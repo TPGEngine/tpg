@@ -1,5 +1,5 @@
 ---
-name: Documentation
+name: 📄 Documentation
 about: Create a documentation issue / ticket.
 title: 'Documentation - Title'
 labels: ''
@@ -7,16 +7,18 @@ assignees: ''
 
 ---
 
-<!--- This template is used for documentation-related issues. -->
+## 📝 Context
+<!--- Briefly describe what you're trying to achieve with this change. -->
+<!--- This helps reviewers understand the purpose behind the change. -->
 
-## Context
-<!--- How has this issue affected you? What are you trying to accomplish? -->
-<!--- Providing context helps us come up with a solution that is most useful in the real world -->
+## 📋 Detailed Description
+<!--- Provide a thorough explanation of the proposed changes or updates. -->
+<!--- Include examples or references if relevant. -->
 
-<!--- Provide a general summary of the issue in the Title above -->
+## 🔄 Feedback
+<!--- If applicable, list the reviewer(s) for this issue. -->
+### Reviewer(s)
+- 
 
-## Detailed Description
-<!--- Provide a detailed description of the change or addition you are proposing -->
-
-## Feedback and Grading
-Leave feedback by commenting on this issue / ticket. 
+💬 Please leave your feedback by commenting on this issue or ticket.
+  

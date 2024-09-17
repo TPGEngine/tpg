@@ -1,33 +1,27 @@
 ---
-name: Code Change
-about: Create a code change issue / ticket.
+name: 🚀 Code Change
+about: Submit an issue or ticket for a code change.
 title: 'Code Change - Title'
 labels: ''
 assignees: ''
 
 ---
 
+# 📚 Context
+<!--- What's the purpose of the change? -->
 
-## Context
-<!--- How has this issue affected you? What are you trying to accomplish? -->
-<!--- Providing context helps us come up with a solution that is most useful in the real world -->
+# 📝 Detailed Description
+<!--- Provide a thorough explanation of the change or feature you are proposing. -->
 
-<!--- Provide a general summary of the issue in the Title above -->
+# 🔧 Changes Made
+<!--- Optional: Suggest a solution or reasoning for the issue. -->
 
-## Detailed Description
-<!--- Provide a detailed description of the change or addition you are proposing -->
-
-## Changes Made
-<!--- Not obligatory, but suggest a fix/reason for the bug, -->
-
-## Steps to Reproduce
-<!--- Provide a link to a live example, or an unambiguous set of steps to -->
-<!--- reproduce this bug. Include code to reproduce, if relevant -->
+# 🐞 Steps to Reproduce
+<!--- Provide clear steps to reproduce the bug or issue. Include relevant code or links if possible. -->
 1.
 2.
 3.
 4.
 
-## Tests Done
-<!--- Provide steps on how you tested your changes -->
-
+# ✅ Tests Done
+<!--- Outline the steps you took to test your changes. Include any test cases or scenarios you used. -->
