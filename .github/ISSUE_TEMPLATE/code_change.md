@@ -7,21 +7,21 @@ assignees: ''
 
 ---
 
-# 📚 Context
+## 📚 Context
 <!--- What's the purpose of the change? -->
 
-# 📝 Detailed Description
+## 📝 Detailed Description
 <!--- Provide a thorough explanation of the change or feature you are proposing. -->
 
-# 🔧 Changes Made
+## 🔧 Changes Made
 <!--- Optional: Suggest a solution or reasoning for the issue. -->
 
-# 🐞 Steps to Reproduce
+## 🐞 Steps to Reproduce
 <!--- Provide clear steps to reproduce the bug or issue. Include relevant code or links if possible. -->
 1.
 2.
 3.
 4.
 
-# ✅ Tests Done
+## ✅ Tests Done
 <!--- Outline the steps you took to test your changes. Include any test cases or scenarios you used. -->
