@@ -1,3 +1,12 @@
+---
+name: Documentation
+about: Create a documentation issue / ticket.
+title: 'Documentation - Title'
+labels: ''
+assignees: ''
+
+---
+
 <!--- This template is used for documentation-related issues. -->
 
 ## Context
@@ -10,4 +19,4 @@
 <!--- Provide a detailed description of the change or addition you are proposing -->
 
 ## Feedback and Grading
-Leave feedback by commenting on this issue. 
+Leave feedback by commenting on this issue / ticket. 

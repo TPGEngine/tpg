@@ -1,4 +1,12 @@
-<!--- Provide a general summary of the issue in the Title above -->
+---
+name: Code Change
+about: Create a code change issue / ticket.
+title: 'Code Change - Title'
+labels: ''
+assignees: ''
+
+---
+
 
 ## Context
 <!--- How has this issue affected you? What are you trying to accomplish? -->
@@ -20,6 +28,6 @@
 3.
 4.
 
-## Tests Made
+## Tests Done
 <!--- Provide steps on how you tested your changes -->
 
