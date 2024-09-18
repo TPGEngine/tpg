@@ -1,0 +1,26 @@
+Import('env')
+
+ccanada = ARGUMENTS.get('ccanada', 0)
+
+import os
+env['TPGPATH'] = os.environ.get('TPGPATH','default')
+env['HOME'] = os.environ.get('HOME','default')
+env['EBROOTOPENCV'] = os.environ.get('EBROOTOPENCV','default')
+
+env.Append(CPPPATH = ['../TPG', '../environments', '../genomic',
+                      '../environments/classicRL', '../environments/sequence',
+                      "$EBROOTBOOST/include",'/usr/include/hdf5/serial/',
+                      '/usr/include/eigen3',"$EBROOTOPENCV/include/opencv4/",
+                      "/usr/include/opencv4/",
+                      "$EBROOTOPENCV/include/opencv4/opencv2"])
+
+env.Append(LIBS = ['TPG','bz2','boost_thread','boost_system','boost_mpi',
+                   'boost_serialization','pthread','boost_iostreams',
+                   'opencv_core','opencv_highgui','opencv_imgcodecs', 'libcurl'])
+
+env.Append(LIBPATH = ['../TPG', '../environments', '/usr/lib/x86_64-linux-gnu',
+                      '/usr/lib/x86_64-linux-gnu/hdf5/serial/',
+                      "$EBROOTOPENCV/lib64/"])
+
+env.Program('TPGExperimentMPI', ['TPGExperimentMPI.cc', 'api_client.cc'])
+
