@@ -1,0 +1,18 @@
+libboost-all-dev
+scons
+libbz2-dev
+libopencv-dev
+libglu1-mesa-dev freeglut3-dev mesa-common-dev
+xterm
+graphviz
+libeigen3-dev
+libarmadillo-dev
+r-base
+r-cran-catools
+r-cran-zoo
+mpi
+git
+vim
+htop
+libcurlpp-dev
+jq

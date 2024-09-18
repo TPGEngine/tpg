@@ -1,0 +1,231 @@
+# start from a checkpoint file
+checkpoint 0
+
+# save checkpoints during evolution
+write_train_checkpoints 0
+write_test_checkpoints 1
+
+# save phylogenetic data
+write_phylogeny 0
+
+# re-evaluate an individual from a checkpoint file
+replay 0
+
+# use the partially-observable version of a task, if available
+partially_observable 0
+
+# re-evaluate an individual from a checkpoint file and animate behaviour, if available
+animate 0
+
+# use stateful programs
+# if set to 0, memories are set to 0 prior to each program execution
+# if set to 1, memories are only set to 0 prior to each evaluation
+stateful 1
+
+# how frequently to run test procedure
+test_mod 100
+
+# in multitask settings, which tasks are active
+# rhs should be a comma-separated list like Cartpole,Acrobot
+active_tasks Cartpole,Mountaincar,Pendulum
+
+# Number of tasks used each selection for evaluation. The rest are estimated with phylogeny.
+n_sampled_tasks_for_eval 1
+
+# number of fitness functions available
+n_fit_mode 1
+
+# which fitness function to use, if multiple available
+fit_mode 0
+
+# which behaviour characterization function to use, if multiple available
+dist_mode 0
+
+# skip introns during evaluation
+skip_introns 1
+
+# auxilliary seed, e.g. for simulators
+seed_aux 42
+
+# max number of generations
+n_generations 1000000
+
+# allow mutation of internal teams (i.e. non-root teams (in-progress)
+mu_internal 0
+
+# number of discrete actions
+n_discrete_action 3
+
+# initial team size
+max_initial_team_size 10
+
+# max team size
+max_team_size 100
+
+# max teams per graph
+max_teams_per_graph 1000000
+
+# when changing action pointer, probability of selecting atomic action
+p_atomic 0.95
+
+# team mutation: probability of deleting program from team
+pmd 0.5
+
+# team mtation: probability of adding program to team
+pma 0.4
+
+# team mutation: probability of mutating a program
+pmm 0.2
+
+# team mutation: probability of mutating a program's action pointer
+pmn 0.1
+
+# team mutation: probability of mutating a program's memory pointer
+pms 0.1
+
+# team mutation: probability of mutating program execution order
+pmw 0.1
+
+# team variation: probability of team crossover
+pmx 0.2
+
+# team variation: probability of team crossover adding each parent prog to child
+pmx_p 0.5
+
+# team variation: probability of team crossover adding each parent prog to child
+pmx_p 0.5
+
+# enable continuous outputs
+continuous_output 1
+
+# number of inputs (aka "features" or "state variables")
+n_input 2,2,2
+
+# max initial program size
+max_initial_prog_size 10
+
+# max program size
+max_prog_size 100
+
+# program variation: probability of changing the program
+p_bid_mutate 1.0
+
+# program variation: probability of swaping the position of two instructions
+p_bid_swap 0.2
+
+# program variation: probability of deleting an instruction
+p_bid_delete 0.5
+
+# program variation: probability of adding an instruction
+p_bid_add 0.4
+
+# program variation: probability of linear crossover with another team
+p_bid_xover 0.0
+
+# program variation: probability of adding noise to constants
+#p_bid_mu_const 1.0
+
+# program variation: stddev of normal noise added to each const
+bid_mu_const_stddev 0.05
+
+# memory size: number of memory indices
+# each memory index points to a data structure (scalar, vector, or matrix)
+memory_indices 8
+
+# this is the dimensionality for vector & matrix memory
+memory_size 8
+
+# number of elite teams
+n_elite 100
+
+# multiplier for # new teams to generate each generation
+n_elite_mul 5
+
+# fitness proportional selection
+fit_prop_select 0
+
+# which diversity mode to use, if available
+diversity_mode 0
+
+parent_select_roots_only 1
+
+# operations, uncomment to activate
+
+# scalar ######################
+SCALAR_SUM_OP
+SCALAR_DIFF_OP
+SCALAR_PRODUCT_OP
+SCALAR_DIVISION_OP
+SCALAR_ABS_OP
+SCALAR_RECIPROCAL_OP
+SCALAR_SIN_OP
+SCALAR_COS_OP
+SCALAR_TAN_OP
+SCALAR_ARCSIN_OP
+SCALAR_ARCCOS_OP
+SCALAR_ARCTAN_OP
+SCALAR_EXP_OP
+SCALAR_LOG_OP
+SCALAR_HEAVYSIDE_OP
+SCALAR_COND_A_OP
+#SCALAR_COND_B_OP
+SCALAR_POW_OP
+SCALAR_SQR_OP
+SCALAR_CUBE_OP
+SCALAR_TANH_OP
+SCALAR_SQRT_OP
+SCALAR_CONST_SET_OP
+SCALAR_MIN_OP
+SCALAR_MAX_OP
+
+## vector #########################
+#VECTOR_HEAVYSIDE_OP
+#MATRIX_HEAVYSIDE_OP
+#SCALAR_VECTOR_PRODUCT_OP
+#SCALAR_BROADCAST_OP
+#VECTOR_RECIPROCAL_OP
+#VECTOR_NORM_OP
+#VECTOR_ABS_OP
+#VECTOR_SUM_OP
+#VECTOR_DIFF_OP
+#VECTOR_PRODUCT_OP
+#VECTOR_DIVISION_OP
+#VECTOR_INNER_PRODUCT_OP
+#VECTOR_MIN_OP
+#VECTOR_MAX_OP
+#VECTOR_MEAN_OP
+#VECTOR_ST_DEV_OP
+#VECTOR_CONST_SET_OP
+
+## matrix #########################
+#VECTOR_OUTER_PRODUCT_OP
+#SCALAR_MATRIX_PRODUCT_OP
+#MATRIX_RECIPROCAL_OP
+#MATRIX_VECTOR_PRODUCT_OP
+#VECTOR_COLUMN_BROADCAST_OP
+#VECTOR_ROW_BROADCAST_OP
+#MATRIX_NORM_OP
+#MATRIX_COLUMN_NORM_OP
+#MATRIX_ROW_NORM_OP
+#MATRIX_TRANSPOSE_OP
+#MATRIX_ABS_OP
+#MATRIX_SUM_OP
+#MATRIX_DIFF_OP
+#MATRIX_PRODUCT_OP
+#MATRIX_DIVISION_OP
+#MATRIX_MATRIX_PRODUCT_OP
+#MATRIX_MIN_OP
+#MATRIX_MAX_OP
+#MATRIX_MEAN_OP
+#MATRIX_ROW_MEAN_OP
+#MATRIX_ROW_ST_DEV_OP
+#MATRIX_ST_DEV_OP
+#MATRIX_CONST_SET_OP
+
+# noise ##########################
+#SCALAR_UNIFORM_SET_OP
+#SCALAR_GAUSSIAN_SET_OP
+#VECTOR_UNIFORM_SET_OP
+#VECTOR_GAUSSIAN_SET_OP
+#MATRIX_UNIFORM_SET_OP
+#MATRIX_GAUSSIAN_SET_OP
