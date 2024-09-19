@@ -104,9 +104,25 @@ for deadlines.}
 
 \section{Proof of Concept Demonstration Plan}
 
-What is the main risk, or risks, for the success of your project?  What will you
-demonstrate during your proof of concept demonstration to convince yourself that
-you will be able to overcome this risk?
+% What is the main risk, or risks, for the success of your project?  What will you
+% demonstrate during your proof of concept demonstration to convince yourself that
+% you will be able to overcome this risk?
+
+For the project's proof of concept demonstration plan, some significant risks may occur while in development and hinder the project's success. Here are the most significant risks:
+\begin{itemize}
+  \item \textbf{GitHub / GitLab integration:} As of now, the TPG repository is currently on GitLab; however, GitHub is required to be utilized for this project. This TPG repository is still currently being contributed by both Dr. Kelly and graduate students. Failure to be able to integrate both changes could deal with some serious merge conflict issues.
+  \item \textbf{Code Robustness:} Due to the large codebase and current unfamiliarity of the code, difficulties in testing may occur and the team may be unable to gather large code coverage within our testing suite. This will delay the goal of establishing a CI/CD environment for TPG and cause major hurdles in the remainder of the project.
+  \item \textbf{Time-Consuming Refactoring:} A part of this project includes refactoring the code to follow standard software engineering principles, as this code is currently being modified throughout the project, refactoring may be a significant time-consuming task, preventing the completion of the other project goals.
+  \item \textbf{Programming Language Learning Curve:} As most of the team for this project have not had experience with the C++ programming language, it will require some additional learning. This may slow down the progress of our project and prevent the proof of concept demonstration plan from being achieved.
+  \item \textbf{Unable to create compatibility with the MuJoCo environment:} The project goal in the end is to allow the TPG code to be simulated within the MujoCo environment. If we are somehow unable to do this, we may need to reroute the focus of our project.
+\end{itemize}
+
+
+\noindent If these significant risks can be prevented or overcome for this project, then the proof of concept demonstration shall include the following to demonstrate the overcoming of the risk: 
+\begin{enumerate}
+ \item The overcoming of TPG integrated into a MuJoCo simulation environment by a basic demonstration of CartPole. 
+ \item Walkthrough the CI/CD pipeline of the TPG project. 
+\end{enumerate}
 
 \section{Expected Technology}
 
