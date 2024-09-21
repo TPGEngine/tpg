@@ -85,7 +85,11 @@ likely change throughout the year.}
 \section{Workflow Plan}
 
 \subsection{Git Workflow}
-Git will be the main version control system for this project. The main code of the Tangled Program Graphs (TPG) framework is stored in \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg}{GitLab}. However, due to the nature of the Capstone project, the team will be cloning the repository as a subtree of the \href{https://github.com/TPGEngine/tpg}{Github repository} to implement the two main goals of this project: support software engineering best practices and the integration of the machine learning framework into another agent-environment. The Gitlab version will be pulled into Github and the Github version changes will be pushed into Gitlab frequently to keep the repositories’ commit history in sync. To redirect the development of TPG to support standard software engineering principles, the Github repository will use Github Actions for running Continuous Integration checks, different kinds of comprehensive testing, and generative documentation.
+Git will be the main version control system for this project. The main code of the Tangled Program Graphs (TPG) framework is stored in \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg}{GitLab}. However, due to the nature of the Capstone project, the team will be cloning the repository as a subtree of the \href{https://github.com/TPGEngine/tpg}{Github repository} to implement the two main goals of this project: support software engineering best practices and the integration of the machine learning framework into another agent-environment. 
+
+\vspace*{10pt}
+
+\noindent The Gitlab and Github repositories will be frequently synchronized using \href{https://gist.github.com/SKempin/b7857a6ff6bddb05717cc17a44091202}{Github subtree} commands to keep the repositories’ commit history consistent. To support standard software engineering principles, the Github repository will use Github Actions for running Continuous Integration checks, different kinds of comprehensive testing, and generative documentation.
 
 \vspace{10pt}
 
@@ -114,15 +118,7 @@ Git will be the main version control system for this project. The main code of t
 
 
 \subsection{Issues}
-Github Issues will be used to monitor tasks and their progress. New templates have been created within the project to better distinguish each issue. These templates can be used to maximize team collaboration, task breakdown and scheduling. The workflow for leveraging issues is as follows:
-
-\begin{enumerate}
-  \item Create an issue via Github's Issue dashboard
-  \item Once work begins for the issue, update its status to `In Progress'
-  \item If the task requires a code change, follow \textbf{7.1 Git Workflow} section
-  \item Once issue is ready for review, update its status to `In Review'
-  \item After the issue meets the acceptance criteria, update its status to `Closed'
-\end{enumerate}
+Github Issues will be used to monitor tasks and their progress. New templates have been created within the project to better distinguish each type of issue. Issues will be linked in every pull request that provides a solution to the issue. Additionally, every issue will be assigned to one team member and will have status that can be tracked through Github projects’ Kanban board template. It is every team member’s responsibility to update the status of their issues throughout the development lifecycle.
 
 \subsection{Milestones}
 Github Milestones will be used to group issues and pull requests to track the overall progress of the project. This would allow the team to analyze small increments of their progress and determine if the project is on track to be completed. Since Github Milestones can have deadlines, the team will assess every milestone once the deadline has been reached to gather feedback for iterative improvement.
@@ -135,12 +131,12 @@ Github Labels will be used to group different types of tasks and pull requests. 
 \noindent The following are labels that will be used in the future. These labels may be modified or replaced throughout the lifecycle of the project:
 
 \begin{itemize}
+  \item high-priority - important and requires immediate attention
+  \item medium-priority - important but not urgent
+  \item low-priority - not important and lowest in priority
   \item feature - related to new features
   \item bug - related to software bug fixes
   \item documentation - related to documentation
-  \item high-priority - important task and requires immediate attention
-  \item medium-priority - important task but not urgent
-  \item low-priority - not important task and lowest in priority
 \end{itemize}
 
 \section{Project Decomposition and Scheduling}
