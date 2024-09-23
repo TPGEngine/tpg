@@ -116,11 +116,59 @@ The roles of each team member are designed to be flexible and adaptable througho
 
 \section{Workflow Plan}
 
+\subsection{Git Workflow}
+Git will be the main version control system for this project. The main code of the Tangled Program Graphs (TPG) framework is stored in \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg}{GitLab}. However, due to the nature of the Capstone project, the team will be cloning the repository as a subtree of the \href{https://github.com/TPGEngine/tpg}{Github repository} to implement the two main goals of this project: support software engineering best practices and the integration of the machine learning framework into another agent-environment. 
+
+\vspace*{10pt}
+
+\noindent The Gitlab and Github repositories will be frequently synchronized using \href{https://gist.github.com/SKempin/b7857a6ff6bddb05717cc17a44091202}{Github subtree} commands to keep the repositories’ commit history consistent. To support standard software engineering principles, the Github repository will use Github Actions for running Continuous Integration checks, different kinds of comprehensive testing, and generative documentation.
+
+\vspace{10pt}
+
+\noindent The general outline of the workflow is as follows:
+
+\begin{enumerate}
+  \item Pull latest changes from the \textbf{main} branch
+  \item Create a feature branch
+  \item Implement code changes
+  \begin{enumerate}
+    \item Add and perform unit and integration testing
+    \item If applicable, add comments and documentation
+  \end{enumerate}
+  \item Commit changes with descriptive messages
+  \item Open a pull request with the \textbf{main} branch as base
+  \begin{enumerate}
+    \item Provide detailed description of changes and testing performed
+    \item CI pipeline will be triggered via GitHub Actions
+    \begin{enumerate}
+      \item  If CI pipeline fails, fix the issue and revert back to Step 3
+    \end{enumerate}
+    \item Other team members check if changes satisfies the acceptance criteria
+  \end{enumerate}
+  \item Merge changes using \textbf{Squash and Merge} method
+\end{enumerate}
+
+
+\subsection{Issues}
+Github Issues will be used to monitor tasks and their progress. New templates have been created within the project to better distinguish each type of issue. Issues will be linked in every pull request that provides a solution to the issue. Additionally, every issue will be assigned to one team member and will have status that can be tracked through Github projects’ Kanban board template. It is every team member’s responsibility to update the status of their issues throughout the development lifecycle.
+
+\subsection{Milestones}
+Github Milestones will be used to group issues and pull requests to track the overall progress of the project. This would allow the team to analyze small increments of their progress and determine if the project is on track to be completed. Since Github Milestones can have deadlines, the team will assess every milestone once the deadline has been reached to gather feedback for iterative improvement.
+
+\subsection{Labels}
+Github Labels will be used to group different types of tasks and pull requests. These can be used to further categorize the priority and nature of each task, allowing the team members to distinguish their criticality throughout the duration of the project.
+
+\vspace{10pt}
+
+\noindent The following are labels that will be used in the future. These labels may be modified or replaced throughout the lifecycle of the project:
+
 \begin{itemize}
-	\item How will you be using git, including branches, pull request, etc.?
-	\item How will you be managing issues, including template issues, issue
-	classification, etc.?
-  \item Use of CI/CD
+  \item high-priority - important and requires immediate attention
+  \item medium-priority - important but not urgent
+  \item low-priority - not important and lowest in priority
+  \item feature - related to new features
+  \item bug - related to software bug fixes
+  \item documentation - related to documentation
 \end{itemize}
 
 \section{Project Decomposition and Scheduling}
