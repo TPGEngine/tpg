@@ -31,19 +31,38 @@ Date2 & Name(s) & Description of changes\\
 
 \section{Problem Statement}
 
-\wss{You should check your problem statement with the
-\href{https://github.com/smiths/capTemplate/blob/main/docs/Checklists/ProbState-Checklist.pdf}
-{problem statement checklist}.} 
-
-\wss{You can change the section headings, as long as you include the required
-information.}
-
 \subsection{Problem}
+
+Tangled Program Graphs (TPG) is a reinforcement learning framework being developed by McMaster’s Creative Algorithm Lab under Dr. Stephen Kelly. The main scope of the research is to eventually apply genetic programming principles to embedded systems and to share this framework as an open source library. Reinforcement Learning algorithms have the same underlying purpose: determining the right action given the current state of the environment. The cost to train deep learning neural networks is a huge blocker to democratize access to this technology. TPG aims to solve the cost issue through evolution. However, TPG has two notable problems: software engineering practices, and integrations into more advanced real-world environments.
+
+Despite its innovative approach, TPG’s code base does not fully adhere to standard software engineering practices commonly found in large open-source libraries. For instance, it lacks comprehensive documentation, robust testing, and CI/CD, which can pose challenges for researchers or community contributors attempting to onboard or make changes to the framework. With more focus on software engineering best principles (SOLID, abstractions, etc.), the code base can evolve over time, allowing researchers to focus more on actual results, rather than dealing with technical debt.
+
+Currently, TPG has been integrated and validated within fully observable mini-game environments (such as Atari, Pac-man, CartPole etc.). However, real-world scenarios are typically partially observable and dynamic, where an AI agent must adapt to constantly changing conditions. To advance Dr. Kelly’s research, testing and validation in more complex, dynamic environments is essential. The ultimate objective is to develop an evolutionary reinforcement learning framework suitable for embedded systems. Achieving this goal requires moving beyond controlled environments and applying evolutionary reinforcement learning to real-world scenarios, further expanding the scope and pushing the boundaries of this research.
 
 \subsection{Inputs and Outputs}
 
-\wss{Characterize the problem in terms of ``high level'' inputs and outputs.  
-Use abstraction so that you can avoid details.}
+The problem is sub divided into two main problems: \textbf{Adhering to Software Engineering Practices} and \textbf{MuJoCo} integration.
+
+\subsubsection{Adhering to Software Engineering Practices}
+
+When developing code according to best software engineering practices, the \textbf{codebase} is the main input. However, there are many different scenarios that need to be encompassed: DevOps integration, code refactoring, and extensive documentation. The main difference is when these scenarios are triggered. For instance, DevOps pipelines are typically run after code has been committed/merged (depends on the requirements specified). Each of these scenarios involves performing transformations on the code base, allowing the team to allow the TPG code base to adhere to the standard open source software development standards. Other sources of inputs could be references that the team can model these software development practices after such as large scale open source projects (i.e., MuJoCo library from DeepMind) to see what standards they adhere to. 
+
+When development is complete, the TPG codebase will have a \textbf{CI/CD pipeline} so whenever changes are made to the codebase - automatic testing, code checks, and possible deployments are performed allowing for more robust, and higher quality code that everyone can contribute to in a standardized manner. Unit testing allows current code to be validated, ensuring the blocks of code can adhere to many different cases both obvious and edge cases. The output of more refined testing is robust code that has been validated. Documentation will allow new contributors to understand how to contribute and also onboard to the project in an easy and clear manner.
+
+\subsubsection{MuJoCo Integration}
+
+For this integration to be successful, TPG and MuJoCo libraries need to be connected together. MuJoCo is an open source physics engine developed by Google DeepMind and enables accurate real-life simulation experiments to be performed for machine learning scientists. The development of the interface requires all of these components as when an experiment is simulated, the interface needs to know what it needs to be simulating on the MuJoCo engine. 
+
+A successful interface enables the TPG framework to be evaluated in more dynamic environments on MuJoCo. As a research team, Dr. Kelly is able to perform more “real-world” like experiments and to evaluate the performance of TPG and fine tune the framework to iteratively improve its capabilities.
+
+\subsection{Why is this Problem Important?}
+Current deep learning neural networks, particularly those used for reinforcement learning, are highly inefficient and resource-intensive, making them impractical for many real-world applications, especially in embedded systems and robotics. Addressing this inefficiency is crucial to making intelligent robotics more accessible and cost-effective.  The alternative utilizing genetic programming principles and concepts of evolution can accelerate the transition to adopting this technology in embedded systems. This approach could drastically reduce the GPU training costs associated with deep learning, enabling more scalable and adaptable solutions for embedded systems and real-time robotics applications. This transition is critical for making advanced robotics more accessible and economically viable.
+
+Achieving this next stage requies significant effort and adjustments. Firstly, the current codebase needs to adhere to traditional software engineering standards to allow for the next steps of evolution. If more researchers want to contribute or build on top of the framework to tune it to their specific applications, then having robust CI/CD pipelines, unit testing, and extensive documentation are critical for the developer experience. Making the codebase more accessible to all while ensuring the business logic is sound is critical to the future of this problem. 
+
+Many existing reinforcement learning models have been tested primarily in “toy” environments—simple, fully observable scenarios like mini-games. While these simulations provide a controlled testing ground, they fail to represent the complexity of real-world environments, which are dynamic and only partially observable. To advance Dr. Kelly’s framework and make it applicable to real-world robotics, further experimentation is required in more realistic settings where agents must learn from incomplete information and adapt to changing conditions over time.
+
+Dr. Kelly’s research addresses a critical bottleneck in how robots learn to interact with their environment. By providing a more efficient and cost-effective alternative to current deep learning models, this work has the potential to revolutionize the industry. However, before this solution can be fully integrated into real-world robotics, rigorous testing and validation in dynamic, real-world environments must be conducted. The work ahead is challenging, but the potential impact is transformative—ushering in a new era of intelligent, accessible, and adaptable robotics.
 
 \subsection{Stakeholders}
 
