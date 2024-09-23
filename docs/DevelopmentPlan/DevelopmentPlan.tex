@@ -271,7 +271,7 @@ These are the following expected technologies that the team expects to use for t
 
 \section{Coding Standard}
 
-\wss{What coding standard will you adopt?}
+We aim for our project to be well documented and easy to understand. Git will be used for version control alongside GitHub for project management and CI/CD. For Git commit messages, we will follow the conventional commits specification at \url{https://www.conventionalcommits.org/en/v1.0.0/}. The provided issue templates will be used and additional templates will be added for bug reports and feature requests to ensure consistency in issue reporting. Since the TPG project is primarily written in C++, we will adopt the \href{https://google.github.io/styleguide/cppguide.html}{Google C++ Style Guide}. For LaTeX documents, we will be following the file structure provided with the template and maintain consistent formatting conventions. Unit tests must be provided for all non-trivial functions and classes and integrated with the CI/CD pipeline.
 
 \newpage{}
 
@@ -282,86 +282,62 @@ These are the following expected technologies that the team expects to use for t
 \input{../Reflection.tex}
 
 \begin{enumerate}
-    \item Why is it important to create a development plan prior to starting the
-    project?
-    \item In your opinion, what are the advantages and disadvantages of using
-    CI/CD?
-    \item What disagreements did your group have in this deliverable, if any,
-    and how did you resolve them?
+    \item Why is it important to create a development plan prior to starting the project?
+
+    Creating a development plan prior to starting the project is important because it helps in outlining the project's scope, objectives, and deliverables. It ensures that all team members are aligned with the project's goals and provides a roadmap for the project's execution. This planning phase helps in identifying potential risks and challenges early on, allowing the team to devise strategies to mitigate them. Additionally, a well-structured development plan facilitates better resource management and timeline estimation, which are crucial for the successful completion of the project.
+    
+    \item In your opinion, what are the advantages and disadvantages of using CI/CD?
+    
+    The advantages of using CI/CD include automated testing, which helps in identifying bugs early in the development process, and ensuring that the codebase remains stable and functional. CI/CD also promotes repeatable and consistent testing environments, reducing the chances of discrepancies caused by different development setups. For example, our team members own devices with different operating systems, so having a CI/CD pipeline ensures that the project can be tested consistently across all devices. Moreover, it can block pull requests until tests pass, ensuring code quality. However, the disadvantages include the potential for CI/CD configurations to become complex and time-consuming to set up and maintain. Additionally, if not managed properly, CI/CD processes can consume significant computational resources, leading to increased costs and longer build times. 
+    
+    \item What disagreements did your group have in this deliverable, if any, and how did you resolve them?
+    
+    For this deliverable, we were in agreement on the selection of intellectual property and projet management policies. However, there was some back and forth regarding the expected technologies and coding standards to be used. Since, some of us are using Mac and others using Windows, we had to decide on which technologies to use so that our progress is platform-agnostic. Tools such as Docker, WSL, and Linux Virtual Machine was considered. But in order to come to a consensus, we determined that such a decision was out of the scope of this delieverable, and will be decided as more of us begin working on the project. Overall, we had productive discussions and reached a consensus on the important aspects of our project.
+
 \end{enumerate}
 
 \newpage{}
 
 \section*{Appendix --- Team Charter}
 
-\wss{borrows from
-\href{https://engineering.up.edu/industry_partnerships/files/team-charter.pdf}
-{University of Portland Team Charter}}
-
 \subsection*{External Goals}
 
-\wss{What are your team's external goals for this project? These are not the
-goals related to the functionality or quality fo the project.  These are the
-goals on what the team wishes to achieve with the project.  Potential goals are
-to win a prize at the Capstone EXPO, or to have something to talk about in
-interviews, or to get an A+, etc.}
+Our team has several external goals for this project. Firstly, we aim to present a standout project at the Capstone EXPO that showcases our technical abilities and innovative thinking. Winning a prize at the EXPO would be a significant achievement and a testament to our hard work. Secondly, we want to develop a comprehensive project that serves as a strong talking point in future job interviews, demonstrating our skills and experience to potential employers. Lastly, we aim to achieve an A+ in this course, reflecting our dedication and the quality of our work.
 
 \subsection*{Attendance}
 
 \subsubsection*{Expectations}
 
-\wss{What are your team's expectations regarding meeting attendance (being on
-time, leaving early, missing meetings, etc.)?}
+Our team expects all members to arrive on time for meetings, with a grace period of up to 5 minutes. Consistent lateness should be explained, and team members are expected to attend at least 80 percent of all meetings. Attendance will be tracked on GitHub, including team meetings, meetings with our supervisor, and TA. Active participation in discussions and decision-making processes is more important than mere attendance.
 
 \subsubsection*{Acceptable Excuse}
 
-\wss{What constitutes an acceptable excuse for missing a meeting or a deadline?
-What types of excuses will not be considered acceptable?}
+Acceptable excuses for missing a meeting or a deadline include medical emergencies, pre-approved commitments (with prior notification to the team), and technical difficulties such as internet outages or device failures. Unacceptable excuses include lack of interest in the project, poor time management, and procrastination.
 
 \subsubsection*{In Case of Emergency}
 
-\wss{What process will team members follow if they have an emergency and cannot
-attend a team meeting or complete their individual work promised for a team
-deliverable?}
+In case of an emergency, the team member must inform the team as soon as possible and provide an acceptable excuse. They should also give an estimated time frame for resolving the emergency and propose a contingency plan for covering their responsibilities.
 
 \subsection*{Accountability and Teamwork}
 
-\subsubsection*{Quality} 
+\subsubsection*{Quality}
 
-\wss{What are your team's expectations regarding the quality
-of team members' preparation for team meetings and the quality of the
-deliverables that members bring to the team?}
+Our team expects high-quality preparation for meetings and deliverables. Each member should come prepared with their assigned tasks completed to the best of their ability, ensuring that all contributions are thorough and well-researched. Moreover, we will check each other's work through assigning reviewers to each other's pull requests. The review process will be based on the provided rubric to ensure that all contributions meet the required standards.
 
 \subsubsection*{Attitude}
 
-\wss{What are your team's expectations regarding team members' ideas,
-interactions with the team, cooperation, attitudes, and anything else regarding
-team member contributions?  Do you want to introduce a code of conduct?  Do you
-want a conflict resolution plan?  Can adopt existing codes of conduct.}
+Team members are expected to contribute positively to the team environment, respecting each other's ideas and cooperating fully. We will adopt McMaster's student code of conduct to ensure respectful interactions. For example, Appendix A in the Code of Student Rights and Responsibilities requires students to refrain from using derogatory or offensive language, maintain a positive and respectful attitude, and refrain from engaging in any form of harassment or discrimination. If a team member violates these rules, the team will address the issue through a formal appeal process. We expect all team members to adhere to these standards at a bare minimum. What we hope to foster is an environment where team members feel inspired to contribute their best work and support each other in doing so.
 
 \subsubsection*{Stay on Track}
 
-\wss{What methods will be used to keep the team on track? How will your team
-ensure that members contribute as expected to the team and that the team
-performs as expected? How will your team reward members who do well and manage
-members whose performance is below expectations?  What are the consequences for
-someone not contributing their fair share?}
+To keep the team on track, we will use project management metrics such as attendance, commits, and issue tracking. These metrics will be used as a rough indicator of team member's contributions. We recognize that these metrics are not perfect. For example, deleting 100 lines of code is often more productive than writing 100 lines of code, but this is not reflected in the commit count. We will also consider other factors such as the complexity of the changes made and the number of reviews a team member has conducted. Nonetheless, members who consistently meet or exceed their targets will be recognized and rewarded, while those who fall short will face consequences such as bringing coffee to the next meeting or scheduling a meeting with the TA or instructor. We will set clear targets for attendance and commits, and ensure that everyone is aware of their responsibilities.
 
-\wss{You may wish to use the project management metrics collected for the TA and
-instructor for this.}
+\subsection*{Team Building}
 
-\wss{You can set target metrics for attendance, commits, etc.  What are the
-consequences if someone doesn't hit their targets?  Do they need to bring the
-coffee to the next team meeting?  Does the team need to make an appointment with
-their TA, or the instructor?  Are there incentives for reaching targets early?}
+To build team cohesion, we will schedule regular fun activities and group rituals, such as team lunches or game nights. These activities will help strengthen our bond and improve our collaboration.
 
-\subsubsection*{Team Building}
+\subsection*{Decision Making}
 
-\wss{How will you build team cohesion (fun time, group rituals, etc.)? }
-
-\subsubsection*{Decision Making} 
-
-\wss{How will you make decisions in your group? Consensus?  Vote? How will you
-handle disagreements? }
+Our team will make decisions through consensus whenever possible. If consensus cannot be reached, we will hold a vote. In case of disagreements, we will follow our conflict resolution plan, which includes discussing the issue openly and seeking input from our supervisor or TA before making a final decision.
 
 \end{document}
