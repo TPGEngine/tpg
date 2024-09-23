@@ -31,116 +31,243 @@ Date2 & Name(s) & Description of changes\\
 
 \newpage{}
 
-\wss{Put your introductory blurb here.  Often the blurb is a brief roadmap of
-what is contained in the report.}
+% \wss{Put your introductory blurb here.  Often the blurb is a brief roadmap of
+% what is contained in the report.}
 
-\wss{Additional information on the development plan can be found in the
-\href{https://gitlab.cas.mcmaster.ca/courses/capstone/-/blob/main/Lectures/L02b_POCAndDevPlan/POCAndDevPlan.pdf?ref_type=heads}
-{lecture slides}.}
+% \wss{Additional information on the development plan can be found in the
+% \href{https://gitlab.cas.mcmaster.ca/courses/capstone/-/blob/main/Lectures/L02b_POCAndDevPlan/POCAndDevPlan.pdf?ref_type=heads}
+% {lecture slides}.}
 
+\noindent The following document contains all information regarding the development plan of the TPG project. The following includes, but is not limited to details such as confidentiality, IP and copyright, team communication guidelines, expected technology, and overall project workflow. Changes within the details may be revised at any point throughout the project lifecycle and are expected to be updated accordingly.
 \section{Confidential Information?}
 
-\wss{State whether your project has confidential information from industry, or
-not.  If there is confidential information, point to the agreement you have in
-place.}
+% \wss{State whether your project has confidential information from industry, or
+% not.  If there is confidential information, point to the agreement you have in
+% place.}
 
-\wss{For most teams this section will just state that there is no confidential
-information to protect.}
+% \wss{For most teams this section will just state that there is no confidential
+% information to protect.}
+
+The project will be an extension of the open-source TPG project by Dr. Stephen Kelly. As a result, there is no confidential information to protect.
 \section{IP to Protect}
 
-\wss{State whether there is IP to protect.  If there is, point to the agreement.
-All students who are working on a project that requires an IP agreement are also
-required to sign the ``Intellectual Property Guide Acknowledgement.''}
+% \wss{State whether there is IP to protect.  If there is, point to the agreement.
+% All students who are working on a project that requires an IP agreement are also
+% required to sign the ``Intellectual Property Guide Acknowledgement.''}
+For this project, there is no intellectual property to protect.
 
 \section{Copyright License}
-
-\wss{What copyright license is your team adopting.  Point to the license in your
-repo.}
+% \wss{What copyright license is your team adopting.  Point to the license in your
+% repo.}
+This project is adopting the MIT License, in which more information can be found \href{https://github.com/TPGEngine/tpg/blob/main/LICENSE}{here}.
 
 \section{Team Meeting Plan}
+The team will hold weekly meetings on Mondays at the H.G. Thode Library from to 3:30 PM to 4:30 PM. Additional meetings will be scheduled if necessary as agreed upon by the team members. It is each team member’s responsibility to provide updates regarding their tasks and raise any concerns during these meetings. 
 
-\wss{How often will you meet? where?}
+\vspace*{10pt}
 
-\wss{If the meeting is a physical location (not virtual), out of an abundance of
-caution for safety reasons you shouldn't put the location online}
-
-\wss{How often will you meet with your industry advisor?  when?  where?}
-
-\wss{Will meetings be virtual?  At least some meetings should likely be
-in-person.}
-
-\wss{How will the meetings be structured?  There should be a chair for all meetings.  There should be an agenda for all meetings.}
+\noindent The weekly recurring sync with the stakeholders will hold on Mondays from 2:30 PM to 3:30 PM in ABB 533 beginning October 7. These meetings will consist of project updates, requirements gathering and asking relevant questions.
 
 \section{Team Communication Plan}
+The team’s official communication will take place in the “TPG Capstone” Discord server. This will include but will not be limited to general communication and questions, daily updates, meetings, design suggestions and code reviews.
 
-\wss{Issues on GitHub should be part of your communication plan.}
+\vspace*{10pt}
+
+\noindent For formal conversation with the stakeholders and the project’s supervisor, all communications will take place in the “TPG Capstone” Microsoft Teams channel or via email if necessary.
 
 \section{Team Member Roles}
+The roles of each team member are designed to be flexible and adaptable throughout the duration of the project. These may shift based on the needs of the project. For now, each student will be responsible for one specific role and the developer role. As a developer, each member will have the responsibility of designing, planning, implementing, testing, reviewing and documenting.
+\begin{center}
+  \setlength{\arrayrulewidth}{0.5mm}
+  \setlength{\tabcolsep}{10pt}
+  \renewcommand{\arraystretch}{1.5}
+  \begin{tabular}{ | m{4cm} | m{9cm} | } 
+    \hline
+      \textbf{Name and Role} & \textbf{Responsibilities} \\ 
+      \hline
+        \textbf{Richard Li} - Project Lead and Developer & \begin{itemize}
+      \item Primary liaison to the supervisor and stakeholders.
+      \item Design, Planning, Implementing, Testing, Reviewing Code Changes, and Documentation.
+    \end{itemize}\\ 
+      \hline
+        \textbf{Cyrus Allen Amante} - Meeting Chair and Developer & \begin{itemize}
+      \item Leads all team meetings including with stakeholders and the supervisor.
+      \item Design, Planning, Implementing, Testing, Reviewing Code Changes, and Documentation.
+    \end{itemize}\\ 
+      \hline
+        \textbf{Mark Cruz} - Academic Communicator and Developer & \begin{itemize}
+      \item Primary liaison to the professor and TAs.
+      \item Design, Planning, Implementing, Testing, Reviewing Code Changes, and Documentation.
+    \end{itemize}\\ 
+      \hline
+        \textbf{Edward Gao} - Repository Manager and Developer & \begin{itemize}
+      \item Maintains the repository from merge conflicts, and the organization of commits, PR's, and merges.
+      \item Design, Planning, Implementing, Testing, Reviewing Code Changes, and Documentation.
+    \end{itemize}\\ 
+      \hline
+        \textbf{Calvyn Siong} - CI/CD Manager and Developer & \begin{itemize}
+      \item Oversees and ensures the CI/CD pipeline is running smoothly and bug-free.
+      \item Design, Planning, Implementing, Testing, Reviewing Code Changes, and Documentation.
+    \end{itemize}\\ 
+      \hline
 
-\wss{You should identify the types of roles you anticipate, like notetaker,
-leader, meeting chair, reviewer.  Assigning specific people to those roles is
-not necessary at this stage.  In a student team the role of the individuals will
-likely change throughout the year.}
+  \end{tabular}
+\end{center}
 
 \section{Workflow Plan}
 
+\subsection{Git Workflow}
+Git will be the main version control system for this project. The main code of the Tangled Program Graphs (TPG) framework is stored in \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg}{GitLab}. However, due to the nature of the Capstone project, the team will be cloning the repository as a subtree of the \href{https://github.com/TPGEngine/tpg}{Github repository} to implement the two main goals of this project: support software engineering best practices and the integration of the machine learning framework into another agent-environment. 
+
+\vspace*{10pt}
+
+\noindent The Gitlab and Github repositories will be frequently synchronized using \href{https://gist.github.com/SKempin/b7857a6ff6bddb05717cc17a44091202}{Github subtree} commands to keep the repositories’ commit history consistent. To support standard software engineering principles, the Github repository will use Github Actions for running Continuous Integration checks, different kinds of comprehensive testing, and generative documentation.
+
+\vspace{10pt}
+
+\noindent The general outline of the workflow is as follows:
+
+\begin{enumerate}
+  \item Pull latest changes from the \textbf{main} branch
+  \item Create a feature branch
+  \item Implement code changes
+  \begin{enumerate}
+    \item Add and perform unit and integration testing
+    \item If applicable, add comments and documentation
+  \end{enumerate}
+  \item Commit changes with descriptive messages
+  \item Open a pull request with the \textbf{main} branch as base
+  \begin{enumerate}
+    \item Provide detailed description of changes and testing performed
+    \item CI pipeline will be triggered via GitHub Actions
+    \begin{enumerate}
+      \item  If CI pipeline fails, fix the issue and revert back to Step 3
+    \end{enumerate}
+    \item Other team members check if changes satisfies the acceptance criteria
+  \end{enumerate}
+  \item Merge changes using \textbf{Squash and Merge} method
+\end{enumerate}
+
+
+\subsection{Issues}
+Github Issues will be used to monitor tasks and their progress. New templates have been created within the project to better distinguish each type of issue. Issues will be linked in every pull request that provides a solution to the issue. Additionally, every issue will be assigned to one team member and will have status that can be tracked through Github projects’ Kanban board template. It is every team member’s responsibility to update the status of their issues throughout the development lifecycle.
+
+\subsection{Milestones}
+Github Milestones will be used to group issues and pull requests to track the overall progress of the project. This would allow the team to analyze small increments of their progress and determine if the project is on track to be completed. Since Github Milestones can have deadlines, the team will assess every milestone once the deadline has been reached to gather feedback for iterative improvement.
+
+\subsection{Labels}
+Github Labels will be used to group different types of tasks and pull requests. These can be used to further categorize the priority and nature of each task, allowing the team members to distinguish their criticality throughout the duration of the project.
+
+\vspace{10pt}
+
+\noindent The following are labels that will be used in the future. These labels may be modified or replaced throughout the lifecycle of the project:
+
 \begin{itemize}
-	\item How will you be using git, including branches, pull request, etc.?
-	\item How will you be managing issues, including template issues, issue
-	classification, etc.?
-  \item Use of CI/CD
+  \item high-priority - important and requires immediate attention
+  \item medium-priority - important but not urgent
+  \item low-priority - not important and lowest in priority
+  \item feature - related to new features
+  \item bug - related to software bug fixes
+  \item documentation - related to documentation
 \end{itemize}
 
 \section{Project Decomposition and Scheduling}
 
+\subsection{Project Management}
+The Kanban board template in Github Projects will be used to organize and monitor existing issues. The GitHub project can be found in the TPG project’s \href{https://github.com/orgs/TPGEngine/projects/1}{Github repository}. This board will contain the opened issues that can be moved across different stages of the development lifecycle such as In Progress, In Review and Closed. 
+
+\subsection{Project Decomposition}
+The team will be using Github Milestones to group issues based on their common goal to be used as feedback regarding future improvements. This can also be used to keep track of all the \href{https://github.com/TPGEngine/tpg/milestones}{important deadlines} in the course outline. The project can be decomposed through several milestones based on the major phases of the development, for example Introduction and Research, and Development of CI/CD pipeline. The team must fully understand each large task or milestone to properly break them into smaller, manageable tasks and to set reasonable deadlines. 
+
+\vspace*{10pt}
+
+\noindent For example, a large task can be decompose into:
+
 \begin{itemize}
-  \item How will you be using GitHub projects?
-  \item Include a link to your GitHub project
+  \item Planning and Research - gathering of information and identifying the scope
+  \item Implementation - designing, execution of actions and coding
+  \item Verification - testing and validating of the implementation
+  \item Review and Feedback - peer, stakeholder and supervisor review
+  \item Final Approval and Publication - publishing of approved implementation
 \end{itemize}
 
-\wss{How will the project be scheduled?  This is the big picture schedule, not
-details. You will need to reproduce information that is in the course outline
-for deadlines.}
+\noindent By having this approach of task decomposition, the team can be flexible with assigning roles to better manage the workloads that the project requires. This method can be applied to every aspect of the project to ensure that large tasks are consistently broken down into smaller ones.
+
+\subsection{Task Assignment}
+Each team member will have different strengths, weaknesses and interests that will be considered when assigning tasks. Issue size, which can be assigned within each Github issue, will be leveraged to ensure equal workload for every member. At the start of each milestone, the team must have a planning meeting to allocate tasks for the upcoming weeks. Each task must be evaluated one-by-one to fairly estimate the effort required per task. These tasks must also have a reasonable buffer time in the case of delays or unexpected challenges.
 
 \section{Proof of Concept Demonstration Plan}
 
-What is the main risk, or risks, for the success of your project?  What will you
-demonstrate during your proof of concept demonstration to convince yourself that
-you will be able to overcome this risk?
+% What is the main risk, or risks, for the success of your project?  What will you
+% demonstrate during your proof of concept demonstration to convince yourself that
+% you will be able to overcome this risk?
+
+For the project's proof of concept demonstration plan, some significant risks may occur while in development and hinder the project's success. Here are the most significant risks:
+\begin{itemize}
+  \item \textbf{GitHub / GitLab integration:} As of now, the TPG repository is currently on GitLab; however, GitHub is required to be utilized for this project. This TPG repository is still currently being contributed by both Dr. Kelly and graduate students. Failure to be able to integrate both changes could deal with some serious merge conflict issues.
+  \item \textbf{Code Robustness:} Due to the large codebase and current unfamiliarity of the code, difficulties in testing may occur and the team may be unable to gather large code coverage within our testing suite. This will delay the goal of establishing a CI/CD environment for TPG and cause major hurdles in the remainder of the project.
+  \item \textbf{Time-Consuming Refactoring:} A part of this project includes refactoring the code to follow standard software engineering principles, as this code is currently being modified throughout the project, refactoring may be a significant time-consuming task, preventing the completion of the other project goals.
+  \item \textbf{Programming Language Learning Curve:} As most of the team for this project have not had experience with the C++ programming language, it will require some additional learning. This may slow down the progress of our project and prevent the proof of concept demonstration plan from being achieved.
+  \item \textbf{Unable to create compatibility with the MuJoCo environment:} The project goal in the end is to allow the TPG code to be simulated within the MujoCo environment. If we are somehow unable to do this, we may need to reroute the focus of our project.
+\end{itemize}
+
+
+\noindent If these significant risks can be prevented or overcome for this project, then the proof of concept demonstration shall include the following to demonstrate the overcoming of the risk: 
+\begin{enumerate}
+ \item The overcoming of TPG integrated into a MuJoCo simulation environment by a basic demonstration of CartPole. 
+ \item Walkthrough the CI/CD pipeline of the TPG project. 
+\end{enumerate}
 
 \section{Expected Technology}
 
-\wss{What programming language or languages do you expect to use?  What external
-libraries?  What frameworks?  What technologies.  Are there major components of
-the implementation that you expect you will implement, despite the existence of
-libraries that provide the required functionality.  For projects with machine
-learning, will you use pre-trained models, or be training your own model?  }
+% \wss{What programming language or languages do you expect to use?  What external
+% libraries?  What frameworks?  What technologies.  Are there major components of
+% the implementation that you expect you will implement, despite the existence of
+% libraries that provide the required functionality.  For projects with machine
+% learning, will you use pre-trained models, or be training your own model?  }
 
-\wss{The implementation decisions can, and likely will, change over the course
-of the project.  The initial documentation should be written in an abstract way;
-it should be agnostic of the implementation choices, unless the implementation
-choices are project constraints.  However, recording our initial thoughts on
-implementation helps understand the challenge level and feasibility of a
-project.  It may also help with early identification of areas where project
-members will need to augment their training.}
-
-Topics to discuss include the following:
+These are the following expected technologies that the team expects to use for the project:
 
 \begin{itemize}
-\item Specific programming language
-\item Specific libraries
-\item Pre-trained models
-\item Specific linter tool (if appropriate)
-\item Specific unit testing framework
-\item Investigation of code coverage measuring tools
-\item Specific plans for Continuous Integration (CI), or an explanation that CI
-  is not being done
-\item Specific performance measuring tools (like Valgrind), if
-  appropriate
-\item Tools you will likely be using?
+  \item \textbf{Git / GitHub / Gitlab:} For version control.
+  \item \textbf{GitHub Projects:}  Create an organized project space to track current progress.
+  \item \textbf{LaTeX:} Allows for a professional-looking report, with easy-to-use syntax and commonly used in the industry.
+  \item \textbf{Make:}  Easily generates the LaTeX format into PDF for a report.
+  \item \textbf{C++:} The existing codebase of TPG is written in this language.
+  \item \textbf{VS Code:} Personal preference for members in this project and by the supervisor.
+  \item \textbf{MuJoCo:} The main simulation environment the project aims to be compatible with.
+  \item \textbf{Clang-tidy:} An open-source, widely used linter with an easy learning curve.
+  \item \textbf{Bash:} For creating scripts.
+  \item \textbf{Python:} For plotting analytical data for TPG.
+  \item \textbf{Catch / Google Test:} For unit testing within the project.
+  \item \textbf{Cppcheck / Gcov:} For static analysis and code coverage analysis.
 \end{itemize}
 
-\wss{git, GitHub and GitHub projects should be part of your technology.}
+% \wss{The implementation decisions can, and likely will, change over the course
+% of the project.  The initial documentation should be written in an abstract way;
+% it should be agnostic of the implementation choices, unless the implementation
+% choices are project constraints.  However, recording our initial thoughts on
+% implementation helps understand the challenge level and feasibility of a
+% project.  It may also help with early identification of areas where project
+% members will need to augment their training.}
+
+% Topics to discuss include the following:
+
+% \begin{itemize}
+% \item Specific programming language
+% \item Specific libraries
+% \item Pre-trained models
+% \item Specific linter tool (if appropriate)
+% \item Specific unit testing framework
+% \item Investigation of code coverage measuring tools
+% \item Specific plans for Continuous Integration (CI), or an explanation that CI
+%   is not being done
+% \item Specific performance measuring tools (like Valgrind), if
+%   appropriate
+% \item Tools you will likely be using?
+% \end{itemize}
+
+% \wss{git, GitHub and GitHub projects should be part of your technology.}
 
 \section{Coding Standard}
 
