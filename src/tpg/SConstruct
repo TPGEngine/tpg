@@ -10,7 +10,7 @@ if int(ccanada):
     common_env.Append(CPPDEFINES=['CCANADA'])
 
 common_env.Append(CCFLAGS = ['-std=c++23', '-Wno-deprecated', '-Wall',
-                                 '-Werror', '-Wextra', '-Wno-unused-parameter'])
+                                 '-Werror', '-Wextra', '-Wno-unused-parameter', '-DEIGEN_DONT_VECTORIZE'])
 
 common_env.MergeFlags(GetOption('cflags'))
 common_env.Append(CPPDEFINES={'VERSION': 1})
