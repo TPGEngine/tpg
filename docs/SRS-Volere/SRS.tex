@@ -96,7 +96,24 @@ Date 2 & 1.1 & Notes\\
 \section{Naming Conventions and Terminology}
 \subsection{Glossary of All Terms, Including Acronyms, Used by Stakeholders
 involved in the Project}
-\lips
+% \lips
+\begin{description}
+  \item [Agent]\label{def:agent} An autonomous intelligence system performed to do specific tasks without human assistance.
+  \item [Environment]\label{def:environment} This is referred to the external system that the agent interacts with. The environment can provide information such as the current state and reward, and the agent can provide the environment with its action.
+  \item [Tangled Program Graphs (TPG)]\label{def:tpg} A framework currently being developed under Dr. Stephen Kelly that will help modular programs apply genetic programming principles to embedded systems.
+  \item [Deep Neural Networks (DNNs)]\label{def:dnn} A machine learning technique that trains an agent to complete difficult tasks that would be difficult to do using conventional programming.
+  \item [Genetic Programming]\label{def:genetic_programming} A technique used to evolve programs, that first start a population of “unfit” agents. Through RL, agents are destroyed, kept, and mutated to evolve into a more suitable population. This is continued until the population reaches its desired fit.
+  \item [Reinforcement Learning (RL)]\label{def:rl} A machine learning technique that utilizes a reward-and-punishment system towards agents, providing a reward for a correctly done task and a punishment for incorrectly done tasks.
+  \item [Multi-Task Reinforcement Learning (Multi-Task RL)]\label{def:mulittask_rl} A type of reinforcement learning in which agents are learning multiple tasks at the same time.
+  \item [Policy]\label{def:policy} A strategy that a particular agent uses to complete a specific task. This is also known as agent behaviour. 
+  \item [MuJoCo]\label{def:mujoco} A free and open-source physics engine created by Google DeepMind that assists in facilitating research and development in areas such as robotics.
+  \item [Phylogenetic Learning]\label{def:phylogenetic_learning} Also known as Policy Search, this is a class of reinforcement learning in which agent-environment interactions are episodic. The policy becomes updated as a whole following the final episode outcome.
+  \item [Temporal Credit Assignment Problem]\label{def:temporal_credit} Actions with neutral or negative rewards may still contribute to a successful outcome.
+  \item [Stationary Environments]\label{def:stationary_env} The transition function does not change over time.
+  \item [Non-Stationary Environments]\label{def:nonstationary_env} Transition function changes over time. e.g. video games get harder the longer you play (physics of the world change)
+  \item [Fully-Observable Environment]\label{fully_obs_env} The state contains all information required to make action decisions, e.g. Chess.
+  \item [Partially-Observable Environment]\label{partial_obs_env} The state provides partial world-view, e.g. first-person perspective video games.
+\end{description}
 
 \section{Relevant Facts And Assumptions}
 \subsection{Relevant Facts}
