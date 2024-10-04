@@ -190,15 +190,52 @@ involved in the Project}
 
 \section{Security Requirements}
 \subsection{Access Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{SR-A1:} The system shall allow a minimal and necessary amount of contributors to the framework.
+  \begin{itemize}
+    \item \textbf{Rationale:} Limiting the number of contributors to only Tangle team members and supervisors makes it easy to monitor all code changes integrated into the main codebase.
+  \end{itemize}
+  \item \textbf{SR-A2:} A form of secondary authentication shall be enabled for contributors.
+  \begin{itemize}
+    \item \textbf{Rationale:} Having Multi-factor Authentication (MFA) and Role-Based Access Control (RBAC) enabled restricts the roles of each contributor in the repository, minimizing the chance of unauthorized changes into the codebase.
+  \end{itemize}
+\end{itemize}
+
 \subsection{Integrity Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{SR-I1:} The system shall have a protection mechanism for the main branch.
+  \begin{itemize}
+    \item \textbf{Rationale:} Protecting the main branch on Github avoids unauthorized, corrupted code to be merged. With this, pull requests will require at least 1 review from other contributors and resolved comments before merging their changes.
+  \end{itemize}
+\end{itemize}
+
 \subsection{Privacy Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{SR-P1:} Any data that may include sensitive, personal information shall be obfuscated or anonymized where necessary.
+  \begin{itemize}
+    \item \textbf{Rationale:} Obfuscating and anonymizing sensitive data ensures that the system strictly follows the law and regulation, decreasing the chance of data breach. This includes any data that must remain private and should not be included in the public Github repository.
+  \end{itemize}
+\end{itemize}
+
 \subsection{Audit Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{SR-A1:} All detailed message logging and simulation results shall be available for audit purposes.
+  \begin{itemize}
+    \item \textbf{Rationale:} Storing all message logs and simulation results allows users to have access to them at a later time for auditing. This ensures traceability for compliance and debugging.
+  \end{itemize}
+\end{itemize}
+
 \subsection{Immunity Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{SR-IM1:} The system shall check and search for unauthorized and undesirable code.
+  \begin{itemize}
+    \item \textbf{Rationale:} Having regular code checks through the CI/CD pipeline guarantees that TPG's code is well-preserved and protected from undesirable code such as viruses, malware, and spyware, minimizing the probability of breaches, or data theft.
+  \end{itemize}
+  \item \textbf{SR-IM2:} The system shall have a robust mechanism for handling errors and malfunctions.
+  \begin{itemize}
+    \item \textbf{Rationale:} A robust mechanism for handling errors and malfunctions ensures the system recovers gracefully from system malfunctions, avoiding downtime for users.
+  \end{itemize}
+\end{itemize}
 
 \section{Cultural Requirements}
 \subsection{Cultural Requirements}
