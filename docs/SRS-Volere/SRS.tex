@@ -7,8 +7,9 @@
 \documentclass[12pt]{article}
 
 \usepackage{booktabs}
-\usepackage{tabularx}
+\usepackage{xltabular}
 \usepackage{hyperref}
+\usepackage{graphicx}
 \hypersetup{
     bookmarks=true,         % show bookmarks bar?
       colorlinks=true,      % false: boxed links; true: colored links
@@ -108,11 +109,97 @@ involved in the Project}
 
 \section{The Scope of the Work}
 \subsection{The Current Situation}
-\lips
+
+For the scope of this capstone, there are two main areas of focus: Software Engineering practices and physics engine integration. Both of these have current states which will be improved upon over the course of this project.
+
+\subsubsection{Software Engineering Practices}
+The TPG (Tangled Program Graph) project is currently managed with basic software engineering practices. The codebase is hosted on GitLab, and Dr. Kelly’s research group uses Git branches to separate and manage their work. This current setup does allow for parallel work and multiple contributors.
+However, several key practices are missing:
+\begin{itemize}
+  \item Unit Testing: There are no unit tests in place. This absence means that code changes are not systematically validated, increasing the risk of introducing bugs and regressions.
+  \item Continuous Integration/Continuous Deployment (CI/CD): The project lacks automated pipelines for building, testing, and deploying code. Without CI/CD, integrating changes can be time-consuming and error-prone.
+  \item Pull Request Templates and Standards: There are no standardized templates or guidelines for pull requests, leading to inconsistencies in code reviews and collaboration.
+  \item Open Source License: The project has not yet adopted an open-source license, which can deter external contributions and limit the software's usage.
+  \item Issue Management: There is no formal system for tracking bugs, feature requests, or tasks, making project management less efficient. 
+\end{itemize}
+The current structure of the TPG codebase may not be optimized for use as an open-source library. Current researchers need to run shell scripts as the entry point, which can be a barrier to entry for those unfamiliar with the system. Additionally, MacOS with ARM based chips may have extra difficulty in onboarding to this project due to the many dependency conflicts in this current state. This approach limits accessibility and may discourage potential users and contributors. More research into code structure and analysis of how other open source libraries allow for their frameworks to be integrated into open source contributor workflows should be studied.
+
+\subsubsection{Physics Engine Integration}
+
+The TPG framework has been validated using OpenAI Gym's classic control problems such as CartPole, Acrobot, and Pendulum. These environments are stationary, meaning their transition functions (the rules determining the next state given a current state and action) do not change over time.
+In contrast, real-world environments are typically non-stationary. Their transition functions can evolve due to external factors, requiring agents to adapt continuously. Currently, the TPG framework needs to evolve and be adapted to more dynamic environments.
+
 \subsection{The Context of the Work}
-\lips
+
+\subsubsection{Software Engineering Practices}
+
+\begin{figure}[h!]
+  \begin{center}
+   \includegraphics[scale=0.6]{SystemContext.png}
+  \caption{System Context}
+  \label{Fig_SystemContext} 
+  \end{center}
+\end{figure}
+
+\begin{itemize}
+  \item Unit Testing: Focused on improving code quality, unit tests ensure that individual pieces of the codebase work as expected.
+  \item CI/CD Pipelines: The integration and automation of software processes, such as building and testing, will allow for continuous integration and deployment of changes, ensuring the project remains robust as it scales.
+  \item Software Architecture: This examines how users interact with TPG, the use of shell scripting, and how the framework is structured using API development and object-oriented programming (OOP) principles. It emphasizes improving design principles for a better developer and user experience.
+  \item Documentation: This is critical for onboarding new developers, ensuring explainability, and providing clear, thorough project documentation.
+  \item Issue Management: Introducing a formal system to track bugs, feature requests, and community suggestions will help organize tasks and streamline project development.
+  \item Guidelines for Open Source Contributors: Establishing clear guidelines will provide a roadmap for external contributors to participate in the project, increasing collaboration and contributions.
+  \item Guidelines for Current Researchers: This component covers how researchers and developers within the project can contribute effectively, ensuring consistency and alignment with the project's goals.
+\end{itemize}
+
+\subsubsection{Physics Engine Integration}
+\begin{figure}[hbt!]
+  \begin{center}
+   \includegraphics[scale=0.5]{PhysicsEngineContext.png}
+  \caption{System Context}
+  \label{Fig_PhysicsEngineContext} 
+  \end{center}
+\end{figure}
+
+\begin{itemize}
+  \item TPG (Tangled Program Graphs): TPG is a reinforcement learning framework. In this context, its role is to act as the core system that will be tested and integrated with dynamic environments. Establishing the interface between TPG and MuJoCo will allow the TPG framework to be tested in physically realistic simulations.
+  \item MuJoCo (Multi-Joint dynamics with Contact): MuJoCo is a high-performance physics engine used for modeling and simulating dynamic systems. In this diagram, it represents the external library that provides the physics-based environments required for testing TPG. The interface with TPG will enable the reinforcement learning agents created using TPG to interact with complex, real-world-like physics simulations provided by MuJoCo.
+  \item Experiments: Experiments define the environments and scenarios where TPG will be tested. This component represents the experimental setups that specify the parameters for evaluating TPG’s performance in various MuJoCo-based scenarios. These experiments are critical for determining how well TPG adapts to different physics-based tasks, environments, and scenarios.
+\end{itemize}
+
 \subsection{Work Partitioning}
-\lips
+
+\begin{xltabular}{\textwidth}{   
+  | >{\raggedright\arraybackslash}X 
+  | >{\raggedright\arraybackslash}X 
+  | >{\raggedright\arraybackslash}X 
+  | >{\raggedright\arraybackslash}X | }
+  \caption{A sample long table.} \label{tab:long} \\
+  
+  \hline \multicolumn{1}{|c|}{\textbf{Event Name}} & \multicolumn{1}{c|}{\textbf{Inputs}} & \multicolumn{1}{c|}{\textbf{Outputs}} & \multicolumn{1}{c|}{\textbf{Summary}} \\ \hline 
+  \endfirsthead
+  
+  \multicolumn{4}{c}%
+  {\tablename\ \thetable{} -- continued from previous page} \\
+  \hline \multicolumn{1}{|c|}{\textbf{Event Name}} & \multicolumn{1}{c|}{\textbf{Inputs}} & \multicolumn{1}{c|}{\textbf{Outputs}} & \multicolumn{1}{c|}{\textbf{Summary}} \\ \hline 
+  \endhead
+  
+  \hline \multicolumn{4}{|r|}{{Continued on next page}} \\ \hline
+  \endfoot
+  \hline
+\endlastfoot
+\hline
+Contributor wants to merge code changes they made & New changes (code that was modified in a PR) & New code is successfully integrated with the main code & CI - Continuous Integration practices into the repo, ensuring all devs can make changes in a seamless manner and be up to date while concurrent work is occuring \\
+\hline
+Contributor wants to evaluate the code they wrote & New code blocks that are written by a contributor & Test functions are created to evaluate new code & Automated tests are generated for new code blocks that are written ensuring code robustness \\
+\hline
+Contributor wants to onboard and use TPG & N/A & Contributor is able to run the framework & Seamless onboarding experience that allows a new contributor/user to get up and running \\
+\hline
+Contributor wants to perform an experiment to test the TPG framework in MuJoCo & TPG, MuJoCo & Functioning simulation of an experiment integrated with a physics engine & New experiments to be conducted in more realistic scenarios evolving the development of this reinforcement learning framework \\
+\hline
+Contributor wants to get visual results of from test data & TPG, MuJoCo & Graphs of the recent experiment & Evaluation of the experiment is crucial to improving the framework and allowing it to become good at multi task reinforcement learning tasks \\
+
+\end{xltabular}
+
 \subsection{Specifying a Business Use Case (BUC)}
 \lips
 
