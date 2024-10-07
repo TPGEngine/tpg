@@ -59,21 +59,79 @@ Date 2 & 1.1 & Notes\\
 \lips
 \section{Stakeholders}
 \subsection{Client}
-\lips
+% \lips
+\begin{itemize}
+  \item \textbf{Description:} Dr. Stephen Kelly and his research team. They are responsible for the development and overseeing changes made to the TPG framework.
+    \begin{itemize}
+      \item \textbf{Role:} Main decision-makers on the scope and direction of the project. They will provide feedback on the project and approve the final implementation.
+    \end{itemize}
+
+  \end{itemize}
+
+
+
+
+
 \subsection{Customer}
-\lips
+\textbf{N/A}
+\begin{itemize}
+\item \textbf{Reasoning:} This project is not a commercial product made for an intended customer audience in mind, but an extension to an existing research project.
+\end{itemize}
+
+
 \subsection{Other Stakeholders}
-\lips
+\begin{itemize}
+
+\item \textbf{Description:} External French research team (GEGELATI). They are an organization that is adopting the TPG algorithm for research purposes differing from Dr Kelly’s project.
+\begin{itemize}
+  \item \textbf{Role:} Access to a more robust and maintainable framework for testing RL algorithms in high-fidelity simulators like MuJoCo. They may also share findings that may be beneficial to Dr Kelly’s research as well.
+
+\end{itemize}
+
+
+\item \textbf{Description:}The broader reinforcement learning research community. This includes research organizations and teams working with evolutionary algorithms and genetic programming who may be interested in Dr. Kelly’s research.
+\begin{itemize}
+  \item \textbf{Role:} End-users who will benefit from the enhancements made to the TPG framework, especially in the form of improved documentation, testing, and real-world applicability. The framework may be utilized or referenced in other research and contribute to further development of the field.
+
+\end{itemize}
+
+\end{itemize}
+
 \subsection{Hands-On Users of the Project}
-\lips
+\begin{itemize}
+  \item \textbf{Description:}  Researchers and developers working directly on the TPG framework. This includes Ph.D. students and collaborators involved in testing and developing within the codebase.
+    \begin{itemize}
+      \item \textbf{Role:} Active users who will interact with the code, run experiments, and test integrations (e.g., with MuJoCo). They are responsible for ensuring that the system works as intended and fits the project's research goals.
+
+    \end{itemize}
+
+  \end{itemize}
+
 \subsection{Personas}
-\lips
+\begin{itemize}
+  \item \textbf{Researcher Persona:}   Dr Stephen Kelly is a postdoctoral researcher focusing on genetic programming in predictive control environments. He is interested in how emergent forms of memory and hierarchy allow digital evolution to build programs in complex, multi-task environments, which he works on through his project -  the TPG framework. His goal is to evaluate and test TPG in complex environments, such as MuJoCo, to further his research in the field of RL. Dr Kelly is driven by the prospect of publishing impactful research and contributing to the RL community. However, he finds the lack of user-friendly documentation in TPG frustrating, as it makes setting up experiments and testing difficult. Despite this, Alex is committed to using TPG to demonstrate how genetic programming can outperform or complement traditional RL methods. He regularly uses technologies such as C++ for his work, and utilizes Gitlab for version control. He also aims to keep his project as an open source framework to allow others to benefit from his research.
+
+  \item \textbf{Developer Persona:} Oliver is a software developer with a background in C++ and knowledge in the fundamentals of software engineering best practices. Currently, Jamie is working with Dr. Kelly’s research group to improve the TPG framework. His primary focus is to introduce modern software engineering principles, such as continuous integration, automated testing, and comprehensive documentation, to enhance the maintainability and scalability of TPG. Jamie is highly motivated to refactor the TPG codebase to make it more user-friendly for other researchers and contributors. However, he will have to balance the challenge of modernizing the codebase without disrupting the existing functionality or performance of TPG, especially without the full context of the system when he starts to work on it. Additionally, he will also be contributing to work on extending TPG to be integrated with Mujoco, an advanced physics simulator. He will be doing research on the best ways to create an integration between the two systems.
+
+  \end{itemize}
 \subsection{Priorities Assigned to Users}
-\lips
+
+\textbf{N/A}
+
 \subsection{User Participation}
-\lips
+\begin{itemize}
+  \item Hands-on users (researchers and developers) will be actively involved throughout the project lifecycle, providing feedback on codebase refactoring, testing, CI development and the MuJoCo integration.
+
+
+  \item Frequent discussions with the Dr. Kelly and the research team during the development process, with periodic reviews at project milestones.
+
+  \item The reinforcement learning community or other research organizations may provide indirect feedback post-development through research papers, informal discussion, and open-source contributions
+
+
+  \end{itemize}
 \subsection{Maintenance Users and Service Technicians}
-\lips
+The future maintainers of the TPG framework will likely be within Dr. Kelly’s research group or external contributors from the open-source community, will handle ongoing updates, bug fixes, and enhancements. User documentation will be provided to help improve the maintainability of the project.
+
 
 \section{Mandated Constraints}
 \subsection{Solution Constraints}
@@ -385,9 +443,30 @@ Inhibit the New Product}
 
 \section{Tasks}
 \subsection{Project Planning}
-\lips
+\begin{itemize}
+  \item \textbf{Develop SRS document:}  Initial draft of the project's requirements document to outline the core functionality and goals.
+  \item \textbf{Conducting Hazard Analysis:} Analyze potential risks and hazards to the project’s success.
+
+  \item \textbf{Developing V&V Plan:} Create a test plan to outline testing and validation procedures.
+  \item \textbf{Proof of Concept Demonstration:} Present a basic demonstration of the core functionalities and integration.
+  \item \textbf{Design Document Revision:} Formulate first revision of the design document, detailing system architecture and design choices.
+  \item \textbf{Revision 0 Project Demonstration:}  Showcase the initial system with key features implemented.
+  \item \textbf{Create user guide:} Develop user documentation for the core features of the project.
+  \item \textbf{V&V Report Revision:} Create a test report to highlight progress and updates in testing and validation procedures.
+  \item \textbf{Final Demonstration:} Complete demonstration with finalized features and documentation at the expo.
+  \item \textbf{Final Documentation:} Revise and complete final project documentation.
+\end{itemize}
 \subsection{Planning of the Development Phases}
-\lips
+\begin{itemize}
+
+  \item \textbf{Initial Codebase Evaluation and Testing Integration:} Conduct thorough evaluation of the current TPG codebase while getting a better understanding of relevant reinforcement learning concepts to integrate a testing suite (unit tests) to ensure code quality and coverage.
+  \item \textbf{Refactor TPG for Continuous Integration:}  Implement continuous integration pipelines (e.g., using GitHub Actions) to automate testing and deployment.
+  \item \textbf{Design and Develop Interface with MuJoCo:} Design and implement the interface between the TPG framework and the MuJoCo simulator to test agents in a more complex and dynamic environment.
+  \item \textbf{Experimentation and Validation:} Conduct tests or experiment with TPG agents in the MuJoCo environment to evaluate performance and behavior, potentially being evaluated against previously established simple models.
+  \item \textbf{Documentation and Knowledge Transfer:} Develop comprehensive user documentation for the new features and integration, including usage guides and development decisions.
+  \item \textbf{Final Testing and Refinement:} Conduct final testing process  to ensure that the TPG framework is stable, reliable, and meets all the initial requirements.
+
+\end{itemize}
 
 \section{Migration to the New Product}
 \subsection{Requirements for Migration to the New Product}
