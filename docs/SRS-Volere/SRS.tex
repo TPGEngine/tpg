@@ -56,26 +56,93 @@ Date 2 & 1.1 & Notes\\
 ~\newpage
 \section{Purpose of the Project}
 \subsection{User Business}
-\lips
+The Tangled Program Graphs (TPG) framework is an alternative approach to reinforcement learning (RL) that leverages evolution-based techniques instead of the widely used deep neural networks (DNN). In traditional RL, agents learn through trial and error by generating actions and receiving rewards. The DNN approach requires extensive computational resources, often involving thousands of GPUs, which can be expensive and inefficient. In contrast, TPG aims to provide a more cost-effective and resource-efficient solution, with the long-term goal of embedding this evolution-based learning directly into hardware, reducing dependency on large-scale computational infrastructure.
+
+Currently, TPG has been tested primarily in fully observable, stationary mini-game environments, which are not representative of the dynamic and partially observable nature of real-world scenarios. This limitation presents a challenge, as the real-world problems TPG is meant to address are much more complex and constantly changing. To safely and effectively evolve TPG's capabilities, it is crucial to test the framework in advanced simulation environments, like MuJoCo, which can better mimic real-life dynamics in a controlled and risk-free manner.
+
+Additionally, TPG's codebase has been developed by graduate students primarily focused on research output, often neglecting the software engineering practices necessary for creating a robust and maintainable open-source framework. Without standardized practices such as unit testing, continuous integration/continuous deployment (CI/CD), and architectural guidelines, TPG's long-term goal of becoming a widely adopted, open-source framework could be hindered. This project seeks to address these gaps, ensuring that TPG can scale, evolve, and attract contributions from other researchers and reinforcement learning enthusiasts in a standardized and efficient manner.
 \subsection{Goals of the Project}
-\lips
+
+\begin{enumerate}
+  \item \textbf{Enabling Software Engineering Standards}: We aim to create a seamless and standardized process for all contributors to the Tangled Program Graphs (TPG) framework. This includes simplifying the onboarding process, establishing clear contribution guidelines, and building a robust, scalable architecture that is open for extension but closed for modification. By doing so, we ensure that future development is both collaborative and sustainable, allowing for a consistent quality of contributions while maintaining the integrity of the core framework.
+  \item \textbf{Physics Engine Integration}: We also seek to enhance TPG's ability to handle more complex, real-world-like scenarios. This will be achieved by integrating TPG with the MuJoCo physics engine, which allows for experimentation in dynamic and partially observable environments. By expanding the testing environments, we can evolve TPG's capabilities beyond its current limits, ensuring it is better suited for real-world applications.
+\end{enumerate}
+
 \section{Stakeholders}
 \subsection{Client}
-\lips
+% \lips
+\begin{itemize}
+  \item \textbf{Description:} Dr. Stephen Kelly and his research team. They are responsible for the development and overseeing changes made to the TPG framework.
+    \begin{itemize}
+      \item \textbf{Role:} Main decision-makers on the scope and direction of the project. They will provide feedback on the project and approve the final implementation.
+    \end{itemize}
+
+  \end{itemize}
+
+
+
+
+
 \subsection{Customer}
-\lips
+\textbf{N/A}
+\begin{itemize}
+\item \textbf{Reasoning:} This project is not a commercial product made for an intended customer audience in mind, but an extension to an existing research project.
+\end{itemize}
+
+
 \subsection{Other Stakeholders}
-\lips
+\begin{itemize}
+
+\item \textbf{Description:} External French research team (GEGELATI). They are an organization that is adopting the TPG algorithm for research purposes differing from Dr Kelly’s project.
+\begin{itemize}
+  \item \textbf{Role:} Access to a more robust and maintainable framework for testing RL algorithms in high-fidelity simulators like MuJoCo. They may also share findings that may be beneficial to Dr Kelly’s research as well.
+
+\end{itemize}
+
+
+\item \textbf{Description:}The broader reinforcement learning research community. This includes research organizations and teams working with evolutionary algorithms and genetic programming who may be interested in Dr. Kelly’s research.
+\begin{itemize}
+  \item \textbf{Role:} End-users who will benefit from the enhancements made to the TPG framework, especially in the form of improved documentation, testing, and real-world applicability. The framework may be utilized or referenced in other research and contribute to further development of the field.
+
+\end{itemize}
+
+\end{itemize}
+
 \subsection{Hands-On Users of the Project}
-\lips
+\begin{itemize}
+  \item \textbf{Description:}  Researchers and developers working directly on the TPG framework. This includes Ph.D. students and collaborators involved in testing and developing within the codebase.
+    \begin{itemize}
+      \item \textbf{Role:} Active users who will interact with the code, run experiments, and test integrations (e.g., with MuJoCo). They are responsible for ensuring that the system works as intended and fits the project's research goals.
+
+    \end{itemize}
+
+  \end{itemize}
+
 \subsection{Personas}
-\lips
+\begin{itemize}
+  \item \textbf{Researcher Persona:}   Dr Stephen Kelly is a postdoctoral researcher focusing on genetic programming in predictive control environments. He is interested in how emergent forms of memory and hierarchy allow digital evolution to build programs in complex, multi-task environments, which he works on through his project -  the TPG framework. His goal is to evaluate and test TPG in complex environments, such as MuJoCo, to further his research in the field of RL. Dr Kelly is driven by the prospect of publishing impactful research and contributing to the RL community. However, he finds the lack of user-friendly documentation in TPG frustrating, as it makes setting up experiments and testing difficult. Despite this, Alex is committed to using TPG to demonstrate how genetic programming can outperform or complement traditional RL methods. He regularly uses technologies such as C++ for his work, and utilizes Gitlab for version control. He also aims to keep his project as an open source framework to allow others to benefit from his research.
+
+  \item \textbf{Developer Persona:} Oliver is a software developer with a background in C++ and knowledge in the fundamentals of software engineering best practices. Currently, Jamie is working with Dr. Kelly’s research group to improve the TPG framework. His primary focus is to introduce modern software engineering principles, such as continuous integration, automated testing, and comprehensive documentation, to enhance the maintainability and scalability of TPG. Jamie is highly motivated to refactor the TPG codebase to make it more user-friendly for other researchers and contributors. However, he will have to balance the challenge of modernizing the codebase without disrupting the existing functionality or performance of TPG, especially without the full context of the system when he starts to work on it. Additionally, he will also be contributing to work on extending TPG to be integrated with Mujoco, an advanced physics simulator. He will be doing research on the best ways to create an integration between the two systems.
+
+  \end{itemize}
 \subsection{Priorities Assigned to Users}
-\lips
+
+\textbf{N/A}
+
 \subsection{User Participation}
-\lips
+\begin{itemize}
+  \item Hands-on users (researchers and developers) will be actively involved throughout the project lifecycle, providing feedback on codebase refactoring, testing, CI development and the MuJoCo integration.
+
+
+  \item Frequent discussions with the Dr. Kelly and the research team during the development process, with periodic reviews at project milestones.
+
+  \item The reinforcement learning community or other research organizations may provide indirect feedback post-development through research papers, informal discussion, and open-source contributions
+
+
+  \end{itemize}
 \subsection{Maintenance Users and Service Technicians}
-\lips
+The future maintainers of the TPG framework will likely be within Dr. Kelly’s research group or external contributors from the open-source community, will handle ongoing updates, bug fixes, and enhancements. User documentation will be provided to help improve the maintainability of the project.
+
 
 \section{Mandated Constraints}
 \subsection{Solution Constraints}
@@ -98,7 +165,24 @@ Date 2 & 1.1 & Notes\\
 \section{Naming Conventions and Terminology}
 \subsection{Glossary of All Terms, Including Acronyms, Used by Stakeholders
 involved in the Project}
-\lips
+% \lips
+\begin{description}
+  \item [Agent]\label{def:agent} An autonomous intelligence system performed to do specific tasks without human assistance.
+  \item [Environment]\label{def:environment} This is referred to the external system that the agent interacts with. The environment can provide information such as the current state and reward, and the agent can provide the environment with its action.
+  \item [Tangled Program Graphs (TPG)]\label{def:tpg} A framework currently being developed under Dr. Stephen Kelly that will help modular programs apply genetic programming principles to embedded systems.
+  \item [Deep Neural Networks (DNNs)]\label{def:dnn} A machine learning technique that trains an agent to complete difficult tasks that would be difficult to do using conventional programming.
+  \item [Genetic Programming]\label{def:genetic_programming} A technique used to evolve programs, that first start a population of “unfit” agents. Through RL, agents are destroyed, kept, and mutated to evolve into a more suitable population. This is continued until the population reaches its desired fit.
+  \item [Reinforcement Learning (RL)]\label{def:rl} A machine learning technique that utilizes a reward-and-punishment system towards agents, providing a reward for a correctly done task and a punishment for incorrectly done tasks.
+  \item [Multi-Task Reinforcement Learning (Multi-Task RL)]\label{def:mulittask_rl} A type of reinforcement learning in which agents are learning multiple tasks at the same time.
+  \item [Policy]\label{def:policy} A strategy that a particular agent uses to complete a specific task. This is also known as agent behaviour. 
+  \item [MuJoCo]\label{def:mujoco} A free and open-source physics engine created by Google DeepMind that assists in facilitating research and development in areas such as robotics.
+  \item [Phylogenetic Learning]\label{def:phylogenetic_learning} Also known as Policy Search, this is a class of reinforcement learning in which agent-environment interactions are episodic. The policy becomes updated as a whole following the final episode outcome.
+  \item [Temporal Credit Assignment Problem]\label{def:temporal_credit} Actions with neutral or negative rewards may still contribute to a successful outcome.
+  \item [Stationary Environments]\label{def:stationary_env} The transition function does not change over time.
+  \item [Non-Stationary Environments]\label{def:nonstationary_env} Transition function changes over time. e.g. video games get harder the longer you play (physics of the world change)
+  \item [Fully-Observable Environment]\label{fully_obs_env} The state contains all information required to make action decisions, e.g. Chess.
+  \item [Partially-Observable Environment]\label{partial_obs_env} The state provides partial world-view, e.g. first-person perspective video games.
+\end{description}
 
 \section{Relevant Facts And Assumptions}
 \subsection{Relevant Facts}
@@ -385,25 +469,118 @@ Relation:
 
 \section{Functional Requirements}
 \subsection{Functional Requirements}
-\lips
-
+% \lips
+\begin{itemize}
+\item \textbf{FR-1:} The system shall have an interface that is compatible with \hyperref[def:mujoco]{MujoCo}.
+  \begin{itemize}
+    \item \textbf{Rationale:} This is a requirement brought on by the stakeholders to have an interface that integrates \hyperref[def:tpg]{TPG} with the \hyperref[def:mujoco]{MuJoCo} environment.
+  \end{itemize}
+\item \textbf{FR-2:} The system shall be able to visualize an experiment running from test data.
+  \begin{itemize}
+    \item \textbf{Rationale:} Visualizing the experiment from test data will allow for verification of the simulator and interface compatibility.
+  \end{itemize}
+\item \textbf{FR-3:} The system shall have an integrated CI/CD pipeline.
+  \begin{itemize}
+    \item \textbf{Rationale:} To have a good workflow environment for the development of the project, a CI/CD pipeline is a beneficial way to do so.
+  \end{itemize}
+\item \textbf{FR-4:} The system shall automatically run test cases once a new code change has been detected in the main branch.
+  \begin{itemize}
+    \item \textbf{Rationale:} This is to ensure that all test cases pass when a new code update has been implemented and breakage of code or functionality is not all introduced.
+  \end{itemize}
+\item \textbf{FR-5:} The system shall be automatically compiled and built once all automated test cases have passed.
+  \begin{itemize}
+    \item \textbf{Rationale:} Once all test cases have passed, the system can safely ensure that the update can be implemented into the code.
+  \end{itemize}
+\item \textbf{FR-6:} The system shall adhere to standard software engineering code practices.
+\begin{itemize}
+  \item \textbf{Rationale:} This is to allow for easy maintainability of the code. As this is a research project, the people working on the project will be constantly changing. Adhering to these practices minimizes development hassle.
+\end{itemize}
+\item \textbf{FR-7:} The system shall perform automatic code linting before building the project.
+\begin{itemize}
+  \item \textbf{Rationale:} Code linting will allow for universal and consistent formatting of code within the project. 
+\end{itemize}
+\item \textbf{FR-8:} The system shall be able to adapt to new experiments provided by the simulator without any downtime. 
+  \begin{itemize}
+    \item \textbf{Rationale:} This is important as the system should not be dependent on the experiments being simulated, rather the interface shall be able to adapt easily to newly introduced experiments. 
+  \end{itemize}
+\end{itemize}
 \section{Look and Feel Requirements}
+
 \subsection{Appearance Requirements}
-\lips
+
+\begin{itemize}
+  \item \textbf{LFAR1:}  The codebase should follow clear and consistent formatting guidelines. This includes proper indentation, descriptive variable names, and potentially inline documentation to enhance readability for both new and experienced project developers.
+      \begin{itemize}
+        \item \textbf{Rationale:} A consistent code style and formatting increases the maintainability of the project and allows developers to easily understand and contribute to the project. 
+      \end{itemize}
+\end{itemize}
+
+
 \subsection{Style Requirements}
-\lips
+
+
+\begin{itemize}
+  \item \textbf{LFSR1:}  The style of the code, including naming conventions, commenting, and structure, should remain consistent across all modules of the TPG framework.
+
+      \begin{itemize}
+        \item \textbf{Rationale:} This consistency will ensure a cohesive development experience and make the project easier to maintain and expand in the future.
+      \end{itemize}
+\end{itemize}
+
 
 \section{Usability and Humanity Requirements}
 \subsection{Ease of Use Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{UH-E1:} The system shall have a clear and comprehensive documentation.
+  \begin{itemize}
+    \item \textbf{Rationale:} A consistent and comprehensive documentation on the CI/CD pipeline and agent-environment integration ensures ease of usage for all future users regardless of their technical level.
+  \end{itemize}
+  \item \textbf{UH-E2:} The system shall provide real-time, accurate logging of messages for every action.
+  \begin{itemize}
+    \item \textbf{Rationale:} Real-time, accurate logging of messages allows users to understand the outcome of their inputs instantaneously, reducing confusion, habilitating more opportunities for debugging and empowers users of their expectations.
+  \end{itemize}
+\end{itemize}
+
+
 \subsection{Personalization and Internationalization Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{UH-PI1:} The system shall have the flexibility to adjust certain parameters when configuring MuJoCo.
+  \begin{itemize}
+    \item \textbf{Rationale:} Having the flexibility to change parameters provides users the opportunity to make the system fit to their specific needs and requirements.
+  \end{itemize}
+\end{itemize}
+
 \subsection{Learning Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{UH-L1:} The system shall have tutorials available to the users.
+  \begin{itemize}
+    \item \textbf{Rationale:} Having tutorials, simulation examples and guides for the TPG framework and MuJoCo provides guidance to understand user interaction between the entire system and agent-environments.
+  \end{itemize}
+  \item \textbf{UH-L2:} The system shall ensure that relevant technical concepts and resources shall be accessible by users with ease.
+  \begin{itemize}
+    \item \textbf{Rationale:} Acknowledging that TPG builds up on several machine learning concepts, listing resources that will complement learning the framework can accelerate user onboarding.
+  \end{itemize}
+\end{itemize}
+
 \subsection{Understandability and Politeness Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{UH-UP1:} The system shall accommodate symbols and words that are naturally understandable by all potential users.
+  \begin{itemize}
+    \item \textbf{Rationale:} In addition to having clear and concise message outputs, avoiding the use of slang, jargons or ambiguous terms minimizes confusion and learning curve for users. This includes using traditional symbols and words that the majority of the users are familiar with.
+  \end{itemize}
+  \item \textbf{UH-UP2:} The system shall not include offensive language in its logging.
+  \begin{itemize}
+    \item \textbf{Rationale:} Explicit, biased or unnaturally used language may harm any users. It is best for the framework to avoid using any words to ensure a healthy environment. The use of offensive languiage can create an unsafe relationship between the user and the system, compromising user trust.
+  \end{itemize}
+\end{itemize}
+
 \subsection{Accessibility Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{UH-A1:} The system shall accommodate users with different kinds of disabilities.
+  \begin{itemize}
+    \item \textbf{Rationale:} Supporting features such as text-to-speech, and color blindness assistance systems can allow users with different kinds of disabilities to leverage TPG, fostering an inclusive environment.
+  \end{itemize}
+\end{itemize}
 
 \section{Performance Requirements}
 \subsection{Speed and Latency Requirements}
@@ -435,45 +612,163 @@ Relation:
 
 \section{Maintainability and Support Requirements}
 \subsection{Maintenance Requirements}
-\lips
+% \lips
+
+\begin{itemize}
+  \item \textbf{MS-M1:} If a change is made to the finished software, it will take at most 15\% of the original development time, assuming the same development resources are available.
+    \begin{itemize}
+      \item \textbf{Rationale:} One of the goals of the project is to ensure a more efficient and smooth software structure. As such 15\% is an appropriate reduction in development time to verify the project’s efficiency. 
+    \end{itemize}
+  \item \textbf{MS-M2:} The software shall have detailed and organized code documentation.
+  \begin{itemize}
+    \item \textbf{Rationale:} Detailed and organized code documentation makes it easier for developers when it comes to traceability and verifiability. 
+  \end{itemize}
+  \item \textbf{MS-M3:} The software shall maintain regular updates, at least once a month, assuming a change regarding dependent frameworks or libraries has occurred. 
+  \begin{itemize}
+    \item \textbf{Rationale:} Maintaining regular updates is critical to ensure that the project is protected against any security or software bugs caused by the dependent frameworks. Ensuring updates at least once a month minimizes the risk of errors occurring. 
+  \end{itemize}
+\end{itemize}
+
 \subsection{Supportability Requirements}
-\lips
+% \lips
+\begin{itemize}
+  \item \textbf{MS-S1:} The software shall maintain an online repository with resources, documentation and FAQs that can address common user issues or questions.
+  \begin{itemize}
+    \item \textbf{Rationale:} As new developers are introduced into the project, a repository with all information regarding common issues will help prevent delayed development changes.
+  \end{itemize}
+  \item \textbf{MS-S2:} The software shall continue to support the latest stable version of Linux and other dependent code libraries.
+  \begin{itemize}
+    \item \textbf{Rationale:} Keeping the versions of dependent libraries up-to-date allows developers and researchers to continue work on the project without hassle.
+  \end{itemize}
+\end{itemize}
 \subsection{Adaptability Requirements}
-\lips
+% \lips
+\begin{itemize}
+  \item \textbf{MS-A1:} The development team shall utilize a CI/CD pipeline to deliver new software additions.
+  \begin{itemize}
+    \item \textbf{Rationale:} CI/CD pipelines allow for an automated process to ensure code changes have met standards. 
+  \end{itemize}
+  \item \textbf{MS-A2:} The software shall be easy to install and execute on major operating systems (Windows, Mac, Linux).
+
+  \begin{itemize}
+    \item \textbf{Rationale:} As many users of the system are on different platforms, ensuring easy installation and execution of the project is crucial to avoid unnecessary workarounds.
+  \end{itemize}
+  \item \textbf{MS-A3:} The software shall be able to adapt to newly implemented experiments provided by the training environment.
+  \begin{itemize}
+    \item \textbf{Rationale:} Adaptability of new experiments is a focal point when it comes to seeing the effectiveness of \hyperref[def:tpg]{TPG}’s \hyperref[def:rl]{RL} technique.
+  \end{itemize}
+\end{itemize}
+
+
 
 \section{Security Requirements}
 \subsection{Access Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{SR-A1:} The system shall allow a minimal and necessary amount of contributors to the framework.
+  \begin{itemize}
+    \item \textbf{Rationale:} Limiting the number of contributors to only Tangle team members and supervisors makes it easy to monitor all code changes integrated into the main codebase.
+  \end{itemize}
+  \item \textbf{SR-A2:} A form of secondary authentication shall be enabled for contributors.
+  \begin{itemize}
+    \item \textbf{Rationale:} Having Multi-factor Authentication (MFA) and Role-Based Access Control (RBAC) enabled restricts the roles of each contributor in the repository, minimizing the chance of unauthorized changes into the codebase.
+  \end{itemize}
+\end{itemize}
+
 \subsection{Integrity Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{SR-I1:} The system shall have a protection mechanism for the main branch.
+  \begin{itemize}
+    \item \textbf{Rationale:} Protecting the main branch on Github avoids unauthorized, corrupted code to be merged. With this, pull requests will require at least 1 review from other contributors and resolved comments before merging their changes.
+  \end{itemize}
+\end{itemize}
+
 \subsection{Privacy Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{SR-P1:} Any data that may include sensitive, personal information shall be obfuscated or anonymized where necessary.
+  \begin{itemize}
+    \item \textbf{Rationale:} Obfuscating and anonymizing sensitive data ensures that the system strictly follows the law and regulation, decreasing the chance of data breach. This includes any data that must remain private and should not be included in the public Github repository.
+  \end{itemize}
+\end{itemize}
+
 \subsection{Audit Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{SR-A1:} All detailed message logging and simulation results shall be available for audit purposes.
+  \begin{itemize}
+    \item \textbf{Rationale:} Storing all message logs and simulation results allows users to have access to them at a later time for auditing. This ensures traceability for compliance and debugging.
+  \end{itemize}
+\end{itemize}
+
 \subsection{Immunity Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{SR-IM1:} The system shall check and search for unauthorized and undesirable code.
+  \begin{itemize}
+    \item \textbf{Rationale:} Having regular code checks through the CI/CD pipeline guarantees that TPG's code is well-preserved and protected from undesirable code such as viruses, malware, and spyware, minimizing the probability of breaches, or data theft.
+  \end{itemize}
+  \item \textbf{SR-IM2:} The system shall have a robust mechanism for handling errors and malfunctions.
+  \begin{itemize}
+    \item \textbf{Rationale:} A robust mechanism for handling errors and malfunctions ensures the system recovers gracefully from system malfunctions, avoiding downtime for users.
+  \end{itemize}
+\end{itemize}
 
 \section{Cultural Requirements}
+
+
+
+
 \subsection{Cultural Requirements}
-\lips
+\textbf{N/A}
 
 \section{Compliance Requirements}
 \subsection{Legal Requirements}
-\lips
-\subsection{Standards Compliance Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{CRL1:}  The TPG framework must comply with the intellectual property policies of the contributing institutions and researchers. It must comply with proper licensing (MIT license) to avoid conflicts with proprietary or open-source software practices.
 
+      \begin{itemize}
+        \item \textbf{Rationale:} Ensuring compliance for intellectual property protects the rights of developers and contributors.Licensing allows the TPG framework to be shared and built upon by other researchers and open source developers while maintaining legal clarity regarding the use and distribution of the software.
+      \end{itemize}
+\end{itemize}
+
+\subsection{Standards Compliance Requirements}
+\begin{itemize}
+  \item \textbf{CRL1:}  TPG framework should follow the Google C++ style, a widely adopted C++ coding standard.
+
+      \begin{itemize}
+        \item \textbf{Rationale:} Adhering to a well established coding standard helps reduce errors throughout development, increases accessibility, readability, and long-term maintainability of the code.
+      \end{itemize}
+\end{itemize}
 \section{Open Issues}
 \lips
 
 \section{Off-the-Shelf Solutions}
 \subsection{Ready-Made Products}
-\lips
-\subsection{Reusable Components}
-\lips
-\subsection{Products That Can Be Copied}
-\lips
+% \lips
 
+All-in-one reinforcement learning frameworks that are integrated with software simulations already exist in today’s market; however, many are very costly. Nevertheless, the project can use some of these products as a benchmark and make comparisons between them. Here are some current ready-made products.
+\begin{itemize}
+  \item \href{https://developer.nvidia.com/isaac/sim}{NVIDIA Issac Sim}
+  \item \href{https://aws.amazon.com/sagemaker/}{Amazon SageMaker RL}
+  \item \href{https://github.com/google-deepmind/dm_control?tab=readme-ov-file}{Google DeepMind Control Suite}
+  \item \href{https://github.com/Unity-Technologies/ml-agents}{Unity ML-Agents}
+\end{itemize}
+
+\subsection{Reusable Components}
+% \lips
+As an open-source project, the use of reusable components is beneficial to keep the project modular and maintainable. Some libraries that could be utilized as components include:
+\begin{itemize}
+  \item Physics Engines such as MuJoCo, and NVIDIA Omniverse
+  \item Unit Testing libraries such as Catch, and Google Test
+  \item Static Analysis and Code Coverage libraries such as Cppcheck, and Gcov
+  \item CI/CD tools such as GitHub actions, GitLab CI/CD
+\end{itemize}
+
+\subsection{Products That Can Be Copied}
+% \lips
+There exists some already open-source reinforcement learning frameworks that have interfaces that can be incorporated with robotic simulators. These products have suitable licenses (such as MIT or BSD) that allow the project to make modifications or take them as a reference.
+\begin{itemize}
+  \item \href{https://github.com/rohanpsingh/mc\_mujoco}{MC\_MuJoCo}
+  \item \href{https://github.com/berkeleyopenarms/blue_mujoco_v1?tab=readme-ov-file}{Blue MuJoCo} - Copyrighted by Berkeley Open Arms
+  \item \href{https://github.com/HoangGiang93/mujoco_sim?tab=readme-ov-file}{MuJoCo-Sim} - Copyrighted by Hoang Giang Nguyen - Institute for Artificial Intelligence, University Bremen
+\end{itemize}
 \section{New Problems}
 \subsection{Effects on the Current Environment}
 \lips
@@ -489,29 +784,73 @@ Inhibit the New Product}
 
 \section{Tasks}
 \subsection{Project Planning}
-\lips
+\begin{itemize}
+  \item \textbf{Develop SRS document:}  Initial draft of the project's requirements document to outline the core functionality and goals.
+  \item \textbf{Conducting Hazard Analysis:} Analyze potential risks and hazards to the project’s success.
+
+  \item \textbf{Developing V\&V Plan:} Create a test plan to outline testing and validation procedures.
+  \item \textbf{Proof of Concept Demonstration:} Present a basic demonstration of the core functionalities and integration.
+  \item \textbf{Design Document Revision:} Formulate first revision of the design document, detailing system architecture and design choices.
+  \item \textbf{Revision 0 Project Demonstration:}  Showcase the initial system with key features implemented.
+  \item \textbf{Create user guide:} Develop user documentation for the core features of the project.
+  \item \textbf{V\&V Report Revision:} Create a test report to highlight progress and updates in testing and validation procedures.
+  \item \textbf{Final Demonstration:} Complete demonstration with finalized features and documentation at the expo.
+  \item \textbf{Final Documentation:} Revise and complete final project documentation.
+\end{itemize}
 \subsection{Planning of the Development Phases}
-\lips
+\begin{itemize}
+
+  \item \textbf{Initial Codebase Evaluation and Testing Integration:} Conduct thorough evaluation of the current TPG codebase while getting a better understanding of relevant reinforcement learning concepts to integrate a testing suite (unit tests) to ensure code quality and coverage.
+  \item \textbf{Refactor TPG for Continuous Integration:}  Implement continuous integration pipelines (e.g., using GitHub Actions) to automate testing and deployment.
+  \item \textbf{Design and Develop Interface with MuJoCo:} Design and implement the interface between the TPG framework and the MuJoCo simulator to test agents in a more complex and dynamic environment.
+  \item \textbf{Experimentation and Validation:} Conduct tests or experiment with TPG agents in the MuJoCo environment to evaluate performance and behavior, potentially being evaluated against previously established simple models.
+  \item \textbf{Documentation and Knowledge Transfer:} Develop comprehensive user documentation for the new features and integration, including usage guides and development decisions.
+  \item \textbf{Final Testing and Refinement:} Conduct final testing process  to ensure that the TPG framework is stable, reliable, and meets all the initial requirements.
+
+\end{itemize}
 
 \section{Migration to the New Product}
+The main code of the TPG framework is stored in \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg}{Gitlab}. However, due to the nature of the Capstone project, the team will be migrating the repository as a subtree of the \href{https://github.com/TPGEngine/tpg}{Github repository} to implement the two main goals of this project: support software engineering best practices and the integration of the machine learning framework into another agent-environment. 
+
 \subsection{Requirements for Migration to the New Product}
-\lips
+\begin{itemize}
+  \item \textbf{MR-R1:} The project’s Github and GitLab repositories shall be continuously synchronized, ensuring changes on one version are reflected on the other.
+  \item \textbf{MR-R2:} Github Actions shall be functional, establishing a seamless support for standard software engineering principles.
+  \item \textbf{MR-R3:} The agent-environment interface between TPG and MuJoCo shall be functional, ensuring no conflicts with dependencies or existing code.
+\end{itemize}
+
 \subsection{Data That Has to be Modified or Translated for the New System}
-\lips
+At this point, there is no data that requires modification or translation.
 
 \section{Costs}
-\lips
+The project's goal for TPG will not accumulate any costs. Throughout the project's duration, the primary tools will be open source frameworks, Github Actions and MuJoCo, all of which are free of charge. This may be subject to change during the project's development if unforeseen challenges arise or the scope is modified.
+
 \section{User Documentation and Training}
 \subsection{User Documentation Requirements}
-\lips
-\subsection{Training Requirements}
-\lips
+% \lips
+\begin{itemize}
+  \item \textbf{USD-UD1:} All user documentation shall be on the code repository, with versions provided in PDF format, so that they may be suitable for offline use.
+  \begin{itemize}
+    \item \textbf{Rationale:} It is important to have documentation available for both online and offline use in the event that online access is unavailable.
+  \end{itemize}
+  \item \textbf{USD-UD2:} Written user guides shall include platform-specific instructions (Windows, macOS, Linux, etc.), system requirements, and troubleshooting for common issues.
+  \begin{itemize}
+    \item \textbf{Rationale:} These detailed user guides allow for developers to access the project with minimal disruptions. 
+  \end{itemize}
+  \item \textbf{USD-UD3:} Release notes shall accompany each software update and provide a clear summary of new features, enhancements, and resolved issues.
+  \begin{itemize}
+    \item \textbf{Rationale:} Release notes are crucial to improving traceability and transparency in addition to keeping all code modifications organized.
+  \end{itemize}
+\end{itemize}
 
+\subsection{Training Requirements}
+% \lips
+This section is not applicable to the project as no training is required for the users of this software. All necessary information required to run the software will be provided in the corresponding documentation.
 \section{Waiting Room}
-\lips
+At this point, there are no additional tasks or requirements needed for the project's completion. This may be subject to change during the development if unforeseen challenges arise or the scope is modified.
 
 \section{Ideas for Solution}
-\lips
+At this point, there are no additional tasks or requirements needed for the project's completion. This may be subject to change during the development if unforeseen challenges arise or the scope is modified.
 
 \newpage{}
 \section*{Appendix --- Reflection}
@@ -532,5 +871,68 @@ graduate attribute of Lifelong Learning.  Please answer the following questions:
   mastering the skill?  Of the identified approaches, which will each team
   member pursue, and why did they make this choice?
 \end{enumerate}
+
+
+\textbf{Calvyn}
+
+\begin{enumerate}
+
+\item I believe that this capstone project will require a solid understanding of C++, and important software development and devops related skills, primarily around developing a CI/CD system from scratch. Project management skills will also be vital to collaborate effectively as a team to meet project milestone deadlines and handle inevitable conflicts.
+
+\item To gain a better understanding of the necessary technical skills required, I believe that referring to existing documentation will be the best option to help guide the learning process. In addition, online resources such as Youtube videos and articles will be very helpful for developing this understanding with a visual/auditory aid.
+
+
+\end{enumerate}
+
+\textbf{Cyruss}
+
+
+\begin{enumerate}
+
+  \item The team will collectively need to acquire knowledge and skills in areas such as C++, reinforcement learning, and DevOps. Team management will also be a critical skill to ensure that the team works smoothly and efficiently, making sure deadlines and goals are met. Another skill that will be crucial is writing, as the project requires many written reports of documentation and analysis. Being able to convey the intended message in written format will allow for less ambiguity and misinterpretations within the project.
+
+  
+  
+  \item   Two approaches when it comes to acquiring the knowledge or mastering the skills are the following: Trial and error experimentation of the skill, and online learning resources. Trial and error experimentation allows for exploration of the topic in question, and creates a self-learning environment where practice is crucial. The approach of online learning resources ensures a guided and structured approach where one follows a set of instructions and topics that one may think are beneficial. I will choose to pursue the approach of online learning resources, as time is critical for this project and experimentation is a time-consuming approach. I learn better with a structured format, and it prevents me from getting off-track when it comes to learning.
+  
+  \end{enumerate}
+
+\textbf{Richard}
+
+\begin{enumerate}
+
+  \item Knowledge and skills that the team will acquire to successfully complete this capstone project involve understanding the CI/CD process (creating our custom GitHub Actions pipeline), software engineering design as refactoring the codebase to be modular, extensible are key since the end goal of this project is to enable open source development. Additionally, team management is something everyone will experience. In our future careers, we’ll all be working in teams so knowing how to do development while being in a team setting is an invaluable experience. Examples of this workflow is task splitting, discussions on what to prioritize, and working on a codebase in a team setting.
+
+  
+  \item For understanding CI/CD, I’ve always been interested in this topic through my co-ops because I always found it cool that the teams I’ve worked on had this infrastructure set up and integrated in a seamless way. An approach to acquiring knowledge is using what I’ve previously known and filling in the gaps through research and tutorials. In the course, there has already been a tutorial on CI/CD, however the pipelines we need to build for our project will be a little more complicated. Using that as a base will set us up with the fundamentals. For me, I’m very interested in learning and being a generalist. I want to contribute to both portions of the project as I want to grow my breadth with how to design a C++ project to make it more modular and usable as a library. Additionally, I’ve been more interested in DevOps as it is an area I hope to gain more experience in. With development of a framework/library, this is different to the application dev experience I’ve had before, but ultimately researching other similar open source projects will be invaluable to see what the best practices are.
+  
+  \end{enumerate}
+
+
+\textbf{Mark}
+
+\begin{enumerate}
+
+  \item The team will collectively acquire knowledge in C++, CI/CD and machine learning. For non-technical skills, the team will be leveraging team management. This will ensure that the team will function efficiently, allowing the team to meet critical deadlines and goals. Communication in ways such as writing and speaking can also be acquired throughout the duration of the project. This skill ensures that the team can successfully create documentations and requirements that can provide future users and contributors insights on the product.
+  
+  \item For learning required skills and knowledge for this project, the team can proactively familiarize themselves into the TPG codebase. This method would allow each member to gain more insights on machine learning, and the C++ programming language. Leveraging online learning resources such as YouTube, Coursera, and Udemy can ensure that the team gain background knowledge on machine learning, CI/CD and C++.
+  
+  \end{enumerate}
+
+
+\textbf{Edward}
+
+\begin{enumerate}
+
+  \item We should acquire a base level of general domain knowledge of existing RL problems and approaches, general overview as well as specific approaches relevant to TPG (genetic programming, program synthesis). Learning relevant terminology will be useful to understanding the TPG codebase and learning to use the MuJoCo API. For an efficient learning approach, sharing the knowledge with team members is important as many of us have little specialized background in RL. Thus, asking Dr. Kelly via teams, or during his presentations is highly encouraged. The alternative of self-study should be used to supplement the aforementioned primary learning approach, as this approach does not facilitate shared learning.
+  
+  \item Proficiency in C++ is important to be developed as more effort is spent on the integration of TPG and MuJoCo codebases. Proficiency of Python is also beneficial since much of MuJoCo documentation and OpenAI Gym examples use Python. The recommended approach of learning such languages should be based on each individual team members’ learning style, whether it be reading documentation, tackling sub-problems, etc.
+  
+  \end{enumerate}
+
+
+
+
+
 
 \end{document}
