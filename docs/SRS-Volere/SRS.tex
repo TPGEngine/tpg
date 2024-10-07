@@ -10,6 +10,7 @@
 \usepackage{xltabular}
 \usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage{multirow}
 \hypersetup{
     bookmarks=true,         % show bookmarks bar?
       colorlinks=true,      % false: boxed links; true: colored links
@@ -173,7 +174,7 @@ In contrast, real-world environments are typically non-stationary. Their transit
   | >{\raggedright\arraybackslash}X 
   | >{\raggedright\arraybackslash}X 
   | >{\raggedright\arraybackslash}X | }
-  \caption{A sample long table.} \label{tab:long} \\
+  \caption{Work Partitioning Table} \\
   
   \hline \multicolumn{1}{|c|}{\textbf{Event Name}} & \multicolumn{1}{c|}{\textbf{Inputs}} & \multicolumn{1}{c|}{\textbf{Outputs}} & \multicolumn{1}{c|}{\textbf{Summary}} \\ \hline 
   \endfirsthead
@@ -200,22 +201,187 @@ Contributor wants to get visual results of from test data & TPG, MuJoCo & Graphs
 
 \end{xltabular}
 
-\subsection{Specifying a Business Use Case (BUC)}
-\lips
-
 \section{Business Data Model and Data Dictionary}
 \subsection{Business Data Model}
-\lips
+\subsubsection{Software Engineering Practices}
+
+\begin{figure}[ht!]
+  \begin{center}
+   \includegraphics[scale=0.5]{DataModel.png}
+  \caption{Data Model}
+  \label{Fig_DataModel} 
+  \end{center}
+\end{figure}
+
+\clearpage
+
+Figure 3 illustrates a UML data model of a traditional CI/CD pipeline implemented using GitHub Actions. The architecture follows a master-slave design pattern, where the pipeline steps are defined in a YAML configuration file. For each step in the pipeline, a Controller (master) class orchestrates the process by delegating tasks to Agents (slaves) that handle specific actions. This design is commonly used in CI/CD pipelines because it reflects the sequential nature of the CI/CD process—each step must wait for the previous one to complete before proceeding.
+
+\subsubsection{Physics Engine Integration}
+
+\begin{figure}[ht!]
+  \begin{center}
+   \includegraphics[scale=0.5]{ClassModel.png}
+  \caption{Physics Engine Class Diagram}
+  \label{Fig_ClassModel} 
+  \end{center}
+\end{figure}
+
+Figure 4 presents a simplified UML data model of the interface being developed to integrate the TPG framework with MuJoCo. The primary objective is to adapt how the TPG framework handles state changes into a format that MuJoCo can interpret. To achieve this, we are utilizing the Adapter design pattern to translate incompatible formats and ensure compatibility between the two systems.
+
 \subsection{Data Dictionary}
-\lips
+
+\begin{xltabular}{\textwidth}{   
+  | >{\raggedright\arraybackslash}X 
+  | >{\raggedright\arraybackslash}X 
+  | >{\raggedright\arraybackslash}X | }
+  \caption{Data Dictionary Table} \\
+  
+  \hline \multicolumn{1}{|c|}{\textbf{Name}} & \multicolumn{1}{c|}{\textbf{Content}} & \multicolumn{1}{c|}{\textbf{Type}} \\ \hline 
+  \endfirsthead
+  
+  \multicolumn{3}{c}%
+  {\tablename\ \thetable{} -- continued from previous page} \\
+  \hline \multicolumn{1}{|c|}{\textbf{Name}} & \multicolumn{1}{c|}{\textbf{Content}} & \multicolumn{1}{c|}{\textbf{Type}} \\ \hline 
+  \endhead
+  
+  \hline \multicolumn{3}{|r|}{{Continued on next page}} \\ \hline
+  \endfoot
+  \hline
+\endlastfoot
+\hline
+Job Runner & Orchestrates all the jobs for the GitHub Actions CI/CD Pipeline & Class \\
+\hline
+Source Controller & Responsible for orchestrating Branch Protection rules and Linting during the Source stage of the CI/CD Pipeline & Class \\
+\hline
+Branch Protection Agent & Responsible for enabling branch protection on the repo to prevent accidental integrations on the main branch & Class \\
+\hline
+Linting Agent & Static analysis on the code and cleans it up & Class \\
+\hline
+Build Controller & Responsible for orchestrating the Build stage of the CI/CD Pipeline & Class \\
+\hline
+Compile Source Code Agent & Compiles the code to prepare it for validation & Class \\
+\hline
+Unit Testing Agent & Runs through all the unit tests in an automated fashion & Class \\
+\hline
+Code Coverage Agent & Static analyzes the coverage from the unit tests, usually needs to be above 85\% & Class \\
+\hline
+Test Controller & Responsible for orchestrating the Test stage of the CI/CD Pipeline & Class \\
+\hline
+MacOS, Linux, Windows Agents & Containers for each OS to test the integration of the framework in each environment (industry standard) & Class \\
+\hline
+Simulation Agent & Responsible for integration testing to ensure the new changes are robust and don’t break & Class \\
+
+\end{xltabular}
 
 \section{The Scope of the Product}
 \subsection{Product Boundary}
-\lips
+
+\begin{xltabular}{\textwidth}{   
+  | >{\raggedright\arraybackslash}X 
+  | >{\raggedright\arraybackslash}X | }
+  \caption{Product Boundary} \\
+  
+  \hline \multicolumn{1}{|c|}{\textbf{In Scope}} & \multicolumn{1}{c|}{\textbf{Out of Scope}} \\ \hline 
+  \endfirsthead
+  
+  \multicolumn{2}{c}%
+  {\tablename\ \thetable{} -- continued from previous page} \\
+  \hline \multicolumn{1}{|c|}{\textbf{In Scope}} & \multicolumn{1}{c|}{\textbf{Out of Scope}} \\ \hline 
+  \endhead
+  
+  \hline \multicolumn{2}{|r|}{{Continued on next page}} \\ \hline
+  \endfoot
+  \hline
+\endlastfoot
+\hline
+CI/CD Pipeline: Software Engineering practices need to be integrated into the code base & Ongoing research experiments with TPG: Since Dr. Kelly and his grad students are still developing TPG, the scope of our capstone won’t encompass current efforts \\
+\hline
+Interface between MuJoCo + TPG: Development of the interface that enables testing and evaluation of TPG in a physics engine must be established & \\
+\hline
+Code refactoring: Reorganizing code structure to make it suitable as a C API to allow open source contributions/seamless integrations into other projects & \\
+
+\end{xltabular}
+
 \subsection{Product Use Case Table}
-\lips
-\subsection{Individual Product Use Cases (PUC's)}
-\lips
+
+\begin{xltabular}{\textwidth}{   
+  | >{\raggedright\arraybackslash}X 
+  | >{\raggedright\arraybackslash}X | }
+  \caption{Product Boundary} \\
+  
+  \hline \multicolumn{1}{|c|}{\textbf{User}} & \multicolumn{1}{c|}{\textbf{Use Case}} \\ \hline 
+  \endfirsthead
+  
+  \multicolumn{2}{c}%
+  {\tablename\ \thetable{} -- continued from previous page} \\
+  \hline \multicolumn{1}{|c|}{\textbf{User}} & \multicolumn{1}{c|}{\textbf{Use Case}} \\ \hline 
+  \endhead
+  
+  \hline \multicolumn{2}{|r|}{{Continued on next page}} \\ \hline
+  \endfoot
+  \hline
+\endlastfoot
+\hline
+
+\multirow{2}{0.5\textwidth}{Researchers in Dr. Kelly’s research group} & - When researcher make changes to the code base, they are able to validate their logic through unit testing, integration testing in the CI/CD pipeline \\
+& - Perform experimentations using TPG in a physics engine, to further improve the reinforcement learning framework \\
+& - Access the code not by only using shell scripts, but through the C API \\
+& - Share how the integration is done in an Open Source manner to allow other community members to access the code \\
+& - Issue management to organize who is working on what currently \\
+
+\multirow{2}{0.5\textwidth}{Open Source Contributors} & - Access and embed the TPG framework into their own applications \\
+& - Make changes to the TPG framework in an automated manner \\
+& - Suggest changes to the framework in an standardized way \\
+
+\end{xltabular}
+
+\subsection{System Boundaries}
+\subsubsection{GitHub Actions Pipeline}
+
+\begin{figure}[ht!]
+  \begin{center}
+   \includegraphics[scale=0.5]{GitHubActionsSystem.png}
+  \caption{GitHub Actions Pipeline System Boundary}
+  \label{Fig_GitHubActions} 
+  \end{center}
+\end{figure}
+
+\subsubsection{Physics Engine Integration}
+
+\begin{figure}[ht!]
+  \begin{center}
+   \includegraphics[scale=0.5]{PhysicsIntegration.png}
+  \caption{MuJoCo Physics Integration}
+  \label{Fig_MuJoCo} 
+  \end{center}
+\end{figure}
+
+\subsection{Formalized Math and Application Flow}
+\subsubsection{Software Engineering Practices}
+
+Definitions: Let C be the set of all code changes, T be the set of all tests, S be the set of all test successes, E be the set of all test failures
+
+Functions:
+\begin{enumerate}
+  \item \begin{math}
+    Success: C \cap T \rightarrow S
+  \end{math}
+  \item \begin{math}
+    Failure: C \cap T \rightarrow E
+  \end{math}
+\end{enumerate}
+
+\subsubsection{Physics Engine Integration}
+
+Definitions: Let T represent the TPG framework, M represent the MuJoCo framework, E represent the experiment
+
+Relation:
+\begin{enumerate}
+  \item \begin{math}
+    R \subseteq E \cup (T \cap M)
+  \end{math}
+\end{enumerate}
 
 \section{Functional Requirements}
 \subsection{Functional Requirements}
