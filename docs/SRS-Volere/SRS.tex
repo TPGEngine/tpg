@@ -268,15 +268,57 @@ involved in the Project}
 
 \section{Usability and Humanity Requirements}
 \subsection{Ease of Use Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{UH-E1:} The system shall have a clear and comprehensive documentation.
+  \begin{itemize}
+    \item \textbf{Rationale:} A consistent and comprehensive documentation on the CI/CD pipeline and agent-environment integration ensures ease of usage for all future users regardless of their technical level.
+  \end{itemize}
+  \item \textbf{UH-E2:} The system shall provide real-time, accurate logging of messages for every action.
+  \begin{itemize}
+    \item \textbf{Rationale:} Real-time, accurate logging of messages allows users to understand the outcome of their inputs instantaneously, reducing confusion, habilitating more opportunities for debugging and empowers users of their expectations.
+  \end{itemize}
+\end{itemize}
+
+
 \subsection{Personalization and Internationalization Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{UH-PI1:} The system shall have the flexibility to adjust certain parameters when configuring MuJoCo.
+  \begin{itemize}
+    \item \textbf{Rationale:} Having the flexibility to change parameters provides users the opportunity to make the system fit to their specific needs and requirements.
+  \end{itemize}
+\end{itemize}
+
 \subsection{Learning Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{UH-L1:} The system shall have tutorials available to the users.
+  \begin{itemize}
+    \item \textbf{Rationale:} Having tutorials, simulation examples and guides for the TPG framework and MuJoCo provides guidance to understand user interaction between the entire system and agent-environments.
+  \end{itemize}
+  \item \textbf{UH-L2:} The system shall ensure that relevant technical concepts and resources shall be accessible by users with ease.
+  \begin{itemize}
+    \item \textbf{Rationale:} Acknowledging that TPG builds up on several machine learning concepts, listing resources that will complement learning the framework can accelerate user onboarding.
+  \end{itemize}
+\end{itemize}
+
 \subsection{Understandability and Politeness Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{UH-UP1:} The system shall accommodate symbols and words that are naturally understandable by all potential users.
+  \begin{itemize}
+    \item \textbf{Rationale:} In addition to having clear and concise message outputs, avoiding the use of slang, jargons or ambiguous terms minimizes confusion and learning curve for users. This includes using traditional symbols and words that the majority of the users are familiar with.
+  \end{itemize}
+  \item \textbf{UH-UP2:} The system shall not include offensive language in its logging.
+  \begin{itemize}
+    \item \textbf{Rationale:} Explicit, biased or unnaturally used language may harm any users. It is best for the framework to avoid using any words to ensure a healthy environment. The use of offensive languiage can create an unsafe relationship between the user and the system, compromising user trust.
+  \end{itemize}
+\end{itemize}
+
 \subsection{Accessibility Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{UH-A1:} The system shall accommodate users with different kinds of disabilities.
+  \begin{itemize}
+    \item \textbf{Rationale:} Supporting features such as text-to-speech, and color blindness assistance systems can allow users with different kinds of disabilities to leverage TPG, fostering an inclusive environment.
+  \end{itemize}
+\end{itemize}
 
 \section{Performance Requirements}
 \subsection{Speed and Latency Requirements}
