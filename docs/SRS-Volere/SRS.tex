@@ -232,11 +232,54 @@ involved in the Project}
 
 \section{Maintainability and Support Requirements}
 \subsection{Maintenance Requirements}
-\lips
+% \lips
+
+\begin{itemize}
+  \item \textbf{MS-M1:} If a change is made to the finished software, it will take at most 15\% of the original development time, assuming the same development resources are available.
+    \begin{itemize}
+      \item \textbf{Rationale:} One of the goals of the project is to ensure a more efficient and smooth software structure. As such 15\% is an appropriate reduction in development time to verify the project’s efficiency. 
+    \end{itemize}
+  \item \textbf{MS-M2:} The software shall have detailed and organized code documentation.
+  \begin{itemize}
+    \item \textbf{Rationale:} Detailed and organized code documentation makes it easier for developers when it comes to traceability and verifiability. 
+  \end{itemize}
+  \item \textbf{MS-M3:} The software shall maintain regular updates, at least once a month, assuming a change regarding dependent frameworks or libraries has occurred. 
+  \begin{itemize}
+    \item \textbf{Rationale:} Maintaining regular updates is critical to ensure that the project is protected against any security or software bugs caused by the dependent frameworks. Ensuring updates at least once a month minimizes the risk of errors occurring. 
+  \end{itemize}
+\end{itemize}
+
 \subsection{Supportability Requirements}
-\lips
+% \lips
+\begin{itemize}
+  \item \textbf{MS-S1:} The software shall maintain an online repository with resources, documentation and FAQs that can address common user issues or questions.
+  \begin{itemize}
+    \item \textbf{Rationale:} As new developers are introduced into the project, a repository with all information regarding common issues will help prevent delayed development changes.
+  \end{itemize}
+  \item \textbf{MS-S2:} The software shall continue to support the latest stable version of Linux and other dependent code libraries.
+  \begin{itemize}
+    \item \textbf{Rationale:} Keeping the versions of dependent libraries up-to-date allows developers and researchers to continue work on the project without hassle.
+  \end{itemize}
+\end{itemize}
 \subsection{Adaptability Requirements}
-\lips
+% \lips
+\begin{itemize}
+  \item \textbf{MS-A1:} The development team shall utilize a CI/CD pipeline to deliver new software additions.
+  \begin{itemize}
+    \item \textbf{Rationale:} CI/CD pipelines allow for an automated process to ensure code changes have met standards. 
+  \end{itemize}
+  \item \textbf{MS-A2:} The software shall be easy to install and execute on major operating systems (Windows, Mac, Linux).
+
+  \begin{itemize}
+    \item \textbf{Rationale:} As many users of the system are on different platforms, ensuring easy installation and execution of the project is crucial to avoid unnecessary workarounds.
+  \end{itemize}
+  \item \textbf{MS-A3:} The software shall be able to adapt to newly implemented experiments provided by the training environment.
+  \begin{itemize}
+    \item \textbf{Rationale:} Adaptability of new experiments is a focal point when it comes to seeing the effectiveness of \hyperref[def:tpg]{TPG}’s \hyperref[def:rl]{RL} technique.
+  \end{itemize}
+\end{itemize}
+
+
 
 \section{Security Requirements}
 \subsection{Access Requirements}
