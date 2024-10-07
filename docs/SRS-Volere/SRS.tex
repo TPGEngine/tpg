@@ -80,7 +80,7 @@ Date 2 & 1.1 & Notes\\
 The solution must strictly adhere to modern software engineering best practices, including comprehensive documentation, robust testing, and the implementation of continuous integration and continuous deployment (CI/CD) pipelines. The implementation must be in C++ to maintain compatibility with the existing Tangled Program Graphs (TPG) codebase. The system must integrate seamlessly with MuJoCo, a physics engine developed by Google DeepMind, to enable testing in dynamic and partially observable environments. All code contributions must comply with open-source licensing agreements and standards to facilitate community collaboration. Additionally, the solution should minimize computational resource requirements to support deployment on embedded systems with limited processing capabilities.
 
 \subsection{Implementation Environment of the Current System}
-The current TPG framework is implemented in C++. MuJoCo is originally written in C, and its core API is in C, so interacting with C++ is a good option. Development will occur in a UNIX-like environment with as much standardization as possible. Virtualization environments such as Docker, VSCode Dev Containers, WSL, VMs will be considered based on the ease of environment standardization across the team. OpenGL will be used to display the RL simulation, so display compatibility with the virtualization environments will need to be considered.
+The current TPG framework is implemented in C++. MuJoCo is originally written in C, and its core API is in C, so interacting with C++ is a good option. Development will occur in a UNIX-like environment with as much standardization as possible. Virtualization environments such as Docker, VSCode Dev Containers, WSL, and VMs will be considered based on the ease of environment standardization across the team. OpenGL will be used to display the RL simulation, so display compatibility with the virtualization environments will need to be considered.
 
 \subsection{Partner or Collaborative Applications}
 \lips
@@ -211,7 +211,7 @@ OE-RR: The system shall be released under an appropriate open-source license (e.
 Rationale: Releasing the system under an open-source license encourages collaboration and ensures accessibility for researchers and developers. Clear documentation and guides help users utilize and contribute effectively, fostering a collaborative environment for framework improvement.
 
 \subsection{Operational Support Requirements}
-OE-OSR: Internal resources and mechanisms should be established to assist current and future members of the research group in utilizing and contributing to the TPG framework. This includes, the Github repository, and associated documentation such as this SRS report, troubleshooting resources, and history of issue tracking.
+OE-OSR: Internal resources and mechanisms should be established to assist current and future members of the research group in utilizing and contributing to the TPG framework. This includes the GitHub repository and associated documentation such as this SRS report, troubleshooting resources, and history of issue tracking.
 
 Rationale: Similar to 13.4, improves efficiency of knowledge sharing.
 
