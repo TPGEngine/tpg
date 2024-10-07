@@ -54,9 +54,18 @@ Date 2 & 1.1 & Notes\\
 ~\newpage
 \section{Purpose of the Project}
 \subsection{User Business}
-\lips
+The Tangled Program Graphs (TPG) framework is an alternative approach to reinforcement learning (RL) that leverages evolution-based techniques instead of the widely used deep neural networks (DNN). In traditional RL, agents learn through trial and error by generating actions and receiving rewards. The DNN approach requires extensive computational resources, often involving thousands of GPUs, which can be expensive and inefficient. In contrast, TPG aims to provide a more cost-effective and resource-efficient solution, with the long-term goal of embedding this evolution-based learning directly into hardware, reducing dependency on large-scale computational infrastructure.
+
+Currently, TPG has been tested primarily in fully observable, stationary mini-game environments, which are not representative of the dynamic and partially observable nature of real-world scenarios. This limitation presents a challenge, as the real-world problems TPG is meant to address are much more complex and constantly changing. To safely and effectively evolve TPG's capabilities, it is crucial to test the framework in advanced simulation environments, like MuJoCo, which can better mimic real-life dynamics in a controlled and risk-free manner.
+
+Additionally, TPG's codebase has been developed by graduate students primarily focused on research output, often neglecting the software engineering practices necessary for creating a robust and maintainable open-source framework. Without standardized practices such as unit testing, continuous integration/continuous deployment (CI/CD), and architectural guidelines, TPG's long-term goal of becoming a widely adopted, open-source framework could be hindered. This project seeks to address these gaps, ensuring that TPG can scale, evolve, and attract contributions from other researchers and reinforcement learning enthusiasts in a standardized and efficient manner.
 \subsection{Goals of the Project}
-\lips
+
+\begin{enumerate}
+  \item \textbf{Enabling Software Engineering Standards}: We aim to create a seamless and standardized process for all contributors to the Tangled Program Graphs (TPG) framework. This includes simplifying the onboarding process, establishing clear contribution guidelines, and building a robust, scalable architecture that is open for extension but closed for modification. By doing so, we ensure that future development is both collaborative and sustainable, allowing for a consistent quality of contributions while maintaining the integrity of the core framework.
+  \item \textbf{Physics Engine Integration}: We also seek to enhance TPG's ability to handle more complex, real-world-like scenarios. This will be achieved by integrating TPG with the MuJoCo physics engine, which allows for experimentation in dynamic and partially observable environments. By expanding the testing environments, we can evolve TPG's capabilities beyond its current limits, ensuring it is better suited for real-world applications.
+\end{enumerate}
+
 \section{Stakeholders}
 \subsection{Client}
 % \lips
