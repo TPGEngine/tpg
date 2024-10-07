@@ -548,10 +548,17 @@ Inhibit the New Product}
 \end{itemize}
 
 \section{Migration to the New Product}
+The main code of the TPG framework is stored in \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg}{Gitlab}. However, due to the nature of the Capstone project, the team will be migrating the repository as a subtree of the \href{https://github.com/TPGEngine/tpg}{Github repository} to implement the two main goals of this project: support software engineering best practices and the integration of the machine learning framework into another agent-environment. 
+
 \subsection{Requirements for Migration to the New Product}
-\lips
+\begin{itemize}
+  \item \textbf{MR-R1:} The project’s Github and GitLab repositories shall be continuously synchronized, ensuring changes on one version are reflected on the other.
+  \item \textbf{MR-R2:} Github Actions shall be functional, establishing a seamless support for standard software engineering principles.
+  \item \textbf{MR-R3:} The agent-environment interface between TPG and MuJoCo shall be functional, ensuring no conflicts with dependencies or existing code.
+\end{itemize}
+
 \subsection{Data That Has to be Modified or Translated for the New System}
-\lips
+At this point, there is no data that requires modification or translation.
 
 \section{Costs}
 \lips
