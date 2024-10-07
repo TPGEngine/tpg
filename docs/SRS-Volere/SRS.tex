@@ -149,8 +149,41 @@ involved in the Project}
 
 \section{Functional Requirements}
 \subsection{Functional Requirements}
-\lips
-
+% \lips
+\begin{itemize}
+\item \textbf{FR-1:} The system shall have an interface that is compatible with \hyperref[def:mujoco]{MujoCo}.
+  \begin{itemize}
+    \item \textbf{Rationale:} This is a requirement brought on by the stakeholders to have an interface that integrates \hyperref[def:tpg]{TPG} with the \hyperref[def:mujoco]{MuJoCo} environment.
+  \end{itemize}
+\item \textbf{FR-2:} The system shall be able to visualize an experiment running from test data.
+  \begin{itemize}
+    \item \textbf{Rationale:} Visualizing the experiment from test data will allow for verification of the simulator and interface compatibility.
+  \end{itemize}
+\item \textbf{FR-3:} The system shall have an integrated CI/CD pipeline.
+  \begin{itemize}
+    \item \textbf{Rationale:} To have a good workflow environment for the development of the project, a CI/CD pipeline is a beneficial way to do so.
+  \end{itemize}
+\item \textbf{FR-4:} The system shall automatically run test cases once a new code change has been detected in the main branch.
+  \begin{itemize}
+    \item \textbf{Rationale:} This is to ensure that all test cases pass when a new code update has been implemented and breakage of code or functionality is not all introduced.
+  \end{itemize}
+\item \textbf{FR-5:} The system shall be automatically compiled and built once all automated test cases have passed.
+  \begin{itemize}
+    \item \textbf{Rationale:} Once all test cases have passed, the system can safely ensure that the update can be implemented into the code.
+  \end{itemize}
+\item \textbf{FR-6:} The system shall adhere to standard software engineering code practices.
+\begin{itemize}
+  \item \textbf{Rationale:} This is to allow for easy maintainability of the code. As this is a research project, the people working on the project will be constantly changing. Adhering to these practices minimizes development hassle.
+\end{itemize}
+\item \textbf{FR-7:} The system shall perform automatic code linting before building the project.
+\begin{itemize}
+  \item \textbf{Rationale:} Code linting will allow for universal and consistent formatting of code within the project. 
+\end{itemize}
+\item \textbf{FR-8:} The system shall be able to adapt to new experiments provided by the simulator without any downtime. 
+  \begin{itemize}
+    \item \textbf{Rationale:} This is important as the system should not be dependent on the experiments being simulated, rather the interface shall be able to adapt easily to newly introduced experiments. 
+  \end{itemize}
+\end{itemize}
 \section{Look and Feel Requirements}
 \subsection{Appearance Requirements}
 \lips
