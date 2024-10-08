@@ -807,16 +807,66 @@ There exists some already open-source reinforcement learning frameworks that hav
 \end{itemize}
 \section{New Problems}
 \subsection{Effects on the Current Environment}
-\lips
+
+\subsubsection{Software Engineering Practices}
+
+\begin{enumerate}
+  \item CI/CD Pipeline Implementation: The introduction of a continuous integration and continuous deployment (CI/CD) pipeline will automate the process of building, testing, and deploying changes. This will significantly streamline development workflows, ensuring that code is consistently tested and integrated into the main branch.
+  \item Unit Testing: Every new feature or bug fix must be accompanied by unit tests to ensure code quality and prevent regressions.
+  \item Documentation: Developers will need to document their changes, explaining new features or updates to existing functionality to ensure clarity for current and future contributors.
+  \item Pull Requests: All pull requests must include detailed comments outlining the changes made, the purpose behind them, and any potential impacts. This will ensure transparency and improve code review processes.
+  \item Issue Management: Proper issue tracking and management will be enforced, allowing for clear prioritization of tasks, bug reporting, and feature requests. This ensures that project development is organized and scalable.
+\end{enumerate}
+
+These new practices will improve collaboration, reduce errors, and increase the maintainability of the codebase. However, they will also introduce some initial overhead, as contributors will need to adapt to these new processes and maintain a higher standard of code quality.
+
+\subsubsection{Physics Engine Integration}
+
+By integrating the MuJoCo physics engine into the current environment, researchers will have access to more advanced and realistic simulations, allowing them to experiment beyond the OpenAI Gym's Classic Control environments (which are typically limited to simpler OpenGL-based environments). This will enable the testing of reinforcement learning algorithms in more complex, non-stationary environments that better mimic real-world scenarios.
+
+The goal of introducing these changes is to foresee and address potential challenges early in the development cycle. By setting clear software engineering standards and expanding the types of environments available for testing, we minimize the risk of conflicts during implementation. Additionally, these improvements will future-proof the project, making it more maintainable and adaptable to new research directions. However, there is also the need to manage potential conflicts that could arise from transitioning to more complex workflows and environments, ensuring that the adoption of new tools and practices does not create friction in the existing development culture.
+
 \subsection{Effects on the Installed Systems}
-\lips
+
+\subsubsection{Software Engineering Practices}
+
+\begin{enumerate}
+  \item CI/CD Pipeline Development: The new CI/CD pipeline is being developed using GitHub Actions, which poses a challenge as the current codebase is hosted on GitLab. GitLab does not directly support GitHub Actions, necessitating a workaround to integrate the two platforms.
+  \item Synchronization between GitLab and GitHub: Dr. Kelly’s codebase, which is regularly updated on GitLab, must be synced with the capstone project repository hosted on GitHub, where the CI/CD pipeline is being developed. To facilitate this, we have utilized a Git subtree mechanism. However, this migration and synchronization process is not straightforward and may require continuous maintenance to ensure both systems remain aligned.
+  \item Adjustment for Current Researchers: Researchers familiar with the current workflow on GitLab will need to adapt to the new development guidelines and processes, including contributing to the GitHub repository and adhering to the CI/CD requirements. This transition will require some initial adjustment in their development practices.
+\end{enumerate}
+
+\subsubsection{Physics Engine Integration}
+\begin{enumerate}
+  \item OpenGL Compatibility Issues: In its current state, the OpenGL animations work seamlessly on Ubuntu environments, particularly for less resource-intensive 2D animations. However, on other platforms such as macOS and Windows, OpenGL dependencies conflict with native system libraries, resulting in difficulties in running the animations smoothly.
+  \item MuJoCo Integration for Cross-Platform Support: The introduction of MuJoCo aims to provide more powerful physics-based simulations compared to the current OpenGL animations. However, solving the issue of platform dependency remains a priority. Making the framework platform-independent, or providing a streamlined onboarding process for different platforms, will be critical in ensuring that researchers and developers can easily evaluate the TPG framework on their preferred systems.
+\end{enumerate}
+
+These changes highlight the need to carefully manage the interfaces between the new system (GitHub CI/CD and MuJoCo integration) and the existing systems (GitLab repository and OpenGL-based animations). Synchronizing code between GitHub and GitLab introduces complexity and potential for conflict, especially with regular updates on both platforms. Likewise, transitioning from OpenGL to MuJoCo must account for platform-specific challenges, as cross-platform compatibility is essential for making the framework accessible to a broader range of users. Identifying and addressing these conflicts early will be crucial for ensuring a smooth integration of the new development with the existing systems.
+
 \subsection{Potential User Problems}
-\lips
+
+\begin{enumerate}
+  \item Refactoring to a C API: As we transition the TPG framework to a C API, existing users, particularly researchers who are accustomed to accessing TPG via shell scripts, may experience difficulties adapting to the new interface. This change could disrupt their current workflow and require additional effort to modify their methods of interaction with the system.
+  \item Onboarding Challenges with CI/CD: The introduction of a CI/CD pipeline could pose onboarding challenges for developers, especially those who may not have prior experience with continuous integration systems. Debugging issues that arise from the pipeline could divert their time and focus away from core development tasks, slowing down overall productivity.
+  \item Increased Burden of Testing and Pipelines: Researchers who are used to more informal development practices may find the requirement to write unit tests and follow a full pipeline process (testing, building, and deploying) burdensome and time-consuming. This could lead to frustration, as they may feel that more time is being spent on meeting software engineering standards than on actual research and development.
+\end{enumerate}
+
+Introducing these new systems and refactoring efforts can have unintended consequences on existing users, particularly researchers. If not properly managed, these changes may lead to a decline in productivity or reluctance to adopt the new processes. It is important to identify these potential adverse reactions early and determine whether they can be mitigated through training, better documentation, or phased rollouts. Ensuring that these changes do not overly burden the existing user base is critical for the smooth adoption of the new features and practices.
+
 \subsection{Limitations in the Anticipated Implementation Environment That May
 Inhibit the New Product}
-\lips
+\begin{enumerate}
+  \item Adherence to New Code Structure: As we refactor the TPG framework into a more modular and structured codebase, there is a risk that current developers may not fully adopt or follow the new coding standards and structure. This could result in inconsistent contributions and hinder the maintainability of the project.
+  \item Reality Gap in MuJoCo Experiments: While integrating MuJoCo provides a more powerful environment for testing, there is a concern that experiments conducted in simulation may not accurately reflect real-world outcomes. This "reality gap" problem could limit the practical application of the results obtained from the MuJoCo simulations.
+  \item Inadequate Testing Coverage: The current testing framework may not be comprehensive enough to catch all potential code errors or edge cases. Without thorough testing, new bugs and regressions could emerge, potentially leading to unstable releases and unforeseen issues during deployment.
+  \item CI/CD Incompatibility between GitHub and GitLab: The planned translation of the CI/CD pipeline from GitHub to GitLab poses compatibility challenges. Since GitLab does not natively support GitHub Actions, integrating the pipeline on GitLab could lead to technical incompatibilities or require significant re-engineering of the CI/CD process.
+\end{enumerate}
+
+Identifying these potential problems early allows us to address them proactively before they manifest during implementation. By recognizing the risks posed by developer adoption, the reality gap, insufficient testing, and platform incompatibility, we can take steps to mitigate conflicts, ensure smoother integration, and improve the likelihood of success with the new technologies and processes being introduced.
+
 \subsection{Follow-Up Problems}
-\lips
+N/A
 
 \section{Tasks}
 \subsection{Project Planning}
