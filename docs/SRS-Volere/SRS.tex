@@ -146,9 +146,11 @@ The future maintainers of the TPG framework will likely be within Dr. Kelly’s 
 
 \section{Mandated Constraints}
 \subsection{Solution Constraints}
-\lips
+The solution must strictly adhere to modern software engineering best practices, including comprehensive documentation, robust testing, and the implementation of continuous integration and continuous deployment (CI/CD) pipelines. The implementation must be in C++ to maintain compatibility with the existing Tangled Program Graphs (TPG) codebase. The system must integrate seamlessly with MuJoCo, a physics engine developed by Google DeepMind, to enable testing in dynamic and partially observable environments. All code contributions must comply with open-source licensing agreements and standards to facilitate community collaboration. Additionally, the solution should minimize computational resource requirements to support deployment on embedded systems with limited processing capabilities.
+
 \subsection{Implementation Environment of the Current System}
-\lips
+The current TPG framework is implemented in C++. MuJoCo is originally written in C, and its core API is in C, so interacting with C++ is a good option. Development will occur in a UNIX-like environment with as much standardization as possible. Virtualization environments such as Docker, VSCode Dev Containers, WSL, and VMs will be considered based on the ease of environment standardization across the team. OpenGL will be used to display the RL simulation, so display compatibility with the virtualization environments will need to be considered.
+
 \subsection{Partner or Collaborative Applications}
 \lips
 \subsection{Off-the-Shelf Software}
@@ -186,11 +188,13 @@ involved in the Project}
 
 \section{Relevant Facts And Assumptions}
 \subsection{Relevant Facts}
-\lips
+The Tangled Program Graphs (TPG) framework is currently implemented in C++ and is utilized for genetic programming in reinforcement learning (RL) environments. The existing codebase lacks comprehensive documentation, testing suites, and continuous integration/continuous deployment (CI/CD) pipelines, which hinders its usability and maintainability. Additionally, the integration of MuJoCo, a physics engine developed by Google DeepMind, is intended to enhance the TPG framework by enabling testing in dynamic and partially observable environments.
+
 \subsection{Business Rules}
-\lips
+All code contributions must comply with open-source licensing agreements, such as the MIT license, to ensure that the framework remains accessible to researchers and developers. Secondly, any modifications to the codebase must be accompanied by comprehensive documentation and testing to maintain high standards of quality and usability, meeting the requirements of rigorous scientific research. Additionally, the project must implement a continuous integration/continuous deployment (CI/CD) pipeline to automate testing and deployment processes, ensuring that all changes are validated before integration into the main codebase.
+
 \subsection{Assumptions}
-\lips
+It is assumed that all team members possess a working knowledge of C++ and are familiar with software engineering best practices. Furthermore, it is expected that the necessary computing resources and development tools will be available and accessible to the team throughout the project duration. The integration of MuJoCo into the TPG framework is presumed to be feasible without encountering insurmountable licensing or technical impediments. Additionally, it is anticipated that external contributors from Dr. Kelly's research group may become involved after the development phase, necessitating clear guidelines and documentation for collaboration.
 
 \section{The Scope of the Work}
 \subsection{The Current Situation}
@@ -583,32 +587,60 @@ Relation:
 \end{itemize}
 
 \section{Performance Requirements}
-\subsection{Speed and Latency Requirements}
-\lips
-\subsection{Safety-Critical Requirements}
-\lips
-\subsection{Precision or Accuracy Requirements}
-\lips
-\subsection{Robustness or Fault-Tolerance Requirements}
-\lips
-\subsection{Capacity Requirements}
-\lips
-\subsection{Scalability or Extensibility Requirements}
-\lips
-\subsection{Longevity Requirements}
-\lips
+\begin{itemize}
+\item \textbf{PR-SL:} The system shall execute without introducing significant computational overhead. The integration with MuJoCo must not degrade performance, and any additional computational costs should be minimized through optimization.
+  \begin{itemize}
+    \item \textbf{Rationale:} Ensures that processing times remain acceptable for real-time experimentation and testing.
+  \end{itemize}
+
+\item \textbf{PR-PA:} The system shall produce accurate and reliable results in simulations and experiments. All calculations must maintain high numerical precision to ensure the validity of results, especially when dealing with complex reinforcement learning tasks and physics simulations.
+  \begin{itemize}
+    \item \textbf{Rationale:} Ensures the validity of the reinforcement models being developed. Otherwise, inaccurate results can lead to incorrect conclusions and hinder the development of effective learning agents.
+  \end{itemize}
+
+\item \textbf{PR-RFT:} The system shall be robust against invalid inputs and unexpected environmental conditions. It must handle exceptions gracefully, recover from errors without data loss, and maintain operational stability under varying workloads and stress conditions.
+  \begin{itemize}
+    \item \textbf{Rationale:} In cases where the agent returns an action that is not defined by the environment, or the agent receives an out-of-bounds state, the system should be able to manage this gracefully.
+  \end{itemize}
+
+\item \textbf{PR-CR:} The system shall support scaling up to handle multiple simultaneous experiments or large-scale simulations without significant degradation in performance. Efficient resource management is essential to accommodate the demands of complex reinforcement learning tasks.
+  \begin{itemize}
+    \item \textbf{Rationale:} Efficient resource management is necessary to ensure that the system can accommodate the needs of diverse experiments without performance degradation.
+  \end{itemize}
+
+\item \textbf{PR-SE:} The system shall be designed for scalability, allowing for easy addition of new features, integration with other environments, and support for future research needs. The codebase should be modular and extensible, facilitating contributions from other researchers and developers.
+  \begin{itemize}
+    \item \textbf{Rationale:} The system should be designed for scalability to allow for future enhancements to the TPG algorithm and the addition of new environments within MuJoCo. A modular and extensible design will facilitate these updates and ensure that the framework remains relevant.
+  \end{itemize}
+
+\item \textbf{PR-RR:} The system shall maintain high reliability, with minimal downtime or failures during operation. Continuous integration and automated testing shall be employed to detect and address issues promptly, ensuring consistent performance over time.
+  \begin{itemize}
+    \item \textbf{Rationale:} High reliability is crucial for maintaining user trust and ensuring that experiments yield consistent results. Continuous integration and automated testing will help identify and address issues promptly, minimizing downtime and ensuring that the system operates smoothly over time.
+  \end{itemize}
+\end{itemize}
 
 \section{Operational and Environmental Requirements}
-\subsection{Expected Physical Environment}
-\lips
-\subsection{Wider Environment Requirements}
-\lips
-\subsection{Requirements for Interfacing with Adjacent Systems}
-\lips
-\subsection{Productization Requirements}
-\lips
-\subsection{Release Requirements}
-\lips
+\begin{itemize}
+\item \textbf{OE-EPE:} The system will operate in typical computing laboratory environments, which may include personal computers or servers running UNIX-like operating systems. It should function effectively on standard hardware without the need for specialized equipment, supporting researchers and developers in academic settings.
+  \begin{itemize}
+    \item \textbf{Rationale:} Ensuring compatibility across different hardware allows for broader accessibility and usability among researchers and developers.
+  \end{itemize}
+
+\item \textbf{OE-RIA:} The system must interface seamlessly with existing environments, MuJoCo, and potentially other simulation environments. Compatibility requires adherence to their API specifications and proper handling of data exchange protocols. Any dependencies or libraries required for integration must be managed effectively.
+  \begin{itemize}
+    \item \textbf{Rationale:} Proper handling of data exchange protocols is essential for maintaining the integrity of experiments and ensuring that the TPG framework can be evaluated in diverse settings.
+  \end{itemize}
+
+\item \textbf{OE-RR:} The system shall be released under an appropriate open-source license (e.g., MIT license) to enable community collaboration. All releases must include comprehensive documentation, installation instructions, and user guides to assist researchers and developers in utilizing and contributing to the framework.
+  \begin{itemize}
+    \item \textbf{Rationale:} Releasing the system under an open-source license encourages collaboration and ensures accessibility for researchers and developers. Clear documentation and guides help users utilize and contribute effectively, fostering a collaborative environment for framework improvement.
+  \end{itemize}
+
+\item \textbf{OE-OSR:} Internal resources and mechanisms should be established to assist current and future members of the research group in utilizing and contributing to the TPG framework. This includes the GitHub repository and associated documentation such as this SRS report, troubleshooting resources, and history of issue tracking.
+  \begin{itemize}
+    \item \textbf{Rationale:} Improves efficiency of knowledge sharing and ensures continuity of the project as team members change over time.
+  \end{itemize}
+\end{itemize}
 
 \section{Maintainability and Support Requirements}
 \subsection{Maintenance Requirements}
@@ -737,7 +769,11 @@ Relation:
       \end{itemize}
 \end{itemize}
 \section{Open Issues}
-\lips
+The integration of TPG (Tangled Program Graphs) with MuJoCo presents significant challenges, particularly regarding the complexity of the integration process. The current TPG implementation is primarily designed for simpler environments, and adapting it to MuJoCo's physics-based simulations may require substantial modifications to the TPG class and its components. Additionally, the state representation in MuJoCo environments is often high-dimensional and continuous, necessitating adaptations in TPG to efficiently handle these more complex state representations. Furthermore, the action space compatibility poses another challenge, as TPG currently supports discrete action spaces, while MuJoCo typically requires continuous action spaces, which may necessitate changes to the action selection and execution mechanisms within TPG.
+
+Performance optimization is crucial, as the computational demands of MuJoCo simulations combined with TPG's evolutionary approach could lead to significant runtime issues. This necessitates exploring optimization strategies to ensure reasonable training and execution times. Moreover, the memory management strategies employed in TPG, which utilize various memory structures such as working\_memory\_ and const\_memory\_, may need to be reassessed to efficiently store and manipulate the potentially large state spaces encountered in MuJoCo environments. The scalability of genetic operations within TPG also requires attention, as the existing mutation and crossover mechanisms may need adaptation to effectively work with the increased complexity of MuJoCo tasks, impacting convergence and learning speed.
+
+Handling partial observability is another critical aspect, as TPG has mechanisms for this, but their effectiveness in the more complex, physics-based scenarios of MuJoCo remains uncertain. Additionally, the integration may complicate debugging and visualization efforts, making it challenging to analyze the TPG's decision-making process. New tools or approaches may be necessary to facilitate effective development and analysis. Finally, the development of comprehensive test suites for the integrated TPG-MuJoCo system will be challenging due to the increased complexity and stochastic nature of the environments, necessitating careful consideration to ensure robust performance across a wide range of scenarios.
 
 \section{Off-the-Shelf Solutions}
 \subsection{Ready-Made Products}
