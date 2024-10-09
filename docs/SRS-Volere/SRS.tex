@@ -145,6 +145,7 @@ The future maintainers of the TPG framework will likely be within Dr. Kelly’s 
 
 
 \section{Mandated Constraints}
+
 \subsection{Solution Constraints}
 The solution must strictly adhere to modern software engineering best practices, including comprehensive documentation, robust testing, and the implementation of continuous integration and continuous deployment (CI/CD) pipelines. The implementation must be in C++ to maintain compatibility with the existing Tangled Program Graphs (TPG) codebase. The system must integrate seamlessly with MuJoCo, a physics engine developed by Google DeepMind, to enable testing in dynamic and partially observable environments. All code contributions must comply with open-source licensing agreements and standards to facilitate community collaboration. Additionally, the solution should minimize computational resource requirements to support deployment on embedded systems with limited processing capabilities.
 
@@ -152,17 +153,22 @@ The solution must strictly adhere to modern software engineering best practices,
 The current TPG framework is implemented in C++. MuJoCo is originally written in C, and its core API is in C, so interacting with C++ is a good option. Development will occur in a UNIX-like environment with as much standardization as possible. Virtualization environments such as Docker, VSCode Dev Containers, WSL, and VMs will be considered based on the ease of environment standardization across the team. OpenGL will be used to display the RL simulation, so display compatibility with the virtualization environments will need to be considered.
 
 \subsection{Partner or Collaborative Applications}
-\lips
+The solution should maintain or improve compatibility with applications or tools used by secondary stakeholders, such as the GEGELATI team, who utilize TPG for their research purposes. This includes ensuring interoperability with their existing frameworks and facilitating data exchange where necessary.
+
 \subsection{Off-the-Shelf Software}
-\lips
+The project may utilize off-the-shelf software components to enhance functionality and reduce development time. Potential components include physics engines like MuJoCo and unit testing libraries such as Catch or Google Test. All off-the-shelf software used must be compatible with the project's open-source licensing and should not introduce dependencies that conflict with the solution constraints. See section 19 for further analysis of potential off-the-shelf software integrations.
+
 \subsection{Anticipated Workplace Environment}
-\lips
+Development will utilize standard C++ development tools, compilers, debuggers, and possibly integrated development environments (IDEs). The team will work in a collaborative environment, employing version control systems like GitHub to manage code contributions and facilitate communication among team members. Meetings with our supervisor, Dr. Kelly, and amongst the team will be default in-person. Modes of communication have been discussed in further detail in the Development Plan document.
+
 \subsection{Schedule Constraints}
-\lips
+The project must be completed according to the deadlines listed in the capstone course outline, aligning with team availability and academic schedules. Key milestones include the early implementation of the CI/CD pipeline to facilitate subsequent testing and development. Achieving the target code coverage is critical and should be scheduled with sufficient time for iterative testing. Integrating MuJoCo should be prioritized to allow ample time for experimentation and evaluation. Time must be allocated for conducting experiments and analyzing results before project completion.
+
 \subsection{Budget Constraints}
-\lips
+The project operates under tight or nonexistent budget constraints, typical of academic projects. Any costs associated with software licenses must be minimized or covered through academic licensing options. Expenditures on additional hardware or paid tools are constrained and must be justified or avoided if possible.
+
 \subsection{Enterprise Constraints}
-\lips
+The solution must comply with university policies, academic integrity standards, and any guidelines provided by the supervising faculty. All development must adhere to the policies regarding intellectual property and open-source contributions.
 
 \section{Naming Conventions and Terminology}
 \subsection{Glossary of All Terms, Including Acronyms, Used by Stakeholders
