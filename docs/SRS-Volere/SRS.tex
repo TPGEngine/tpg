@@ -607,31 +607,37 @@ Relation:
 \item \textbf{PR-SL:} The system shall execute without introducing significant computational overhead. The integration with MuJoCo must not degrade performance, and any additional computational costs should be minimized through optimization.
   \begin{itemize}
     \item \textbf{Rationale:} Ensures that processing times remain acceptable for real-time experimentation and testing.
+    \item \textbf{Phase In Plan:} During development, in conjunction with the CI/CD pipeline.
   \end{itemize}
 
 \item \textbf{PR-PA:} The system shall produce accurate and reliable results in simulations and experiments. All calculations must maintain high numerical precision to ensure the validity of results, especially when dealing with complex reinforcement learning tasks and physics simulations.
   \begin{itemize}
     \item \textbf{Rationale:} Ensures the validity of the reinforcement models being developed. Otherwise, inaccurate results can lead to incorrect conclusions and hinder the development of effective learning agents.
+    \item \textbf{Phase In Plan:} During development, starting Oct 14, 2024.
   \end{itemize}
 
 \item \textbf{PR-RFT:} The system shall be robust against invalid inputs and unexpected environmental conditions. It must handle exceptions gracefully, recover from errors without data loss, and maintain operational stability under varying workloads and stress conditions.
   \begin{itemize}
     \item \textbf{Rationale:} In cases where the agent returns an action that is not defined by the environment, or the agent receives an out-of-bounds state, the system should be able to manage this gracefully.
+    \item \textbf{Phase In Plan:} During development, starting Oct 14, 2024.
   \end{itemize}
 
 \item \textbf{PR-CR:} The system shall support scaling up to handle multiple simultaneous experiments or large-scale simulations without significant degradation in performance. Efficient resource management is essential to accommodate the demands of complex reinforcement learning tasks.
   \begin{itemize}
     \item \textbf{Rationale:} Efficient resource management is necessary to ensure that the system can accommodate the needs of diverse experiments without performance degradation.
+    \item \textbf{Phase In Plan:} After phase 1 of the project, which starts in February 2025. The scale of the computational requirements will be better understood after this phase.
   \end{itemize}
 
 \item \textbf{PR-SE:} The system shall be designed for scalability, allowing for easy addition of new features, integration with other environments, and support for future research needs. The codebase should be modular and extensible, facilitating contributions from other researchers and developers.
   \begin{itemize}
     \item \textbf{Rationale:} The system should be designed for scalability to allow for future enhancements to the TPG algorithm and the addition of new environments within MuJoCo. A modular and extensible design will facilitate these updates and ensure that the framework remains relevant.
+    \item \textbf{Phase In Plan:} During development, starting Oct 14, 2024.
   \end{itemize}
 
 \item \textbf{PR-RR:} The system shall maintain high reliability, with minimal downtime or failures during operation. Continuous integration and automated testing shall be employed to detect and address issues promptly, ensuring consistent performance over time.
   \begin{itemize}
     \item \textbf{Rationale:} High reliability is crucial for maintaining user trust and ensuring that experiments yield consistent results. Continuous integration and automated testing will help identify and address issues promptly, minimizing downtime and ensuring that the system operates smoothly over time.
+    \item \textbf{Phase In Plan:} During development, starting Oct 14, 2024.
   \end{itemize}
 \end{itemize}
 
@@ -640,21 +646,25 @@ Relation:
 \item \textbf{OE-EPE:} The system will operate in typical computing laboratory environments, which may include personal computers or servers running UNIX-like operating systems. It should function effectively on standard hardware without the need for specialized equipment, supporting researchers and developers in academic settings.
   \begin{itemize}
     \item \textbf{Rationale:} Ensuring compatibility across different hardware allows for broader accessibility and usability among researchers and developers.
+    \item \textbf{Phase In Plan:} Before development. Virtual environments are being considered at this stage.
   \end{itemize}
 
 \item \textbf{OE-RIA:} The system must interface seamlessly with existing environments, MuJoCo, and potentially other simulation environments. Compatibility requires adherence to their API specifications and proper handling of data exchange protocols. Any dependencies or libraries required for integration must be managed effectively.
   \begin{itemize}
     \item \textbf{Rationale:} Proper handling of data exchange protocols is essential for maintaining the integrity of experiments and ensuring that the TPG framework can be evaluated in diverse settings.
+    \item \textbf{Phase In Plan:} During development, starting Oct 14, 2024.
   \end{itemize}
 
 \item \textbf{OE-RR:} The system shall be released under an appropriate open-source license (e.g., MIT license) to enable community collaboration. All releases must include comprehensive documentation, installation instructions, and user guides to assist researchers and developers in utilizing and contributing to the framework.
   \begin{itemize}
     \item \textbf{Rationale:} Releasing the system under an open-source license encourages collaboration and ensures accessibility for researchers and developers. Clear documentation and guides help users utilize and contribute effectively, fostering a collaborative environment for framework improvement.
+    \item \textbf{Phase In Plan:} Before development, starting Oct 14, 2024.
   \end{itemize}
 
 \item \textbf{OE-OSR:} Internal resources and mechanisms should be established to assist current and future members of the research group in utilizing and contributing to the TPG framework. This includes the GitHub repository and associated documentation such as this SRS report, troubleshooting resources, and history of issue tracking.
   \begin{itemize}
     \item \textbf{Rationale:} Improves efficiency of knowledge sharing and ensures continuity of the project as team members change over time.
+    \item \textbf{Phase In Plan:} Throughout lifecycle of the project.
   \end{itemize}
 \end{itemize}
 
