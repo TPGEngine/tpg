@@ -522,6 +522,8 @@ Relation:
   \item \textbf{LFAR1:}  The codebase should follow clear and consistent formatting guidelines. This includes proper indentation, descriptive variable names, and potentially inline documentation to enhance readability for both new and experienced project developers.
       \begin{itemize}
         \item \textbf{Rationale:} A consistent code style and formatting increases the maintainability of the project and allows developers to easily understand and contribute to the project. 
+        \item \textbf{Phase In Plan:} This requirement will become phased in once most of the project’s features are completed, which begins after February 3, 2025. 
+
       \end{itemize}
 \end{itemize}
 
@@ -534,6 +536,8 @@ Relation:
 
       \begin{itemize}
         \item \textbf{Rationale:} This consistency will ensure a cohesive development experience and make the project easier to maintain and expand in the future.
+        \item \textbf{Phase In Plan:} This requirement will become phased in once most of the project’s features are completed, which begins after February 3, 2025. 
+
       \end{itemize}
 \end{itemize}
 
@@ -544,10 +548,12 @@ Relation:
   \item \textbf{UH-E1:} The system shall have a clear and comprehensive documentation.
   \begin{itemize}
     \item \textbf{Rationale:} A consistent and comprehensive documentation on the CI/CD pipeline and agent-environment integration ensures ease of usage for all future users regardless of their technical level.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once most of the project’s features are completed, which begins after February 3, 2025. 
   \end{itemize}
   \item \textbf{UH-E2:} The system shall provide real-time, accurate logging of messages for every action.
   \begin{itemize}
     \item \textbf{Rationale:} Real-time, accurate logging of messages allows users to understand the outcome of their inputs instantaneously, reducing confusion, habilitating more opportunities for debugging and empowers users of their expectations.
+    \item  \textbf{Phase In Plan:} This requirement will become phased in midway through the project development process, which should be approximaly around December 2024. 
   \end{itemize}
 \end{itemize}
 
@@ -557,6 +563,7 @@ Relation:
   \item \textbf{UH-PI1:} The system shall have the flexibility to adjust certain parameters when configuring MuJoCo.
   \begin{itemize}
     \item \textbf{Rationale:} Having the flexibility to change parameters provides users the opportunity to make the system fit to their specific needs and requirements.
+    \item  \textbf{Phase In Plan:} This requirement will become phased in once the MuJoCo interface integration is completed, which begins after February 3, 2025.
   \end{itemize}
 \end{itemize}
 
@@ -565,10 +572,12 @@ Relation:
   \item \textbf{UH-L1:} The system shall have tutorials available to the users.
   \begin{itemize}
     \item \textbf{Rationale:} Having tutorials, simulation examples and guides for the TPG framework and MuJoCo provides guidance to understand user interaction between the entire system and agent-environments.
+    \item  \textbf{Phase In Plan:} This requirement will become phased in once the CI/CD and MuJoCo integration are completed, which begins after February 3, 2025.
   \end{itemize}
   \item \textbf{UH-L2:} The system shall ensure that relevant technical concepts and resources shall be accessible by users with ease.
   \begin{itemize}
     \item \textbf{Rationale:} Acknowledging that TPG builds up on several machine learning concepts, listing resources that will complement learning the framework can accelerate user onboarding.
+    \item \textbf{Phase In Plan:}  This requirement will become phased in once the CI/CD and MuJoCo integration are completed, which begins after February 3, 2025.
   \end{itemize}
 \end{itemize}
 
@@ -589,6 +598,7 @@ Relation:
   \item \textbf{UH-A1:} The system shall accommodate users with different kinds of disabilities.
   \begin{itemize}
     \item \textbf{Rationale:} Supporting features such as text-to-speech, and color blindness assistance systems can allow users with different kinds of disabilities to leverage TPG, fostering an inclusive environment.
+    \item \textbf{Phase In Plan:} This requirement will become phased in after the Rev 0 is completed, which begins after March 18, 2025.
   \end{itemize}
 \end{itemize}
 
@@ -597,31 +607,37 @@ Relation:
 \item \textbf{PR-SL:} The system shall execute without introducing significant computational overhead. The integration with MuJoCo must not degrade performance, and any additional computational costs should be minimized through optimization.
   \begin{itemize}
     \item \textbf{Rationale:} Ensures that processing times remain acceptable for real-time experimentation and testing.
+    \item \textbf{Phase In Plan:} During development, in conjunction with the CI/CD pipeline.
   \end{itemize}
 
 \item \textbf{PR-PA:} The system shall produce accurate and reliable results in simulations and experiments. All calculations must maintain high numerical precision to ensure the validity of results, especially when dealing with complex reinforcement learning tasks and physics simulations.
   \begin{itemize}
     \item \textbf{Rationale:} Ensures the validity of the reinforcement models being developed. Otherwise, inaccurate results can lead to incorrect conclusions and hinder the development of effective learning agents.
+    \item \textbf{Phase In Plan:} During development, starting Oct 14, 2024.
   \end{itemize}
 
 \item \textbf{PR-RFT:} The system shall be robust against invalid inputs and unexpected environmental conditions. It must handle exceptions gracefully, recover from errors without data loss, and maintain operational stability under varying workloads and stress conditions.
   \begin{itemize}
     \item \textbf{Rationale:} In cases where the agent returns an action that is not defined by the environment, or the agent receives an out-of-bounds state, the system should be able to manage this gracefully.
+    \item \textbf{Phase In Plan:} During development, starting Oct 14, 2024.
   \end{itemize}
 
 \item \textbf{PR-CR:} The system shall support scaling up to handle multiple simultaneous experiments or large-scale simulations without significant degradation in performance. Efficient resource management is essential to accommodate the demands of complex reinforcement learning tasks.
   \begin{itemize}
     \item \textbf{Rationale:} Efficient resource management is necessary to ensure that the system can accommodate the needs of diverse experiments without performance degradation.
+    \item \textbf{Phase In Plan:} After phase 1 of the project, which starts in February 2025. The scale of the computational requirements will be better understood after this phase.
   \end{itemize}
 
 \item \textbf{PR-SE:} The system shall be designed for scalability, allowing for easy addition of new features, integration with other environments, and support for future research needs. The codebase should be modular and extensible, facilitating contributions from other researchers and developers.
   \begin{itemize}
     \item \textbf{Rationale:} The system should be designed for scalability to allow for future enhancements to the TPG algorithm and the addition of new environments within MuJoCo. A modular and extensible design will facilitate these updates and ensure that the framework remains relevant.
+    \item \textbf{Phase In Plan:} During development, starting Oct 14, 2024.
   \end{itemize}
 
 \item \textbf{PR-RR:} The system shall maintain high reliability, with minimal downtime or failures during operation. Continuous integration and automated testing shall be employed to detect and address issues promptly, ensuring consistent performance over time.
   \begin{itemize}
     \item \textbf{Rationale:} High reliability is crucial for maintaining user trust and ensuring that experiments yield consistent results. Continuous integration and automated testing will help identify and address issues promptly, minimizing downtime and ensuring that the system operates smoothly over time.
+    \item \textbf{Phase In Plan:} During development, starting Oct 14, 2024.
   \end{itemize}
 \end{itemize}
 
@@ -630,21 +646,25 @@ Relation:
 \item \textbf{OE-EPE:} The system will operate in typical computing laboratory environments, which may include personal computers or servers running UNIX-like operating systems. It should function effectively on standard hardware without the need for specialized equipment, supporting researchers and developers in academic settings.
   \begin{itemize}
     \item \textbf{Rationale:} Ensuring compatibility across different hardware allows for broader accessibility and usability among researchers and developers.
+    \item \textbf{Phase In Plan:} Before development. Virtual environments are being considered at this stage.
   \end{itemize}
 
 \item \textbf{OE-RIA:} The system must interface seamlessly with existing environments, MuJoCo, and potentially other simulation environments. Compatibility requires adherence to their API specifications and proper handling of data exchange protocols. Any dependencies or libraries required for integration must be managed effectively.
   \begin{itemize}
     \item \textbf{Rationale:} Proper handling of data exchange protocols is essential for maintaining the integrity of experiments and ensuring that the TPG framework can be evaluated in diverse settings.
+    \item \textbf{Phase In Plan:} During development, starting Oct 14, 2024.
   \end{itemize}
 
 \item \textbf{OE-RR:} The system shall be released under an appropriate open-source license (e.g., MIT license) to enable community collaboration. All releases must include comprehensive documentation, installation instructions, and user guides to assist researchers and developers in utilizing and contributing to the framework.
   \begin{itemize}
     \item \textbf{Rationale:} Releasing the system under an open-source license encourages collaboration and ensures accessibility for researchers and developers. Clear documentation and guides help users utilize and contribute effectively, fostering a collaborative environment for framework improvement.
+    \item \textbf{Phase In Plan:} Before development, starting Oct 14, 2024.
   \end{itemize}
 
 \item \textbf{OE-OSR:} Internal resources and mechanisms should be established to assist current and future members of the research group in utilizing and contributing to the TPG framework. This includes the GitHub repository and associated documentation such as this SRS report, troubleshooting resources, and history of issue tracking.
   \begin{itemize}
     \item \textbf{Rationale:} Improves efficiency of knowledge sharing and ensures continuity of the project as team members change over time.
+    \item \textbf{Phase In Plan:} Throughout lifecycle of the project.
   \end{itemize}
 \end{itemize}
 
@@ -656,14 +676,17 @@ Relation:
   \item \textbf{MS-M1:} If a change is made to the finished software, it will take at most 15\% of the original development time, assuming the same development resources are available.
     \begin{itemize}
       \item \textbf{Rationale:} One of the goals of the project is to ensure a more efficient and smooth software structure. As such 15\% is an appropriate reduction in development time to verify the project’s efficiency. 
+      \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
     \end{itemize}
   \item \textbf{MS-M2:} The software shall have detailed and organized code documentation.
   \begin{itemize}
     \item \textbf{Rationale:} Detailed and organized code documentation makes it easier for developers when it comes to traceability and verifiability. 
+    \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
   \end{itemize}
   \item \textbf{MS-M3:} The software shall maintain regular updates, at least once a month, assuming a change regarding dependent frameworks or libraries has occurred. 
   \begin{itemize}
     \item \textbf{Rationale:} Maintaining regular updates is critical to ensure that the project is protected against any security or software bugs caused by the dependent frameworks. Ensuring updates at least once a month minimizes the risk of errors occurring. 
+    \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
   \end{itemize}
 \end{itemize}
 
@@ -673,10 +696,12 @@ Relation:
   \item \textbf{MS-S1:} The software shall maintain an online repository with resources, documentation and FAQs that can address common user issues or questions.
   \begin{itemize}
     \item \textbf{Rationale:} As new developers are introduced into the project, a repository with all information regarding common issues will help prevent delayed development changes.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
   \end{itemize}
   \item \textbf{MS-S2:} The software shall continue to support the latest stable version of Linux and other dependent code libraries.
   \begin{itemize}
     \item \textbf{Rationale:} Keeping the versions of dependent libraries up-to-date allows developers and researchers to continue work on the project without hassle.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
   \end{itemize}
 \end{itemize}
 \subsection{Adaptability Requirements}
@@ -685,15 +710,17 @@ Relation:
   \item \textbf{MS-A1:} The development team shall utilize a CI/CD pipeline to deliver new software additions.
   \begin{itemize}
     \item \textbf{Rationale:} CI/CD pipelines allow for an automated process to ensure code changes have met standards. 
+    \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
   \end{itemize}
   \item \textbf{MS-A2:} The software shall be easy to install and execute on major operating systems (Windows, Mac, Linux).
-
   \begin{itemize}
     \item \textbf{Rationale:} As many users of the system are on different platforms, ensuring easy installation and execution of the project is crucial to avoid unnecessary workarounds.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
   \end{itemize}
   \item \textbf{MS-A3:} The software shall be able to adapt to newly implemented experiments provided by the training environment.
   \begin{itemize}
     \item \textbf{Rationale:} Adaptability of new experiments is a focal point when it comes to seeing the effectiveness of \hyperref[def:tpg]{TPG}’s \hyperref[def:rl]{RL} technique.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
   \end{itemize}
 \end{itemize}
 
@@ -705,10 +732,12 @@ Relation:
   \item \textbf{SR-A1:} The system shall allow a minimal and necessary amount of contributors to the framework.
   \begin{itemize}
     \item \textbf{Rationale:} Limiting the number of contributors to only Tangle team members and supervisors makes it easy to monitor all code changes integrated into the main codebase.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
   \end{itemize}
   \item \textbf{SR-A2:} A form of secondary authentication shall be enabled for contributors.
   \begin{itemize}
     \item \textbf{Rationale:} Having Multi-factor Authentication (MFA) and Role-Based Access Control (RBAC) enabled restricts the roles of each contributor in the repository, minimizing the chance of unauthorized changes into the codebase.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
   \end{itemize}
 \end{itemize}
 
@@ -717,6 +746,7 @@ Relation:
   \item \textbf{SR-I1:} The system shall have a protection mechanism for the main branch.
   \begin{itemize}
     \item \textbf{Rationale:} Protecting the main branch on Github avoids unauthorized, corrupted code to be merged. With this, pull requests will require at least 1 review from other contributors and resolved comments before merging their changes.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
   \end{itemize}
 \end{itemize}
 
@@ -725,6 +755,7 @@ Relation:
   \item \textbf{SR-P1:} Any data that may include sensitive, personal information shall be obfuscated or anonymized where necessary.
   \begin{itemize}
     \item \textbf{Rationale:} Obfuscating and anonymizing sensitive data ensures that the system strictly follows the law and regulation, decreasing the chance of data breach. This includes any data that must remain private and should not be included in the public Github repository.
+    \item \textbf{Phase In Plan:}  This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
   \end{itemize}
 \end{itemize}
 
@@ -733,6 +764,8 @@ Relation:
   \item \textbf{SR-A1:} All detailed message logging and simulation results shall be available for audit purposes.
   \begin{itemize}
     \item \textbf{Rationale:} Storing all message logs and simulation results allows users to have access to them at a later time for auditing. This ensures traceability for compliance and debugging.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once CI/CD component of the project is completed, which begins after November 13, 2024. 
+
   \end{itemize}
 \end{itemize}
 
@@ -741,10 +774,12 @@ Relation:
   \item \textbf{SR-IM1:} The system shall check and search for unauthorized and undesirable code.
   \begin{itemize}
     \item \textbf{Rationale:} Having regular code checks through the CI/CD pipeline guarantees that TPG's code is well-preserved and protected from undesirable code such as viruses, malware, and spyware, minimizing the probability of breaches, or data theft.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once the CI/CD pipeline is completed, which begins after November 13, 2024.
   \end{itemize}
   \item \textbf{SR-IM2:} The system shall have a robust mechanism for handling errors and malfunctions.
   \begin{itemize}
     \item \textbf{Rationale:} A robust mechanism for handling errors and malfunctions ensures the system recovers gracefully from system malfunctions, avoiding downtime for users.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
   \end{itemize}
 \end{itemize}
 
@@ -754,7 +789,7 @@ Relation:
 
 
 \subsection{Cultural Requirements}
-\textbf{N/A}
+\textbf{N/A} - There are no relevant cultural requirements related to this project.
 
 \section{Compliance Requirements}
 \subsection{Legal Requirements}
@@ -763,6 +798,7 @@ Relation:
 
       \begin{itemize}
         \item \textbf{Rationale:} Ensuring compliance for intellectual property protects the rights of developers and contributors.Licensing allows the TPG framework to be shared and built upon by other researchers and open source developers while maintaining legal clarity regarding the use and distribution of the software.
+        \item \textbf{Phase in Plan:} This requirement has already been phased in the first week after the start of the project, which begun after September 16, 2025. 
       \end{itemize}
 \end{itemize}
 
@@ -772,6 +808,7 @@ Relation:
 
       \begin{itemize}
         \item \textbf{Rationale:} Adhering to a well established coding standard helps reduce errors throughout development, increases accessibility, readability, and long-term maintainability of the code.
+        \item \textbf{Phase in Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
       \end{itemize}
 \end{itemize}
 \section{Open Issues}
@@ -907,8 +944,20 @@ The main code of the TPG framework is stored in \href{https://gitlab.cas.mcmaste
 \subsection{Requirements for Migration to the New Product}
 \begin{itemize}
   \item \textbf{MR-R1:} The project’s Github and GitLab repositories shall be continuously synchronized, ensuring changes on one version are reflected on the other.
+  
+\begin{itemize}
+  \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
+
+\end{itemize}
+
   \item \textbf{MR-R2:} Github Actions shall be functional, establishing a seamless support for standard software engineering principles.
+  \begin{itemize}
+  \item \textbf{Phase In Plan:} This requirement will become phased in once the CI/CD integration is completed, which begins after November 13, 2024. 
+\end{itemize}
   \item \textbf{MR-R3:} The agent-environment interface between TPG and MuJoCo shall be functional, ensuring no conflicts with dependencies or existing code.
+  \begin{itemize}
+  \item \textbf{Phase In Plan:} This requirement will become phased in once Rev 0 is completed, which begins after February 3, 2025. 
+\end{itemize}
 \end{itemize}
 
 \subsection{Data That Has to be Modified or Translated for the New System}
@@ -924,14 +973,17 @@ The project's goal for TPG will not accumulate any costs. Throughout the project
   \item \textbf{USD-UD1:} All user documentation shall be on the code repository, with versions provided in PDF format, so that they may be suitable for offline use.
   \begin{itemize}
     \item \textbf{Rationale:} It is important to have documentation available for both online and offline use in the event that online access is unavailable.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
   \end{itemize}
   \item \textbf{USD-UD2:} Written user guides shall include platform-specific instructions (Windows, macOS, Linux, etc.), system requirements, and troubleshooting for common issues.
   \begin{itemize}
     \item \textbf{Rationale:} These detailed user guides allow for developers to access the project with minimal disruptions. 
+    \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025.
   \end{itemize}
   \item \textbf{USD-UD3:} Release notes shall accompany each software update and provide a clear summary of new features, enhancements, and resolved issues.
   \begin{itemize}
     \item \textbf{Rationale:} Release notes are crucial to improving traceability and transparency in addition to keeping all code modifications organized.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
   \end{itemize}
 \end{itemize}
 
