@@ -522,6 +522,8 @@ Relation:
   \item \textbf{LFAR1:}  The codebase should follow clear and consistent formatting guidelines. This includes proper indentation, descriptive variable names, and potentially inline documentation to enhance readability for both new and experienced project developers.
       \begin{itemize}
         \item \textbf{Rationale:} A consistent code style and formatting increases the maintainability of the project and allows developers to easily understand and contribute to the project. 
+        \item \textbf{Phase In Plan:} This requirement will become phased in once most of the project’s features are completed, which begins after February 3, 2025. 
+
       \end{itemize}
 \end{itemize}
 
@@ -534,6 +536,8 @@ Relation:
 
       \begin{itemize}
         \item \textbf{Rationale:} This consistency will ensure a cohesive development experience and make the project easier to maintain and expand in the future.
+        \item \textbf{Phase In Plan:} This requirement will become phased in once most of the project’s features are completed, which begins after February 3, 2025. 
+
       \end{itemize}
 \end{itemize}
 
@@ -544,10 +548,12 @@ Relation:
   \item \textbf{UH-E1:} The system shall have a clear and comprehensive documentation.
   \begin{itemize}
     \item \textbf{Rationale:} A consistent and comprehensive documentation on the CI/CD pipeline and agent-environment integration ensures ease of usage for all future users regardless of their technical level.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once most of the project’s features are completed, which begins after February 3, 2025. 
   \end{itemize}
   \item \textbf{UH-E2:} The system shall provide real-time, accurate logging of messages for every action.
   \begin{itemize}
     \item \textbf{Rationale:} Real-time, accurate logging of messages allows users to understand the outcome of their inputs instantaneously, reducing confusion, habilitating more opportunities for debugging and empowers users of their expectations.
+    \item  \textbf{Phase In Plan:} This requirement will become phased in midway through the project development process, which should be approximaly around December 2024. 
   \end{itemize}
 \end{itemize}
 
@@ -557,6 +563,7 @@ Relation:
   \item \textbf{UH-PI1:} The system shall have the flexibility to adjust certain parameters when configuring MuJoCo.
   \begin{itemize}
     \item \textbf{Rationale:} Having the flexibility to change parameters provides users the opportunity to make the system fit to their specific needs and requirements.
+    \item  \textbf{Phase In Plan:} This requirement will become phased in once the MuJoCo interface integration is completed, which begins after February 3, 2025.
   \end{itemize}
 \end{itemize}
 
@@ -565,10 +572,12 @@ Relation:
   \item \textbf{UH-L1:} The system shall have tutorials available to the users.
   \begin{itemize}
     \item \textbf{Rationale:} Having tutorials, simulation examples and guides for the TPG framework and MuJoCo provides guidance to understand user interaction between the entire system and agent-environments.
+    \item  \textbf{Phase In Plan:} This requirement will become phased in once the CI/CD and MuJoCo integration are completed, which begins after February 3, 2025.
   \end{itemize}
   \item \textbf{UH-L2:} The system shall ensure that relevant technical concepts and resources shall be accessible by users with ease.
   \begin{itemize}
     \item \textbf{Rationale:} Acknowledging that TPG builds up on several machine learning concepts, listing resources that will complement learning the framework can accelerate user onboarding.
+    \item \textbf{Phase In Plan:}  This requirement will become phased in once the CI/CD and MuJoCo integration are completed, which begins after February 3, 2025.
   \end{itemize}
 \end{itemize}
 
@@ -589,6 +598,7 @@ Relation:
   \item \textbf{UH-A1:} The system shall accommodate users with different kinds of disabilities.
   \begin{itemize}
     \item \textbf{Rationale:} Supporting features such as text-to-speech, and color blindness assistance systems can allow users with different kinds of disabilities to leverage TPG, fostering an inclusive environment.
+    \item \textbf{Phase In Plan:} This requirement will become phased in after the Rev 0 is completed, which begins after March 18, 2025.
   \end{itemize}
 \end{itemize}
 
@@ -712,10 +722,12 @@ Relation:
   \item \textbf{SR-A1:} The system shall allow a minimal and necessary amount of contributors to the framework.
   \begin{itemize}
     \item \textbf{Rationale:} Limiting the number of contributors to only Tangle team members and supervisors makes it easy to monitor all code changes integrated into the main codebase.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
   \end{itemize}
   \item \textbf{SR-A2:} A form of secondary authentication shall be enabled for contributors.
   \begin{itemize}
     \item \textbf{Rationale:} Having Multi-factor Authentication (MFA) and Role-Based Access Control (RBAC) enabled restricts the roles of each contributor in the repository, minimizing the chance of unauthorized changes into the codebase.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
   \end{itemize}
 \end{itemize}
 
@@ -724,6 +736,7 @@ Relation:
   \item \textbf{SR-I1:} The system shall have a protection mechanism for the main branch.
   \begin{itemize}
     \item \textbf{Rationale:} Protecting the main branch on Github avoids unauthorized, corrupted code to be merged. With this, pull requests will require at least 1 review from other contributors and resolved comments before merging their changes.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
   \end{itemize}
 \end{itemize}
 
@@ -732,6 +745,7 @@ Relation:
   \item \textbf{SR-P1:} Any data that may include sensitive, personal information shall be obfuscated or anonymized where necessary.
   \begin{itemize}
     \item \textbf{Rationale:} Obfuscating and anonymizing sensitive data ensures that the system strictly follows the law and regulation, decreasing the chance of data breach. This includes any data that must remain private and should not be included in the public Github repository.
+    \item \textbf{Phase In Plan:}  This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
   \end{itemize}
 \end{itemize}
 
@@ -740,6 +754,8 @@ Relation:
   \item \textbf{SR-A1:} All detailed message logging and simulation results shall be available for audit purposes.
   \begin{itemize}
     \item \textbf{Rationale:} Storing all message logs and simulation results allows users to have access to them at a later time for auditing. This ensures traceability for compliance and debugging.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once CI/CD component of the project is completed, which begins after November 13, 2024. 
+
   \end{itemize}
 \end{itemize}
 
@@ -748,10 +764,12 @@ Relation:
   \item \textbf{SR-IM1:} The system shall check and search for unauthorized and undesirable code.
   \begin{itemize}
     \item \textbf{Rationale:} Having regular code checks through the CI/CD pipeline guarantees that TPG's code is well-preserved and protected from undesirable code such as viruses, malware, and spyware, minimizing the probability of breaches, or data theft.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once the CI/CD pipeline is completed, which begins after November 13, 2024.
   \end{itemize}
   \item \textbf{SR-IM2:} The system shall have a robust mechanism for handling errors and malfunctions.
   \begin{itemize}
     \item \textbf{Rationale:} A robust mechanism for handling errors and malfunctions ensures the system recovers gracefully from system malfunctions, avoiding downtime for users.
+    \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
   \end{itemize}
 \end{itemize}
 
@@ -761,7 +779,7 @@ Relation:
 
 
 \subsection{Cultural Requirements}
-\textbf{N/A}
+\textbf{N/A} - There are no relevant cultural requirements related to this project.
 
 \section{Compliance Requirements}
 \subsection{Legal Requirements}
@@ -770,6 +788,7 @@ Relation:
 
       \begin{itemize}
         \item \textbf{Rationale:} Ensuring compliance for intellectual property protects the rights of developers and contributors.Licensing allows the TPG framework to be shared and built upon by other researchers and open source developers while maintaining legal clarity regarding the use and distribution of the software.
+        \item \textbf{Phase in Plan:} This requirement has already been phased in the first week after the start of the project, which begun after September 16, 2025. 
       \end{itemize}
 \end{itemize}
 
@@ -779,6 +798,7 @@ Relation:
 
       \begin{itemize}
         \item \textbf{Rationale:} Adhering to a well established coding standard helps reduce errors throughout development, increases accessibility, readability, and long-term maintainability of the code.
+        \item \textbf{Phase in Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
       \end{itemize}
 \end{itemize}
 \section{Open Issues}
@@ -914,8 +934,20 @@ The main code of the TPG framework is stored in \href{https://gitlab.cas.mcmaste
 \subsection{Requirements for Migration to the New Product}
 \begin{itemize}
   \item \textbf{MR-R1:} The project’s Github and GitLab repositories shall be continuously synchronized, ensuring changes on one version are reflected on the other.
+  
+\begin{itemize}
+  \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
+
+\end{itemize}
+
   \item \textbf{MR-R2:} Github Actions shall be functional, establishing a seamless support for standard software engineering principles.
+  \begin{itemize}
+  \item \textbf{Phase In Plan:} This requirement will become phased in once the CI/CD integration is completed, which begins after November 13, 2024. 
+\end{itemize}
   \item \textbf{MR-R3:} The agent-environment interface between TPG and MuJoCo shall be functional, ensuring no conflicts with dependencies or existing code.
+  \begin{itemize}
+  \item \textbf{Phase In Plan:} This requirement will become phased in once Rev 0 is completed, which begins after February 3, 2025. 
+\end{itemize}
 \end{itemize}
 
 \subsection{Data That Has to be Modified or Translated for the New System}
