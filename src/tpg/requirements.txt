@@ -16,3 +16,5 @@ vim
 htop
 libcurlpp-dev
 jq
+bc
+poppler-utils
