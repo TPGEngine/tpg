@@ -525,7 +525,7 @@ Relation:
   \begin{itemize}
     \item \textbf{Rationale:} Once all test cases have passed, the system can safely ensure that the update can be implemented into the code.
   \end{itemize}
-\item \textbf{FR-6:} The system shall adhere to standard software engineering code practices.
+\item \textbf{FR-6:} The system shall adhere to SOLID code practices and the Google C++ Style Guide.
 \begin{itemize}
   \item \textbf{Rationale:} This is to allow for easy maintainability of the code. As this is a research project, the people working on the project will be constantly changing. Adhering to these practices minimizes development hassle.
 \end{itemize}
@@ -697,12 +697,12 @@ Relation:
 % \lips
 
 \begin{itemize}
-  \item \textbf{MS-M1:} If a change is made to the finished software, it will take at most 15\% of the original development time, assuming the same development resources are available.
+  \item \textbf{MS-M1:} If a change is made to the software after the capstone project has concluded, any major changes to the software shall take no more than 20\% of the original time to compile and build, assuming the same resources are available. 
     \begin{itemize}
       \item \textbf{Rationale:} One of the goals of the project is to ensure a more efficient and smooth software structure. As such 15\% is an appropriate reduction in development time to verify the project’s efficiency. 
       \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
     \end{itemize}
-  \item \textbf{MS-M2:} The software shall have detailed and organized code documentation.
+  \item \textbf{MS-M2:} The software shall have code documentation covering all major functions, classes, and modules. The information shall include descriptions of the component’s purpose, inputs, outputs, and any exceptions that may occur.
   \begin{itemize}
     \item \textbf{Rationale:} Detailed and organized code documentation makes it easier for developers when it comes to traceability and verifiability. 
     \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
@@ -722,7 +722,7 @@ Relation:
     \item \textbf{Rationale:} As new developers are introduced into the project, a repository with all information regarding common issues will help prevent delayed development changes.
     \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
   \end{itemize}
-  \item \textbf{MS-S2:} The software shall continue to support the latest stable version of Linux and other dependent code libraries.
+  \item \textbf{MS-S2:} The software shall continue to support the latest stable version of Linux and other dependent code libraries throughout the duration of the Capstone project.
   \begin{itemize}
     \item \textbf{Rationale:} Keeping the versions of dependent libraries up-to-date allows developers and researchers to continue work on the project without hassle.
     \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
@@ -736,7 +736,7 @@ Relation:
     \item \textbf{Rationale:} CI/CD pipelines allow for an automated process to ensure code changes have met standards. 
     \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
   \end{itemize}
-  \item \textbf{MS-A2:} The software shall be easy to install and execute on major operating systems (Windows, Mac, Linux).
+  \item \textbf{MS-A2:} The software shall take up to 15 steps to install and execute on major operating systems (Windows, Mac, Linux).
   \begin{itemize}
     \item \textbf{Rationale:} As many users of the system are on different platforms, ensuring easy installation and execution of the project is crucial to avoid unnecessary workarounds.
     \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
