@@ -1,0 +1,13 @@
+Import('env')
+
+acenet = ARGUMENTS.get('acenet', 0)
+ccanada = ARGUMENTS.get('ccanada', 0)
+hpcc = ARGUMENTS.get('hpcc', 0)
+think = ARGUMENTS.get('think', 0)
+
+if int(acenet) or int(ccanada) or int(hpcc):
+ for subdir in ['cpp/TPG','cpp/experiments/']:
+  env.SConscript('%s/SConscript' % subdir, {'env': env})
+else:
+ for subdir in ['cpp/TPG', 'cpp/experiments', 'cpp/environments/classic_control']:
+   env.SConscript('%s/SConscript' % subdir, {'env': env})
