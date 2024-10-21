@@ -18,6 +18,13 @@ track_mod 20
 # Re-evaluate an individual from a checkpoint file
 replay 0
 
+# ID of the individual to replay from checkpoint file
+id_to_replay = 0
+
+# Which task in which to replay the individual
+# Index in active_tasks list starting at 0
+replay_task 0
+
 # Re-evaluate an individual from a checkpoint file and animate behaviour, 
 # if available
 animate 0
@@ -26,8 +33,17 @@ animate 0
 ## GA Parameters ###############################################################
 ################################################################################
 
-# Start from a checkpoint file
-checkpoint 0
+# Whether to start from a checkpoint file
+start_from_checkpoint 0
+
+# Genertion of the checkpoint file
+checkpoint_in_t 0
+
+# Which phase checkpoint file to read
+# Training: 0
+# Validation: 1
+# Test: 2
+checkpoint_in_phase 2
 
 # Save checkpoints during evolution
 write_train_checkpoints 0
@@ -37,24 +53,27 @@ write_test_checkpoints 1
 write_phylogeny 0
 
 # How frequently to run test procedure
-test_mod 100
+test_mod 1
 
-# Number of tasks used each selection for evaluation. 
-# The rest are estimated with phylogeny.
+# Number of tasks used each selection for evaluation 
+# The rest are estimated with phylogeny
 #n_sampled_tasks_for_eval 1
 
-# Number of fitness functions available.
+# Number of fitness functions available
 n_fit_mode 1
 
-# Which fitness function to use, if multiple available. 
+# Which fitness function to use, if multiple available
 # Range is [0, n_fit_mode)
 fit_mode 0
 
-# Which behaviour characterization function to use, if multiple available.
+# Which behaviour characterization function to use, if multiple available
 # Range is [0, n_dist_mode)
 dist_mode 0
 
-# Auxilliary seed, e.g. for simulators.
+# Main seed for evolution
+seed_tpg 42
+
+# Auxilliary seed, e.g. for simulators
 seed_aux 42
 
 # Max number of generations
@@ -64,7 +83,7 @@ n_generations 1000000
 mu_internal 0
 
 # Number of elite teams
-n_elite 360
+n_elite 100
 
 # n_elite * n_elite_mul new teams are created each generation
 n_elite_mul 2
@@ -91,25 +110,25 @@ max_team_size 1000000
 # Max teams per graph
 max_teams_per_graph 1000000
 
-# When changing action pointer, probability of selecting atomic action.
-p_atomic 0.99
+# When changing action pointer, probability of selecting atomic action
+p_atomic 1.0
 
-# Team mutation: probability of deleting program from team.
+# Team mutation: probability of deleting program from team
 pmd 0.5
 
-# Team mtation: probability of adding program to team.
+# Team mtation: probability of adding program to team
 pma 0.4
 
-# Team mutation: probability of mutating a program.
+# Team mutation: probability of mutating a program
 pmm 1.0
 
-# Team mutation: probability of mutating a program's action pointer.
+# Team mutation: probability of mutating a program's action pointer
 pmn 0.2
 
-# Team mutation: probability of mutating program execution order.
+# Team mutation: probability of mutating program execution order
 pmw 0.2
 
-# Team variation: probability of team crossover.
+# Team variation: probability of team crossover
 pmx 0.5
 
 # Team variation: probability of team crossover adding each parent prog to child
@@ -125,7 +144,7 @@ pmx_p 0.5
 stateful 1
 
 # Whether to skip introns during evaluation
-skip_introns 0
+skip_introns 1
 
 # Enable continuous outputs
 # 0: disabled
@@ -135,7 +154,8 @@ skip_introns 0
 continuous_output 2
 
 # Number of inputs (aka "features" or "state variables")
-n_input 29
+# Note MuJoco does not use this
+n_input 0
 
 # Max initial program size
 max_initial_prog_size 10
@@ -149,8 +169,8 @@ memory_indices 8
 
 # Dimensionality for vector & matrix memory
 memory_size 8
-min_memory_size 8
-max_memory_size 8 
+min_memory_size 2
+max_memory_size 27
 
 # Observations are stored in a buffer with this time window
 observation_buff_size 1
@@ -185,13 +205,13 @@ p_observation_buff_size 0.0
 p_observation_index 0.2
 
 # Program variation: probability of changing memory_size
-p_memory_size 0.0
+p_memory_size 0.2
 
 ################################################################################
 ## General Task Parameters #####################################################
 ################################################################################
 
-# Which tasks active
+# Which tasks are active
 # Right-hand-side should be a single task name or a comma-separated list
 active_tasks Mujoco_Ant_v4
 
@@ -234,8 +254,8 @@ mj_model_path $TPG/datasets/mujoco_models/ant.xml
 
 mj_max_timestep 1000
 
-mj_n_eval_train 5
-mj_n_eval_test 5
+mj_n_eval_train 3
+mj_n_eval_test 3
 
 ################################################################################
 ## Operations, uncomment to activate ###########################################

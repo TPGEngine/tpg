@@ -196,7 +196,7 @@ void replayer_viz(TPG &tpg, vector<TaskEnv *> &tasks) {
   tpg.getTeams(eval.teams, true);
   eval.eval_result = "";
   for (auto tm : eval.teams) {
-    if (tm->id_ != tpg.GetParam<int>("host_to_replay")) continue;
+    if (tm->id_ != tpg.GetParam<int>("id_to_replay")) continue;
     eval.tm = tm;
 
     vector<int> steps_per_task(tpg.GetState("n_task"), 0);

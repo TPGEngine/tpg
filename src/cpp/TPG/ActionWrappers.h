@@ -3,6 +3,11 @@
 
 #include "EvalData.h"
 
+#include <iostream>
+#include <Eigen/Dense>
+#include <vector>
+#include <algorithm> // For std::transform
+
 // TPG represents discrete actions as negative ints starting at -1
 // Map them to positive ints starting at 0
 int WrapDiscreteAction(EvalData &eval) {

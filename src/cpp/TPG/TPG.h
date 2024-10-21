@@ -144,7 +144,6 @@ class TPG {
   void SetEliteTeams(vector<TaskEnv *> &tasks);
   void setOutcome(team *tm, string behav, vector<double> &rewards,
                   vector<int> &ints, long gtime);
-  void setParams();
   inline void teamMap(map<long, team *> &team_map) const {
     team_map = _teamMap;
   }
@@ -204,6 +203,8 @@ class TPG {
   bool HaveParam(string p) { return params_.find(p) != params_.end(); }
   std::unordered_map<std::string, int> state_;
   int GetState(string p) { return state_[p]; }
+  void ProcessParams();
+  void SetParams(int argc, char** argv);
 };
 
 #endif

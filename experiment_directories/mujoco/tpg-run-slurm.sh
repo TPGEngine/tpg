@@ -8,9 +8,9 @@
 # #SBATCH --time=0-0:30  # time (DD-HH:MM)
 
 # cpus anywhere
-#SBATCH --ntasks=21               
+#SBATCH --ntasks=101               
 #SBATCH --mem-per-cpu=4G      
-#SBATCH --time=0-3:00  # time (DD-HH:MM)
+#SBATCH --time=0-00:30  # time (DD-HH:MM)
 
 #defaults
 mode=0 #Train:0, Replay:1, Debug:2
@@ -25,8 +25,10 @@ do
 done
 
 if [ $mode -eq 0 ]; then
-  srun $TPG/build/release/cpp/experiments/TPGExperimentMPI -s $seed \
-  1> tpg.$seed.$$.std 2> tpg.$seed.$$.err
+  srun $TPG/build/release/cpp/experiments/TPGExperimentMPI \
+  seed_tpg=$seed \
+  1> tpg.$seed.$$.std \
+  2> tpg.$seed.$$.err
 fi
 
 ##pickup from checkpoint file
