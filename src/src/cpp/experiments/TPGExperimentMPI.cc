@@ -10,7 +10,6 @@
 #include <api_client.h>
 #include <misc.h>
 #include <phylogenetic_fitness.h>
-#include <tpg_arg_parse.h>
 #include <tpg_eval_mpi.h>
 
 #include <algorithm>
@@ -34,8 +33,7 @@ int main(int argc, char **argv) {
     mpi::communicator world;
     TPG tpg;
     tpg.params_["id"] = -1;  // remove later
-    tpg.setParams();
-    tpg_arg_parse(tpg, argc, argv);
+    tpg.SetParams(argc, argv);
 
     APIClient *apiClient = nullptr;
 
@@ -102,7 +100,8 @@ int main(int argc, char **argv) {
         else if (substr == "Bach")
             tasks.push_back(new RecursiveForecast("Bach"));
         else if (substr == "Mujoco_Ant_v4")
-            tasks.push_back(new Mujoco_Ant_v4(tpg.params_)); // TODO(skelly):fix
+            tasks.push_back(
+                new Mujoco_Ant_v4(tpg.params_));  // TODO(skelly):fix
         else {
             cerr << "Unrecognised task:" << substr << endl;
             exit(1);
@@ -187,9 +186,9 @@ int main(int argc, char **argv) {
         auto startReport = chrono::system_clock::now();
         chrono::duration<double> endReport;
 
-        // initialization
-        if (tpg.GetParam<int>("checkpoint")) {
-            tpg.readCheckpoint(tpg.GetParam<int>("t_pickup"),
+        // Initialization //////////////////////////////////////////////////////
+        if (tpg.GetParam<int>("start_from_checkpoint")) {
+            tpg.readCheckpoint(tpg.GetParam<int>("checkpoint_in_t"),
                                tpg.GetParam<int>("checkpoint_in_phase"), -1,
                                false, "");
         } else {
@@ -197,29 +196,26 @@ int main(int argc, char **argv) {
         }
 
         // Main training loop.
-        tpg.params_["t_start"] = 0;
-        tpg.state_["t_current"] = 0;  // tpg.GetParam<int>("t_start");
         tpg.state_["phase"] = _TRAIN_PHASE;
         if (tpg.GetParam<int>("replay")) {
             tpg.state_["phase"] = _TEST_PHASE;
             tpg.state_["active_task"] = tpg.state_["replay_task"];
+            tpg.ProcessParams();
             replayer_viz(tpg, tasks);
         } else {
             while (tpg.GetState("t_current") <=
                    tpg.GetParam<int>("n_generations")) {
-                /* replacement
-                 * *******************************************************/
-                if (tpg.GetState("t_current") > tpg.GetParam<int>("t_start")) {
+                // Replacement /////////////////////////////////////////////////
+                if (tpg.GetState("t_current") > tpg.GetState("t_start")) {
                     startGenTeams = chrono::system_clock::now();
                     tpg.GenerateNewTeams();
                     endGenTeams = chrono::system_clock::now() - startGenTeams;
                 }
 
-                /* evaluation
-                 * ********************************************************/
+                // Evaluation //////////////////////////////////////////////////
                 startEval = chrono::system_clock::now();
                 tpg.MarkEffectiveCode();
-                if (tpg.GetState("t_current") > tpg.GetParam<int>("t_start") &&
+                if (tpg.GetState("t_current") > tpg.GetState("t_start") &&
                     tpg.HaveParam("n_sampled_tasks_for_eval")) {
                     // Split tasks into evaluated and estimated
                     vector<int> evalTasks, estTasks;
@@ -239,8 +235,7 @@ int main(int argc, char **argv) {
 
                 endEval = chrono::system_clock::now() - startEval;
 
-                /* selection
-                 * *********************************************************/
+                // Selection /////////////////////////////////////////////////// 
                 startSetEliteTeams = chrono::system_clock::now();
                 tpg.SetEliteTeams(tasks);
                 endSetEliteTeams =
@@ -249,8 +244,7 @@ int main(int argc, char **argv) {
                 tpg.SelectTeams();
                 endSelTeams = chrono::system_clock::now() - startSelTeams;
 
-                /* accounting and reporting
-                 * ******************************************/
+                // Accounting and reporting ////////////////////////////////////
                 startReport = chrono::system_clock::now();
                 if (tpg.GetState("t_current") % tpg.GetParam<int>("test_mod") ==
                     0) {
@@ -271,7 +265,7 @@ int main(int argc, char **argv) {
                 /* MODES
                  * *************************************************************/
                 startMODES = chrono::system_clock::now();
-                if (tpg.GetState("t_current") == tpg.GetParam<int>("t_start") ||
+                if (tpg.GetState("t_current") == tpg.GetState("t_start") ||
                     tpg.GetState("t_current") % MODES_T == 0)
                     tpg.updateMODESFilters(true);
                 endMODES = chrono::system_clock::now() - startMODES;

@@ -166,7 +166,6 @@ class instruction {
 
   // Execute this instruction
   inline void exec(bool dbg) {
-    // dbg = true;
     (this->*op_list_[op_])(dbg);
 
     // TODO(skelly): set to 1.0 instead of 0.0?
@@ -175,9 +174,6 @@ class instruction {
     out_->working_memory_[outIdxE_].array() =
         out_->working_memory_[outIdxE_].array().unaryExpr(
             [](double v) { return std::isfinite(v) ? v : 0.0; });
-
-    // TODO(skelly): tmp debugging output
-    // if (dbg) cerr << out_->working_memory_[outIdx_](0, 0) << endl;
   }
 
   inline int GetInIdx(int i) const {

@@ -54,7 +54,7 @@ class MujocoEnv : public TaskEnv {
     }
 
     void do_simulation(vector<double>& ctrl, int n_frames) {
-        for (int i = 0; i < m_->nu; i++) {
+        for (int i = 0; i < m_->nu && i < static_cast<int>(ctrl.size()); i++) {
             d_->ctrl[i] = ctrl[i];
         }
         for (int i = 0; i < n_frames; i++) {
