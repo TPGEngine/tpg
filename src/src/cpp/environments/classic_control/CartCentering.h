@@ -66,7 +66,7 @@ class CartCentering : public ClassicControlEnv {
     }
 
     /****************************************************************************/
-    void reset(mt19937 &rng) {
+    void reset(mt19937& rng) {
         step_ = 0;
 
         do {
@@ -97,7 +97,7 @@ class CartCentering : public ClassicControlEnv {
     }
 
     /****************************************************************************/
-    Results update(int actionD, double actionC, mt19937 &rng) {
+    Results update(int actionD, double actionC, mt19937& rng) {
         (void)actionC;
         double force;
 
@@ -200,7 +200,8 @@ class CartCentering : public ClassicControlEnv {
             glVertex3f(dir * 0.12, -0.3, 0);
             glEnd();
 
-            if (abs(state_[X]) <= NEAR_ORIGIN && abs(state_[V]) <= NEAR_ORIGIN) {
+            if (abs(state_[X]) <= NEAR_ORIGIN &&
+                abs(state_[V]) <= NEAR_ORIGIN) {
                 glColor3f(0.0, 1.0, 0.0);
                 glBegin(GL_LINE_LOOP);
                 for (int i = 0; i <= 300; i++) {

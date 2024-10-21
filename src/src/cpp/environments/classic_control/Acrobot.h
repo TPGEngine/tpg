@@ -14,7 +14,6 @@
 
 #define STATE_SIZE 4
 
-
 class Acrobot : public ClassicControlEnv {
    protected:
     const double maxTheta1 = M_PI;
@@ -74,7 +73,7 @@ class Acrobot : public ClassicControlEnv {
         }
     }
 
-    void reset(mt19937 &rng) {
+    void reset(mt19937& rng) {
         state_po_[_theta1] = state_[_theta1] = disReset(rng);
 
         state_po_[_theta2] = state_[_theta2] = disReset(rng);
@@ -91,7 +90,7 @@ class Acrobot : public ClassicControlEnv {
         normalizeState(true);
     }
 
-    Results update(int actionD, double actionC, mt19937 &rng) {
+    Results update(int actionD, double actionC, mt19937& rng) {
         (void)actionD;
         (void)rng;
 
@@ -167,8 +166,10 @@ class Acrobot : public ClassicControlEnv {
 
     double wrap(double x, double m, double M) {
         double diff = M - m;
-        while (x > M) x = x - diff;
-        while (x < m) x = x + diff;
+        while (x > M)
+            x = x - diff;
+        while (x < m)
+            x = x + diff;
         return x;
     }
 

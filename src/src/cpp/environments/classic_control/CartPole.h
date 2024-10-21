@@ -13,7 +13,6 @@
 
 #define STATE_SIZE 4
 
-
 class CartPole : public ClassicControlEnv {
    protected:
     const double GRAVITY = 9.8;
@@ -83,7 +82,7 @@ class CartPole : public ClassicControlEnv {
         }
     }
 
-    void reset(mt19937 &rng) {
+    void reset(mt19937& rng) {
         state_po_[_x] = state_[_x] = disReset(rng);
         state_po_[_theta] = state_[_theta] = disReset(rng);
         state_[_x_dot] = disReset(rng);
@@ -101,7 +100,7 @@ class CartPole : public ClassicControlEnv {
         return terminalState;
     }
 
-    Results update(int actionD, double actionC, mt19937 &rng) {
+    Results update(int actionD, double actionC, mt19937& rng) {
         double xacc, thetaacc, force, costheta, sintheta, temp;
 
         (void)actionC;

@@ -15,7 +15,6 @@
 #define PENDULUM_STATE_SIZE 3
 #define PENDULUM_DIM 2
 
-
 class Pendulum : public ClassicControlEnv {
    protected:
     const double maxSpeed = 8;
@@ -76,7 +75,7 @@ class Pendulum : public ClassicControlEnv {
 
     ~Pendulum() {}
 
-    void reset(mt19937 &rng) {
+    void reset(mt19937& rng) {
         internal_state_[_theta] = disReset(rng);
         internal_state_[_thetaDot] = disResetDot(rng);
 
@@ -98,19 +97,22 @@ class Pendulum : public ClassicControlEnv {
         return terminalState;
     }
 
-    Results update(int actionD, double actionC, mt19937 &rng) {
+    Results update(int actionD, double actionC, mt19937& rng) {
         (void)actionD;
         double torque = bound(actionC, -maxTorque, maxTorque);
 
         double costs = pow(angle_normalize(internal_state_[_theta]), 2) +
-                       0.1 * pow(internal_state_[_thetaDot], 2) + 0.001 * pow(torque, 2);
+                       0.1 * pow(internal_state_[_thetaDot], 2) +
+                       0.001 * pow(torque, 2);
         double newThetaDot =
-            internal_state_[_thetaDot] + (-3 * g / (2 * l) * sin(internal_state_[_theta] + M_PI) +
-                                 3.0 / (m * pow(l, 2)) * torque) *
-                                    dt;
+            internal_state_[_thetaDot] +
+            (-3 * g / (2 * l) * sin(internal_state_[_theta] + M_PI) +
+             3.0 / (m * pow(l, 2)) * torque) *
+                dt;
         internal_state_[_theta] = internal_state_[_theta] + newThetaDot * dt;
         internal_state_[_thetaDot] = newThetaDot;
-        internal_state_[_thetaDot] = bound(internal_state_[_thetaDot], -maxSpeed, maxSpeed);
+        internal_state_[_thetaDot] =
+            bound(internal_state_[_thetaDot], -maxSpeed, maxSpeed);
 
         state_[0] = state_po_[0] = cos(internal_state_[_theta]);
         state_[1] = state_po_[1] = sin(internal_state_[_theta]);

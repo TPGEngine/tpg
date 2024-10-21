@@ -14,7 +14,6 @@
 
 #define STATE_SIZE 4
 
-
 class MountainCar : public ClassicControlEnv {
    protected:
     const double min_position = -1.2;
@@ -48,10 +47,10 @@ class MountainCar : public ClassicControlEnv {
     void normalizeState(bool po) {
         if (po)
             state_po_[_position] = (state_po_[_position] - min_position) /
-                                  (max_position - min_position);
+                                   (max_position - min_position);
     }
 
-    void reset(mt19937 &rng) {
+    void reset(mt19937& rng) {
         state_[_position] = state_po_[_position] = disReset(rng);
         state_[_velocity] = 0;
 
@@ -75,14 +74,15 @@ class MountainCar : public ClassicControlEnv {
         return terminalState;
     }
 
-    Results update(int actionD, double actionC, mt19937 &rng) {
+    Results update(int actionD, double actionC, mt19937& rng) {
         (void)actionC;
 
         state_[_velocity] +=
             (actionD - 1) * force + cos(3 * state_[_position]) * -gravity;
         state_[_velocity] = bound(state_[_velocity], -max_speed, max_speed);
         state_[_position] += state_[_velocity];
-        state_[_position] = bound(state_[_position], min_position, max_position);
+        state_[_position] =
+            bound(state_[_position], min_position, max_position);
         if (state_[_position] == min_position && state_[_velocity] < 0)
             state_[_velocity] = 0;
 

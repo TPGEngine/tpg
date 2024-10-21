@@ -5,12 +5,11 @@
 #include <GL/glut.h>
 #include <TaskEnv.h>
 
-
 class ClassicControlEnv : public TaskEnv {
    public:
     uniform_real_distribution<> disReset;
     uniform_real_distribution<> disNoise;
-    vector<deque<double> > actionTrace;
+    vector<deque<double>> actionTrace;
     ClassicControlEnv() {
         actionTrace.reserve(3);
         actionTrace.resize(3);
@@ -24,7 +23,7 @@ class ClassicControlEnv : public TaskEnv {
     ~ClassicControlEnv() {}
 
     double bound(double x, double m, double M) { return min(max(x, m), M); }
-    virtual void display_function(int, int, double) {};
+    virtual void display_function(int, int, double){};
 
     /**************************************************************************/
     void saveScreenshotToFile(std::string filename, int windowWidth,
@@ -35,7 +34,7 @@ class ClassicControlEnv : public TaskEnv {
         glReadBuffer(GL_FRONT);
         glReadPixels(0, 0, windowWidth, windowHeight, GL_BGR_EXT,
                      GL_UNSIGNED_BYTE, pixels);
-        FILE *outputFile = fopen(filename.c_str(), "w");
+        FILE* outputFile = fopen(filename.c_str(), "w");
         short header[] = {
             0, 2, 0, 0, 0, 0, (short)windowWidth, (short)windowHeight, 24};
         fwrite(&header, sizeof(header), 1, outputFile);
@@ -43,15 +42,15 @@ class ClassicControlEnv : public TaskEnv {
         fclose(outputFile);
     }
 
-    void drawBitmapText(char *string, float x, float y, float z) {
-        char *c;
+    void drawBitmapText(char* string, float x, float y, float z) {
+        char* c;
         glRasterPos3f(x, y, z);
         for (c = string; *c != ':'; c++)
             glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
     }
 
-    void drawStrokeText(char *string, float x, float y, float z) {
-        char *c;
+    void drawStrokeText(char* string, float x, float y, float z) {
+        char* c;
         glPushMatrix();
         glTranslatef(x, y, z);
         glScalef(0.001f, 0.001f, z);
@@ -97,7 +96,8 @@ class ClassicControlEnv : public TaskEnv {
         vector<double> xs(N);
         typename vector<double>::iterator x;
         double val;
-        for (x = xs.begin(), val = a; x != xs.end(); ++x, val += h) *x = val;
+        for (x = xs.begin(), val = a; x != xs.end(); ++x, val += h)
+            *x = val;
         return xs;
     }
 };

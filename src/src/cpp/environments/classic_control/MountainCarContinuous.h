@@ -14,7 +14,6 @@
 
 #define STATE_SIZE 4
 
-
 class MountainCarContinuous : public ClassicControlEnv {
    protected:
     const double min_action = -1.0;
@@ -56,11 +55,11 @@ class MountainCarContinuous : public ClassicControlEnv {
     void normalizeState(bool po) {
         if (po) {
             state_po_[_position] = (state_po_[_position] - min_position) /
-                                  (max_position - min_position);
+                                   (max_position - min_position);
         }
     }
 
-    void reset(mt19937 &rng) {
+    void reset(mt19937& rng) {
         state_[_position] = state_po_[_position] = disReset(rng);
         state_[_velocity] = 0;
 
@@ -78,18 +77,20 @@ class MountainCarContinuous : public ClassicControlEnv {
 
     bool terminal() {
         if (step_ >= max_step_ || (state_[_position] >= goal_position &&
-                                 state_[_velocity] >= goal_velocity))
+                                   state_[_velocity] >= goal_velocity))
             terminalState = true;
         return terminalState;
     }
 
-    Results update(int actionD, double actionC, mt19937 &rng) {
+    Results update(int actionD, double actionC, mt19937& rng) {
         (void)actionD;
         double force = bound(actionC, min_action, max_action);
-        state_[_velocity] += force * power - gravity * cos(3 * state_[_position]);
+        state_[_velocity] +=
+            force * power - gravity * cos(3 * state_[_position]);
         state_[_velocity] = bound(state_[_velocity], -max_speed, max_speed);
         state_[_position] += state_[_velocity];
-        state_[_position] = bound(state_[_position], min_position, max_position);
+        state_[_position] =
+            bound(state_[_position], min_position, max_position);
         if (state_[_position] == min_position && state_[_velocity] < 0)
             state_[_velocity] = 0;
 
