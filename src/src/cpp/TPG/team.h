@@ -311,11 +311,10 @@ struct teamFitnessLexicalCompare {
     } else {
       t1->lastCompareFactor_ = 7;
       t2->lastCompareFactor_ = 7;
-      // cout << "teamLexComp lcf 7 " << t1->id_ << " (>) " << t2->id_ << endl;
-      // return t1->id_ > t2->id_;  // younger is better
-      // older is better TODO(skelly): potential dramatic effect on neutrality &
-      // evolution!
-      return t1->id_ < t2->id_;
+
+      // TODO(skelly): potential dramatic effect on neutrality & evolution!
+      // return t1->id_ > t2->id_;    // Younger is better
+      return t1->id_ < t2->id_;  // Older is better
     }
   }
 };
@@ -325,8 +324,6 @@ struct teamFitComplexLexCompare {
     if (!isEqual(t1->fit_, t2->fit_)) {
       t1->lastCompareFactor_ = 1;
       t2->lastCompareFactor_ = 1;
-      // cerr <<"teamFitComplexLexCompare 0:" << t1->fit_ << " " << t2->fit_ <<
-      // endl;
       return t1->fit_ > t2->fit_;
     } else {
       auto t1_val = t1->runTimeComplexityIns_;

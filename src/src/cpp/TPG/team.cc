@@ -546,9 +546,6 @@ void team::setOutcome(point *pt) {
   quickMeans_[pt->task()][pt->key()][pt->phase()] =
       quickSums_[pt->task()][pt->key()][pt->phase()] /
       numOutcomes(pt->phase(), pt->task());
-
-  // cerr << "set_out id " << id_ << " qm " <<
-  // quickMeans_[pt->task()][pt->key()][pt->phase()] << endl;
 }
 
 /******************************************************************************/
@@ -564,6 +561,7 @@ program *team::getAction(state *s, map<long, team *> &teamMap,
 
   int l = 0;
   for (auto prog : members_) {
+    
     prog->bidVal(prog->Run(s, timeStep, visitedTeams.size(), verbose));
     members_run_[l++] = prog;
     decisionInstructions += prog->SizeEffective();

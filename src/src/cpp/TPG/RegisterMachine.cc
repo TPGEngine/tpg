@@ -60,7 +60,6 @@ RegisterMachine::RegisterMachine(
     bid_.push_back(new instruction(**initer));
   op_counts_.resize(instruction::NUM_OP);
   SetupMemory(std::any_cast<int>(params["memory_indices"]));
-  // CheckMemorySizes(std::any_cast<int>(params["memory_indices"]));
 }
 
 // Create RegisterMachine from checkpoint file
@@ -80,7 +79,6 @@ RegisterMachine::RegisterMachine(
   memory_size_ = memory_size;
   op_counts_.resize(instruction::NUM_OP);
   SetupMemory(std::any_cast<int>(params["memory_indices"]));
-  // CheckMemorySizes(std::any_cast<int>(params["memory_indices"]));
 }
 
 RegisterMachine::~RegisterMachine() {
@@ -115,7 +113,6 @@ void RegisterMachine::MarkFeatures(instruction *istr, int in) {
       }
     }
   }
-  // CheckMemorySizes(8);
 }
 
 void RegisterMachine::MarkIntrons(
@@ -139,16 +136,16 @@ void RegisterMachine::MarkIntrons(
   else if (std::any_cast<int>(params["continuous_output"]) == 3)
     Meff[memoryEigen::MATRIX_TYPE][1] = true;  
     
-
-  // backward pass to find effective instructions when stateless
+  // Backward pass to find effective instructions when stateless
   std::vector<instruction *> bid_effective_stateless;
   for (auto riter = bid_.rbegin(); riter != bid_.rend(); riter++) {
     auto istr = *riter;
     if (Meff[istr->GetOutType()][istr->outIdx_ % memory_indices]) {
       bid_effective_stateless.push_back(istr);
       for (int in = 0; in < 2; in++) {
-        if (istr->IsMemoryRef(in))
+        if (istr->IsMemoryRef(in)) {
           Meff[istr->GetInType(in)][istr->GetInIdx(in) % memory_indices] = true;
+        }
       }
     }
   }
@@ -156,8 +153,8 @@ void RegisterMachine::MarkIntrons(
   // TODO(skelly): Is this the most efficient method? Currently O(n^2)
   for (size_t t = 0; t < bid_.size(); t++) {
     bidEffective_.clear();
-    std::fill(op_counts_.begin(), op_counts_.end(),
-              0);  // Count occurance of each op.
+    // Count occurance of each op.
+    std::fill(op_counts_.begin(), op_counts_.end(), 0);  
     for (auto istr : bid_) {
       if (Meff[istr->GetOutType()][istr->outIdx_ % memory_indices] ||
           std::find(bid_effective_stateless.begin(),
@@ -176,7 +173,6 @@ void RegisterMachine::MarkIntrons(
       }
     }
   }
-  // CheckMemorySizes(8);
 }
 
 void RegisterMachine::Mutate(std::unordered_map<std::string, std::any> &params,
@@ -267,7 +263,6 @@ void RegisterMachine::Mutate(std::unordered_map<std::string, std::any> &params,
 void RegisterMachine::CopyObservationToMemoryBuff(state *obs,
                                                   size_t memory_type) {
   if (memory_type == memoryEigen::VECTOR_TYPE) {
-    // Copy obs to vector memory
     int f = obs_index_ % obs->dim_;
     for (int row = 0; row < memory_size_; row++) {
       observation_memory_buff_[memoryEigen::VECTOR_TYPE]->working_memory_[0](
@@ -288,10 +283,10 @@ void RegisterMachine::CopyObservationToMemoryBuff(state *obs,
 
 double RegisterMachine::Run(state *obs, int &time_step,
                             const size_t &graph_depth, bool &verbose) {
+                              
   // Clear working memory prior to execution, making this program stateless
   if (!stateful_) ClearWorking();
 
-  // CopyObservationToMemoryBuff(obs);
   bool copied_obs_vec = false;
   bool copied_obs_mat = false;
 
