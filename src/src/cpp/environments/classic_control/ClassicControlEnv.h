@@ -5,7 +5,6 @@
 #include <GL/glut.h>
 #include <TaskEnv.h>
 
-using namespace std;
 
 class ClassicControlEnv : public TaskEnv {
    public:

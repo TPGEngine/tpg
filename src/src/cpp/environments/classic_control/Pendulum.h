@@ -15,7 +15,6 @@
 #define PENDULUM_STATE_SIZE 3
 #define PENDULUM_DIM 2
 
-using namespace std;
 
 class Pendulum : public ClassicControlEnv {
    protected:

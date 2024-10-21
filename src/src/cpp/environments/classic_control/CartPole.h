@@ -13,7 +13,6 @@
 
 #define STATE_SIZE 4
 
-using namespace std;
 
 class CartPole : public ClassicControlEnv {
    protected:

@@ -14,7 +14,6 @@
 
 #define STATE_SIZE 4
 
-using namespace std;
 
 class Acrobot : public ClassicControlEnv {
    protected:
