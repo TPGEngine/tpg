@@ -3,6 +3,8 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{pdflscape}
 
 \hypersetup{
     colorlinks=true,       % false: boxed links; true: colored links
@@ -87,6 +89,35 @@ requirements.}
 \wss{If no safety requirement can be devised, other mitigation strategies can be
 entered in the table, including strategies involving providing additional
 documentation, and/or test cases.}
+
+\begin{landscape}
+    \begin{table}[ht]
+       \centering
+       \scalebox{0.7}{ 
+       \begin{tabular}{|p{1.75cm}|p{4cm}|p{5cm}|p{5cm}|p{3cm}|p{5cm}|p{2cm}|p{2cm}|}
+       \hline
+       \textbf{Design Function} & \textbf{Failure Modes} & \textbf{Effects of Failure} & \textbf{Causes of Failure} & \textbf{Detection} & \textbf{Recommended Actions} & \textbf{SR} & \textbf{Ref.} \\
+       \hline
+       GitHub Actions CI/CD Pipeline & Invalid Config File & Code can't be merged & a. Improper syntax & Error handling messages & a. Debug error messages  & a. SR-1 & H1-1 \\
+       \cline{2-8}
+        & Dependency compatibility issues & Code won't compile & Incorrect versions of a dependency & Error handling messages & a. Debug error messages & a. SR-1 & H1-2 \\
+       \cline{2-8}
+        & Invalid testing & Code does not pass coverage tests, failed test cases & a. "Breaking changes" were added that broke old code & a. Error handling messages \newline b. Automated tests run against new code & Debug error messages & a. SR-1 & H1-3 \\
+       \hline
+       Experiment & Incomplete experiment & Output logs are missing data & a. OS compatibility \newline b. Scripts unable to parse the input data & Error handling messages & a. Redo experiment \newline b. Debug error messages \newline c. Input validation & a. SR-2 & H3-1 \\
+       \hline
+       OpenGL Interface & OS compatibility issues & Visual Disparities & a. Missing OS specific dependencies & Testing on multiple OS types (e.g. Mac vs Windows vs Linux) & a. Testing OpenGL on a variety of operating systems and their different versions \newline b. Ensure integration testing in GitHub Actions pipeline & a. SR-3 & H4-1 \\
+       \hline
+       Open source contribution & Unintended code changes & Security, code tampering & a. Wrong code being merged \newline b. Security Vulnerabilities & a. CI/CD Github Actions pipeline ensures reviewer and main branch protection & a. Revert back to previous version (Git controlled) & a. SR-1 & H5-1 \\
+       \hline
+       \end{tabular}
+       } % End of \scalebox
+       \caption{Failure Mode and Effect Analysis}
+       \label{table:fmea}
+       \end{table}
+   
+\end{landscape}
+
 
 \section{Safety and Security Requirements}
 
