@@ -3,6 +3,7 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{enumitem}
 
 \hypersetup{
     colorlinks=true,       % false: boxed links; true: colored links
@@ -36,9 +37,7 @@
 \toprule
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
-Date1 & Name(s) & Description of changes\\
-Date2 & Name(s) & Description of changes\\
-... & ... & ...\\
+10/25/2024 & All members & Revision 0 of Hazard Analysis\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -51,31 +50,62 @@ Date2 & Name(s) & Description of changes\\
 
 \pagenumbering{arabic}
 
-\wss{You are free to modify this template.}
+% \wss{You are free to modify this template.}
 
 \section{Introduction}
 
-\wss{You can include your definition of what a hazard is here.}
+% \wss{You can include your definition of what a hazard is here.}
+
+This document describes the potential hazards of the TPG capstone project. Details include information such as the scope and purpose of the hazard analysis, system boundaries and components, critical assumptions, FMEA tables, newly discovered safety and security requirements, and a roadmap describing the timeline for the Capstone project’s safety requirement implementation. 
+\\\\
+The definition of a hazard utilized in this document is based on the definition by Nancy Leveson: 
+\\\\
+A \underline{hazard} is any potential condition within the system that could harm or damage the project. This includes unexpected conditions such as security risks and safety hazards. 
 
 \section{Scope and Purpose of Hazard Analysis}
 
-\wss{You should say what \textbf{loss} could be incurred because of the
-hazards.}
+% \wss{You should say what \textbf{loss} could be incurred because of the
+% hazards.}
+
+The scope of the hazard analysis will focus on the TPG Repository and its integration with MuJoCo. In addition, the to-be-implemented CI/CD pipeline will also be in consideration within the scope of the analysis. 
+\\\\
+The purpose of the hazard analysis is to identify any hazards that may occur within the system’s components. The hazards will be analyzed to find the reasons and causes of the failures, ultimately leading up to the creation of mitigation strategies in an attempt to reduce the hazard and its potential damage if such hazard arises. The analysis will result in the creation of new safety and security requirements for the project that had not been added in Revision 0 of the SRS.
 
 \section{System Boundaries and Components}
 
-\wss{Dividing the system into components will help you brainstorm the hazards.
-You shouldn't do a full design of the components, just get a feel for the major
-ones.  For projects that involve hardware, the components will typically include
-each individual piece of hardware.  If your software will have a database, or an
-important library, these are also potential components.}
+% \wss{Dividing the system into components will help you brainstorm the hazards.
+% You shouldn't do a full design of the components, just get a feel for the major
+% ones.  For projects that involve hardware, the components will typically include
+% each individual piece of hardware.  If your software will have a database, or an
+% important library, these are also potential components.}
+
+The hazard analysis will be conducted on the following system which will have the following boundaries and components:
+\begin{enumerate}
+    \item The TPG codebase includes the following components:
+    \begin{enumerate}[label=(\alph*)]
+        \item The reinforcement learning algorithm is responsible for training the agents.
+        \item The environment in which agents will be interacting with.
+        \item Scripts that are run to initialize the interaction between agents and environments.
+        \item The OpenGL visualizer will allow for visualization of the reinforcement learning interaction. 
+    \end{enumerate}
+    \item The device in which the repository is being run from.
+    \item The interface integrated with TPG and MuJoCo.
+\end{enumerate}
 
 \section{Critical Assumptions}
 
-\wss{These assumptions that are made about the software or system.  You should
-minimize the number of assumptions that remove potential hazards.  For instance,
-you could assume a part will never fail, but it is generally better to include
-this potential failure mode.}
+% \wss{These assumptions that are made about the software or system.  You should
+% minimize the number of assumptions that remove potential hazards.  For instance,
+% you could assume a part will never fail, but it is generally better to include
+% this potential failure mode.}
+
+Here are the following critical assumptions that will be made: 
+
+\begin{itemize}
+    \item Dependent libraries and frameworks are stable and any current issues or bugs don\'t affect the product\'s functionality.
+    \item The MuJoCo environment works as intended as the documentation provides.
+    \item The operators and users of the systems are using the product in its intended form.
+\end{itemize}
 
 \section{Failure Mode and Effect Analysis}
 
@@ -102,21 +132,26 @@ Which requirements will be implemented in the future?}
 
 \section*{Appendix --- Reflection}
 
-\wss{Not required for CAS 741}
+% \wss{Not required for CAS 741}
 
-\input{../Reflection.tex}
+% \input{../Reflection.tex}
 
-\begin{enumerate}
-    \item What went well while writing this deliverable? 
-    \item What pain points did you experience during this deliverable, and how
-    did you resolve them?
-    \item Which of your listed risks had your team thought of before this
-    deliverable, and which did you think of while doing this deliverable? For
-    the latter ones (ones you thought of while doing the Hazard Analysis), how
-    did they come about?
-    \item Other than the risk of physical harm (some projects may not have any
-    appreciable risks of this form), list at least 2 other types of risk in
-    software products. Why are they important to consider?
-\end{enumerate}
+\textbf{What went well while writing this deliverable?}
+\\\\
+While writing this deliverable, the team communicated well on the progress of the hazard analysis. As items were being completed, constant updates between members were given to give traceability and allow team members to review sections written by other members.
+\\\\
+\textbf{What pain points did you experience during this deliverable, and how did you resolve them?}
+\\\\
+Some pain points that were experienced during this deliverable were the constraints of time management. Although reading week was in effect, there were many other items to consider such as midterms and assignments throughout the hazard analysis. This was somehow resolved by delegating tasks between members to balance the time managed on the project itself and the documentation. Another pain point that was experienced is that there was initially a lack of understanding of what hazards were between members. Some had initial thoughts and ideas of what should be considered, while others had different ones. In the end, this was resolved by communicating with the team to come to a consensus on what the definition of a hazard was and the overall scope of what this hazard analysis would become.
+\\\\
+\textbf{Which of your listed risks had your team thought of before this deliverable, and which did you think of while doing this deliverable? For
+the latter ones (ones you thought of while doing the Hazard Analysis), how did they come about?}
+\\\\
+Text here.
+\\\\
+\textbf{Other than the risk of physical harm (some projects may not have any appreciable risks of this form), list at least 2 other types of risk in
+software products. Why are they important to consider?}
+\\\\
+Two other types of software product risk include security and compliance risks. Security risks are important to consider to protect the product itself. If some malicious actors are looking to cause harm to the system, mitigation strategies and prevention are important to keep the system and any critical data such as user information, safe as well. Compliance risks are important to consider as if any crucial changes are made to the system, it is necessary to make sure all laws and guidelines such as PIPEDA, are still being followed. 
 
 \end{document}
