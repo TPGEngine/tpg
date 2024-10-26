@@ -22,7 +22,7 @@ do
    esac
 done
 
-# Evolve mode
+# Evolve mode ##################################################################
 if [ $mode -eq 0 ]; then
    echo "Starting run $seed_tpg..."
    mpirun --oversubscribe -np $num_mpi_proc \
@@ -32,7 +32,7 @@ if [ $mode -eq 0 ]; then
      2> tpg.$seed_tpg.$$.err &
 fi
 
-# Replay mode
+# Replay mode ##################################################################
 if [ $mode -eq 1 ]; then
    # Training phase
    phase=2
@@ -55,7 +55,7 @@ if [ $mode -eq 1 ]; then
    # Get generation of best team
    checkpoint_in_t=$(grep setElTmsMTA tpg.${seed_tpg}.*.std | \
      grep " fm 0 " | \
-     grep "p${phase}t${replay_task}a0 ${bestScore} " | \
+     grep "p${phase}t${replay_task}a0 ${best_fitness} " | \
      grep " phs $phase " | \
      head -n 1 | \
      awk -F" t " '{print $2}' | \
@@ -64,7 +64,7 @@ if [ $mode -eq 1 ]; then
    # Get id of best team
    tm_id=$(grep "setElTmsMTA" tpg.${seed_tpg}.*.std | \
      grep " fm 0 " | \
-     grep "p${phase}t${replay_task}a0 ${bestScore} " | \
+     grep "p${phase}t${replay_task}a0 ${best_fitness} " | \
      grep " phs $phase " | \
      grep " t $checkpoint_in_t " | \
      head -n 1 | \
@@ -74,8 +74,8 @@ if [ $mode -eq 1 ]; then
    echo "Fitness:$best_fitness Generation:$checkpoint_in_t Team:$tm_id"
    
    #  for dbg mpirun --oversubscribe -np 1 xterm -hold -e gdb -ex run --args \
-   mpirun --oversubscribe -np 1 \  
-     $TPG/build/release/cpp/experiments/TPGExperimentMPI \
+   mpirun --oversubscribe \
+     -np 1 $TPG/build/release/cpp/experiments/TPGExperimentMPI \
      replay=1 animate=1 id_to_replay=$tm_id replay_task=$replay_task \
      checkpoint_in_phase=$phase checkpoint_in_t=$checkpoint_in_t \
      seed_tpg=$seed_tpg seed_aux=$seed_aux \
@@ -83,7 +83,7 @@ if [ $mode -eq 1 ]; then
      2> tpg.$seed_tpg.$seed_aux.replay.err &
 fi
 
-# Debug mode
+# Debug mode ###################################################################
 if [ $mode -eq 2 ]; then
    mpirun --oversubscribe -np $num_mpi_proc xterm -hold -e gdb -ex run \
      --args $TPG/build/release/cpp/experiments/TPGExperimentMPI \
