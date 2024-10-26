@@ -2,23 +2,30 @@
 ## Experiment Tracking Parameters ##############################################
 ################################################################################
 
-# whether to track experiments in comet
+# Whether to track experiments in comet
 track_experiments 0
 
-# comet experiment key
+# Comet experiment key
 experiment_key 7ac170bcf3e64f6fb3a29646c316ba7e
 
-# how frequently to track experiment metrics (in generations)
+# How frequently to track experiment metrics (in generations)
 track_mod 20
 
 ################################################################################
 ## Experiment Type Parameters ##################################################
 ################################################################################
 
-# re-evaluate an individual from a checkpoint file
+# Re-evaluate an individual from a checkpoint file
 replay 0
 
-# re-evaluate an individual from a checkpoint file and animate behaviour, 
+# ID of the individual to replay from checkpoint file
+id_to_replay = 0
+
+# Which task in which to replay the individual
+# Index in active_tasks list starting at 0
+replay_task 0
+
+# Re-evaluate an individual from a checkpoint file and animate behaviour, 
 # if available
 animate 0
 
@@ -26,190 +33,208 @@ animate 0
 ## GA Parameters ###############################################################
 ################################################################################
 
-# start from a checkpoint file
-checkpoint 0
+# Whether to start from a checkpoint file
+start_from_checkpoint 0
 
-# save checkpoints during evolution
+# Genertion of the checkpoint file
+checkpoint_in_t 0
+
+# Which phase checkpoint file to read
+# Training: 0
+# Validation: 1
+# Test: 2
+checkpoint_in_phase 2
+
+# Save checkpoints during evolution
 write_train_checkpoints 0
 write_test_checkpoints 1
 
-# save phylogenetic data
+# Save phylogenetic data
 write_phylogeny 0
 
-# how frequently to run test procedure
+# How frequently to run test procedure
 test_mod 1
 
-# Number of tasks used each selection for evaluation. 
-# The rest are estimated with phylogeny.
+# Number of tasks used each selection for evaluation 
+# The rest are estimated with phylogeny
 #n_sampled_tasks_for_eval 1
 
-# number of fitness functions available
+# Number of fitness functions available
 n_fit_mode 1
 
-# which fitness function to use, if multiple available
+# Which fitness function to use, if multiple available
+# Range is [0, n_fit_mode)
 fit_mode 0
 
-# which behaviour characterization function to use, if multiple available
+# Which behaviour characterization function to use, if multiple available
+# Range is [0, n_dist_mode)
 dist_mode 0
 
-# auxilliary seed, e.g. for simulators
+# Main seed for evolution
+seed_tpg 42
+
+# Auxilliary seed, e.g. for simulators
 seed_aux 42
 
-# max number of generations
-n_generations 500
+# Max number of generations
+n_generations 100000
 
-# allow mutation of internal teams (i.e. non-root teams (in-progress))
+# Allow mutation of internal teams (i.e. non-root teams (in-progress))
 mu_internal 0
 
-# number of elite teams
+# Number of elite root teams (agents)
 n_elite 400
 
 # n_elite * n_elite_mul new teams are created each generation
-n_elite_mul 2
+n_elite_mul 2.0
 
-# fitness proportional selection
+# Whether to use fitness proportional selection
 fit_prop_select 0
 
-# which diversity mode to use, if available
+# Which diversity mode to use, if available
 diversity_mode 0
 
+# Whether to constrain parent selection to root teams
 parent_select_roots_only 0
 
 ################################################################################
 ## Team  parameters ############################################################
 ################################################################################
 
-# initial team size
+# Initial team size
 max_initial_team_size 10
 
-# max team size
+# Max team size
 max_team_size 1000000
 
-# max teams per graph
+# Max teams per graph
 max_teams_per_graph 1000000
 
-# when changing action pointer, probability of selecting atomic action
+# When changing action pointer, probability of selecting atomic action
 p_atomic 0.99
 
-# team mutation: probability of deleting program from team
+# Team mutation: probability of deleting program from team
 pmd 0.5
 
-# team mtation: probability of adding program to team
+# Team mtation: probability of adding program to team
 pma 0.4
 
-# team mutation: probability of mutating a program
+# Team mutation: probability of mutating a program
 pmm 1.0
 
-# team mutation: probability of mutating a program's action pointer
+# Team mutation: probability of mutating a program's action pointer
 pmn 0.2
 
-# team mutation: probability of mutating program execution order
+# Team mutation: probability of mutating program execution order
 pmw 0.2
 
-# team variation: probability of team crossover
-pmx 0.5
+# Team variation: probability of team crossover
+pmx 0.0
 
-# team variation: probability of team crossover adding each parent prog to child
+# Team variation: probability of team crossover adding each parent prog to child
 pmx_p 0.5
 
 ################################################################################
 ## Program  parameters #########################################################
 ################################################################################
 
-# use stateful programs
-# if set to 0, memories are set to 0 prior to each program execution
-# if set to 1, memories are only set to 0 prior to each evaluation
+# Use stateful programs
+# If set to 0, memories are set to 0 prior to each program execution
+# If set to 1, memories are only set to 0 prior to each evaluation
 stateful 1
 
-# skip introns during evaluation
+# Whether to skip introns during evaluation
 skip_introns 1
 
-# enable continuous outputs
+# Enable continuous outputs
+# 0: disabled
+# 1: output is scalar s1
+# 2: output is vector v1
+# 3: output is matrix m1
 continuous_output 1
 
-# number of inputs (aka "features" or "state variables")
+# Number of inputs (aka "features" or "state variables")
+# Note MuJoco does not use this
 n_input 2
 
-# max initial program size
+# Max initial program size
 max_initial_prog_size 10
 
-# max program size
+# Max program size
 max_prog_size 1000000
 
-# number of memory indices
-# each memory index points to a data structure (scalar, vector, or matrix)
+# Number of memory indices
+# Each memory index points to a data structure (scalar, vector, or matrix)
 memory_indices 8
 
 # Dimensionality for vector & matrix memory
 memory_size 2
 min_memory_size 2
-max_memory_size 32 
+max_memory_size 2
 
-# Observations are stored in a buffer with this time window.
+# Observations are stored in a buffer with this time window
 observation_buff_size 1
 min_observation_buff_size 1
 max_observation_buff_size 1
 
-# program variation: probability of changing a random instruction
+# Program variation: probability of changing a random instruction
 p_bid_mutate 1.0
 
-# program variation: probability of swaping the position of two instructions
+# Program variation: probability of swaping the position of two instructions
 p_bid_swap 0.5
 
-# program variation: probability of deleting an instruction
+# Program variation: probability of deleting an instruction
 p_bid_delete 0.5
 
 # program variation: probability of adding an instruction
 p_bid_add 0.4
 
-# program variation: probability of linear crossover with another team
+# Program variation: probability of linear crossover with another team
 p_bid_xover 0.0
 
-# program variation: probability of adding noise to constants
-#p_bid_mu_const 1.0
+# Program variation: probability of adding noise to constants
+p_bid_mu_const 0.0
 
-# program variation: stddev of normal noise added to each const
+# Program variation: stddev of normal noise added to each const
 bid_mu_const_stddev 0.05
 
-# program variation: probability of changing observation_buff_size
+# Program variation: probability of changing observation_buff_size
 p_observation_buff_size 0.0
 
-# program variation: probability of changing observation_index
+# Program variation: probability of changing observation_index
 p_observation_index 0.2
 
-# program variation: probability of changing memory_size
+# Program variation: probability of changing memory_size
 p_memory_size 0.0
 
 ################################################################################
 ## General Task Parameters #####################################################
 ################################################################################
 
-# which tasks are active
-# rhs should be a single task name or a comma-separated list
+# Which tasks are active
+# Right-hand-side should be a single task name or a comma-separated list
 active_tasks Cartpole
 
-# use the partially-observable version of a task, if available
-# currently only available for calssic control tasks
+# Use the partially-observable version of a task, if available
+# Currently only available for calssic control and Mujoco tasks
 partially_observable 1
 
-# number of discrete actions
+# Number of discrete actions
 n_discrete_action 3
 
 ################################################################################
 ## Parameters Specific to Recursive Forecasting ################################
 ################################################################################
 
-forecast_univar 1
-
-# fitness function
-# supported options: "mse", "correlation", "theils", "pearson"
+# Fitness function
+# Supported options: "mse", "correlation", "theils", "pearson"
 forecast_fitness mse
 
-# whether to use discrete actions for forecasting
-# must also set n_discrete_action
+# Whether to use discrete actions for forecasting
+# Must also set n_discrete_action
 forecast_discrete 0
 
-# whether to normalize forecasting dataset in [0,1]
+# Whether to normalize forecasting dataset in [0,1]
 forecast_normalize_data 1
 
 forecast_prime_steps 50
@@ -218,11 +243,19 @@ forecast_horizon_train 50
 forecast_horizon_val 100
 forecast_horizon_test 100
 
-forecast_n_eval_train 19
-forecast_n_eval_val 9
+forecast_n_eval_train 20
+forecast_n_eval_val 10
 
-#forecast_n_eval_train 37
-#forecast_n_eval_val 18
+################################################################################
+## Parameters Specific to Mujoco ###############################################
+################################################################################
+
+mj_model_path $TPG/datasets/mujoco_models/ant.xml
+
+mj_max_timestep 1000
+
+mj_n_eval_train 3
+mj_n_eval_test 3
 
 ################################################################################
 ## Operations, uncomment to activate ###########################################
