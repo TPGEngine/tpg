@@ -7,49 +7,52 @@
 
 class ClassicControlEnv : public TaskEnv {
    public:
-    uniform_real_distribution<> disReset;
-    uniform_real_distribution<> disNoise;
-    vector<deque<double>> actionTrace;
+    std::uniform_real_distribution<> dis_reset;
+    std::uniform_real_distribution<> dis_noise;
+    std::vector<std::deque<double>> action_trace;
+
     ClassicControlEnv() {
-        actionTrace.reserve(3);
-        actionTrace.resize(3);
+        action_trace.reserve(3);
+        action_trace.resize(3);
         for (size_t i = 0; i < 200; i++) {
-            actionTrace[0].push_back(0);
-            actionTrace[1].push_back(0);
-            actionTrace[2].push_back(0);
+            action_trace[0].push_back(0);
+            action_trace[1].push_back(0);
+            action_trace[2].push_back(0);
         }
-        disNoise = uniform_real_distribution<>(-M_PI, M_PI);
+        dis_noise = std::uniform_real_distribution<>(-M_PI, M_PI);
     }
+
     ~ClassicControlEnv() {}
 
-    double bound(double x, double m, double M) { return min(max(x, m), M); }
-    virtual void display_function(int, int, double){};
+    double Bound(double x, double m, double M) {
+        return std::min(std::max(x, m), M);
+    }
+    virtual void DisplayFunction(int, int, double){};
 
-    /**************************************************************************/
-    void saveScreenshotToFile(std::string filename, int windowWidth,
-                              int windowHeight) {
-        const int numberOfPixels = windowWidth * windowHeight * 3;
-        unsigned char pixels[numberOfPixels];
+    void SaveScreenshotToFile(std::string filename, int window_width,
+                              int window_height) {
+        const int number_of_pixels = window_width * window_height * 3;
+        unsigned char pixels[number_of_pixels];
         glPixelStorei(GL_PACK_ALIGNMENT, 1);
         glReadBuffer(GL_FRONT);
-        glReadPixels(0, 0, windowWidth, windowHeight, GL_BGR_EXT,
+        glReadPixels(0, 0, window_width, window_height, GL_BGR_EXT,
                      GL_UNSIGNED_BYTE, pixels);
-        FILE* outputFile = fopen(filename.c_str(), "w");
+        FILE* output_file = std::fopen(filename.c_str(), "w");
         short header[] = {
-            0, 2, 0, 0, 0, 0, (short)windowWidth, (short)windowHeight, 24};
-        fwrite(&header, sizeof(header), 1, outputFile);
-        fwrite(pixels, numberOfPixels, 1, outputFile);
-        fclose(outputFile);
+            0, 2, 0, 0, 0, 0, (short)window_width, (short)window_height, 24};
+        std::fwrite(&header, sizeof(header), 1, output_file);
+        std::fwrite(pixels, number_of_pixels, 1, output_file);
+        std::fclose(output_file);
     }
 
-    void drawBitmapText(char* string, float x, float y, float z) {
+    void DrawBitmapText(char* string, float x, float y, float z) {
         char* c;
         glRasterPos3f(x, y, z);
         for (c = string; *c != ':'; c++)
             glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
     }
 
-    void drawStrokeText(char* string, float x, float y, float z) {
+    void DrawStrokeText(char* string, float x, float y, float z) {
         char* c;
         glPushMatrix();
         glTranslatef(x, y, z);
@@ -60,41 +63,41 @@ class ClassicControlEnv : public TaskEnv {
         glPopMatrix();
     }
 
-    // actionProcessed should be in [-1.0,1.0]
-    void drawTrace(int idx, string label, double actionProcessed,
-                   double yActionTrace) {
-        double traceXStep = 0.01;
-        actionTrace[idx].push_front(0.1 * actionProcessed);
-        actionTrace[idx].pop_back();
+    // action_processed should be in [-1.0,1.0]
+    void DrawTrace(int idx, std::string label, double action_processed,
+                   double y_action_trace) {
+        double trace_x_step = 0.01;
+        action_trace[idx].push_front(0.1 * action_processed);
+        action_trace[idx].pop_back();
         glBlendFunc(GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA);
         glPointSize(1);
         glColor3f(1.0, 1.0, 1.0);
         glBegin(GL_LINES);
         double x = 0;
-        for (size_t i = 0; i < actionTrace[idx].size(); i++) {
-            glVertex2d(x, yActionTrace + actionTrace[idx][i]);
-            x = x - traceXStep;
+        for (size_t i = 0; i < action_trace[idx].size(); i++) {
+            glVertex2d(x, y_action_trace + action_trace[idx][i]);
+            x = x - trace_x_step;
         }
         glEnd();
 
         // action text
         char c[80];
-        strcpy(c, label.c_str());
-        drawStrokeText(c, 0.05, yActionTrace, 0);
+        std::strcpy(c, label.c_str());
+        DrawStrokeText(c, 0.05, y_action_trace, 0);
     }
 
-    void drawEpisodeStepCounter(int episode, int step, float x, float y) {
+    void DrawEpisodeStepCounter(int episode, int step, float x, float y) {
         glColor3f(1.0, 1.0, 1.0);
         char c[80];
         (void)episode;
-        sprintf(c, "Step %d%s", step, ":");
-        drawStrokeText(c, x, y, 0);
+        std::sprintf(c, "Step %d%s", step, ":");
+        DrawStrokeText(c, x, y, 0);
     }
 
-    vector<double> linspace(double a, double b, size_t N) {
+    std::vector<double> Linspace(double a, double b, size_t N) {
         double h = (b - a) / static_cast<double>(N - 1);
-        vector<double> xs(N);
-        typename vector<double>::iterator x;
+        std::vector<double> xs(N);
+        typename std::vector<double>::iterator x;
         double val;
         for (x = xs.begin(), val = a; x != xs.end(); ++x, val += h)
             *x = val;
