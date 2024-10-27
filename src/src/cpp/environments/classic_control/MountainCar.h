@@ -1,11 +1,12 @@
 #ifndef MountainCar_h
 #define MountainCar_h
 
-#include <ClassicControlEnv.h>
 #include <math.h>
 #include <stdlib.h>
 
 #include <iostream>
+
+#include "ClassicControlEnv.h"
 
 #if !defined(CCANADA) && !defined(HPCC)
 #include <GL/gl.h>

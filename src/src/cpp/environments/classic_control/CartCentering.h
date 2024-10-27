@@ -1,12 +1,13 @@
 #ifndef CartCentering_h
 #define CartCentering_h
 
-#include <ClassicControlEnv.h>
 #include <math.h>
 #include <misc.h>
 #include <stdlib.h>
 
 #include <iostream>
+
+#include "ClassicControlEnv.h"
 #if !defined(CCANADA) && !defined(HPCC)
 #include <GL/gl.h>
 #include <GL/glut.h>

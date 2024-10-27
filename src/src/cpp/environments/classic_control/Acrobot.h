@@ -1,11 +1,12 @@
 #ifndef Acrobot_h
-#define Acrobot_h
+#define ACROBOT_H
 
-#include <ClassicControlEnv.h>
 #include <math.h>
 #include <stdlib.h>
 
 #include <iostream>
+
+#include "ClassicControlEnv.h"
 
 #if !defined(CCANADA) && !defined(HPCC)
 #include <GL/gl.h>
