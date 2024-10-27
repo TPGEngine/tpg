@@ -15,6 +15,7 @@ class RegisterMachine : public program {
   // Bid program, a list of instructions
   std::vector<instruction *> bid_;
   std::vector<instruction *> bidEffective_;
+
   inline void AddToInputMemoryBuff(Matrix<double, Dynamic, Dynamic> &mat,
                                    int mem_t) {
     observation_memory_buff_[mem_t]->working_memory_.push_front(mat);

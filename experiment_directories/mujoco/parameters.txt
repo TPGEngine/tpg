@@ -83,10 +83,10 @@ n_generations 1000000
 mu_internal 0
 
 # Number of elite root teams (agents)
-n_elite 500
+n_elite 4000
 
 # n_elite * n_elite_mul new teams are created each generation
-n_elite_mul 1.0
+n_elite_mul 0.025
 
 # Whether to use fitness proportional selection
 fit_prop_select 0
@@ -119,7 +119,7 @@ pmx_p 0.5
 pmd 0.1
 
 # Team variation: probability of adding program to team
-pma 0.05
+pma 0.075
 
 # Team variation: probability of mutating program execution order
 pmw 0.1
@@ -134,7 +134,7 @@ pmw 0.1
 # Program variation: probability of mutating a program's action pointer
 pmn 0.1
 # When changing action pointer, probability of selecting atomic action
-p_atomic 0.99
+p_atomic 1.0
 
 # Program variation: probability of changing a random instruction
 p_bid_mutate 0.2
@@ -164,7 +164,7 @@ p_observation_buff_size 0.0
 p_observation_index 0.1
 
 # Program variation: probability of changing memory_size
-p_memory_size 0.0
+p_memory_size 0.1
 
 # Use stateful programs
 # If set to 0, memories are set to 0 prior to each program execution
@@ -252,8 +252,8 @@ mj_model_path $TPG/datasets/mujoco_models/ant.xml
 
 mj_max_timestep 1000
 
-mj_n_eval_train 3
-mj_n_eval_test 3
+mj_n_eval_train 1
+mj_n_eval_test 1
 
 ################################################################################
 ## Operations, uncomment to activate ###########################################
