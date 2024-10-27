@@ -1,9 +1,9 @@
 #ifndef CARTPOLE_H
 #define CARTPOLE_H
 
-#include <math.h>
 #include <stdlib.h>
 
+#include <cmath>
 #include <iostream>
 #include <random>
 
@@ -159,7 +159,7 @@ class CartPole : public ClassicControlEnv {
 
     // TODO: Change function name once TaskEnv follows Google's C++ Styling
     // OpenGL Display
-    void display_function(int episode, int actionD, double actionC) {
+    void DisplayFunction(int episode, int actionD, double actionC) {
         (void)actionC;
         (void)actionD;
         (void)episode;
@@ -217,11 +217,11 @@ class CartPole : public ClassicControlEnv {
             glVertex3f(dir * 0.12, -0.3, 0);
             glEnd();
             glLineWidth(2.0);
-            drawTrace(0, "Action:", force / kForceMag, -1.0);
+            DrawTrace(0, "Action:", force / kForceMag, -1.0);
         }
 
         glLineWidth(1.0);
-        drawEpisodeStepCounter(episode, step_, -1.9, -1.9);
+        DrawEpisodeStepCounter(episode, step_, -1.9, -1.9);
 
         glColor3f(1.0, 1.0, 1.0);
         char c[80];
@@ -232,7 +232,7 @@ class CartPole : public ClassicControlEnv {
         else
             std::sprintf(c, "CartPole%s", ":");
 
-        drawStrokeText(c, -1.9, -1.7, 0);
+        DrawStrokeText(c, -1.9, -1.7, 0);
 
         glFlush();
 #endif

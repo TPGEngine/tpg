@@ -1,10 +1,10 @@
 #ifndef CARTCENTERING_H
 #define CARTCENTERING_H
 
-#include <math.h>
 #include <misc.h>
 #include <stdlib.h>
 
+#include <cmath>
 #include <iostream>
 #include <random>
 
@@ -116,7 +116,7 @@ class CartCentering : public ClassicControlEnv {
         state_po_[StateIndex::kX] = state_[StateIndex::kX];
 
         state_[StateIndex::kV] += kTau * acc_t;
-        state_[StateIndex::kV] = bound(state_[StateIndex::kV], -kMaxV, kMaxV);
+        state_[StateIndex::kV] = Bound(state_[StateIndex::kV], -kMaxV, kMaxV);
         state_po_[StateIndex::kV] = disNoise(rng);
 
         state_[2] = disNoise(rng);
@@ -138,7 +138,7 @@ class CartCentering : public ClassicControlEnv {
 
     // TODO: Change function name once TaskEnv follows Google's C++ Styling
     // OpenGL Display
-    void display_function(int episode, int actionD, double actionC) {
+    void DisplayFunction(int episode, int actionD, double actionC) {
         (void)episode;
         (void)actionD;
         (void)actionC;
@@ -212,12 +212,12 @@ class CartCentering : public ClassicControlEnv {
             }
             glEnd();
             glLineWidth(2.0);
-            drawTrace(0, "Action:", force / kForceMag, -1.0);
+            DrawTrace(0, "Action:", force / kForceMag, -1.0);
         }
 
         glColor3f(1.0, 1.0, 1.0);
         glLineWidth(1.0);
-        drawEpisodeStepCounter(episode, step_, -1.9, -1.9);
+        DrawEpisodeStepCounter(episode, step_, -1.9, -1.9);
 
         char c[80];
         if (step_ == 0)
@@ -226,7 +226,7 @@ class CartCentering : public ClassicControlEnv {
             std::sprintf(c, "CartCentering Terminal%s", ":");
         else
             std::sprintf(c, "CartCentering%s", ":");
-        drawStrokeText(c, -1.9, -1.7, 0);
+        DrawStrokeText(c, -1.9, -1.7, 0);
 
         glFlush();
 #endif
