@@ -67,6 +67,7 @@ class CartCentering : public ClassicControlEnv {
     }
 
     /****************************************************************************/
+    //! Resets the Acrobot environment to a initial state within specified ranges
     void reset(mt19937& rng) {
         step_ = 0;
 
@@ -87,6 +88,7 @@ class CartCentering : public ClassicControlEnv {
     }
 
     /****************************************************************************/
+    //! Checks if the current state is terminal based on step count, position, and velocity
     bool terminal() {
         terminalState = step_ >= max_step_ ||
                                 (abs(state_[X]) <= NEAR_ORIGIN &&
@@ -98,6 +100,7 @@ class CartCentering : public ClassicControlEnv {
     }
 
     /****************************************************************************/
+    //! Updates the environment state based on the given action and returns the reward
     Results update(int actionD, double actionC, mt19937& rng) {
         (void)actionC;
         double force;
@@ -139,7 +142,8 @@ class CartCentering : public ClassicControlEnv {
     }
 
     /****************************************************************************/
-    // opengl
+    //! Renders the current state of the CartCentering environment using OpenGL
+
     void display_function(int episode, int actionD, double actionC) {
         (void)episode;
         (void)actionD;

@@ -24,11 +24,13 @@ class ClassicControlEnv : public TaskEnv {
 
     ~ClassicControlEnv() {}
 
+    //! Bounds a value x between m and M
     double Bound(double x, double m, double M) {
         return std::min(std::max(x, m), M);
     }
     virtual void DisplayFunction(int, int, double){};
 
+    //! Saves current OpenGL frame buffer as a screenshot
     void SaveScreenshotToFile(std::string filename, int window_width,
                               int window_height) {
         const int number_of_pixels = window_width * window_height * 3;
@@ -45,6 +47,7 @@ class ClassicControlEnv : public TaskEnv {
         std::fclose(output_file);
     }
 
+    //! Draws bitmap text at specified 3D coordinates
     void DrawBitmapText(char* string, float x, float y, float z) {
         char* c;
         glRasterPos3f(x, y, z);
@@ -52,6 +55,7 @@ class ClassicControlEnv : public TaskEnv {
             glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
     }
 
+    //! Draws stroke text at specified 3D coordinates with scaling
     void DrawStrokeText(char* string, float x, float y, float z) {
         char* c;
         glPushMatrix();
@@ -63,6 +67,7 @@ class ClassicControlEnv : public TaskEnv {
         glPopMatrix();
     }
 
+    //! Draws a trace of action values over time
     // action_processed should be in [-1.0,1.0]
     void DrawTrace(int idx, std::string label, double action_processed,
                    double y_action_trace) {
@@ -85,7 +90,8 @@ class ClassicControlEnv : public TaskEnv {
         std::strcpy(c, label.c_str());
         DrawStrokeText(c, 0.05, y_action_trace, 0);
     }
-
+    
+    //! Draws the episode and step counter on the screen
     void DrawEpisodeStepCounter(int episode, int step, float x, float y) {
         glColor3f(1.0, 1.0, 1.0);
         char c[80];
@@ -94,6 +100,7 @@ class ClassicControlEnv : public TaskEnv {
         DrawStrokeText(c, x, y, 0);
     }
 
+    //! Creates a vector of evenly spaced values between a and b
     std::vector<double> Linspace(double a, double b, size_t N) {
         double h = (b - a) / static_cast<double>(N - 1);
         std::vector<double> xs(N);

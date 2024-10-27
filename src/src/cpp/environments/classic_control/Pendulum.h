@@ -76,6 +76,7 @@ class Pendulum : public ClassicControlEnv {
 
     ~Pendulum() {}
 
+    //! Resets the pendulum to a initial state based on specified bounds
     void reset(mt19937& rng) {
         internal_state_[_theta] = disReset(rng);
         internal_state_[_thetaDot] = disResetDot(rng);
@@ -93,11 +94,13 @@ class Pendulum : public ClassicControlEnv {
         terminalState = false;
     }
 
+    //! Checks if the current state is terminal based on steps
     bool terminal() {
         terminalState = step_ >= max_step_ ? true : false;
         return terminalState;
     }
 
+    //! Updates the pendulum state based on the given action
     Results update(int actionD, double actionC, mt19937& rng) {
         (void)actionD;
         double torque = bound(actionC, -maxTorque, maxTorque);
@@ -129,7 +132,7 @@ class Pendulum : public ClassicControlEnv {
         return {reward, 0.0};
     }
 
-    // opengl
+    //! Displays the pendulum state using OpenGL 
     void display_function(int episode, int actionD, double actionC) {
         (void)episode;
         (void)actionD;

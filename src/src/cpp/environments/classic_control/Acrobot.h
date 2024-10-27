@@ -67,6 +67,7 @@ class Acrobot : public ClassicControlEnv {
 
     double maxActionContinuous() const { return 1.0; }
 
+    //! Normalizes the state values by dividing them by their respective maximum values
     void normalizeState(bool po) {
         if (po) {
             state_po_[_theta1] /= maxTheta1;
@@ -74,6 +75,7 @@ class Acrobot : public ClassicControlEnv {
         }
     }
 
+    //! Resets the Acrobot environment to a initial state within specified ranges - uniform_real_distribution<>(-0.1, 0.1);
     void reset(mt19937& rng) {
         state_po_[_theta1] = state_[_theta1] = disReset(rng);
 
@@ -91,6 +93,7 @@ class Acrobot : public ClassicControlEnv {
         normalizeState(true);
     }
 
+    //! Updates Acrobot state based on the given action and returns the reward 
     Results update(int actionD, double actionC, mt19937& rng) {
         (void)actionD;
         (void)rng;
@@ -157,6 +160,7 @@ class Acrobot : public ClassicControlEnv {
         return {reward, 0.0};
     }
 
+    //! Provide boolean result to check if the current state is terminal based on step count or position
     bool terminal() {
         if (step_ >= max_step_ ||
             (-cos(state_[_theta1]) - cos(state_[_theta2] + state_[_theta1]) >
@@ -165,6 +169,7 @@ class Acrobot : public ClassicControlEnv {
         return terminalState;
     }
 
+    //! Wraps a value x within the range [m, M] by adding or subtracting the difference 
     double wrap(double x, double m, double M) {
         double diff = M - m;
         while (x > M)
@@ -174,7 +179,8 @@ class Acrobot : public ClassicControlEnv {
         return x;
     }
 
-    // opengl
+
+    //! Renders the current state of the Acrobot environment using OpenGL
     void display_function(int episode, int actionD, double actionC) {
         (void)episode;
         (void)actionD;

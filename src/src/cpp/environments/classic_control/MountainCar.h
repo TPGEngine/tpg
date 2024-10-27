@@ -45,12 +45,14 @@ class MountainCar : public ClassicControlEnv {
 
     ~MountainCar() {}
 
+    //! Normalizes the state values for partially observable environments
     void normalizeState(bool po) {
         if (po)
             state_po_[_position] = (state_po_[_position] - min_position) /
                                    (max_position - min_position);
     }
 
+    //! Resets the environment to its initial state within specified ranges
     void reset(mt19937& rng) {
         state_[_position] = state_po_[_position] = disReset(rng);
         state_[_velocity] = 0;
@@ -67,6 +69,7 @@ class MountainCar : public ClassicControlEnv {
         normalizeState(true);
     }
 
+    //! Checks if the current state is terminal based on steps or position
     bool terminal() {
         if (step_ >= max_step_ ||
             (state_[_position] >=
@@ -75,6 +78,7 @@ class MountainCar : public ClassicControlEnv {
         return terminalState;
     }
 
+    //! Updates the environment based on the given action
     Results update(int actionD, double actionC, mt19937& rng) {
         (void)actionC;
 
@@ -101,7 +105,7 @@ class MountainCar : public ClassicControlEnv {
         return {reward, 0.0};
     }
 
-    // opengl
+    //! Displays the current state of the environment using OpenGL
     void display_function(int episode, int actionD, double actionC) {
         (void)episode;
         (void)actionC;

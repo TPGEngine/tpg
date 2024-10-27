@@ -67,6 +67,7 @@ class CartPole : public ClassicControlEnv {
         actionTrace.clear();
     }
 
+    //! Returns the number of evaluations for a given phase (train, validation, or test)
     int GetNumEval(int phase) {
         if (phase == 0)
             return n_eval_train_;
@@ -76,13 +77,15 @@ class CartPole : public ClassicControlEnv {
             return n_eval_test_;
     }
 
+    //! Normalizes the state values for position and angle
     void normalizeState(bool po) {
         if (po) {
             state_po_[_x] /= MAX_X;
             state_po_[_theta] /= TWELVE_DEGREES;
         }
     }
-
+    
+    //! Resets the CartPole environment to a initial state within specified ranges
     void reset(mt19937& rng) {
         state_po_[_x] = state_[_x] = disReset(rng);
         state_po_[_theta] = state_[_theta] = disReset(rng);
@@ -94,6 +97,7 @@ class CartPole : public ClassicControlEnv {
         normalizeState(true);
     }
 
+    //! Checks if the current state is terminal based on angle, position, or max steps
     bool terminal() {
         if (step_ >= max_step_ || abs(state_[_theta]) > TWELVE_DEGREES ||
             abs(state_[_x]) > MAX_X)
@@ -101,6 +105,7 @@ class CartPole : public ClassicControlEnv {
         return terminalState;
     }
 
+    //! Updates the environment state based on the given action
     Results update(int actionD, double actionC, mt19937& rng) {
         double xacc, thetaacc, force, costheta, sintheta, temp;
 
@@ -153,7 +158,7 @@ class CartPole : public ClassicControlEnv {
         return {reward, 0.0};
     }
 
-    // opengl
+    //! Displays the CartPole environment using OpenGL 
     void display_function(int episode, int actionD, double actionC) {
         (void)actionC;
         (void)actionD;

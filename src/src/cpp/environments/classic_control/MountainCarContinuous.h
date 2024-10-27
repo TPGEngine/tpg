@@ -53,6 +53,7 @@ class MountainCarContinuous : public ClassicControlEnv {
 
     ~MountainCarContinuous() {}
 
+    //! Normalizes the state values for partially observable environments
     void normalizeState(bool po) {
         if (po) {
             state_po_[_position] = (state_po_[_position] - min_position) /
@@ -60,6 +61,7 @@ class MountainCarContinuous : public ClassicControlEnv {
         }
     }
 
+    //! Resets the environment to its initial state
     void reset(mt19937& rng) {
         state_[_position] = state_po_[_position] = disReset(rng);
         state_[_velocity] = 0;
@@ -76,6 +78,7 @@ class MountainCarContinuous : public ClassicControlEnv {
         normalizeState(true);
     }
 
+    //! Checks if the current state is terminal based on steps/position/velocity
     bool terminal() {
         if (step_ >= max_step_ || (state_[_position] >= goal_position &&
                                    state_[_velocity] >= goal_velocity))
@@ -83,6 +86,7 @@ class MountainCarContinuous : public ClassicControlEnv {
         return terminalState;
     }
 
+    //! Updates the environment based on the given action
     Results update(int actionD, double actionC, mt19937& rng) {
         (void)actionD;
         double force = bound(actionC, min_action, max_action);
@@ -113,7 +117,7 @@ class MountainCarContinuous : public ClassicControlEnv {
         return {reward, 0.0};
     }
 
-    // opengl
+    //! Displays the current state of the environment using OpenGL
     void display_function(int episode, int actionD, double actionC) {
         (void)episode;
         (void)actionD;
