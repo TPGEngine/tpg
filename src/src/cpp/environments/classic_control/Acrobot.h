@@ -46,7 +46,7 @@ class Acrobot : public ClassicControlEnv {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        disReset = std::uniform_real_distribution<>(-0.1, 0.1);
+        dis_reset = std::uniform_real_distribution<>(-0.1, 0.1);
         actionsDiscrete.push_back(-1.0);
         actionsDiscrete.push_back(0.0);
         actionsDiscrete.push_back(1.0);
@@ -79,14 +79,14 @@ class Acrobot : public ClassicControlEnv {
     // TODO: Change function name once TaskEnv follows Google's C++ Styling
     void reset(std::mt19937 &rng) {
         state_po_[StateIndex::kTheta1] = state_[StateIndex::kTheta1] =
-            disReset(rng);
+            dis_reset(rng);
 
         state_po_[StateIndex::kTheta2] = state_[StateIndex::kTheta2] =
-            disReset(rng);
+            dis_reset(rng);
 
-        state_[StateIndex::kTheta1Dot] = disReset(rng);
+        state_[StateIndex::kTheta1Dot] = dis_reset(rng);
 
-        state_[StateIndex::kTheta2Dot] = disReset(rng);
+        state_[StateIndex::kTheta2Dot] = dis_reset(rng);
 
         reward = 0;
 

@@ -47,7 +47,7 @@ class CartPole : public ClassicControlEnv {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        disReset = std::uniform_real_distribution<>(-0.05, 0.05);
+        dis_reset = std::uniform_real_distribution<>(-0.05, 0.05);
         actionsDiscrete.push_back(-kForceMag);
         actionsDiscrete.push_back(0.0);
         actionsDiscrete.push_back(kForceMag);
@@ -63,7 +63,7 @@ class CartPole : public ClassicControlEnv {
         state_.clear();
         state_po_.clear();
         actionsDiscrete.clear();
-        actionTrace.clear();
+        action_trace.clear();
     }
 
     int GetNumEval(int phase) {
@@ -84,11 +84,11 @@ class CartPole : public ClassicControlEnv {
 
     // TODO: Change function name once TaskEnv follows Google's C++ Styling
     void reset(std::mt19937 &rng) {
-        state_po_[StateIndex::kX] = state_[StateIndex::kX] = disReset(rng);
+        state_po_[StateIndex::kX] = state_[StateIndex::kX] = dis_reset(rng);
         state_po_[StateIndex::kTheta] = state_[StateIndex::kTheta] =
-            disReset(rng);
-        state_[StateIndex::kXDot] = disReset(rng);
-        state_[StateIndex::kThetaDot] = disReset(rng);
+            dis_reset(rng);
+        state_[StateIndex::kXDot] = dis_reset(rng);
+        state_[StateIndex::kThetaDot] = dis_reset(rng);
         reward = 0;
         step_ = 0;
         terminalState = false;

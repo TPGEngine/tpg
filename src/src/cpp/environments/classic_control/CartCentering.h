@@ -42,7 +42,7 @@ class CartCentering : public ClassicControlEnv {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        disReset = std::uniform_real_distribution<>(kMinVarIni, kMaxVarIni);
+        dis_reset = std::uniform_real_distribution<>(kMinVarIni, kMaxVarIni);
         actionsDiscrete.push_back(-kForceMag);
         actionsDiscrete.push_back(0.0);
         actionsDiscrete.push_back(kForceMag);
@@ -68,15 +68,15 @@ class CartCentering : public ClassicControlEnv {
         step_ = 0;
 
         do {
-            state_po_[StateIndex::kX] = state_[StateIndex::kX] = disReset(rng);
-            state_[StateIndex::kV] = disReset(rng);
+            state_po_[StateIndex::kX] = state_[StateIndex::kX] = dis_reset(rng);
+            state_[StateIndex::kV] = dis_reset(rng);
             terminalState = false;
         } while (terminal());
 
-        state_po_[StateIndex::kV] = disNoise(rng);
+        state_po_[StateIndex::kV] = dis_noise(rng);
 
-        state_[2] = disNoise(rng);
-        state_[3] = disNoise(rng);
+        state_[2] = dis_noise(rng);
+        state_[3] = dis_noise(rng);
 
         reward = 0;
 
@@ -117,10 +117,10 @@ class CartCentering : public ClassicControlEnv {
 
         state_[StateIndex::kV] += kTau * acc_t;
         state_[StateIndex::kV] = Bound(state_[StateIndex::kV], -kMaxV, kMaxV);
-        state_po_[StateIndex::kV] = disNoise(rng);
+        state_po_[StateIndex::kV] = dis_noise(rng);
 
-        state_[2] = disNoise(rng);
-        state_[3] = disNoise(rng);
+        state_[2] = dis_noise(rng);
+        state_[3] = dis_noise(rng);
 
         step_++;
 
