@@ -291,33 +291,11 @@ void RegisterMachine::Mutate(std::unordered_map<std::string, std::any> &params,
    }
 }
 
-// // TODO(skelly): This functions currently assumes obs is a vector of state vars
-// void RegisterMachine::CopyObservationToMemoryBuff(state *obs,
-//                                                   size_t memory_type) {
-//    if (memory_type == memoryEigen::VECTOR_TYPE) {
-//       int f = obs_index_ % obs->dim_;
-//       for (int row = 0; row < memory_size_; row++) {
-//          observation_memory_buff_[memoryEigen::VECTOR_TYPE]->working_memory_[0](
-//              row, 0) = obs->stateValueAtIndex(f % obs->dim_);
-//          f++;
-//       }
-//    } else if (memory_type == memoryEigen::MATRIX_TYPE) {
-//       int fm = obs_index_ % obs->dim_;
-//       for (int row = 0; row < memory_size_; row++) {
-//          for (int col = 0; col < memory_size_; col++) {
-//             observation_memory_buff_[memoryEigen::MATRIX_TYPE]
-//                 ->working_memory_[0](row, col) =
-//                 obs->stateValueAtIndex(fm % obs->dim_);
-//             fm++;
-//          }
-//       }
-//    }
-// }
-
 // TODO(skelly): This functions currently assumes obs is a vector of state vars
 void RegisterMachine::CopyObservationToMemoryBuff(state *obs, size_t mem_t) {
+   //TODO(skelly): this can be optimized further
    int n_col = mem_t == memoryEigen::VECTOR_TYPE ? 1 : memory_size_;
-   Matrix<double, Dynamic, Dynamic> mat(memory_size_, n_col);                                                
+   Matrix<double, Dynamic, Dynamic> mat(memory_size_, n_col);                                            
    
    if (mem_t == memoryEigen::VECTOR_TYPE) {  // copy obs to vector
       int f = obs_index_ % obs->dim_;
