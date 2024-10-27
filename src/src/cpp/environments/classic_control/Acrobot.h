@@ -236,12 +236,12 @@ class Acrobot : public ClassicControlEnv {
             glColor3f(1.0, 1.0, 1.0);
             double torque = bound(actionC, -1.0, 1.0);
             glLineWidth(2.0);
-            DrawTrace(0, "Action:", torque / 1.0, 1.2);
+            drawTrace(0, "Action:", torque / 1.0, 1.2);
         }
 
         glColor3f(1.0, 1.0, 1.0);
         glLineWidth(1.0);
-        DrawEpisodeStepCounter(episode, step_, -1.9, -1.9);
+        drawEpisodeStepCounter(episode, step_, -1.9, -1.9);
 
         char c[80];
         if (step_ == 0)
@@ -250,7 +250,7 @@ class Acrobot : public ClassicControlEnv {
             std::sprintf(c, "Acrobot Terminal%s", ":");
         else
             std::sprintf(c, "Acrobot%s", ":");
-        DrawStrokeText(c, -1.9, -1.7, 0);
+        drawStrokeText(c, -1.9, -1.7, 0);
 
         glFlush();
 #endif
