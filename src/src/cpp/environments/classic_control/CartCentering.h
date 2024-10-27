@@ -1,52 +1,51 @@
-#ifndef CartCentering_h
-#define CartCentering_h
+#ifndef CARTCENTERING_H
+#define CARTCENTERING_H
 
-#include <ClassicControlEnv.h>
 #include <math.h>
 #include <misc.h>
 #include <stdlib.h>
 
 #include <iostream>
+#include <random>
+
+#include "ClassicControlEnv.h"
+
 #if !defined(CCANADA) && !defined(HPCC)
 #include <GL/gl.h>
 #include <GL/glut.h>
 #endif
 
 #define STATE_SIZE 4
-using namespace std;
-/******************************************************************************/
+
 class CartCentering : public ClassicControlEnv {
    protected:
     /*** Parameters for simulation ***/
-    const double MASSCART = 2.0;
-    const double FORCE_MAG = 1.0;
-    const double TAU = 0.02;  // seconds between state updates
+    const double kMassCart = 2.0;
+    const double kForceMag = 1.0;
+    const double kTau = 0.02;  // seconds between state updates
 
-    // these may depend on each other and dt
-    const double MAX_X = 1.5;
-    const double MAX_V = 6;
+    // These may depend on each other and dt
+    const double kMaxX = 1.5;
+    const double kMaxV = 6;
 
-    const double MIN_VAR_INI = -0.75;
-    const double MAX_VAR_INI = 0.75;
-    const double NEAR_ORIGIN = 0.01;
+    const double kMinVarIni = -0.75;
+    const double kMaxVarIni = 0.75;
+    const double kNearOrigin = 0.01;
 
-    // state array indexing
-    const int X = 0;
-    const int V = 1;
+    // State array indexing
+    enum StateIndex { kX = 0, kV = 1 };
 
-    int lastActionD = -FORCE_MAG;
-    uniform_real_distribution<> disReset;
+    int last_action_d = -kForceMag;
 
    public:
-    /****************************************************************************/
     CartCentering() {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        disReset = uniform_real_distribution<>(MIN_VAR_INI, MAX_VAR_INI);
-        actionsDiscrete.push_back(-FORCE_MAG);
+        disReset = std::uniform_real_distribution<>(kMinVarIni, kMaxVarIni);
+        actionsDiscrete.push_back(-kForceMag);
         actionsDiscrete.push_back(0.0);
-        actionsDiscrete.push_back(FORCE_MAG);
+        actionsDiscrete.push_back(kForceMag);
         eval_type_ = "Control";
         max_step_ = 500;
         state_.reserve(STATE_SIZE);
@@ -55,71 +54,70 @@ class CartCentering : public ClassicControlEnv {
         state_po_.resize(STATE_SIZE);
     }
 
-    /****************************************************************************/
     ~CartCentering() {}
 
-    /****************************************************************************/
-    void normalizeState(bool po) {
+    void NormalizeState(bool po) {
         if (po) {
-            state_po_[X] /= MAX_X;
-            state_po_[V] /= M_PI;
+            state_po_[StateIndex::kX] /= kMaxX;
+            state_po_[StateIndex::kV] /= M_PI;
         }
     }
 
-    /****************************************************************************/
-    void reset(mt19937 &rng) {
+    // TODO: Change function name once TaskEnv follows Google's C++ Styling
+    void reset(std::mt19937 &rng) {
         step_ = 0;
 
         do {
-            state_po_[X] = state_[X] = disReset(rng);
-            state_[V] = disReset(rng);
+            state_po_[StateIndex::kX] = state_[StateIndex::kX] = disReset(rng);
+            state_[StateIndex::kV] = disReset(rng);
             terminalState = false;
         } while (terminal());
 
-        state_po_[V] = disNoise(rng);
+        state_po_[StateIndex::kV] = disNoise(rng);
 
         state_[2] = disNoise(rng);
         state_[3] = disNoise(rng);
 
         reward = 0;
 
-        normalizeState(true);
+        NormalizeState(true);
     }
 
-    /****************************************************************************/
+    // TODO: Change function name once TaskEnv follows Google's C++ Styling
     bool terminal() {
-        terminalState = step_ >= max_step_ ||
-                                (abs(state_[X]) <= NEAR_ORIGIN &&
-                                 abs(state_[V]) <= NEAR_ORIGIN) ||
-                                abs(state_[X]) > MAX_X
-                            ? true
-                            : false;
+        terminalState =
+            step_ >= max_step_ ||
+                    (std::abs(state_[StateIndex::kX]) <= kNearOrigin &&
+                     std::abs(state_[StateIndex::kV]) <= kNearOrigin) ||
+                    std::abs(state_[StateIndex::kX]) > kMaxX
+                ? true
+                : false;
         return terminalState;
     }
 
-    /****************************************************************************/
-    Results update(int actionD, double actionC, mt19937 &rng) {
+    // TODO: Change function name once TaskEnv follows Google's C++ Styling
+    Results update(int actionD, double actionC, std::mt19937 &rng) {
         (void)actionC;
         double force;
 
         // action 1 is ignored
         if (actionD == 0) {
-            lastActionD = 0;
-            force = actionsDiscrete[lastActionD];
+            last_action_d = 0;
+            force = actionsDiscrete[last_action_d];
         } else if (actionD == 2) {
-            lastActionD = 2;
-            force = actionsDiscrete[lastActionD];
+            last_action_d = 2;
+            force = actionsDiscrete[last_action_d];
         } else
-            force = actionsDiscrete[lastActionD];
+            force = actionsDiscrete[last_action_d];
 
-        double acc_t = force / MASSCART;
+        double acc_t = force / kMassCart;
 
-        state_[X] += TAU * state_[V];
-        state_po_[X] = state_[X];
+        state_[StateIndex::kX] += kTau * state_[StateIndex::kV];
+        state_po_[StateIndex::kX] = state_[StateIndex::kX];
 
-        state_[V] += TAU * acc_t;
-        state_[V] = bound(state_[V], -MAX_V, MAX_V);
-        state_po_[V] = disNoise(rng);
+        state_[StateIndex::kV] += kTau * acc_t;
+        state_[StateIndex::kV] = bound(state_[StateIndex::kV], -kMaxV, kMaxV);
+        state_po_[StateIndex::kV] = disNoise(rng);
 
         state_[2] = disNoise(rng);
         state_[3] = disNoise(rng);
@@ -127,19 +125,19 @@ class CartCentering : public ClassicControlEnv {
         step_++;
 
         if (terminal())
-            reward =
-                -((((abs(state_[X]) / MAX_X) + (abs(state_[V]) / MAX_V) / 2)) +
-                  (((double)step_ / max_step_) * 0.1));
+            reward = -((((std::abs(state_[StateIndex::kX]) / kMaxX) +
+                         (std::abs(state_[StateIndex::kV]) / kMaxV) / 2)) +
+                       (((double)step_ / max_step_) * 0.1));
         else
             reward = 0;
 
-        normalizeState(true);
+        NormalizeState(true);
 
         return {reward, 0.0};
     }
 
-    /****************************************************************************/
-    // opengl
+    // TODO: Change function name once TaskEnv follows Google's C++ Styling
+    // OpenGL Display
     void display_function(int episode, int actionD, double actionC) {
         (void)episode;
         (void)actionD;
@@ -152,26 +150,26 @@ class CartCentering : public ClassicControlEnv {
         // cart
         glColor3f(0.0, 0.0, 1.0);
         glBegin(GL_TRIANGLES);
-        glVertex2f(state_[X] - 0.15, 0.075);
-        glVertex2f(state_[X] - 0.15, -0.075);
-        glVertex2f(state_[X] + 0.15, 0.075);
-        glVertex2f(state_[X] + 0.15, 0.075);
-        glVertex2f(state_[X] - 0.15, -0.075);
-        glVertex2f(state_[X] + 0.15, -0.075);
+        glVertex2f(state_[StateIndex::kX] - 0.15, 0.075);
+        glVertex2f(state_[StateIndex::kX] - 0.15, -0.075);
+        glVertex2f(state_[StateIndex::kX] + 0.15, 0.075);
+        glVertex2f(state_[StateIndex::kX] + 0.15, 0.075);
+        glVertex2f(state_[StateIndex::kX] - 0.15, -0.075);
+        glVertex2f(state_[StateIndex::kX] + 0.15, -0.075);
         glEnd();
         glColor3f(1.0, 1.0, 1.0);
         glBegin(GL_LINES);
-        glVertex2d(state_[X], -0.075);
-        glVertex2d(state_[X], 0.075);
+        glVertex2d(state_[StateIndex::kX], -0.075);
+        glVertex2d(state_[StateIndex::kX], 0.075);
 
         // x bounds surface
-        glVertex2d(-MAX_X, 0.0);
-        glVertex2d(MAX_X, 0.0);
+        glVertex2d(-kMaxX, 0.0);
+        glVertex2d(kMaxX, 0.0);
 
         // ticks (green centre) TMP
-        for (int i = 1; MAX_X - (i * 0.1) > -MAX_X; i++) {
-            glVertex2d(MAX_X - (i * 0.1), 0.0);
-            if (isEqual(MAX_X - (i * 0.1), 0)) {
+        for (int i = 1; kMaxX - (i * 0.1) > -kMaxX; i++) {
+            glVertex2d(kMaxX - (i * 0.1), 0.0);
+            if (isEqual(kMaxX - (i * 0.1), 0)) {
                 glColor3f(0.0, 1.0, 0.0);
                 glVertex2d(1.5 - (i * 0.1),
                            isEqual(1.5 - (i * 0.1), 0) ? -0.1 : -0.025);
@@ -188,7 +186,7 @@ class CartCentering : public ClassicControlEnv {
             else if (actionD == 2)
                 force = actionsDiscrete[2];
             else
-                force = actionsDiscrete[lastActionD];
+                force = actionsDiscrete[last_action_d];
 
             int dir = 1;
             if (force < 0)
@@ -201,7 +199,8 @@ class CartCentering : public ClassicControlEnv {
             glVertex3f(dir * 0.12, -0.3, 0);
             glEnd();
 
-            if (abs(state_[X]) <= NEAR_ORIGIN && abs(state_[V]) <= NEAR_ORIGIN) {
+            if (std::abs(state_[StateIndex::kX]) <= kNearOrigin &&
+                std::abs(state_[StateIndex::kV]) <= kNearOrigin) {
                 glColor3f(0.0, 1.0, 0.0);
                 glBegin(GL_LINE_LOOP);
                 for (int i = 0; i <= 300; i++) {
@@ -213,7 +212,7 @@ class CartCentering : public ClassicControlEnv {
             }
             glEnd();
             glLineWidth(2.0);
-            drawTrace(0, "Action:", force / FORCE_MAG, -1.0);
+            drawTrace(0, "Action:", force / kForceMag, -1.0);
         }
 
         glColor3f(1.0, 1.0, 1.0);
@@ -222,11 +221,11 @@ class CartCentering : public ClassicControlEnv {
 
         char c[80];
         if (step_ == 0)
-            sprintf(c, "CartCentering Initial Conditions%s", ":");
+            std::sprintf(c, "CartCentering Initial Conditions%s", ":");
         else if (terminal())
-            sprintf(c, "CartCentering Terminal%s", ":");
+            std::sprintf(c, "CartCentering Terminal%s", ":");
         else
-            sprintf(c, "CartCentering%s", ":");
+            std::sprintf(c, "CartCentering%s", ":");
         drawStrokeText(c, -1.9, -1.7, 0);
 
         glFlush();
@@ -234,4 +233,4 @@ class CartCentering : public ClassicControlEnv {
     }
 };
 
-#endif
+#endif  // CARTCENTERING_H
