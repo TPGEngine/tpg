@@ -53,7 +53,7 @@ class CartPole : public ClassicControlEnv {
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
         dis_reset = std::uniform_real_distribution<>(-0.05, 0.05);
-        actionsDiscrete.push_back(-FORCE_MAG);
+        actionsDiscrete.push_back(-kForceMag);
         actionsDiscrete.push_back(0.0);
         actionsDiscrete.push_back(kForceMag);
         eval_type_ = "Control";
@@ -91,8 +91,7 @@ class CartPole : public ClassicControlEnv {
     }
     
     //! Resets the CartPole environment to a initial state within specified ranges
-    // TODO: Change function name once TaskEnv follows Google's C++ Styling
-    void reset(std::mt19937 &rng) {
+    void Reset(std::mt19937 &rng) {
         state_po_[StateIndex::kX] = state_[StateIndex::kX] = dis_reset(rng);
         state_po_[StateIndex::kTheta] = state_[StateIndex::kTheta] =
             dis_reset(rng);
@@ -105,8 +104,7 @@ class CartPole : public ClassicControlEnv {
     }
 
     //! Checks if the current state is terminal based on angle, position, or max steps
-    // TODO: Change function name once TaskEnv follows Google's C++ Styling
-    bool terminal() {
+    bool Terminal() {
         if (step_ >= max_step_ ||
             std::abs(state_[StateIndex::kTheta]) > kTwelveDegrees ||
             std::abs(state_[StateIndex::kX]) > kMaxX)
@@ -115,8 +113,7 @@ class CartPole : public ClassicControlEnv {
     }
 
     //! Updates the environment state based on the given action
-    // TODO: Change function name once TaskEnv follows Google's C++ Styling
-    Results update(int actionD, double actionC, std::mt19937 &rng) {
+    Results Update(int actionD, double actionC, std::mt19937 &rng) {
         double xacc, thetaacc, force, costheta, sintheta, temp;
 
         (void)actionC;
@@ -169,9 +166,7 @@ class CartPole : public ClassicControlEnv {
     }
 
     //! Displays the CartPole environment using OpenGL 
-    // TODO: Change function name once TaskEnv follows Google's C++ Styling
-    // OpenGL Display
-    void display_function(int episode, int actionD, double actionC) {
+    void DisplayFunction(int episode, int actionD, double actionC) {
         (void)actionC;
         (void)actionD;
         (void)episode;
@@ -229,7 +224,7 @@ class CartPole : public ClassicControlEnv {
             glVertex3f(dir * 0.12, -0.3, 0);
             glEnd();
             glLineWidth(2.0);
-            DrawTrace(0, "Action:", force / FORCE_MAG, -1.0);
+            DrawTrace(0, "Action:", force / kForceMag, -1.0);
         }
 
         glLineWidth(1.0);
@@ -239,7 +234,7 @@ class CartPole : public ClassicControlEnv {
         char c[80];
         if (step_ == 0)
             std::sprintf(c, "CartPole Initial Conditions%s", ":");
-        else if (terminal())
+        else if (Terminal())
             std::sprintf(c, "CartPole Terminal%s", ":");
         else
             std::sprintf(c, "CartPole%s", ":");
@@ -251,4 +246,4 @@ class CartPole : public ClassicControlEnv {
     }
 };
 
-#endif  // CARTPOLE_H
+#endif  

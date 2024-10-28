@@ -34,7 +34,7 @@ class MountainCar : public ClassicControlEnv {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        dis_reset = uniform_real_distribution<>(-0.6, -0.4);
+        dis_reset = std::uniform_real_distribution<>(-0.6, -0.4);
         eval_type_ = "Control";
         max_step_ = 200;
         state_.reserve(STATE_SIZE);

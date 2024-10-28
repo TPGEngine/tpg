@@ -11,8 +11,6 @@
 
 #include "ClassicControlEnv.h"
 
-#include "ClassicControlEnv.h"
-
 #if !defined(CCANADA) && !defined(HPCC)
 #include <GL/gl.h>
 #include <GL/glut.h>
@@ -77,8 +75,6 @@ class Acrobot : public ClassicControlEnv {
     double maxActionContinuous() const { return 1.0; }
 
     //! Normalizes the state values by dividing them by their respective maximum values
-    void normalizeState(bool po) {
-
     void NormalizeState(bool po) {
         if (po) {
             state_po_[StateIndex::kTheta1] /= kMaxTheta1;
@@ -170,9 +166,9 @@ class Acrobot : public ClassicControlEnv {
                 Wrap(state_[StateIndex::kTheta1], -kMaxTheta1, kMaxTheta1);
             state_[StateIndex::kTheta2] =
                 Wrap(state_[StateIndex::kTheta2], -kMaxTheta2, kMaxTheta2);
-            state_[StateIndex::kTheta1Dot] = bound(
+            state_[StateIndex::kTheta1Dot] = Bound(
                 state_[StateIndex::kTheta1Dot], -kMaxTheta1Dot, kMaxTheta1Dot);
-            state_[StateIndex::kTheta2Dot] = bound(
+            state_[StateIndex::kTheta2Dot] = Bound(
                 state_[StateIndex::kTheta2Dot], -kMaxTheta2Dot, kMaxTheta2Dot);
 
         }
@@ -279,4 +275,4 @@ class Acrobot : public ClassicControlEnv {
     }
 };
 
-#endif  // ACROBOT_H
+#endif 

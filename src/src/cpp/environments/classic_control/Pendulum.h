@@ -103,7 +103,7 @@ class Pendulum : public ClassicControlEnv {
     //! Updates the pendulum state based on the given action
     Results update(int actionD, double actionC, mt19937& rng) {
         (void)actionD;
-        double torque = bound(actionC, -maxTorque, maxTorque);
+        double torque = Bound(actionC, -maxTorque, maxTorque);
 
         double costs = pow(angle_normalize(internal_state_[_theta]), 2) +
                        0.1 * pow(internal_state_[_thetaDot], 2) +
@@ -116,7 +116,7 @@ class Pendulum : public ClassicControlEnv {
         internal_state_[_theta] = internal_state_[_theta] + newThetaDot * dt;
         internal_state_[_thetaDot] = newThetaDot;
         internal_state_[_thetaDot] =
-            bound(internal_state_[_thetaDot], -maxSpeed, maxSpeed);
+            Bound(internal_state_[_thetaDot], -maxSpeed, maxSpeed);
 
         state_[0] = state_po_[0] = cos(internal_state_[_theta]);
         state_[1] = state_po_[1] = sin(internal_state_[_theta]);
@@ -158,7 +158,7 @@ class Pendulum : public ClassicControlEnv {
 
         if (step_ > 0) {
             // action
-            double torque = bound(actionC, -maxTorque, maxTorque);
+            double torque = Bound(actionC, -maxTorque, maxTorque);
             const int sides = 40;
             const double radius = 0.2;
 

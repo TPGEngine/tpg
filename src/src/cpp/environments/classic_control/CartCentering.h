@@ -70,16 +70,15 @@ class CartCentering : public ClassicControlEnv {
     }
 
 
-   //! Resets the Acrobot environment to a initial state within specified ranges
-    // TODO: Change function name once TaskEnv follows Google's C++ Styling
-    void reset(std::mt19937 &rng) {
+   //! Resets the CartCentering environment to a initial state within specified ranges
+    void Reset(std::mt19937 &rng) {
         step_ = 0;
 
         do {
             state_po_[StateIndex::kX] = state_[StateIndex::kX] = dis_reset(rng);
             state_[StateIndex::kV] = dis_reset(rng);
             terminalState = false;
-        } while (terminal());
+        } while (Terminal());
 
         state_po_[StateIndex::kV] = dis_noise(rng);
 
@@ -95,9 +94,8 @@ class CartCentering : public ClassicControlEnv {
 
     /****************************************************************************/
     //! Checks if the current state is terminal based on step count, position, and velocity
-    // TODO: Change function name once TaskEnv follows Google's C++ Styling
 
-    bool terminal() {
+    bool Terminal() {
         terminalState =
             step_ >= max_step_ ||
                     (std::abs(state_[StateIndex::kX]) <= kNearOrigin &&
@@ -141,7 +139,7 @@ class CartCentering : public ClassicControlEnv {
 
         step_++;
 
-        if (terminal())
+        if (Terminal())
             reward = -((((std::abs(state_[StateIndex::kX]) / kMaxX) +
                          (std::abs(state_[StateIndex::kV]) / kMaxV) / 2)) +
                        (((double)step_ / max_step_) * 0.1));
@@ -155,9 +153,8 @@ class CartCentering : public ClassicControlEnv {
 
     /****************************************************************************/
     //! Renders the current state of the CartCentering environment using OpenGL
-    // TODO: Change function name once TaskEnv follows Google's C++ Styling
     // OpenGL Display
-    void display_function(int episode, int actionD, double actionC) {
+    void DisplayFunction(int episode, int actionD, double actionC) {
         (void)episode;
         (void)actionD;
         (void)actionC;
@@ -242,7 +239,7 @@ class CartCentering : public ClassicControlEnv {
         char c[80];
         if (step_ == 0)
             std::sprintf(c, "CartCentering Initial Conditions%s", ":");
-        else if (terminal())
+        else if (Terminal())
             std::sprintf(c, "CartCentering Terminal%s", ":");
         else
             std::sprintf(c, "CartCentering%s", ":");
@@ -252,4 +249,4 @@ class CartCentering : public ClassicControlEnv {
     }
 };
 
-#endif  // CARTCENTERING_H
+#endif  

@@ -44,18 +44,18 @@ void MaybeAnimateStep(EvalData &eval) {
 /******************************************************************************/
 void EvalControl(TPG &tpg, EvalData &eval) {
     MaybeStartAnimation(tpg);
-    eval.task->reset(tpg.rngs_[AUX_SEED]);
+    eval.task->Reset(tpg.rngs_[AUX_SEED]);
     eval.n_prediction = 0;
     state *obs = new state(tpg.n_input_[tpg.GetState("active_task")]);
     obs->Set(eval.task->GetObsVec(eval.partially_observable));
-    while (!eval.task->terminal()) {
+    while (!eval.task->Terminal()) {
         eval.program_out = tpg.getAction(
             eval.tm, obs, true, eval.teams_visited, eval.instruction_count,
             eval.task->step_, eval.team_path, tpg.rngs_[AUX_SEED], false);
 
         MaybeAnimateStep(eval);
         TaskEnv::Results r =
-            eval.task->update(WrapDiscreteAction(eval),
+            eval.task->Update(WrapDiscreteAction(eval),
                               WrapContinuousAction(eval), tpg.rngs_[AUX_SEED]);
         eval.stats_double[REWARD1_IDX] += r.r1;
         eval.AccumulateStepData();
@@ -72,10 +72,10 @@ void EvalControlViz(TPG &tpg, EvalData &eval,
                     set<team *, teamIdComp> &teams_visitedAllTasks,
                     int &steps) {
     MaybeStartAnimation(tpg);
-    eval.task->reset(tpg.rngs_[AUX_SEED]);
+    eval.task->Reset(tpg.rngs_[AUX_SEED]);
     state *obs = new state(tpg.n_input_[tpg.GetState("active_task")]);
     obs->Set(eval.task->GetObsVec(eval.partially_observable));
-    while (!eval.task->terminal()) {
+    while (!eval.task->Terminal()) {
         eval.program_out = tpg.getAction(
             eval.tm, obs, true, eval.teams_visited, eval.instruction_count,
             eval.task->step_, eval.team_path, tpg.rngs_[AUX_SEED], false);
@@ -94,7 +94,7 @@ void EvalControlViz(TPG &tpg, EvalData &eval,
                                      eval.teams_visited.end());
         MaybeAnimateStep(eval);
         TaskEnv::Results r =
-            eval.task->update(WrapDiscreteAction(eval),
+            eval.task->Update(WrapDiscreteAction(eval),
                               WrapContinuousAction(eval), tpg.rngs_[AUX_SEED]);
         eval.stats_double[REWARD1_IDX] += r.r1;
         eval.AccumulateStepData();
