@@ -13,24 +13,24 @@
 #include <GL/glut.h>
 #endif
 
-#define STATE_SIZE 4
+constexpr int kStateSize = 4;
 
 class Acrobot : public ClassicControlEnv {
    protected:
-    const double kMaxTheta1 = M_PI;
-    const double kMaxTheta2 = M_PI;
-    const double kMaxTheta1Dot = 4 * M_PI;
-    const double kMaxTheta2Dot = 9 * M_PI;
-    const double kM1 = 1.0;
-    const double kM2 = 1.0;
-    const double kL1 = 1.0;
-    const double kLC1 = 0.5;
-    const double kLC2 = 0.5;
-    const double kI1 = 1.0;
-    const double kI2 = 1.0;
-    const double kG = 9.8;
-    const double kDt = 0.05;
-    const double kAcrobotGoalPosition = 1.0;
+    static constexpr double kMaxTheta1 = M_PI;
+    static constexpr double kMaxTheta2 = M_PI;
+    static constexpr double kMaxTheta1Dot = 4 * M_PI;
+    static constexpr double kMaxTheta2Dot = 9 * M_PI;
+    static constexpr double kM1 = 1.0;
+    static constexpr double kM2 = 1.0;
+    static constexpr double kL1 = 1.0;
+    static constexpr double kLC1 = 0.5;
+    static constexpr double kLC2 = 0.5;
+    static constexpr double kI1 = 1.0;
+    static constexpr double kI2 = 1.0;
+    static constexpr double kG = 9.8;
+    static constexpr double kDt = 0.05;
+    static constexpr double kAcrobotGoalPosition = 1.0;
 
     // State array indexing
     enum StateIndex {
@@ -46,16 +46,16 @@ class Acrobot : public ClassicControlEnv {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        dis_reset = std::uniform_real_distribution<>(-0.1, 0.1);
+        disReset = std::uniform_real_distribution<>(-0.1, 0.1);
         actionsDiscrete.push_back(-1.0);
         actionsDiscrete.push_back(0.0);
         actionsDiscrete.push_back(1.0);
         eval_type_ = "Control";
         max_step_ = 200;
-        state_.reserve(STATE_SIZE);
-        state_.resize(STATE_SIZE);
-        state_po_.reserve(STATE_SIZE);
-        state_po_.resize(STATE_SIZE);
+        state_.reserve(kStateSize);
+        state_.resize(kStateSize);
+        state_po_.reserve(kStateSize);
+        state_po_.resize(kStateSize);
     }
 
     ~Acrobot() {}
@@ -79,14 +79,14 @@ class Acrobot : public ClassicControlEnv {
     // TODO: Change function name once TaskEnv follows Google's C++ Styling
     void reset(std::mt19937 &rng) {
         state_po_[StateIndex::kTheta1] = state_[StateIndex::kTheta1] =
-            dis_reset(rng);
+            disReset(rng);
 
         state_po_[StateIndex::kTheta2] = state_[StateIndex::kTheta2] =
-            dis_reset(rng);
+            disReset(rng);
 
-        state_[StateIndex::kTheta1Dot] = dis_reset(rng);
+        state_[StateIndex::kTheta1Dot] = disReset(rng);
 
-        state_[StateIndex::kTheta2Dot] = dis_reset(rng);
+        state_[StateIndex::kTheta2Dot] = disReset(rng);
 
         reward = 0;
 
@@ -102,7 +102,7 @@ class Acrobot : public ClassicControlEnv {
         (void)rng;
 
         // double torque = actionsDiscrete[actionD];
-        double torque = Bound(actionC, -1.0, 1.0);
+        double torque = bound(actionC, -1.0, 1.0);
         double d1;
         double d2;
         double phi_2;
@@ -156,9 +156,9 @@ class Acrobot : public ClassicControlEnv {
                 Wrap(state_[StateIndex::kTheta1], -kMaxTheta1, kMaxTheta1);
             state_[StateIndex::kTheta2] =
                 Wrap(state_[StateIndex::kTheta2], -kMaxTheta2, kMaxTheta2);
-            state_[StateIndex::kTheta1Dot] = Bound(
+            state_[StateIndex::kTheta1Dot] = bound(
                 state_[StateIndex::kTheta1Dot], -kMaxTheta1Dot, kMaxTheta1Dot);
-            state_[StateIndex::kTheta2Dot] = Bound(
+            state_[StateIndex::kTheta2Dot] = bound(
                 state_[StateIndex::kTheta2Dot], -kMaxTheta2Dot, kMaxTheta2Dot);
         }
 
@@ -192,7 +192,7 @@ class Acrobot : public ClassicControlEnv {
 
     // TODO: Change function name once TaskEnv follows Google's C++ Styling
     // OpenGL Display
-    void DisplayFunction(int episode, int actionD, double actionC) {
+    void display_function(int episode, int actionD, double actionC) {
         (void)episode;
         (void)actionD;
         (void)actionC;
@@ -233,14 +233,14 @@ class Acrobot : public ClassicControlEnv {
 
         if (step_ > 0) {
             glColor3f(1.0, 1.0, 1.0);
-            double torque = Bound(actionC, -1.0, 1.0);
+            double torque = bound(actionC, -1.0, 1.0);
             glLineWidth(2.0);
-            DrawTrace(0, "Action:", torque / 1.0, 1.2);
+            drawTrace(0, "Action:", torque / 1.0, 1.2);
         }
 
         glColor3f(1.0, 1.0, 1.0);
         glLineWidth(1.0);
-        DrawEpisodeStepCounter(episode, step_, -1.9, -1.9);
+        drawEpisodeStepCounter(episode, step_, -1.9, -1.9);
 
         char c[80];
         if (step_ == 0)
@@ -249,7 +249,7 @@ class Acrobot : public ClassicControlEnv {
             std::sprintf(c, "Acrobot Terminal%s", ":");
         else
             std::sprintf(c, "Acrobot%s", ":");
-        DrawStrokeText(c, -1.9, -1.7, 0);
+        drawStrokeText(c, -1.9, -1.7, 0);
 
         glFlush();
 #endif

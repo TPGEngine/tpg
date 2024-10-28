@@ -14,28 +14,29 @@
 #include <GL/glut.h>
 #endif
 
-#define STATE_SIZE 4
+constexpr int kStateSize = 4;
 
 class CartPole : public ClassicControlEnv {
    protected:
-    const double kGravity = 9.8;
-    const double kMassCart = 1.0;
-    const double kMassPole = 0.1;
-    const double kTotalMass = (kMassPole + kMassCart);
-    const double kLength = 0.5; /* actually half the pole's length */
-    const double kPoleMassLength = (kMassPole * kLength);
-    const double kForceMag = 10.0;
-    const double kTau = 0.02; /* seconds between state updates */
-    const double kFourThirds = 1.3333333333333;
-    const double kSixDegrees = 0.1047198;
-    const double kSevenDegrees = 0.1221730;
-    const double kTenDegrees = 0.1745329;
-    const double kTwelveDegrees = 0.2094384;
-    const double kFifteenDegrees = 0.2617993;
-    const double kTwelveDegreesSquared = kTwelveDegrees * kTwelveDegrees;
+    static constexpr double kGravity = 9.8;
+    static constexpr double kMassCart = 1.0;
+    static constexpr double kMassPole = 0.1;
+    static constexpr double kTotalMass = (kMassPole + kMassCart);
+    static constexpr double kLength = 0.5; /* Actually half the pole's length */
+    static constexpr double kPoleMassLength = (kMassPole * kLength);
+    static constexpr double kForceMag = 10.0;
+    static constexpr double kTau = 0.02; /* Seconds between state updates */
+    static constexpr double kFourThirds = 1.3333333333333;
+    static constexpr double kSixDegrees = 0.1047198;
+    static constexpr double kSevenDegrees = 0.1221730;
+    static constexpr double kTenDegrees = 0.1745329;
+    static constexpr double kTwelveDegrees = 0.2094384;
+    static constexpr double kFifteenDegrees = 0.2617993;
+    static constexpr double kTwelveDegreesSquared =
+        kTwelveDegrees * kTwelveDegrees;
 
-    const double kMinX = -1;
-    const double kMaxX = 1;
+    static constexpr double kMinX = -1;
+    static constexpr double kMaxX = 1;
 
     // State array indexing
     enum StateIndex { kX = 0, kTheta = 1, kXDot = 2, kThetaDot = 3 };
@@ -47,23 +48,23 @@ class CartPole : public ClassicControlEnv {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        dis_reset = std::uniform_real_distribution<>(-0.05, 0.05);
+        disReset = std::uniform_real_distribution<>(-0.05, 0.05);
         actionsDiscrete.push_back(-kForceMag);
         actionsDiscrete.push_back(0.0);
         actionsDiscrete.push_back(kForceMag);
         eval_type_ = "Control";
         max_step_ = 500;
-        state_.reserve(STATE_SIZE);
-        state_.resize(STATE_SIZE);
-        state_po_.reserve(STATE_SIZE - 2);
-        state_po_.resize(STATE_SIZE - 2);
+        state_.reserve(kStateSize);
+        state_.resize(kStateSize);
+        state_po_.reserve(kStateSize - 2);
+        state_po_.resize(kStateSize - 2);
     }
 
     ~CartPole() {
         state_.clear();
         state_po_.clear();
         actionsDiscrete.clear();
-        action_trace.clear();
+        actionTrace.clear();
     }
 
     int GetNumEval(int phase) {
@@ -84,11 +85,11 @@ class CartPole : public ClassicControlEnv {
 
     // TODO: Change function name once TaskEnv follows Google's C++ Styling
     void reset(std::mt19937 &rng) {
-        state_po_[StateIndex::kX] = state_[StateIndex::kX] = dis_reset(rng);
+        state_po_[StateIndex::kX] = state_[StateIndex::kX] = disReset(rng);
         state_po_[StateIndex::kTheta] = state_[StateIndex::kTheta] =
-            dis_reset(rng);
-        state_[StateIndex::kXDot] = dis_reset(rng);
-        state_[StateIndex::kThetaDot] = dis_reset(rng);
+            disReset(rng);
+        state_[StateIndex::kXDot] = disReset(rng);
+        state_[StateIndex::kThetaDot] = disReset(rng);
         reward = 0;
         step_ = 0;
         terminalState = false;
@@ -159,7 +160,7 @@ class CartPole : public ClassicControlEnv {
 
     // TODO: Change function name once TaskEnv follows Google's C++ Styling
     // OpenGL Display
-    void DisplayFunction(int episode, int actionD, double actionC) {
+    void display_function(int episode, int actionD, double actionC) {
         (void)actionC;
         (void)actionD;
         (void)episode;
@@ -217,11 +218,11 @@ class CartPole : public ClassicControlEnv {
             glVertex3f(dir * 0.12, -0.3, 0);
             glEnd();
             glLineWidth(2.0);
-            DrawTrace(0, "Action:", force / kForceMag, -1.0);
+            drawTrace(0, "Action:", force / kForceMag, -1.0);
         }
 
         glLineWidth(1.0);
-        DrawEpisodeStepCounter(episode, step_, -1.9, -1.9);
+        drawEpisodeStepCounter(episode, step_, -1.9, -1.9);
 
         glColor3f(1.0, 1.0, 1.0);
         char c[80];
@@ -232,7 +233,7 @@ class CartPole : public ClassicControlEnv {
         else
             std::sprintf(c, "CartPole%s", ":");
 
-        DrawStrokeText(c, -1.9, -1.7, 0);
+        drawStrokeText(c, -1.9, -1.7, 0);
 
         glFlush();
 #endif

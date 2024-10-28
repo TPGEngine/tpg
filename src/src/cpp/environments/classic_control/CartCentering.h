@@ -15,22 +15,22 @@
 #include <GL/glut.h>
 #endif
 
-#define STATE_SIZE 4
+constexpr int kStateSize = 4;
 
 class CartCentering : public ClassicControlEnv {
    protected:
     /*** Parameters for simulation ***/
-    const double kMassCart = 2.0;
-    const double kForceMag = 1.0;
-    const double kTau = 0.02;  // seconds between state updates
+    static constexpr double kMassCart = 2.0;
+    static constexpr double kForceMag = 1.0;
+    static constexpr double kTau = 0.02;  // seconds between state updates
 
     // These may depend on each other and dt
-    const double kMaxX = 1.5;
-    const double kMaxV = 6;
+    static constexpr double kMaxX = 1.5;
+    static constexpr double kMaxV = 6;
 
-    const double kMinVarIni = -0.75;
-    const double kMaxVarIni = 0.75;
-    const double kNearOrigin = 0.01;
+    static constexpr double kMinVarIni = -0.75;
+    static constexpr double kMaxVarIni = 0.75;
+    static constexpr double kNearOrigin = 0.01;
 
     // State array indexing
     enum StateIndex { kX = 0, kV = 1 };
@@ -42,16 +42,16 @@ class CartCentering : public ClassicControlEnv {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        dis_reset = std::uniform_real_distribution<>(kMinVarIni, kMaxVarIni);
+        disReset = std::uniform_real_distribution<>(kMinVarIni, kMaxVarIni);
         actionsDiscrete.push_back(-kForceMag);
         actionsDiscrete.push_back(0.0);
         actionsDiscrete.push_back(kForceMag);
         eval_type_ = "Control";
         max_step_ = 500;
-        state_.reserve(STATE_SIZE);
-        state_.resize(STATE_SIZE);
-        state_po_.reserve(STATE_SIZE);
-        state_po_.resize(STATE_SIZE);
+        state_.reserve(kStateSize);
+        state_.resize(kStateSize);
+        state_po_.reserve(kStateSize);
+        state_po_.resize(kStateSize);
     }
 
     ~CartCentering() {}
@@ -68,8 +68,8 @@ class CartCentering : public ClassicControlEnv {
         step_ = 0;
 
         do {
-            state_po_[StateIndex::kX] = state_[StateIndex::kX] = dis_reset(rng);
-            state_[StateIndex::kV] = dis_reset(rng);
+            state_po_[StateIndex::kX] = state_[StateIndex::kX] = disReset(rng);
+            state_[StateIndex::kV] = disReset(rng);
             terminalState = false;
         } while (terminal());
 
@@ -116,7 +116,7 @@ class CartCentering : public ClassicControlEnv {
         state_po_[StateIndex::kX] = state_[StateIndex::kX];
 
         state_[StateIndex::kV] += kTau * acc_t;
-        state_[StateIndex::kV] = Bound(state_[StateIndex::kV], -kMaxV, kMaxV);
+        state_[StateIndex::kV] = bound(state_[StateIndex::kV], -kMaxV, kMaxV);
         state_po_[StateIndex::kV] = dis_noise(rng);
 
         state_[2] = dis_noise(rng);
@@ -138,7 +138,7 @@ class CartCentering : public ClassicControlEnv {
 
     // TODO: Change function name once TaskEnv follows Google's C++ Styling
     // OpenGL Display
-    void DisplayFunction(int episode, int actionD, double actionC) {
+    void display_function(int episode, int actionD, double actionC) {
         (void)episode;
         (void)actionD;
         (void)actionC;
@@ -212,12 +212,12 @@ class CartCentering : public ClassicControlEnv {
             }
             glEnd();
             glLineWidth(2.0);
-            DrawTrace(0, "Action:", force / kForceMag, -1.0);
+            drawTrace(0, "Action:", force / kForceMag, -1.0);
         }
 
         glColor3f(1.0, 1.0, 1.0);
         glLineWidth(1.0);
-        DrawEpisodeStepCounter(episode, step_, -1.9, -1.9);
+        drawEpisodeStepCounter(episode, step_, -1.9, -1.9);
 
         char c[80];
         if (step_ == 0)
@@ -226,7 +226,7 @@ class CartCentering : public ClassicControlEnv {
             std::sprintf(c, "CartCentering Terminal%s", ":");
         else
             std::sprintf(c, "CartCentering%s", ":");
-        DrawStrokeText(c, -1.9, -1.7, 0);
+        drawStrokeText(c, -1.9, -1.7, 0);
 
         glFlush();
 #endif
