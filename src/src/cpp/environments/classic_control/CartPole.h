@@ -14,7 +14,7 @@
 #include <GL/glut.h>
 #endif
 
-constexpr int kStateSize = 4;
+constexpr int kCartPoleStateSize = 4;
 
 class CartPole : public ClassicControlEnv {
    protected:
@@ -54,10 +54,10 @@ class CartPole : public ClassicControlEnv {
         actionsDiscrete.push_back(kForceMag);
         eval_type_ = "Control";
         max_step_ = 500;
-        state_.reserve(kStateSize);
-        state_.resize(kStateSize);
-        state_po_.reserve(kStateSize - 2);
-        state_po_.resize(kStateSize - 2);
+        state_.reserve(kCartPoleStateSize);
+        state_.resize(kCartPoleStateSize);
+        state_po_.reserve(kCartPoleStateSize - 2);
+        state_po_.resize(kCartPoleStateSize - 2);
     }
 
     ~CartPole() {

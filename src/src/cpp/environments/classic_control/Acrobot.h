@@ -13,7 +13,7 @@
 #include <GL/glut.h>
 #endif
 
-constexpr int kStateSize = 4;
+constexpr int kAcrobotStateSize = 4;
 
 class Acrobot : public ClassicControlEnv {
    protected:
@@ -52,10 +52,10 @@ class Acrobot : public ClassicControlEnv {
         actionsDiscrete.push_back(1.0);
         eval_type_ = "Control";
         max_step_ = 200;
-        state_.reserve(kStateSize);
-        state_.resize(kStateSize);
-        state_po_.reserve(kStateSize);
-        state_po_.resize(kStateSize);
+        state_.reserve(kAcrobotStateSize);
+        state_.resize(kAcrobotStateSize);
+        state_po_.reserve(kAcrobotStateSize);
+        state_po_.resize(kAcrobotStateSize);
     }
 
     ~Acrobot() {}

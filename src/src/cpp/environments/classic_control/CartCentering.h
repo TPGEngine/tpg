@@ -15,7 +15,7 @@
 #include <GL/glut.h>
 #endif
 
-constexpr int kStateSize = 4;
+constexpr int kCartCenteringStateSize = 4;
 
 class CartCentering : public ClassicControlEnv {
    protected:
@@ -48,10 +48,10 @@ class CartCentering : public ClassicControlEnv {
         actionsDiscrete.push_back(kForceMag);
         eval_type_ = "Control";
         max_step_ = 500;
-        state_.reserve(kStateSize);
-        state_.resize(kStateSize);
-        state_po_.reserve(kStateSize);
-        state_po_.resize(kStateSize);
+        state_.reserve(kCartCenteringStateSize);
+        state_.resize(kCartCenteringStateSize);
+        state_po_.reserve(kCartCenteringStateSize);
+        state_po_.resize(kCartCenteringStateSize);
     }
 
     ~CartCentering() {}
@@ -73,10 +73,10 @@ class CartCentering : public ClassicControlEnv {
             terminalState = false;
         } while (terminal());
 
-        state_po_[StateIndex::kV] = dis_noise(rng);
+        state_po_[StateIndex::kV] = disNoise(rng);
 
-        state_[2] = dis_noise(rng);
-        state_[3] = dis_noise(rng);
+        state_[2] = disNoise(rng);
+        state_[3] = disNoise(rng);
 
         reward = 0;
 
@@ -117,10 +117,10 @@ class CartCentering : public ClassicControlEnv {
 
         state_[StateIndex::kV] += kTau * acc_t;
         state_[StateIndex::kV] = bound(state_[StateIndex::kV], -kMaxV, kMaxV);
-        state_po_[StateIndex::kV] = dis_noise(rng);
+        state_po_[StateIndex::kV] = disNoise(rng);
 
-        state_[2] = dis_noise(rng);
-        state_[3] = dis_noise(rng);
+        state_[2] = disNoise(rng);
+        state_[3] = disNoise(rng);
 
         step_++;
 
