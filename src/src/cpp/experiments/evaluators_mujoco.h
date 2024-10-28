@@ -155,6 +155,7 @@ void MaybeAnimateStep(TPG& tpg) {
 /******************************************************************************/
 void EvalMujoco(TPG& tpg, EvalData& eval) {
     MujocoEnv* task = dynamic_cast<MujocoEnv*>(eval.task);
+    tpg.rngs_[AUX_SEED].seed(tpg.seeds_[AUX_SEED]);
     task->reset(tpg.rngs_[AUX_SEED]);
     MaybeStartAnimation(tpg, task);
     MaybeAnimateStep(tpg);

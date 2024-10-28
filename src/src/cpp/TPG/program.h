@@ -13,6 +13,7 @@ class program {
   int action_;         // Action index
   double bid_val_;     // Most recent bid value
   static long count_;  // Next id to use
+  bool use_evolved_const_;
 
   // Features indexed by non-introns in this program, determined in
   // MarkIntrons().
@@ -27,6 +28,8 @@ class program {
 
   // Vector storing 1 memoryEigen* of each type (SCALAR, VECTOR, MATRIX)
   vector<memoryEigen *> privateMemory_;
+  // Vecto soring id of each private memory (required for checkpointing)
+  vector<long> private_memory_ids_;
 
   // Vector storing 1 memoryEigen* of each type (SCALAR, VECTOR, MATRIX)
   vector<memoryEigen *> observation_memory_buff_;
@@ -76,8 +79,7 @@ class program {
     return a != action;
   }
   // Mutate bid, return true if any changes occured
-  virtual void Mutate(std::unordered_map<std::string, std::any> &, mt19937 &,
-                     vector<bool> &) = 0;
+  virtual void Mutate(std::unordered_map<std::string, std::any> &, mt19937 &, vector<bool> &) = 0;
   // Not counting introns
   inline long numFeatures() { return features_.size(); }
   inline void op_counts(vector<int> &v) { v = op_counts_; }
@@ -88,6 +90,11 @@ class program {
   inline bool stateful() { return stateful_; }
   inline void stateful(bool s) { stateful_ = s; }
   inline bool targetMem() { return targetMem_; }
+  void CopyPrivateConstToWorking() {
+    for (auto m : privateMemory_) {
+      m->CopyConstToWorking();
+    }
+  }
 };
 
 struct programIdComp {

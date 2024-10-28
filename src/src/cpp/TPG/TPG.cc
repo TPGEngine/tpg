@@ -2,15 +2,15 @@
 
 /******************************************************************************/
 TPG::TPG() {
-  instruction::SetupOps();
-  real_dist_ = uniform_real_distribution<>(0.0, 1.0);
-  _Memids.resize(memoryEigen::NUM_MEMORY_TYPES);
-  _Memory.resize(memoryEigen::NUM_MEMORY_TYPES);
-  for (size_t i = 0; i < _NUM_PHASE; i++) _numEliteTeamsCurrent.push_back(0);
-  _ops.resize(instruction::NUM_OP);
-  fill(_ops.begin(), _ops.end(), false);
-  rngs_.resize(NUM_RNG);
-  seeds_.resize(NUM_RNG);
+    instruction::SetupOps();
+    real_dist_ = uniform_real_distribution<>(0.0, 1.0);
+    _Memids.resize(memoryEigen::NUM_MEMORY_TYPES);
+    _Memory.resize(memoryEigen::NUM_MEMORY_TYPES);
+    for (size_t i = 0; i < _NUM_PHASE; i++) _numEliteTeamsCurrent.push_back(0);
+    _ops.resize(instruction::NUM_OP);
+    fill(_ops.begin(), _ops.end(), false);
+    rngs_.resize(NUM_RNG);
+    seeds_.resize(NUM_RNG);
 }
 
 /******************************************************************************/
@@ -18,96 +18,97 @@ TPG::~TPG() {}
 
 /******************************************************************************/
 void TPG::AddProgram(program *p) {
-  _L[p->id_] = p;
-  _Lids.push_back(p->id_);
+    _L[p->id_] = p;
+    _Lids.push_back(p->id_);
 }
 
 /******************************************************************************/
 void TPG::removeProgram(program *p, bool updateLids) {
-  if (updateLids) {
-    auto it = find(_Lids.begin(), _Lids.end(), p->id_);
-    if (it == _Lids.end())
-      die(__FILE__, __FUNCTION__, __LINE__, "failed to remove program");
-    swap(_Lids[distance(_Lids.begin(), it)], _Lids.back());
-    _Lids.pop_back();
-  }
-  _L.erase(p->id_);
+    if (updateLids) {
+        auto it = find(_Lids.begin(), _Lids.end(), p->id_);
+        if (it == _Lids.end())
+            die(__FILE__, __FUNCTION__, __LINE__, "failed to remove program");
+        swap(_Lids[distance(_Lids.begin(), it)], _Lids.back());
+        _Lids.pop_back();
+    }
+    _L.erase(p->id_);
 }
 
 /******************************************************************************/
 void TPG::AddTeam(team *tm) {
-  _M.insert(tm);
-  if (tm->root_) {
-    _Mroot.insert(tm);
-  }
-  _teamMap[tm->id_] = tm;
+    _M.insert(tm);
+    if (tm->root_) {
+        _Mroot.insert(tm);
+    }
+    _teamMap[tm->id_] = tm;
 }
 
 /******************************************************************************/
 void TPG::RemoveTeam(team *tm, deque<program *> &p) {
-  // decrement program refs
-  for (auto prog : tm->members_) {
-    prog->nrefs_--;
-    if (prog->nrefs_ < 1) p.push_back(prog);
-  }
-  // TODO(skelly): test cloning
-  if (_teamMap.find(tm->cloneId_) != _teamMap.end())
-    _teamMap[tm->cloneId_]->clones_--;
-  _teamMap.erase(tm->id_);
-  _M.erase(tm);
-  delete tm;
+    // decrement program refs
+    for (auto prog : tm->members_) {
+        prog->nrefs_--;
+        if (prog->nrefs_ < 1) p.push_back(prog);
+    }
+    // TODO(skelly): test cloning
+    if (_teamMap.find(tm->cloneId_) != _teamMap.end())
+        _teamMap[tm->cloneId_]->clones_--;
+    _teamMap.erase(tm->id_);
+    _M.erase(tm);
+    delete tm;
 }
 
 /******************************************************************************/
 void TPG::AddMemory(memoryEigen *m) {
-  _Memory[m->type()][m->id_] = m;
-  _Memids[m->type()].push_back(m->id_);
+    _Memory[m->type_][m->id_] = m;
+    _Memids[m->type_].push_back(m->id_);
 }
 
 /******************************************************************************/
 void TPG::removeMemory(memoryEigen *m) {
-  auto it = find(_Memids[m->type()].begin(), _Memids[m->type()].end(), m->id_);
-  if (it == _Memids[m->type()].end())
-    die(__FILE__, __FUNCTION__, __LINE__, "failed to remove memoryEigen");
-  swap(_Memids[m->type()][it - _Memids[m->type()].begin()],
-       _Memids[m->type()].back());
-  _Memids[m->type()].pop_back();
-  _Memory[m->type()].erase(m->id_);
+    auto it =
+        find(_Memids[m->type_].begin(), _Memids[m->type_].end(), m->id_);
+    if (it == _Memids[m->type_].end())
+        die(__FILE__, __FUNCTION__, __LINE__, "failed to remove memoryEigen");
+    swap(_Memids[m->type_][it - _Memids[m->type_].begin()],
+         _Memids[m->type_].back());
+    _Memids[m->type_].pop_back();
+    _Memory[m->type_].erase(m->id_);
 }
 
 /******************************************************************************/
 team *TPG::getTeamByID(long id) {
-  for (auto teiter = _M.begin(); teiter != _M.end(); teiter++)
-    if ((*teiter)->id_ == id) return *teiter;
-  return *(_M.begin());
+    for (auto teiter = _M.begin(); teiter != _M.end(); teiter++)
+        if ((*teiter)->id_ == id) return *teiter;
+    return *(_M.begin());
 }
 
 /******************************************************************************/
 bool TPG::haveEliteTeam(string taskset, int fitMode, int phase) {
-  return _eliteTeamPS[taskset][fitMode].find(phase) !=
-         _eliteTeamPS[taskset][fitMode].end();
+    return _eliteTeamPS[taskset][fitMode].find(phase) !=
+           _eliteTeamPS[taskset][fitMode].end();
 }
 
 /******************************************************************************/
 void TPG::Seed(size_t i, uint_fast32_t s) {
-  seeds_[i] = s;
-  rngs_[i].seed(seeds_[i]);
+    seeds_[i] = s;
+    rngs_[i].seed(seeds_[i]);
 }
 
 void TPG::InitExperimentTracking(APIClient *apiClient) {
-  api_client_ = apiClient;
+    api_client_ = apiClient;
 }
 
 /******************************************************************************/
 void TPG::clearMemory() {
-  for (int mem_t = 0; mem_t < memoryEigen::NUM_MEMORY_TYPES; mem_t++) {
-    for (auto meiter = _Memory[mem_t].begin(); meiter != _Memory[mem_t].end();
-         meiter++) {
-      meiter->second->ClearWorking();
-      meiter->second->ClearReadTime();
-      meiter->second->ClearWriteTime();
+    for (int mem_t = 0; mem_t < memoryEigen::NUM_MEMORY_TYPES; mem_t++) {
+        for (auto meiter = _Memory[mem_t].begin();
+             meiter != _Memory[mem_t].end(); meiter++) {
+            meiter->second->ClearWorking();
+            meiter->second->ClearReadTime();
+            meiter->second->ClearWriteTime();
+        }
     }
-  }
 }
 
 /******************************************************************************/
@@ -115,11 +116,12 @@ program *TPG::getAction(team *tm, state *s, bool updateActive,
                         set<team *, teamIdComp> &visitedTeams,
                         long &decisionInstructions, int timeStep,
                         vector<team *> &teamPath, mt19937 &rng, bool verbose) {
-  visitedTeams.clear();
-  decisionInstructions = 0;
-  teamPath.clear();
-  return tm->getAction(s, _teamMap, updateActive, visitedTeams,
-                       decisionInstructions, timeStep, teamPath, rng, verbose);
+    visitedTeams.clear();
+    decisionInstructions = 0;
+    teamPath.clear();
+    return tm->getAction(s, _teamMap, updateActive, visitedTeams,
+                         decisionInstructions, timeStep, teamPath, rng,
+                         verbose);
 }
 
 /******************************************************************************/
@@ -130,25 +132,24 @@ program *TPG::getAction(
     vector<program *> &winningPrograms, vector<set<long>> &decisionFeatures,
     // vector<set<memoryEigen *, memoryEigenIdComp>> &decisionMemories,
     vector<team *> &teamPath, mt19937 &rng, bool verbose) {
-  allPrograms.clear();
-  winningPrograms.clear();
-  decisionInstructions = 0;
-  decisionFeatures.clear();
-  // decisionMemories.clear();
-  // visitedTeams.clear();
-  teamPath.clear();
-  return tm->getAction(s, _teamMap, updateActive, visitedTeams,
-                       decisionInstructions, timeStep, allPrograms,
-                       winningPrograms, decisionFeatures,
-                       teamPath, rng, verbose);
+    allPrograms.clear();
+    winningPrograms.clear();
+    decisionInstructions = 0;
+    decisionFeatures.clear();
+    // decisionMemories.clear();
+    // visitedTeams.clear();
+    teamPath.clear();
+    return tm->getAction(
+        s, _teamMap, updateActive, visitedTeams, decisionInstructions, timeStep,
+        allPrograms, winningPrograms, decisionFeatures, teamPath, rng, verbose);
 }
 
 /******************************************************************************/
 void TPG::GetAllNodes(team *tm, set<team *, teamIdComp> &teams,
                       set<program *, programIdComp> &programs) {
-  teams.clear();
-  programs.clear();
-  tm->GetAllNodes(_teamMap, teams, programs);
+    teams.clear();
+    programs.clear();
+    tm->GetAllNodes(_teamMap, teams, programs);
 }
 
 // /******************************************************************************/
@@ -163,10 +164,10 @@ void TPG::GetAllNodes(team *tm, set<team *, teamIdComp> &teams,
 
 /******************************************************************************/
 void TPG::getTeams(vector<team *> &t, bool roots) const {
-  if (roots)
-    t.assign(_Mroot.begin(), _Mroot.end());
-  else
-    t.assign(_M.begin(), _M.end());
+    if (roots)
+        t.assign(_Mroot.begin(), _Mroot.end());
+    else
+        t.assign(_M.begin(), _M.end());
 }
 
 // /******************************************************************************/
@@ -182,534 +183,573 @@ void TPG::getTeams(vector<team *> &t, bool roots) const {
 
 /******************************************************************************/
 map<long, team *> TPG::GetTeamsInMap(bool roots) const {
-  map<long, team *> t;
-  if (roots)
-    for (auto teiter = _Mroot.begin(); teiter != _Mroot.end(); teiter++)
-      t[(*teiter)->id_] = *teiter;
-  else
-    for (auto teiter = _M.begin(); teiter != _M.end(); teiter++)
-      t[(*teiter)->id_] = *teiter;
-  return t;
+    map<long, team *> t;
+    if (roots)
+        for (auto teiter = _Mroot.begin(); teiter != _Mroot.end(); teiter++)
+            t[(*teiter)->id_] = *teiter;
+    else
+        for (auto teiter = _M.begin(); teiter != _M.end(); teiter++)
+            t[(*teiter)->id_] = *teiter;
+    return t;
 }
 
 /******************************************************************************/
 vector<team *> TPG::GetTeamsInVec(bool roots) const {
-  vector<team *> teams;
-  if (roots)
-    for (auto teiter = _Mroot.begin(); teiter != _Mroot.end(); teiter++)
-      teams.push_back(*teiter);
-  else
-    for (auto teiter = _M.begin(); teiter != _M.end(); teiter++)
-      teams.push_back(*teiter);
-  return teams;
+    vector<team *> teams;
+    if (roots)
+        for (auto teiter = _Mroot.begin(); teiter != _Mroot.end(); teiter++)
+            teams.push_back(*teiter);
+    else
+        for (auto teiter = _M.begin(); teiter != _M.end(); teiter++)
+            teams.push_back(*teiter);
+    return teams;
 }
 
 /******************************************************************************/
 bool TPG::isElitePS(team *tm, int phase) {
-  for (auto itr1 = _eliteTeamPS.begin(); itr1 != _eliteTeamPS.end();
-       itr1++) {  // taskset
-    for (auto itr2 = itr1->second.begin(); itr2 != itr1->second.end();
-         itr2++) {  // fitmode
-                    // for (auto itr3 = itr2->second.begin(); itr3 !=
-                    // itr2->second.end(); itr3++)//phase
-      if (itr2->second.find(phase) != itr2->second.end() &&
-          itr2->second[phase]->id_ == tm->id_)
-        return true;
+    for (auto itr1 = _eliteTeamPS.begin(); itr1 != _eliteTeamPS.end();
+         itr1++) {  // taskset
+        for (auto itr2 = itr1->second.begin(); itr2 != itr1->second.end();
+             itr2++) {  // fitmode
+                        // for (auto itr3 = itr2->second.begin(); itr3 !=
+                        // itr2->second.end(); itr3++)//phase
+            if (itr2->second.find(phase) != itr2->second.end() &&
+                itr2->second[phase]->id_ == tm->id_)
+                return true;
+        }
     }
-  }
-  return false;
+    return false;
 }
 
 /******************************************************************************/
 void TPG::MarkEffectiveCode() {
-  for (auto prog : _L) {
-    prog.second->stateful_ = GetParam<int>("stateful");
-    prog.second->MarkIntrons(params_);
-  }
+    for (auto prog : _L) {
+        prog.second->stateful_ = GetParam<int>("stateful");
+        prog.second->MarkIntrons(params_);
+    }
 }
 
 /******************************************************************************/
 void TPG::printOss() {
-  cout << oss.str();
-  oss.str("");
+    cout << oss.str();
+    oss.str("");
 }
 
 /******************************************************************************/
 void TPG::printOss(ostringstream &o) {
-  oss << o.str();
-  o.str("");
+    oss << o.str();
+    o.str("");
 }
 
 /******************************************************************************/
 void TPG::ReadParameters(string file_name,
                          std::unordered_map<string, std::any> &params) {
-  std::ifstream infile(file_name);
-  string oneline;
-  vector<string> outcome_fields;
-  while (std::getline(infile, oneline)) {
-    if (oneline.find('#') != std::string::npos || oneline.size() == 0)
-      continue;  // skip comments and empty lines
-    SplitString(oneline, ' ', outcome_fields);
+    std::ifstream infile(file_name);
+    string oneline;
+    vector<string> outcome_fields;
+    while (std::getline(infile, oneline)) {
+        if (oneline.find('#') != std::string::npos || oneline.size() == 0)
+            continue;  // skip comments and empty lines
+        SplitString(oneline, ' ', outcome_fields);
 
-    if (outcome_fields[0] == "SCALAR_SUM_OP")
-      _ops[instruction::SCALAR_SUM_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_DIFF_OP")
-      _ops[instruction::SCALAR_DIFF_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_PRODUCT_OP")
-      _ops[instruction::SCALAR_PRODUCT_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_DIVISION_OP")
-      _ops[instruction::SCALAR_DIVISION_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_ABS_OP")
-      _ops[instruction::SCALAR_ABS_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_RECIPROCAL_OP")
-      _ops[instruction::SCALAR_RECIPROCAL_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_SIN_OP")
-      _ops[instruction::SCALAR_SIN_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_COS_OP")
-      _ops[instruction::SCALAR_COS_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_TAN_OP")
-      _ops[instruction::SCALAR_TAN_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_ARCSIN_OP")
-      _ops[instruction::SCALAR_ARCSIN_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_ARCCOS_OP")
-      _ops[instruction::SCALAR_ARCCOS_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_ARCTAN_OP")
-      _ops[instruction::SCALAR_ARCTAN_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_EXP_OP")
-      _ops[instruction::SCALAR_EXP_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_LOG_OP")
-      _ops[instruction::SCALAR_LOG_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_HEAVYSIDE_OP")
-      _ops[instruction::SCALAR_HEAVYSIDE_OP_] = true;
-    if (outcome_fields[0] == "VECTOR_HEAVYSIDE_OP")
-      _ops[instruction::VECTOR_HEAVYSIDE_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_HEAVYSIDE_OP")
-      _ops[instruction::MATRIX_HEAVYSIDE_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_VECTOR_PRODUCT_OP")
-      _ops[instruction::SCALAR_VECTOR_PRODUCT_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_BROADCAST_OP")
-      _ops[instruction::SCALAR_BROADCAST_OP_] = true;
-    if (outcome_fields[0] == "VECTOR_RECIPROCAL_OP")
-      _ops[instruction::VECTOR_RECIPROCAL_OP_] = true;
-    if (outcome_fields[0] == "VECTOR_NORM_OP")
-      _ops[instruction::VECTOR_NORM_OP_] = true;
-    if (outcome_fields[0] == "VECTOR_ABS_OP")
-      _ops[instruction::VECTOR_ABS_OP_] = true;
-    if (outcome_fields[0] == "VECTOR_SUM_OP")
-      _ops[instruction::VECTOR_SUM_OP_] = true;
-    if (outcome_fields[0] == "VECTOR_DIFF_OP")
-      _ops[instruction::VECTOR_DIFF_OP_] = true;
-    if (outcome_fields[0] == "VECTOR_PRODUCT_OP")
-      _ops[instruction::VECTOR_PRODUCT_OP_] = true;
-    if (outcome_fields[0] == "VECTOR_DIVISION_OP")
-      _ops[instruction::VECTOR_DIVISION_OP_] = true;
-    if (outcome_fields[0] == "VECTOR_INNER_PRODUCT_OP")
-      _ops[instruction::VECTOR_INNER_PRODUCT_OP_] = true;
-    if (outcome_fields[0] == "VECTOR_OUTER_PRODUCT_OP")
-      _ops[instruction::VECTOR_OUTER_PRODUCT_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_MATRIX_PRODUCT_OP")
-      _ops[instruction::SCALAR_MATRIX_PRODUCT_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_RECIPROCAL_OP")
-      _ops[instruction::MATRIX_RECIPROCAL_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_VECTOR_PRODUCT_OP")
-      _ops[instruction::MATRIX_VECTOR_PRODUCT_OP_] = true;
-    if (outcome_fields[0] == "VECTOR_COLUMN_BROADCAST_OP")
-      _ops[instruction::VECTOR_COLUMN_BROADCAST_OP_] = true;
-    if (outcome_fields[0] == "VECTOR_ROW_BROADCAST_OP")
-      _ops[instruction::VECTOR_ROW_BROADCAST_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_NORM_OP")
-      _ops[instruction::MATRIX_NORM_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_COLUMN_NORM_OP")
-      _ops[instruction::MATRIX_COLUMN_NORM_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_ROW_NORM_OP")
-      _ops[instruction::MATRIX_ROW_NORM_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_TRANSPOSE_OP")
-      _ops[instruction::MATRIX_TRANSPOSE_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_ABS_OP")
-      _ops[instruction::MATRIX_ABS_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_SUM_OP")
-      _ops[instruction::MATRIX_SUM_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_DIFF_OP")
-      _ops[instruction::MATRIX_DIFF_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_PRODUCT_OP")
-      _ops[instruction::MATRIX_PRODUCT_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_DIVISION_OP")
-      _ops[instruction::MATRIX_DIVISION_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_MATRIX_PRODUCT_OP")
-      _ops[instruction::MATRIX_MATRIX_PRODUCT_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_MIN_OP")
-      _ops[instruction::SCALAR_MIN_OP_] = true;
-    if (outcome_fields[0] == "VECTOR_MIN_OP")
-      _ops[instruction::VECTOR_MIN_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_MIN_OP")
-      _ops[instruction::MATRIX_MIN_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_MAX_OP")
-      _ops[instruction::SCALAR_MAX_OP_] = true;
-    if (outcome_fields[0] == "VECTOR_MAX_OP")
-      _ops[instruction::VECTOR_MAX_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_MAX_OP")
-      _ops[instruction::MATRIX_MAX_OP_] = true;
-    if (outcome_fields[0] == "VECTOR_MEAN_OP")
-      _ops[instruction::VECTOR_MEAN_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_MEAN_OP")
-      _ops[instruction::MATRIX_MEAN_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_ROW_ST_DEV_OP")
-      _ops[instruction::MATRIX_ROW_ST_DEV_OP_] = true;
-    if (outcome_fields[0] == "VECTOR_ST_DEV_OP")
-      _ops[instruction::VECTOR_ST_DEV_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_ST_DEV_OP")
-      _ops[instruction::MATRIX_ST_DEV_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_CONST_SET_OP")
-      _ops[instruction::SCALAR_CONST_SET_OP_] = true;
-    if (outcome_fields[0] == "VECTOR_CONST_SET_OP")
-      _ops[instruction::VECTOR_CONST_SET_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_CONST_SET_OP")
-      _ops[instruction::MATRIX_CONST_SET_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_UNIFORM_SET_OP")
-      _ops[instruction::SCALAR_UNIFORM_SET_OP_] = true;
-    if (outcome_fields[0] == "VECTOR_UNIFORM_SET_OP")
-      _ops[instruction::VECTOR_UNIFORM_SET_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_UNIFORM_SET_OP")
-      _ops[instruction::MATRIX_UNIFORM_SET_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_GAUSSIAN_SET_OP")
-      _ops[instruction::SCALAR_GAUSSIAN_SET_OP_] = true;
-    if (outcome_fields[0] == "VECTOR_GAUSSIAN_SET_OP")
-      _ops[instruction::VECTOR_GAUSSIAN_SET_OP_] = true;
-    if (outcome_fields[0] == "MATRIX_GAUSSIAN_SET_OP")
-      _ops[instruction::MATRIX_GAUSSIAN_SET_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_CONDITIONAL_OP")
-      _ops[instruction::SCALAR_CONDITIONAL_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_POW_OP")
-      _ops[instruction::SCALAR_POW_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_SQR_OP")
-      _ops[instruction::SCALAR_SQR_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_CUBE_OP")
-      _ops[instruction::SCALAR_CUBE_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_TANH_OP")
-      _ops[instruction::SCALAR_TANH_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_SQRT_OP")
-      _ops[instruction::SCALAR_SQRT_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_VECTOR_ASSIGN_OP")
-      _ops[instruction::SCALAR_VECTOR_ASSIGN_OP_] = true;
-    if (outcome_fields[0] == "SCALAR_MATRIX_ASSIGN_OP")
-      _ops[instruction::SCALAR_MATRIX_ASSIGN_OP_] = true;
-    if (outcome_fields[0] == "OBS_BUFF_SLICE_OP")
-      _ops[instruction::OBS_BUFF_SLICE_OP_] = true;  
+        if (outcome_fields[0] == "SCALAR_SUM_OP")
+            _ops[instruction::SCALAR_SUM_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_DIFF_OP")
+            _ops[instruction::SCALAR_DIFF_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_PRODUCT_OP")
+            _ops[instruction::SCALAR_PRODUCT_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_DIVISION_OP")
+            _ops[instruction::SCALAR_DIVISION_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_ABS_OP")
+            _ops[instruction::SCALAR_ABS_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_RECIPROCAL_OP")
+            _ops[instruction::SCALAR_RECIPROCAL_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_SIN_OP")
+            _ops[instruction::SCALAR_SIN_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_COS_OP")
+            _ops[instruction::SCALAR_COS_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_TAN_OP")
+            _ops[instruction::SCALAR_TAN_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_ARCSIN_OP")
+            _ops[instruction::SCALAR_ARCSIN_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_ARCCOS_OP")
+            _ops[instruction::SCALAR_ARCCOS_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_ARCTAN_OP")
+            _ops[instruction::SCALAR_ARCTAN_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_EXP_OP")
+            _ops[instruction::SCALAR_EXP_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_LOG_OP")
+            _ops[instruction::SCALAR_LOG_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_HEAVYSIDE_OP")
+            _ops[instruction::SCALAR_HEAVYSIDE_OP_] = true;
+        if (outcome_fields[0] == "VECTOR_HEAVYSIDE_OP")
+            _ops[instruction::VECTOR_HEAVYSIDE_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_HEAVYSIDE_OP")
+            _ops[instruction::MATRIX_HEAVYSIDE_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_VECTOR_PRODUCT_OP")
+            _ops[instruction::SCALAR_VECTOR_PRODUCT_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_BROADCAST_OP")
+            _ops[instruction::SCALAR_BROADCAST_OP_] = true;
+        if (outcome_fields[0] == "VECTOR_RECIPROCAL_OP")
+            _ops[instruction::VECTOR_RECIPROCAL_OP_] = true;
+        if (outcome_fields[0] == "VECTOR_NORM_OP")
+            _ops[instruction::VECTOR_NORM_OP_] = true;
+        if (outcome_fields[0] == "VECTOR_ABS_OP")
+            _ops[instruction::VECTOR_ABS_OP_] = true;
+        if (outcome_fields[0] == "VECTOR_SUM_OP")
+            _ops[instruction::VECTOR_SUM_OP_] = true;
+        if (outcome_fields[0] == "VECTOR_DIFF_OP")
+            _ops[instruction::VECTOR_DIFF_OP_] = true;
+        if (outcome_fields[0] == "VECTOR_PRODUCT_OP")
+            _ops[instruction::VECTOR_PRODUCT_OP_] = true;
+        if (outcome_fields[0] == "VECTOR_DIVISION_OP")
+            _ops[instruction::VECTOR_DIVISION_OP_] = true;
+        if (outcome_fields[0] == "VECTOR_INNER_PRODUCT_OP")
+            _ops[instruction::VECTOR_INNER_PRODUCT_OP_] = true;
+        if (outcome_fields[0] == "VECTOR_OUTER_PRODUCT_OP")
+            _ops[instruction::VECTOR_OUTER_PRODUCT_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_MATRIX_PRODUCT_OP")
+            _ops[instruction::SCALAR_MATRIX_PRODUCT_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_RECIPROCAL_OP")
+            _ops[instruction::MATRIX_RECIPROCAL_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_VECTOR_PRODUCT_OP")
+            _ops[instruction::MATRIX_VECTOR_PRODUCT_OP_] = true;
+        if (outcome_fields[0] == "VECTOR_COLUMN_BROADCAST_OP")
+            _ops[instruction::VECTOR_COLUMN_BROADCAST_OP_] = true;
+        if (outcome_fields[0] == "VECTOR_ROW_BROADCAST_OP")
+            _ops[instruction::VECTOR_ROW_BROADCAST_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_NORM_OP")
+            _ops[instruction::MATRIX_NORM_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_COLUMN_NORM_OP")
+            _ops[instruction::MATRIX_COLUMN_NORM_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_ROW_NORM_OP")
+            _ops[instruction::MATRIX_ROW_NORM_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_TRANSPOSE_OP")
+            _ops[instruction::MATRIX_TRANSPOSE_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_ABS_OP")
+            _ops[instruction::MATRIX_ABS_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_SUM_OP")
+            _ops[instruction::MATRIX_SUM_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_DIFF_OP")
+            _ops[instruction::MATRIX_DIFF_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_PRODUCT_OP")
+            _ops[instruction::MATRIX_PRODUCT_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_DIVISION_OP")
+            _ops[instruction::MATRIX_DIVISION_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_MATRIX_PRODUCT_OP")
+            _ops[instruction::MATRIX_MATRIX_PRODUCT_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_MIN_OP")
+            _ops[instruction::SCALAR_MIN_OP_] = true;
+        if (outcome_fields[0] == "VECTOR_MIN_OP")
+            _ops[instruction::VECTOR_MIN_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_MIN_OP")
+            _ops[instruction::MATRIX_MIN_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_MAX_OP")
+            _ops[instruction::SCALAR_MAX_OP_] = true;
+        if (outcome_fields[0] == "VECTOR_MAX_OP")
+            _ops[instruction::VECTOR_MAX_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_MAX_OP")
+            _ops[instruction::MATRIX_MAX_OP_] = true;
+        if (outcome_fields[0] == "VECTOR_MEAN_OP")
+            _ops[instruction::VECTOR_MEAN_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_MEAN_OP")
+            _ops[instruction::MATRIX_MEAN_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_ROW_ST_DEV_OP")
+            _ops[instruction::MATRIX_ROW_ST_DEV_OP_] = true;
+        if (outcome_fields[0] == "VECTOR_ST_DEV_OP")
+            _ops[instruction::VECTOR_ST_DEV_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_ST_DEV_OP")
+            _ops[instruction::MATRIX_ST_DEV_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_CONST_SET_OP")
+            _ops[instruction::SCALAR_CONST_SET_OP_] = true;
+        if (outcome_fields[0] == "VECTOR_CONST_SET_OP")
+            _ops[instruction::VECTOR_CONST_SET_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_CONST_SET_OP")
+            _ops[instruction::MATRIX_CONST_SET_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_UNIFORM_SET_OP")
+            _ops[instruction::SCALAR_UNIFORM_SET_OP_] = true;
+        if (outcome_fields[0] == "VECTOR_UNIFORM_SET_OP")
+            _ops[instruction::VECTOR_UNIFORM_SET_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_UNIFORM_SET_OP")
+            _ops[instruction::MATRIX_UNIFORM_SET_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_GAUSSIAN_SET_OP")
+            _ops[instruction::SCALAR_GAUSSIAN_SET_OP_] = true;
+        if (outcome_fields[0] == "VECTOR_GAUSSIAN_SET_OP")
+            _ops[instruction::VECTOR_GAUSSIAN_SET_OP_] = true;
+        if (outcome_fields[0] == "MATRIX_GAUSSIAN_SET_OP")
+            _ops[instruction::MATRIX_GAUSSIAN_SET_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_CONDITIONAL_OP")
+            _ops[instruction::SCALAR_CONDITIONAL_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_POW_OP")
+            _ops[instruction::SCALAR_POW_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_SQR_OP")
+            _ops[instruction::SCALAR_SQR_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_CUBE_OP")
+            _ops[instruction::SCALAR_CUBE_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_TANH_OP")
+            _ops[instruction::SCALAR_TANH_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_SQRT_OP")
+            _ops[instruction::SCALAR_SQRT_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_VECTOR_ASSIGN_OP")
+            _ops[instruction::SCALAR_VECTOR_ASSIGN_OP_] = true;
+        if (outcome_fields[0] == "SCALAR_MATRIX_ASSIGN_OP")
+            _ops[instruction::SCALAR_MATRIX_ASSIGN_OP_] = true;
+        if (outcome_fields[0] == "OBS_BUFF_SLICE_OP")
+            _ops[instruction::OBS_BUFF_SLICE_OP_] = true;
 
-    // TODO(skelly): make types part of parameter file
-    // string parameters are "hard coded" here
-    if (outcome_fields[0] == "active_tasks" || outcome_fields[0] == "n_input" ||
-        outcome_fields[0] == "n_stored_outcomes_TRAIN" ||
-        outcome_fields[0] == "n_stored_outcomes_VALIDATION" ||
-        outcome_fields[0] == "n_stored_outcomes_TEST" ||
-        outcome_fields[0] == "forecast_fitness" ||
-        outcome_fields[0] == "action_dim" ||
-        outcome_fields[0] == "mj_model_path" ||
-        outcome_fields[0] == "experiment_key") {
-      params[outcome_fields[0]] = outcome_fields[1];
+        // TODO(skelly): make types part of parameter file
+        // string parameters are "hard coded" here
+        if (outcome_fields[0] == "active_tasks" ||
+            outcome_fields[0] == "n_input" ||
+            outcome_fields[0] == "n_stored_outcomes_TRAIN" ||
+            outcome_fields[0] == "n_stored_outcomes_VALIDATION" ||
+            outcome_fields[0] == "n_stored_outcomes_TEST" ||
+            outcome_fields[0] == "forecast_fitness" ||
+            outcome_fields[0] == "action_dim" ||
+            outcome_fields[0] == "mj_model_path" ||
+            outcome_fields[0] == "experiment_key") {
+            params[outcome_fields[0]] = outcome_fields[1];
+        }
+        // double parameters are identified by a decimal place
+        else if (outcome_fields[1].find('.') != std::string::npos) {
+            params[outcome_fields[0]] = stringToDouble(outcome_fields[1]);
+        }
+        // otherwise we store the parameter as an integer
+        else {
+            params[outcome_fields[0]] = stringToInt(outcome_fields[1]);
+        }
     }
-    // double parameters are identified by a decimal place
-    else if (outcome_fields[1].find('.') != std::string::npos) {
-      params[outcome_fields[0]] = stringToDouble(outcome_fields[1]);
-    }
-    // otherwise we store the parameter as an integer
-    else {
-      params[outcome_fields[0]] = stringToInt(outcome_fields[1]);
-    }
-  }
 }
 
 /******************************************************************************/
 void TPG::resetOutcomes(int phase, bool roots) {
-  if (roots)
-    for (auto teiter = _Mroot.begin(); teiter != _Mroot.end(); teiter++)
-      (*teiter)->resetOutcomes(phase);
-  else
-    for (auto teiter = _M.begin(); teiter != _M.end(); teiter++)
-      (*teiter)->resetOutcomes(phase);
+    if (roots)
+        for (auto teiter = _Mroot.begin(); teiter != _Mroot.end(); teiter++)
+            (*teiter)->resetOutcomes(phase);
+    else
+        for (auto teiter = _M.begin(); teiter != _M.end(); teiter++)
+            (*teiter)->resetOutcomes(phase);
 }
 
 /******************************************************************************/
 void TPG::setOutcome(team *tm, string behav, vector<double> &rewards,
                      vector<int> &ints, long gtime) {
-  point *p = new point(gtime, state_["point_count"]++, behav, rewards, ints);
-  p->key(GetParam<int>("fit_mode"));
-  tm->setOutcome(p);
+    point *p = new point(gtime, state_["point_count"]++, behav, rewards, ints);
+    p->key(GetParam<int>("fit_mode"));
+    tm->setOutcome(p);
 }
 
 /******************************************************************************/
 void TPG::finalize() {
-  // TODO: remove clears that are not required
-  _allComponentsA.clear();
-  _allComponentsAt.clear();
-  _eliteTeams.clear();
-  _eliteTeamPS.clear();
-  _Mroot.clear();
-  _teamMap.clear();
-  _Lids.clear();
-  _Memids.clear();
-  _Memids.resize(memoryEigen::NUM_MEMORY_TYPES);
-  state_["memory_count"] = 0;
-  _numEliteTeamsCurrent.clear();
-  for (size_t i = 0; i < _NUM_PHASE; i++) _numEliteTeamsCurrent.push_back(0);
-  _persistenceFilterA.clear();
-  _persistenceFilterA_t.clear();
-  _persistenceFilterAllTime.clear();
-  state_["point_count"] = 0;
-  state_["program_count"] = 0;
-  task_set_map_.clear();
-  state_["team_count"] = 0;
-  _teamPairsToCompair.clear();
+    // TODO(skelly): remove clears that are not required
+    _allComponentsA.clear();
+    _allComponentsAt.clear();
+    _eliteTeams.clear();
+    _eliteTeamPS.clear();
+    _Mroot.clear();
+    _teamMap.clear();
+    _Lids.clear();
+    _Memids.clear();
+    _Memids.resize(memoryEigen::NUM_MEMORY_TYPES);
+    state_["memory_count"] = 0;
+    _numEliteTeamsCurrent.clear();
+    for (size_t i = 0; i < _NUM_PHASE; i++) _numEliteTeamsCurrent.push_back(0);
+    _persistenceFilterA.clear();
+    _persistenceFilterA_t.clear();
+    _persistenceFilterAllTime.clear();
+    state_["point_count"] = 0;
+    state_["program_count"] = 0;
+    state_["memory_count"] = 0;
+    task_set_map_.clear();
 
-  for (auto teiter = _M.begin(); teiter != _M.end(); teiter++) {
-    (*teiter)->resetOutcomes(-1);
-    delete *teiter;
-  }
-  _M.clear();
+    _teamPairsToCompair.clear();
 
-  for (auto leiter = _L.begin(); leiter != _L.end(); leiter++)
-    delete leiter->second;
-  _L.clear();
+    for (auto teiter = _M.begin(); teiter != _M.end(); teiter++) {
+        (*teiter)->resetOutcomes(-1);
+        delete *teiter;
+    }
+    _M.clear();
 
-  for (int mem_t = 0; mem_t < memoryEigen::NUM_MEMORY_TYPES; mem_t++) {
-    for (auto meiter = _Memory[mem_t].begin(); meiter != _Memory[mem_t].end();
-         meiter++)
-      delete meiter->second;
-    _Memory[mem_t].clear();
-  }
-  _Memory.clear();
-  _Memory.resize(memoryEigen::NUM_MEMORY_TYPES);
+    for (auto leiter = _L.begin(); leiter != _L.end(); leiter++)
+        delete leiter->second;
+    _L.clear();
 
-  _phyloGraph.clear();
+    // for (int mem_t = 0; mem_t < memoryEigen::NUM_MEMORY_TYPES; mem_t++) {
+    //     for (auto meiter = _Memory[mem_t].begin();
+    //          meiter != _Memory[mem_t].end(); meiter++)
+    //         delete meiter->second;
+    //     _Memory[mem_t].clear();
+    // }
+    _Memory.clear();
+    _Memory.resize(memoryEigen::NUM_MEMORY_TYPES);
+
+    _phyloGraph.clear();
 }
 
+/******************************************************************************/
 void TPG::TeamMutator_ProgramOrder(team *team_to_mu) {
-  if ((team_to_mu)->size() > 1 &&
-      real_dist_(rngs_[TPG_SEED]) < GetParam<double>("pmw")) {
-    int i, j;
-    uniform_int_distribution<int> dis_team_size(0, (team_to_mu)->size() - 1);
-    i = dis_team_size(rngs_[TPG_SEED]);
-    do {
-      j = dis_team_size(rngs_[TPG_SEED]);
-    } while (i == j);
-    (team_to_mu)->MuProgramOrder(i, j);
-  }
+    if ((team_to_mu)->size() > 1 &&
+        real_dist_(rngs_[TPG_SEED]) < GetParam<double>("pmw")) {
+        int i, j;
+        uniform_int_distribution<int> dis_team_size(0,
+                                                    (team_to_mu)->size() - 1);
+        i = dis_team_size(rngs_[TPG_SEED]);
+        do {
+            j = dis_team_size(rngs_[TPG_SEED]);
+        } while (i == j);
+        (team_to_mu)->MuProgramOrder(i, j);
+    }
 }
 
+/******************************************************************************/
 void TPG::TeamMutator_AddPrograms(team *team_to_mu) {
-  double rd = real_dist_(rngs_[TPG_SEED]);
-  if ((int)team_to_mu->size() < GetParam<int>("max_team_size") &&
-      rd < GetParam<double>("pma")) {
-    uniform_int_distribution<int> dis_programs(0, _L.size() - 1);
-    uniform_int_distribution<int> dis_team_size(0, team_to_mu->size() - 1);
-    int rand_p = dis_programs(rngs_[TPG_SEED]);
-    int rand_ts = dis_team_size(rngs_[TPG_SEED]);
-    program *p = _L[_Lids[rand_p]];
-    team_to_mu->AddProgram(p, rand_ts);
-  }
+    double rd = real_dist_(rngs_[TPG_SEED]);
+    if ((int)team_to_mu->size() < GetParam<int>("max_team_size") &&
+        rd < GetParam<double>("pma")) {
+        uniform_int_distribution<int> dis_programs(0, _L.size() - 1);
+        uniform_int_distribution<int> dis_team_size(0, team_to_mu->size() - 1);
+        int rand_p = dis_programs(rngs_[TPG_SEED]);
+        int rand_ts = dis_team_size(rngs_[TPG_SEED]);
+        program *p = _L[_Lids[rand_p]];
+        team_to_mu->AddProgram(p, rand_ts);
+    }
 }
 
+/******************************************************************************/
 void TPG::TeamMutator_RemovePrograms(team *team_to_mu) {
-  if (real_dist_(rngs_[TPG_SEED]) < GetParam<double>("pmd"))
-    team_to_mu->RemoveRandomProgram(rngs_[TPG_SEED]);
+    if (real_dist_(rngs_[TPG_SEED]) < GetParam<double>("pmd"))
+        team_to_mu->RemoveRandomProgram(rngs_[TPG_SEED]);
 }
 
+/******************************************************************************/
 team *TPG::CloneTeam(team *team_to_clone) {
-  team *team_clone = new team(GetState("t_current"), state_["team_count"]++);
-  for (auto m : team_to_clone->members_) {
-    team_clone->AddProgram(m);
-  }
-  return team_clone;
+    team *team_clone = new team(GetState("t_current"), state_["team_count"]++);
+    for (auto m : team_to_clone->members_) {
+        team_clone->AddProgram(m);
+    }
+    return team_clone;
 }
 
+/******************************************************************************/
 program *TPG::CloneProgram(program *prog) {
-  program *prog_clone = new RegisterMachine(
-      GetState("t_current"), *(dynamic_cast<RegisterMachine *>(prog)), params_,
-      state_["program_count"]++);
-  if (prog_clone->action() >= 0)
-    _teamMap[prog_clone->action()]->AddIncomingProgram(prog_clone->id_);
-  return prog_clone;
+    program *prog_clone = new RegisterMachine(
+        *(dynamic_cast<RegisterMachine *>(prog)), params_, state_);
+    if (prog_clone->action() >= 0)
+        _teamMap[prog_clone->action()]->AddIncomingProgram(prog_clone->id_);
+    return prog_clone;
 }
 
+/******************************************************************************/
 void TPG::ProgramMutator_Instructions(program *prog_to_mu) {
-  prog_to_mu->Mutate(params_, rngs_[TPG_SEED], _ops);
+    prog_to_mu->Mutate(params_, rngs_[TPG_SEED], _ops);
 }
 
+/******************************************************************************/
+void TPG::MutateActionToTerminal(program *prog_to_mu, team *new_team) {
+    // If program is already terminal (action < 0) and there are no discrete
+    // actions there is nothing to change
+    if (prog_to_mu->action() < 0 && GetParam<int>("n_discrete_action") == 0) {
+        return;
+    } else if (GetParam<int>("n_discrete_action") > 1) {
+        uniform_int_distribution<int> dis(
+            0, GetParam<int>("n_discrete_action") - 1);
+        long new_discrete_action;
+        do {
+            // Discrete actions are negatives: -1 down to -n_discrete_action
+            new_discrete_action = -1 - dis(rngs_[TPG_SEED]);
+        } while (prog_to_mu->action() == new_discrete_action);
+        // If changing from team pointer to atomic, update pointee's incoming
+        if (prog_to_mu->action() >= 0) {
+            _teamMap[prog_to_mu->action()]->removeIncomingProgram(
+                prog_to_mu->id_);
+        }
+        prog_to_mu->muAction(new_discrete_action);
+    }
+}
+
+/******************************************************************************/
+void TPG::MutateActionToTeam(program *prog_to_mu, team *new_team,
+                             int &n_new_teams) {
+    // All programs remain terminal in the first generation
+    if (GetState("t_current") == 1) {
+        return;
+    } else {
+        uniform_int_distribution<int> disM(0, _teamMap.size() - 1);
+        team *tm;
+        int tries = 0;
+        do {
+            auto it = _teamMap.begin();
+            advance(it, disM(rngs_[TPG_SEED]));
+            tm = it->second;
+        } while (tries++ < 20 &&
+                 (tm->gtime_ == GetState("t_current") || tm->clones_ > 0 ||
+                  prog_to_mu->action() == tm->id_));
+        if (prog_to_mu->action() >= 0)
+            _teamMap[prog_to_mu->action()]->removeIncomingProgram(
+                prog_to_mu->id_);
+        if (!tm->root()) {  // Already subsumed, don't clone
+            prog_to_mu->muAction(tm->id_);
+            tm->AddIncomingProgram(prog_to_mu->id_);
+        } else {  // clone when subsumed
+            team *sub = new team(GetState("t_current"), state_["team_count"]++);
+            tm->clone(_phyloGraph, &sub);
+            prog_to_mu->muAction(sub->id_);
+            sub->AddIncomingProgram(prog_to_mu->id_);
+            // TODO(skelly): put in PhyloGraph functions
+            _phyloGraph[tm->id_].adj.push_back(sub->id_);
+            _phyloGraph.insert(
+                pair<long, phyloRecord>(sub->id_, phyloRecord()));
+            _phyloGraph[sub->id_].gtime = GetState("t_current");
+            _phyloGraph[sub->id_].root = false;
+            AddTeam(sub);
+            n_new_teams++;
+        }
+    }
+}
+
+/******************************************************************************/
 void TPG::ProgramMutator_ActionPointer(program *prog_to_mu, team *new_team,
                                        int &n_new_teams) {
-  if (real_dist_(rngs_[TPG_SEED]) < GetParam<double>("pmn")) return;
-  uniform_int_distribution<int> disAct(0,
-                                       GetParam<int>("n_discrete_action") - 1);
-  // atomic
-  if (GetState("t_current") == 1 ||  // first generation is atomic
-      (prog_to_mu->action() < 0 &&
-       new_team->n_atomic_ < 2) ||  // always mutate the fail-safe
-                                    // atomic program to another atomic
-      real_dist_(rngs_[TPG_SEED]) < GetParam<double>("p_atomic")) {
-    if (GetParam<int>("n_discrete_action") > 1) {
-      long act;
-      do {
-        act = -1 - disAct(rngs_[TPG_SEED]);  // atomic actions are
-                                             // negatives: -1 down to
-                                             // -numAtomicActions()
-      } while (prog_to_mu->action() == act);
-      if (prog_to_mu->action() >= 0)
-        _teamMap[prog_to_mu->action()]->removeIncomingProgram(prog_to_mu->id_);
-      prog_to_mu->muAction(act);
+    if (real_dist_(rngs_[TPG_SEED]) < GetParam<double>("p_atomic")) {
+        MutateActionToTerminal(prog_to_mu, new_team);
+    } else {
+        MutateActionToTeam(prog_to_mu, new_team, n_new_teams);
     }
-  } else {  // path
-    uniform_int_distribution<int> disM(0, _teamMap.size() - 1);
-    team *tm;
-    int tries = 0;
-    do {
-      auto it = _teamMap.begin();
-      advance(it, disM(rngs_[TPG_SEED]));
-      tm = it->second;
-    } while (tries++ < 20 &&
-             (tm->gtime_ == GetState("t_current") || tm->clones_ > 0 ||
-              prog_to_mu->action() == tm->id_));
-    if (prog_to_mu->action() >= 0)
-      _teamMap[prog_to_mu->action()]->removeIncomingProgram(prog_to_mu->id_);
-    if (!tm->root()) {  // already subsumed, don't clone
-      prog_to_mu->muAction(tm->id_);
-      tm->AddIncomingProgram(prog_to_mu->id_);
-    } else {  // clone when subsumed
-      team *sub = new team(GetState("t_current"), state_["team_count"]++);
-      tm->clone(_phyloGraph, &sub);
-      prog_to_mu->muAction(sub->id_);
-      sub->AddIncomingProgram(prog_to_mu->id_);
-      // TODO(skelly): put in PhyloGraph functions
-      _phyloGraph[tm->id_].adj.push_back(sub->id_);
-      _phyloGraph.insert(pair<long, phyloRecord>(sub->id_, phyloRecord()));
-      _phyloGraph[sub->id_].gtime = GetState("t_current");
-      _phyloGraph[sub->id_].root = false;
-      AddTeam(sub);
-      n_new_teams++;
-    }
-  }
 }
 
+/******************************************************************************/
 void TPG::AddAncestorToPhylogeny(team *parent, team *new_team) {
-  _phyloGraph[new_team->id_].ancestorIds.insert(parent->id_);
-  new_team->addAncestorId(parent->id_);
-  _phyloGraph[parent->id_].adj.push_back(new_team->id_);
+    _phyloGraph[new_team->id_].ancestorIds.insert(parent->id_);
+    new_team->addAncestorId(parent->id_);
+    _phyloGraph[parent->id_].adj.push_back(new_team->id_);
 }
 
+/******************************************************************************/
 void TPG::AddTeamToPhylogeny(team *new_team) {
-  _phyloGraph.insert(pair<long, phyloRecord>(new_team->id_, phyloRecord()));
-  _phyloGraph[new_team->id_].gtime = GetState("t_current");
-  _phyloGraph[new_team->id_].root = new_team->root_;
+    _phyloGraph.insert(pair<long, phyloRecord>(new_team->id_, phyloRecord()));
+    _phyloGraph[new_team->id_].gtime = GetState("t_current");
+    _phyloGraph[new_team->id_].root = new_team->root_;
 }
 
+/******************************************************************************/
 team *TPG::TeamXover(vector<team *> &parents) {
-  uniform_int_distribution<int> disP(0, parents.size() - 1);
-  // parent teams
-  team *pm1 = parents[disP(rngs_[TPG_SEED])];
-  std::list<program *> p1programs = pm1->members_;
-  auto p1liter = p1programs.begin();
+    uniform_int_distribution<int> disP(0, parents.size() - 1);
+    // parent teams
+    team *pm1 = parents[disP(rngs_[TPG_SEED])];
+    std::list<program *> p1programs = pm1->members_;
+    auto p1liter = p1programs.begin();
 
-  team *pm2 = parents[disP(rngs_[TPG_SEED])];
-  std::list<program *> p2programs = pm2->members_;
-  auto p2liter = p2programs.begin();
+    team *pm2 = parents[disP(rngs_[TPG_SEED])];
+    std::list<program *> p2programs = pm2->members_;
+    auto p2liter = p2programs.begin();
 
-  team *child_team = new team(GetState("t_current"), state_["team_count"]++);
+    team *child_team = new team(GetState("t_current"), state_["team_count"]++);
 
-  while (p1liter != p1programs.end() || p2liter != p2programs.end()) {
-    if (p1liter != p1programs.end()) {
-      if ((*p1liter)->action() < 0 && child_team->n_atomic_ < 1) {
-        child_team->AddProgram(*p1liter);
-      } else if ((int)child_team->size() < GetParam<int>("max_team_size") &&
-                 real_dist_(rngs_[TPG_SEED]) < GetParam<double>("pmx_p")) {
-        child_team->AddProgram(*p1liter);
-      }
+    while (p1liter != p1programs.end() || p2liter != p2programs.end()) {
+        if (p1liter != p1programs.end()) {
+            if ((*p1liter)->action() < 0 && child_team->n_atomic_ < 1) {
+                child_team->AddProgram(*p1liter);
+            } else if ((int)child_team->size() <
+                           GetParam<int>("max_team_size") &&
+                       real_dist_(rngs_[TPG_SEED]) <
+                           GetParam<double>("pmx_p")) {
+                child_team->AddProgram(*p1liter);
+            }
+        }
+        if (p2liter != p2programs.end()) {
+            if ((*p2liter)->action() < 0 && child_team->n_atomic_ < 1) {
+                child_team->AddProgram(*p2liter);
+            } else if ((int)child_team->size() <
+                           GetParam<int>("max_team_size") &&
+                       real_dist_(rngs_[TPG_SEED]) <
+                           GetParam<double>("pmx_p")) {
+                child_team->AddProgram(*p2liter);
+            }
+        }
+        if (p1liter != p1programs.end()) p1liter++;
+        if (p2liter != p2programs.end()) p2liter++;
     }
-    if (p2liter != p2programs.end()) {
-      if ((*p2liter)->action() < 0 && child_team->n_atomic_ < 1) {
-        child_team->AddProgram(*p2liter);
-      } else if ((int)child_team->size() < GetParam<int>("max_team_size") &&
-                 real_dist_(rngs_[TPG_SEED]) < GetParam<double>("pmx_p")) {
-        child_team->AddProgram(*p2liter);
-      }
-    }
-    if (p1liter != p1programs.end()) p1liter++;
-    if (p2liter != p2programs.end()) p2liter++;
-  }
 
-  if (child_team->n_atomic_ < 1)
-    die(__FILE__, __FUNCTION__, __LINE__,
-        "Crossover must leave the fail-safe atomic program!");
-  AddTeamToPhylogeny(child_team);
-  AddAncestorToPhylogeny(pm1, child_team);
-  AddAncestorToPhylogeny(pm2, child_team);
-  return child_team;
+    if (child_team->n_atomic_ < 1) {
+        die(__FILE__, __FUNCTION__, __LINE__,
+            "Crossover must leave the fail-safe atomic program!");
+    }
+    AddTeamToPhylogeny(child_team);
+    AddAncestorToPhylogeny(pm1, child_team);
+    AddAncestorToPhylogeny(pm2, child_team);
+    return child_team;
 }
 
 /******************************************************************************/
 void TPG::GenerateNewTeams() {
-  auto root_size_in = _Mroot.size();
-  int new_teams_count = 0;
-  auto task_power_set = PowerSet(GetState("n_task"));
-  int n_new_teams_per_set =
-      (GetParam<int>("n_elite") * (GetParam<int>("n_elite_mul") - 1)) /
-      task_power_set.size();
-  vector<team *> candidate_parent_teams;
-  if (!GetParam<int>("parent_select_roots_only")) {
-    candidate_parent_teams.resize(_M.size());
-    std::copy(_M.begin(), _M.end(), candidate_parent_teams.begin());
-  }
-  for (auto &subset : task_power_set) {
-    if (GetParam<int>("parent_select_roots_only")) {
-      if (task_set_map_[vecToStrNoSpace(subset)].size() == 0) continue;
-      candidate_parent_teams = task_set_map_[vecToStrNoSpace(subset)];
+    auto root_size_in = _Mroot.size();
+    int new_teams_count = 0;
+    auto task_power_set = PowerSet(GetState("n_task"));
+    int n_new_teams_per_set = static_cast<int>(
+        (GetParam<int>("n_elite") * GetParam<double>("n_elite_mul")) /
+        task_power_set.size());
+    vector<team *> candidate_parent_teams;
+    if (!GetParam<int>("parent_select_roots_only")) {
+        candidate_parent_teams.resize(_M.size());
+        std::copy(_M.begin(), _M.end(), candidate_parent_teams.begin());
     }
-    uniform_int_distribution<int> disP(0, candidate_parent_teams.size() - 1);
-    for (int i = 0; i < n_new_teams_per_set; i++) {
-      team *child_team;
-      if (real_dist_(rngs_[TPG_SEED]) < GetParam<double>("pmx"))
-        child_team = TeamXover(candidate_parent_teams);
-      else {
-        auto parent_team = candidate_parent_teams[disP(rngs_[TPG_SEED])];
-        child_team = CloneTeam(parent_team);
-        AddTeamToPhylogeny(child_team);
-        AddAncestorToPhylogeny(parent_team, child_team);
-      }
-      // Mutate child team
-      ApplyVariationOps(child_team, new_teams_count);
-      AddTeam(child_team);
-      new_teams_count++;
+    for (auto &subset : task_power_set) {
+        if (GetParam<int>("parent_select_roots_only")) {
+            if (task_set_map_[vecToStrNoSpace(subset)].size() == 0) continue;
+            candidate_parent_teams = task_set_map_[vecToStrNoSpace(subset)];
+        }
+        uniform_int_distribution<int> disP(0,
+                                           candidate_parent_teams.size() - 1);
+        for (int i = 0; i < n_new_teams_per_set; i++) {
+            team *child_team;
+            if (real_dist_(rngs_[TPG_SEED]) < GetParam<double>("pmx"))
+                child_team = TeamXover(candidate_parent_teams);
+            else {
+                auto parent_team =
+                    candidate_parent_teams[disP(rngs_[TPG_SEED])];
+                child_team = CloneTeam(parent_team);
+                AddTeamToPhylogeny(child_team);
+                AddAncestorToPhylogeny(parent_team, child_team);
+            }
+            // Mutate child team
+            ApplyVariationOps(child_team, new_teams_count);
+            AddTeam(child_team);
+            new_teams_count++;
+        }
     }
-  }
-  oss << "genTms t " << GetState("t_current") << " Msz " << _M.size() << " Lsz "
-      << _L.size() << " rSz " << _Mroot.size() << " rSzIn " << root_size_in << " mSz";
-  for (int mem_t = 0; mem_t < memoryEigen::NUM_MEMORY_TYPES; mem_t++) {
-    oss << " " << _Memory[mem_t].size();
-  }
-  oss << _Memory.size() << " eLSz " << _numEliteTeamsCurrent[GetState("phase")];
-  oss << " nNTms " << new_teams_count << endl;
+    oss << "genTms t " << GetState("t_current") << " Msz " << _M.size()
+        << " Lsz " << _L.size() << " rSz " << _Mroot.size() << " rSzIn "
+        << root_size_in << " mSz";
+    for (int mem_t = 0; mem_t < memoryEigen::NUM_MEMORY_TYPES; mem_t++) {
+        oss << " " << _Memory[mem_t].size();
+    }
+    oss << _Memory.size() << " eLSz "
+        << _numEliteTeamsCurrent[GetState("phase")];
+    oss << " nNTms " << new_teams_count << endl;
 }
 
 /******************************************************************************/
 void TPG::ApplyVariationOps(team *team_to_modify, int &n_new_teams) {
-  uniform_int_distribution<int> disL(0, _L.size() - 1);
-  // Mutate team
-  TeamMutator_RemovePrograms(team_to_modify);
-  TeamMutator_AddPrograms(team_to_modify);
-  TeamMutator_ProgramOrder(team_to_modify);
-  // Mutate programs
-  set<program *, programIdComp> new_team_programs =
-      team_to_modify->CopyMembers();
-  for (auto prog : new_team_programs) {
-    if (real_dist_(rngs_[TPG_SEED]) < GetParam<double>("pmm")) {
-      team_to_modify->RemoveProgram(prog);
-      program *prog_clone = CloneProgram(prog);
-      ProgramMutator_Instructions(prog_clone);
-      // TODO(spkelly): remove shared memory code
-      // ProgramMutator_MemoryPointer(prog_clone);
-      ProgramMutator_ActionPointer(prog_clone, team_to_modify, n_new_teams);
-      team_to_modify->AddProgram(prog_clone);
-      AddProgram(prog_clone);  // Add new program to program pop
+    uniform_int_distribution<int> disL(0, _L.size() - 1);
+    // Mutate team
+    TeamMutator_RemovePrograms(team_to_modify);
+    TeamMutator_AddPrograms(team_to_modify);
+    TeamMutator_ProgramOrder(team_to_modify);
+    // Mutate programs
+    set<program *, programIdComp> new_team_programs =
+        team_to_modify->CopyMembers();
+    for (auto prog : new_team_programs) {
+        // Probably modify one program
+        if (real_dist_(rngs_[TPG_SEED]) < 1.0 / new_team_programs.size()) {
+            team_to_modify->RemoveProgram(prog);
+            program *prog_clone = CloneProgram(prog);
+            ProgramMutator_Instructions(prog_clone);
+            ProgramMutator_ActionPointer(prog_clone, team_to_modify,
+                                         n_new_teams);
+            team_to_modify->AddProgram(prog_clone);
+            AddProgram(prog_clone);  // Add new program to program pop
+        }
     }
-  }
 }
 
 /******************************************************************************/
@@ -790,224 +830,233 @@ void TPG::ApplyVariationOps(team *team_to_modify, int &n_new_teams) {
 
 /******************************************************************************/
 team *TPG::getBestTeam() {
-  set<team *, teamFitnessLexicalCompare> teams;
+    set<team *, teamFitnessLexicalCompare> teams;
 
-  for (auto teiter = _Mroot.begin(); teiter != _Mroot.end(); teiter++)
-    teams.insert(*teiter);
+    for (auto teiter = _Mroot.begin(); teiter != _Mroot.end(); teiter++)
+        teams.insert(*teiter);
 
-  return *teams.begin();
+    return *teams.begin();
 }
 
+/******************************************************************************/
 void TPG::UpdateTeamPhyloData(team *tm) {
-  // MarkEffectiveCode(tm);
-  if (tm->runTimeComplexityIns() == 0) {
-    // TODO(skelly): clean out magic number - 2
-    tm->updateComplexityRecord(_teamMap,
-                               GetParam<int>("n_point_aux_double") - 2);
-  }
-  _phyloGraph[tm->id_].fitness = tm->fit_;
-  _phyloGraph[tm->id_].numActiveFeatures = tm->numActiveFeatures_;
-  _phyloGraph[tm->id_].numActivePrograms = tm->numActivePrograms_;
-  _phyloGraph[tm->id_].numActiveTeams = tm->numActiveTeams_;
-  _phyloGraph[tm->id_].numEffectiveInstructions =
-      tm->numEffectiveInstructions();
+    // MarkEffectiveCode(tm);
+    if (tm->runTimeComplexityIns() == 0) {
+        // TODO(skelly): clean out magic number - 2
+        tm->updateComplexityRecord(_teamMap,
+                                   GetParam<int>("n_point_aux_double") - 2);
+    }
+    _phyloGraph[tm->id_].fitness = tm->fit_;
+    _phyloGraph[tm->id_].numActiveFeatures = tm->numActiveFeatures_;
+    _phyloGraph[tm->id_].numActivePrograms = tm->numActivePrograms_;
+    _phyloGraph[tm->id_].numActiveTeams = tm->numActiveTeams_;
+    _phyloGraph[tm->id_].numEffectiveInstructions =
+        tm->numEffectiveInstructions();
 }
+
 /******************************************************************************/
 // Find the elite single-task program graphs
 void TPG::FindSingleTaskFitnessRange(vector<TaskEnv *> &tasks,
                                      vector<vector<double>> &mins,
                                      vector<vector<double>> &maxs) {
-  vector<team *> teamsRankedVec;
-  for (int task = 0; task < GetState("n_task"); task++) {
-    teamsRankedVec.clear();
-    for (auto tm : _Mroot) {
-      tm->elite(GetState("phase"), false);  // mark team as not elite
-      if (tm->numOutcomes(GetState("phase"), task) >=
-          tasks[task]->GetNumEval(GetState("phase"))) {
-        tm->fit_ =
-            tm->getQuickMean(task, GetState("fitMode"), GetState("phase"));
-        teamsRankedVec.push_back(tm);
-        if (GetState("phase") == _TEST_PHASE) {
-          UpdateTeamPhyloData(tm);
+    vector<team *> teamsRankedVec;
+    for (int task = 0; task < GetState("n_task"); task++) {
+        teamsRankedVec.clear();
+        for (auto tm : _Mroot) {
+            tm->elite(GetState("phase"), false);  // mark team as not elite
+            if (tm->numOutcomes(GetState("phase"), task) >=
+                tasks[task]->GetNumEval(GetState("phase"))) {
+                tm->fit_ = tm->getQuickMean(task, GetState("fitMode"),
+                                            GetState("phase"));
+                teamsRankedVec.push_back(tm);
+                if (GetState("phase") == _TEST_PHASE) {
+                    UpdateTeamPhyloData(tm);
+                }
+            } else {
+                // mark elite to protect until eval in all tasks
+                tm->elite(true);
+            }
         }
-      } else {
-        // mark elite to protect until eval in all tasks
-        tm->elite(true);
-      }
+        if (teamsRankedVec.size() > 0) {
+            sort(teamsRankedVec.begin(), teamsRankedVec.end(),
+                 teamFitnessLexicalCompare());
+            maxs[GetState("fitMode")][task] = (*(teamsRankedVec.begin()))->fit_;
+            mins[GetState("fitMode")][task] =
+                (*(teamsRankedVec.rbegin()))->fit_;
+        }
     }
-    if (teamsRankedVec.size() > 0) {
-      sort(teamsRankedVec.begin(), teamsRankedVec.end(),
-           teamFitnessLexicalCompare());
-      maxs[GetState("fitMode")][task] = (*(teamsRankedVec.begin()))->fit_;
-      mins[GetState("fitMode")][task] = (*(teamsRankedVec.rbegin()))->fit_;
-    }
-  }
 }
 
 /******************************************************************************/
 vector<team *> TPG::NormalizeScoresAndRankTeams(
     vector<TaskEnv *> &tasks, vector<int> &set,
     vector<vector<double>> &min_scores, vector<vector<double>> &max_scores) {
-  vector<team *> vec;
-  for (auto tm : _Mroot) {
-    if (GetState("phase") == _TEST_PHASE &&
-        tm->id_ != (_eliteTeamPS[vecToStrNoSpace(set)]
-                                [GetParam<int>("fit_mode")][_VALIDATION_PHASE])
-                       ->id_) {
-      continue;
+    vector<team *> vec;
+    for (auto tm : _Mroot) {
+        if (GetState("phase") == _TEST_PHASE &&
+            tm->id_ != (_eliteTeamPS[vecToStrNoSpace(set)][GetParam<int>(
+                            "fit_mode")][_VALIDATION_PHASE])
+                           ->id_) {
+            continue;
+        }
+        vector<double> normalizedScores;
+        for (size_t task = 0; task < set.size(); task++) {
+            if (tm->numOutcomes(GetState("phase"), set[task]) <
+                tasks[set[task]]->GetNumEval(GetState("phase"))) {
+                die(__FILE__, __FUNCTION__, __LINE__,
+                    "All root teams should have enough evaluations at this "
+                    "point.");
+            }
+            auto raw_mean_score = tm->getQuickMean(
+                set[task], GetState("fitMode"), GetState("phase"));
+            // guards for same min and max
+            if (!isEqual(min_scores[GetState("fitMode")][set[task]],
+                         max_scores[GetState("fitMode")][set[task]])) {
+                normalizedScores.push_back(
+                    (raw_mean_score -
+                     min_scores[GetState("fitMode")][set[task]]) /
+                    (max_scores[GetState("fitMode")][set[task]] -
+                     min_scores[GetState("fitMode")][set[task]]));
+            } else {
+                normalizedScores.push_back(
+                    raw_mean_score /
+                    max_scores[GetState("fitMode")][set[task]]);
+            }
+        }
+        if (normalizedScores.size() != set.size()) {
+            die(__FILE__, __FUNCTION__, __LINE__,
+                "This team should have a score for all tasks.");
+        }
+        tm->fit_ =
+            *min_element(normalizedScores.begin(), normalizedScores.end());
+        // TODO(skelly): debug, test, and cleanup complexity record
+        // GetParam<int>("n_point_aux_double") - 2 refers to
+        // decision_instructions
+        tm->updateComplexityRecord(_teamMap,
+                                   GetParam<int>("n_point_aux_double") - 1);
+        vec.push_back(tm);
     }
-    vector<double> normalizedScores;
-    for (size_t task = 0; task < set.size(); task++) {
-      if (tm->numOutcomes(GetState("phase"), set[task]) <
-          tasks[set[task]]->GetNumEval(GetState("phase"))) {
-      cerr << "phase " << GetState("phase") << "tm5 " << tm->id_ << " no " << tm->numOutcomes(GetState("phase"), set[task]) << " ne " << tasks[set[task]]->GetNumEval(GetState("phase")) << endl;
-        die(__FILE__, __FUNCTION__, __LINE__,
-            "All root teams should have enough evaluations at this point.");
-      }
-      auto raw_mean_score =
-          tm->getQuickMean(set[task], GetState("fitMode"), GetState("phase"));
-      // guards for same min and max
-      if (!isEqual(min_scores[GetState("fitMode")][set[task]],
-                   max_scores[GetState("fitMode")][set[task]])) {
-        normalizedScores.push_back(
-            (raw_mean_score - min_scores[GetState("fitMode")][set[task]]) /
-            (max_scores[GetState("fitMode")][set[task]] -
-             min_scores[GetState("fitMode")][set[task]]));
-      } else {
-        normalizedScores.push_back(raw_mean_score /
-                                   max_scores[GetState("fitMode")][set[task]]);
-      }
-    }
-    if (normalizedScores.size() != set.size()) {
-      die(__FILE__, __FUNCTION__, __LINE__,
-          "This team should have a score for all tasks.");
-    }
-    tm->fit_ = *min_element(normalizedScores.begin(), normalizedScores.end());
-    // TODO(skelly): debug, test, and cleanup complexity record
-    // GetParam<int>("n_point_aux_double") - 2 refers to decision_instructions
-    tm->updateComplexityRecord(_teamMap, GetParam<int>("n_point_aux_double") - 1);
-    vec.push_back(tm);
-  }
-  return vec;
+    return vec;
 }
 
 /******************************************************************************/
 void TPG::FindMultiTaskElites(vector<TaskEnv *> &tasks,
                               vector<vector<double>> &min_scores,
                               vector<vector<double>> &max_scores) {
-  auto PS = PowerSet(GetState("n_task"));
-  size_t n_elite_per_task = GetParam<int>("n_elite") / PS.size();
-  for (auto &set : PS) {
-    if (GetState("phase") == _TRAIN_PHASE)
-      task_set_map_[vecToStrNoSpace(set)].clear();  // TODO(skelly): check this
-    auto teams_normed_scores =
-        NormalizeScoresAndRankTeams(tasks, set, min_scores, max_scores);
-    
-    sort(teams_normed_scores.begin(), teams_normed_scores.end(),
-         teamFitnessLexicalCompare());
-    // sort(teams_normed_scores.begin(), teams_normed_scores.end(), teamFitComplexLexCompare());
-    size_t elite_count = 0;
-    for (auto tm : teams_normed_scores) {
-      if (!tm->elite(GetState("phase"))) {
-        elite_count++;
-        _numEliteTeamsCurrent[GetState("phase")]++;
-        tm->elite(GetState("phase"), true);
-        if (GetState("phase") == _TRAIN_PHASE) {
-          tm->fitnessBin(GetState("t_current"), vecToStrNoSpace(set));
-          _phyloGraph[tm->id_].fitnessBin = tm->fitnessBin();
-          _phyloGraph[tm->id_].fitness = tm->fit_;
-
-          _phyloGraph[tm->id_].taskFitnesses.clear();
-          for (int task = 0; task < GetState("n_task"); task++) {
-            _phyloGraph[tm->id_].taskFitnesses.push_back(
-                tm->getQuickMean(task, GetState("fitMode"), GetState("phase")));
-          }
-        }
+    auto PS = PowerSet(GetState("n_task"));
+    size_t n_elite_per_task = GetParam<int>("n_elite") / PS.size();
+    for (auto &set : PS) {
         if (GetState("phase") == _TRAIN_PHASE)
-          task_set_map_[vecToStrNoSpace(set)].push_back(tm);
-      }
-      if (elite_count >= n_elite_per_task) break;
+            task_set_map_[vecToStrNoSpace(set)]
+                .clear();  // TODO(skelly): check this
+        auto teams_normed_scores =
+            NormalizeScoresAndRankTeams(tasks, set, min_scores, max_scores);
+
+        sort(teams_normed_scores.begin(), teams_normed_scores.end(),
+             teamFitnessLexicalCompare());
+        // sort(teams_normed_scores.begin(), teams_normed_scores.end(),
+        // teamFitComplexLexCompare());
+        size_t elite_count = 0;
+        for (auto tm : teams_normed_scores) {
+            if (!tm->elite(GetState("phase"))) {
+                elite_count++;
+                _numEliteTeamsCurrent[GetState("phase")]++;
+                tm->elite(GetState("phase"), true);
+                if (GetState("phase") == _TRAIN_PHASE) {
+                    tm->fitnessBin(GetState("t_current"), vecToStrNoSpace(set));
+                    _phyloGraph[tm->id_].fitnessBin = tm->fitnessBin();
+                    _phyloGraph[tm->id_].fitness = tm->fit_;
+
+                    _phyloGraph[tm->id_].taskFitnesses.clear();
+                    for (int task = 0; task < GetState("n_task"); task++) {
+                        _phyloGraph[tm->id_].taskFitnesses.push_back(
+                            tm->getQuickMean(task, GetState("fitMode"),
+                                             GetState("phase")));
+                    }
+                }
+                if (GetState("phase") == _TRAIN_PHASE)
+                    task_set_map_[vecToStrNoSpace(set)].push_back(tm);
+            }
+            if (elite_count >= n_elite_per_task) break;
+        }
+        // Always keep track of single elite team for each task set
+        _eliteTeamPS[vecToStrNoSpace(set)][GetState("fitMode")]
+                    [GetState("phase")] = *(teams_normed_scores.begin());
     }
-    // Always keep track of single elite team for each task set
-    _eliteTeamPS[vecToStrNoSpace(set)][GetState("fitMode")][GetState("phase")] =
-        *(teams_normed_scores.begin());
-  }
 }
 
 /******************************************************************************/
 void TPG::SetEliteTeams(vector<TaskEnv *> &tasks) {
-  vector<team *> teams_normed_scores;
-  _numEliteTeamsCurrent[GetState("phase")] = 0;
-  // min/max scores for normalization, overcomplicated data structure?
-  vector<vector<double>> min_scores, max_scores;
-  min_scores.resize(GetParam<int>("n_fit_mode"));
-  max_scores.resize(GetParam<int>("n_fit_mode"));
-  min_scores[GetState("fitMode")].resize(GetState("n_task"));
-  max_scores[GetState("fitMode")].resize(GetState("n_task"));
+    vector<team *> teams_normed_scores;
+    _numEliteTeamsCurrent[GetState("phase")] = 0;
+    // min/max scores for normalization, overcomplicated data structure?
+    vector<vector<double>> min_scores, max_scores;
+    min_scores.resize(GetParam<int>("n_fit_mode"));
+    max_scores.resize(GetParam<int>("n_fit_mode"));
+    min_scores[GetState("fitMode")].resize(GetState("n_task"));
+    max_scores[GetState("fitMode")].resize(GetState("n_task"));
 
-  FindSingleTaskFitnessRange(tasks, min_scores, max_scores);
-  FindMultiTaskElites(tasks, min_scores, max_scores);
+    FindSingleTaskFitnessRange(tasks, min_scores, max_scores);
+    FindMultiTaskElites(tasks, min_scores, max_scores);
 
-  auto PS = PowerSet(GetState("n_task"));
-  for (auto &set : PS) {
-    auto elite_id = _eliteTeamPS[vecToStrNoSpace(set)][GetState("fitMode")]
-                                [GetState("phase")]
-                                    ->id_;
-    if (set.size() == 1 &&
-        haveEliteTeam(vecToStrNoSpace(set), GetState("fitMode"),
-                      GetState("phase"))) {
-      oss << "setElTmsST eLSz " << _numEliteTeamsCurrent[GetState("phase")]
-          << " ss " << vecToStrNoSpace(set) << " fm " << GetState("fitMode")
-          << " minThr "
-          << _eliteTeamPS[vecToStrNoSpace(set)][GetState("fitMode")]
-                         [GetState("phase")]
-                             ->fit_
-          << " ";
-      printTeamInfo(GetState("t_current"), GetState("phase"), false, elite_id);
+    auto PS = PowerSet(GetState("n_task"));
+    for (auto &set : PS) {
+        auto elite_id = _eliteTeamPS[vecToStrNoSpace(set)][GetState("fitMode")]
+                                    [GetState("phase")]
+                                        ->id_;
+        if (set.size() == 1 &&
+            haveEliteTeam(vecToStrNoSpace(set), GetState("fitMode"),
+                          GetState("phase"))) {
+            oss << "setElTmsST eLSz "
+                << _numEliteTeamsCurrent[GetState("phase")] << " ss "
+                << vecToStrNoSpace(set) << " fm " << GetState("fitMode")
+                << " minThr "
+                << _eliteTeamPS[vecToStrNoSpace(set)][GetState("fitMode")]
+                               [GetState("phase")]
+                                   ->fit_
+                << " ";
+            printTeamInfo(GetState("t_current"), GetState("phase"), false,
+                          elite_id);
 
-      if (GetParam<int>("track_experiments") &&
-          GetState("t_current") % GetParam<int>("track_mod") == 0) {
-        trackTeamInfo(GetState("t_current"), GetState("phase"), false,
-                      elite_id);
-      }
-    }
-    if (set.size() == (size_t)GetState("n_task") &&
-        haveEliteTeam(vecToStrNoSpace(set), GetState("fitMode"),
-                      GetState("phase"))) {
-      oss << "setElTmsMTA eLSz " << _numEliteTeamsCurrent[GetState("phase")]
-          << " ss " << vecToStrNoSpace(set) << " fm " << GetState("fitMode")
-          << " minThr "
-          << _eliteTeamPS[vecToStrNoSpace(set)][GetState("fitMode")]
-                         [GetState("phase")]
-                             ->fit_
-          << " ";
-      printTeamInfo(GetState("t_current"), GetState("phase"), false, elite_id);
-
-      if (GetParam<int>("track_experiments") &&
-          GetState("t_current") % GetParam<int>("track_mod") == 0) {
-        trackTeamInfo(GetState("t_current"), GetState("phase"), false,
-                      elite_id);
-      }
-
-      // Keep track of elite team history and only save test checkpoints when we
-      // have a new test champion for the full set (all tasks)
-      // TODO(skelly): debug this
-      if (GetState("phase") == _TEST_PHASE &&
-          elite_team_id_history_.find(elite_id) ==
-              elite_team_id_history_.end()) {
-        // cerr << "new elite! checkpoint t " << GetState("t_current") << " id "
-        //      << elite_id << " fit "
-        //      << _eliteTeamPS[vecToStrNoSpace(set)][GetState(
-        //             "fitMode")][GetState("phase")]
-        //             ->getQuickMean(0, GetState("fitMode"), GetState("phase"))
-        //      << endl;
-        elite_team_id_history_.insert(elite_id);
-        if (GetParam<int>("write_test_checkpoints")) {
-          writeCheckpoint(GetState("t_current"), true);
+            if (GetParam<int>("track_experiments") &&
+                GetState("t_current") % GetParam<int>("track_mod") == 0) {
+                trackTeamInfo(GetState("t_current"), GetState("phase"), false,
+                              elite_id);
+            }
         }
-      }
+        if (set.size() == (size_t)GetState("n_task") &&
+            haveEliteTeam(vecToStrNoSpace(set), GetState("fitMode"),
+                          GetState("phase"))) {
+            oss << "setElTmsMTA eLSz "
+                << _numEliteTeamsCurrent[GetState("phase")] << " ss "
+                << vecToStrNoSpace(set) << " fm " << GetState("fitMode")
+                << " minThr "
+                << _eliteTeamPS[vecToStrNoSpace(set)][GetState("fitMode")]
+                               [GetState("phase")]
+                                   ->fit_
+                << " ";
+            printTeamInfo(GetState("t_current"), GetState("phase"), false,
+                          elite_id);
+
+            if (GetParam<int>("track_experiments") &&
+                GetState("t_current") % GetParam<int>("track_mod") == 0) {
+                trackTeamInfo(GetState("t_current"), GetState("phase"), false,
+                              elite_id);
+            }
+
+            // Keep track of elite team history and only save test checkpoints
+            // when we have a new test champion for the full set (all tasks)
+            // TODO(skelly): debug this
+            if (GetState("phase") == _TEST_PHASE &&
+                elite_team_id_history_.find(elite_id) ==
+                    elite_team_id_history_.end()) {
+                elite_team_id_history_.insert(elite_id);
+                if (GetParam<int>("write_test_checkpoints")) {
+                    WriteCheckpoint(GetState("t_current"), true);
+                }
+            }
+        }
     }
-  }
 }
 
 /******************************************************************************/
@@ -1156,53 +1205,53 @@ void TPG::SetEliteTeams(vector<TaskEnv *> &tasks) {
 /******************************************************************************/
 // Helper struct for distance comparisons
 struct distanceInstance {
-  double distance;
-  bool fromArchive;
-  distanceInstance(double d, bool a) : distance(d), fromArchive(a) {}
+    double distance;
+    bool fromArchive;
+    distanceInstance(double d, bool a) : distance(d), fromArchive(a) {}
 };
 
 /******************************************************************************/
 bool compareByDistance(const distanceInstance &a, const distanceInstance &b) {
-  return a.distance < b.distance;
+    return a.distance < b.distance;
 }
 
 /******************************************************************************/
 void TPG::InitTeams() {
-  
-  uniform_int_distribution<int> dis_actions(0, GetParam<int>("n_discrete_action") - 1);
-  int initial_team_size = GetParam<int>("n_discrete_action");
-  for (int t = 0; t < GetParam<int>("n_elite") * GetParam<int>("n_elite_mul");
-       t++) {
-    auto new_team = new team(GetState("t_current"), state_["team_count"]++);
-    for (int p = 0; p < initial_team_size; p++) {
-      // discrete atomic actions are negatives -1 to -numAtomicActions()
-      long discrete_action = -1 - dis_actions(rngs_[TPG_SEED]);
-      auto new_prog =
-          new RegisterMachine(GetState("t_current"), discrete_action, params_,
-                              state_["program_count"]++, rngs_[TPG_SEED], _ops);
-      new_team->AddProgram(new_prog);
-      AddProgram(new_prog);  // add program to program population
+    int max_discrete_action = GetParam<int>("n_discrete_action") > 0
+                                  ? GetParam<int>("n_discrete_action") - 1
+                                  : 0;
+    uniform_int_distribution<int> dis_actions(0, max_discrete_action);
+    int initial_team_size = 2;
+    for (int t = 0; t < GetParam<int>("n_elite"); t++) {
+        auto new_team = new team(GetState("t_current"), state_["team_count"]++);
+        for (int p = 0; p < initial_team_size; p++) {
+            // Discrete atomic actions are negatives -1 to -numAtomicActions()
+            long discrete_action = -1 - dis_actions(rngs_[TPG_SEED]);
+            auto new_prog = new RegisterMachine(discrete_action, params_,
+                                                state_, rngs_[TPG_SEED], _ops);
+            new_team->AddProgram(new_prog);
+            AddProgram(new_prog);  // add program to program population
+        }
+        AddTeam(new_team);  // add team to team population
+        _phyloGraph.insert(
+            pair<long, phyloRecord>(new_team->id_, phyloRecord()));
+        _phyloGraph[new_team->id_].gtime = 0;
     }
-    AddTeam(new_team);  // ad team to team population
-    _phyloGraph.insert(pair<long, phyloRecord>(new_team->id_, phyloRecord()));
-    _phyloGraph[new_team->id_].gtime = 0;
-  }
-
-  // Fill teams from learner population
-  uniform_int_distribution<int> dis_team_size(
-      2, GetParam<int>("max_initial_team_size") - 1);
-  uniform_int_distribution<int> dis_programs(0, _L.size() - 1);
-  for (auto tm : _M) {
-    int team_size = dis_team_size(rngs_[TPG_SEED]);
-    while (tm->size() < team_size) tm->AddProgram(_L[dis_programs(rngs_[TPG_SEED])]);
-  }
-
-  oss << "InitTms Msz " << _M.size() << " Lsz " << _L.size() << " rSz "
-      << _Mroot.size() << " mSz";
-  for (int mem_t = 0; mem_t < memoryEigen::NUM_MEMORY_TYPES; mem_t++) {
-    oss << " " << _Memory[mem_t].size();
-  }
-  oss << " eLSz " << _numEliteTeamsCurrent[GetState("phase")] << endl;
+    // Fill teams from learner population
+    uniform_int_distribution<int> dis_team_size(
+        2, GetParam<int>("max_initial_team_size"));
+    uniform_int_distribution<int> dis_programs(0, _L.size() - 1);
+    for (auto tm : _M) {
+        auto team_size = dis_team_size(rngs_[TPG_SEED]);
+        while (tm->size() < team_size)
+            tm->AddProgram(_L[dis_programs(rngs_[TPG_SEED])]);
+    }
+    oss << "InitTms Msz " << _M.size() << " Lsz " << _L.size() << " rSz "
+        << _Mroot.size() << " mSz";
+    for (int mem_t = 0; mem_t < memoryEigen::NUM_MEMORY_TYPES; mem_t++) {
+        oss << " " << _Memory[mem_t].size();
+    }
+    oss << " eLSz " << _numEliteTeamsCurrent[GetState("phase")] << endl;
 }
 
 /******************************************************************************/
@@ -1227,8 +1276,8 @@ void TPG::ProcessParams() {
 // <name> must be a parameter with a default value in parameters.txt
 // Default values are overwritten by command line parameters
 void TPG::SetParams(int argc, char **argv) {
-  // First read parameters file
-  ReadParameters("parameters.txt", params_);
+    // First read parameters file
+    ReadParameters("parameters.txt", params_);
     // Parse command line parameters
     if (argc > 1) {
         for (int i = 1; i < argc; ++i) {
@@ -1244,9 +1293,11 @@ void TPG::SetParams(int argc, char **argv) {
                         params_[key] = stringToInt(val);
                     }
                 } else {
-                    die(__FILE__, __FUNCTION__, __LINE__,
-                        "Command line parameters must have default "
-                        "values in parameters.txt");
+                    std::string err_message =
+                        "Unreconised command line parameter:" + key +
+                        ". Command line parameters must have default values in "
+                        "parameters.txt";
+                    die(__FILE__, __FUNCTION__, __LINE__, err_message.c_str());
                 }
             }
         }
@@ -1256,15 +1307,16 @@ void TPG::SetParams(int argc, char **argv) {
 
 /******************************************************************************/
 void TPG::policyFeatures(int hostId, set<long> &features, bool active) {
-  features.clear();
-  set<team *, teamIdComp> visitedTeams;
-  if (hostId == -1) {
-    for (auto it = _Mroot.begin(); it != _Mroot.end(); it++) {
-      visitedTeams.clear();
-      (*it)->policyFeatures(_teamMap, visitedTeams, features, active);
-    }
-  } else
-    _teamMap[hostId]->policyFeatures(_teamMap, visitedTeams, features, active);
+    features.clear();
+    set<team *, teamIdComp> visitedTeams;
+    if (hostId == -1) {
+        for (auto it = _Mroot.begin(); it != _Mroot.end(); it++) {
+            visitedTeams.clear();
+            (*it)->policyFeatures(_teamMap, visitedTeams, features, active);
+        }
+    } else
+        _teamMap[hostId]->policyFeatures(_teamMap, visitedTeams, features,
+                                         active);
 }
 
 // /******************************************************************************/
@@ -1680,87 +1732,87 @@ void TPG::printGraphDotGPTPXXI(long rootTeamId,
                                set<team *, teamIdComp> &visitedTeamsAllTasks,
                                vector<map<long, double>> &teamUseMapPerTask,
                                vector<int> &steps_per_task) {
-  team *rootTeam = _teamMap[rootTeamId];
-  vector<string> taskCol;
-  taskCol.push_back("#7fc97f");
-  taskCol.push_back("#beaed4");
-  taskCol.push_back("#fdc086");
-  taskCol.push_back("#ffff99");
-  // taskCol.push_back("#386cb0");
-  // taskCol.push_back("#f0027f");
-  map<long, string> nodeLabMap;
-  double nodeWidth = 2.0;
-  double arrowSize_1 = 3;  // 0.1;
+    team *rootTeam = _teamMap[rootTeamId];
+    vector<string> taskCol;
+    taskCol.push_back("#7fc97f");
+    taskCol.push_back("#beaed4");
+    taskCol.push_back("#fdc086");
+    taskCol.push_back("#ffff99");
+    // taskCol.push_back("#386cb0");
+    // taskCol.push_back("#f0027f");
+    map<long, string> nodeLabMap;
+    double nodeWidth = 2.0;
+    double arrowSize_1 = 3;  // 0.1;
 
-  char outputFilename[80];
-  ofstream ofs;
+    char outputFilename[80];
+    ofstream ofs;
 
-  sprintf(outputFilename, "replay/graphs/gv_taskDecomposition_%d%s",
-          (int)rootTeam->id_, ".dot");
-  ofs.open(outputFilename, ios::out);
-  if (!ofs) die(__FILE__, __FUNCTION__, __LINE__, "Can't open file.");
+    sprintf(outputFilename, "replay/graphs/gv_taskDecomposition_%d%s",
+            (int)rootTeam->id_, ".dot");
+    ofs.open(outputFilename, ios::out);
+    if (!ofs) die(__FILE__, __FUNCTION__, __LINE__, "Can't open file.");
 
-  ofs << "strict digraph G {" << endl;
-  ofs << "ratio=0.7" << endl;
-  ofs << "root=t_" << rootTeam->id_ << endl;
+    ofs << "strict digraph G {" << endl;
+    ofs << "ratio=0.7" << endl;
+    ofs << "root=t_" << rootTeam->id_ << endl;
 
-  // teams
-  for (auto tm : visitedTeamsAllTasks) {
-    string col = "";
-    ofs << " t_" << tm->id_ << " [shape=circle, style=wedged, fillcolor=\"";
-    for (int tsk = 0; tsk < GetState("n_task"); tsk++) {
-      ofs << taskCol[tsk] << ";";
-      if (teamUseMapPerTask[tsk].find(tm->id_) !=
-          teamUseMapPerTask[tsk].end()) {
-        ofs << (teamUseMapPerTask[tsk][tm->id_] / steps_per_task[tsk]) /
-                   GetState("n_task");
-      } else {
-        ofs << 0;
-      }
-      if (tsk < GetState("n_task") - 1) ofs << ":";
+    // teams
+    for (auto tm : visitedTeamsAllTasks) {
+        string col = "";
+        ofs << " t_" << tm->id_ << " [shape=circle, style=wedged, fillcolor=\"";
+        for (int tsk = 0; tsk < GetState("n_task"); tsk++) {
+            ofs << taskCol[tsk] << ";";
+            if (teamUseMapPerTask[tsk].find(tm->id_) !=
+                teamUseMapPerTask[tsk].end()) {
+                ofs << (teamUseMapPerTask[tsk][tm->id_] / steps_per_task[tsk]) /
+                           GetState("n_task");
+            } else {
+                ofs << 0;
+            }
+            if (tsk < GetState("n_task") - 1) ofs << ":";
+        }
+        ofs << "\"";
+        ofs << ", label=\"";
+        if (nodeLabMap.find(tm->id_) == nodeLabMap.end()) {
+            ofs << "";
+        } else {
+            ofs << nodeLabMap[tm->id_];
+        }
+        ofs << "\", fontsize=84, regular=1, width=" << nodeWidth * 2
+            << ",penwidth=0]" << endl;
     }
-    ofs << "\"";
-    ofs << ", label=\"";
-    if (nodeLabMap.find(tm->id_) == nodeLabMap.end()) {
-      ofs << "";
-    } else {
-      ofs << nodeLabMap[tm->id_];
+    // team -> team edges
+    for (auto tm : visitedTeamsAllTasks) {
+        // auto mem = tm->members_;
+        for (auto prog : tm->members_) {
+            if (prog->action() >= 0 &&
+                find(visitedTeamsAllTasks.begin(), visitedTeamsAllTasks.end(),
+                     _teamMap[prog->action()]) != visitedTeamsAllTasks.end()) {
+                ofs << " t_" << tm->id_ << "->t_" << prog->action()
+                    << " [arrowsize=" << arrowSize_1 << ", penwidth=" << "1"
+                    << " color=" << "black" << "];" << endl;
+            }
+        }
     }
-    ofs << "\", fontsize=84, regular=1, width=" << nodeWidth * 2
-        << ",penwidth=0]" << endl;
-  }
-  // team -> team edges
-  for (auto tm : visitedTeamsAllTasks) {
-    // auto mem = tm->members_;
-    for (auto prog : tm->members_) {
-      if (prog->action() >= 0 &&
-          find(visitedTeamsAllTasks.begin(), visitedTeamsAllTasks.end(),
-               _teamMap[prog->action()]) != visitedTeamsAllTasks.end()) {
-        ofs << " t_" << tm->id_ << "->t_" << prog->action()
-            << " [arrowsize=" << arrowSize_1 << ", penwidth=" << "1"
-            << " color=" << "black" << "];" << endl;
-      }
-    }
-  }
 
-  // //legend
-  // ofs << "subgraph {" << endl;
-  // ofs << "ratio=1" << endl;
-  // ofs << "rank=sink" << endl;
-  // ofs << "node [shape=plaintext]" << endl;
-  // ofs << "legend [colorscheme=set18," << endl;
-  // ofs << "label=<" << endl;
-  // ofs << "<table border=\"0\" cellborder=\"1\" cellspacing=\"0\">" << endl;
-  // ofs << "<tr><td bgcolor=\"" << taskCol[0] << "\">" << "CartPole" <<
-  // "</td></tr>" << endl; ofs << "<tr><td bgcolor=\"" << taskCol[1] << "\">" <<
-  // "Pendulum" << "</td></tr>" << endl; ofs << "<tr><td bgcolor=\"" <<
-  // taskCol[2] << "\">" << "Sunspots" << "</td></tr>" << endl; ofs << "<tr><td
-  // bgcolor=\"" << taskCol[3] << "\">" << "Mackey-Glass" << "</td></tr>" <<
-  // endl; ofs << "</table>>" << endl; ofs << ", fontsize=84, regular=1];" <<
-  // endl; ofs << "}" << endl;
+    // //legend
+    // ofs << "subgraph {" << endl;
+    // ofs << "ratio=1" << endl;
+    // ofs << "rank=sink" << endl;
+    // ofs << "node [shape=plaintext]" << endl;
+    // ofs << "legend [colorscheme=set18," << endl;
+    // ofs << "label=<" << endl;
+    // ofs << "<table border=\"0\" cellborder=\"1\" cellspacing=\"0\">" << endl;
+    // ofs << "<tr><td bgcolor=\"" << taskCol[0] << "\">" << "CartPole" <<
+    // "</td></tr>" << endl; ofs << "<tr><td bgcolor=\"" << taskCol[1] << "\">"
+    // << "Pendulum" << "</td></tr>" << endl; ofs << "<tr><td bgcolor=\"" <<
+    // taskCol[2] << "\">" << "Sunspots" << "</td></tr>" << endl; ofs <<
+    // "<tr><td bgcolor=\"" << taskCol[3] << "\">" << "Mackey-Glass" <<
+    // "</td></tr>" << endl; ofs << "</table>>" << endl; ofs << ", fontsize=84,
+    // regular=1];" << endl; ofs << "}" << endl;
 
-  ofs << "}" << endl;
-  ofs.close();
+    ofs << "}" << endl;
+    ofs.close();
 }
 
 // /******************************************************************************/
@@ -1996,283 +2048,303 @@ void TPG::printGraphDotGPTPXXI(long rootTeamId,
 
 /******************************************************************************/
 void TPG::printPhyloGraphDot(team *tm) {
-  char outputFilename[80];
-  ofstream ofs;
+    char outputFilename[80];
+    ofstream ofs;
 
-  sprintf(outputFilename, "replay/graphs/phylo-t%05d-s%lu%s",
-          (int)GetState("t_current"), seeds_[TPG_SEED], ".dot");
-  ofs.open(outputFilename, ios::out);
-  if (!ofs) die(__FILE__, __FUNCTION__, __LINE__, "Can't open file.");
+    sprintf(outputFilename, "replay/graphs/phylo-t%05d-s%lu%s",
+            (int)GetState("t_current"), seeds_[TPG_SEED], ".dot");
+    ofs.open(outputFilename, ios::out);
+    if (!ofs) die(__FILE__, __FUNCTION__, __LINE__, "Can't open file.");
 
-  ofs << "digraph G {" << endl;
+    ofs << "digraph G {" << endl;
 
-  // Basic breadth-first search
+    // Basic breadth-first search
 
-  std::vector<long> visited = {tm->id_};
-  list<long> queue = {tm->id_};
+    std::vector<long> visited = {tm->id_};
+    list<long> queue = {tm->id_};
 
-  while (!queue.empty()) {
-    long currId = queue.front();
-    queue.pop_front();
+    while (!queue.empty()) {
+        long currId = queue.front();
+        queue.pop_front();
 
-    for (long ancId : _phyloGraph[currId].ancestorIds) {
-      ofs << ancId << " -> " << currId << endl;
-      if (std::find(visited.begin(), visited.end(), ancId) == visited.end()) {
-        visited.push_back(ancId);
-        queue.push_back(ancId);
-      }
+        for (long ancId : _phyloGraph[currId].ancestorIds) {
+            ofs << ancId << " -> " << currId << endl;
+            if (std::find(visited.begin(), visited.end(), ancId) ==
+                visited.end()) {
+                visited.push_back(ancId);
+                queue.push_back(ancId);
+            }
+        }
     }
-  }
 
-  // Color nodes based on fitness
-  for (long id : visited) {
-    double fitness = _phyloGraph[id].fitness;
-    double hue = std::clamp(fitness, 0.0, 1.0) / 3;
+    // Color nodes based on fitness
+    for (long id : visited) {
+        double fitness = _phyloGraph[id].fitness;
+        double hue = std::clamp(fitness, 0.0, 1.0) / 3;
 
-    ofs << id << " [label=\"id: " << id << "\\nfit: " << std::fixed
-        << std::setprecision(4) << fitness << "\" style=filled, fillcolor=\""
-        << hue << " 1.000 1.000\"]" << endl;
-  }
+        ofs << id << " [label=\"id: " << id << "\\nfit: " << std::fixed
+            << std::setprecision(4) << fitness
+            << "\" style=filled, fillcolor=\"" << hue << " 1.000 1.000\"]"
+            << endl;
+    }
 
-  ofs << "}" << endl;
-  ofs.close();
+    ofs << "}" << endl;
+    ofs.close();
 }
 
 /******************************************************************************/
 void TPG::printTeamInfo(long t, int phase, bool singleBest, long teamId) {
-  team *bestTeam = *(_Mroot.begin());
-  if (singleBest && teamId == -1) bestTeam = getBestTeam();
-  ostringstream tmposs;
-  map<point *, double, pointLexicalLessThan> allOutcomes;
-  // map < point *, double > :: iterator myoiter;
-  vector<int> behaviourSequence;
-  set<team *, teamIdComp> visitedTeams;
-  for (auto teiter = _M.begin(); teiter != _M.end(); teiter++) {
-    if ((!singleBest && (*teiter)->root() && teamId == -1) ||  // all root teams
-        (!singleBest && (*teiter)->id_ == teamId) ||           // specific team
-        (singleBest &&
-         (*teiter)->id_ == bestTeam->id_))  // singleBest root team
-    {
-      oss << "tminfo t " << t << " id " << (*teiter)->id_ << " gtm "
-          << (*teiter)->gtime_ << " phs " << phase;
-      oss << " root " << ((*teiter)->root() ? 1 : 0);
-      oss << " sz " << (*teiter)->size();
-      oss << " age " << t - (*teiter)->gtime_;
-      // oss << " compl";
-      // oss << " " << (*teiter)->numActiveTeams_;
-      // oss << " " << (*teiter)->numActivePrograms_;
-      // oss << " " << (*teiter)->numEffectiveInstructions();
-      // oss << " " << (*teiter)->numActiveFeatures_;
-      oss << " nOut " << (*teiter)->numOutcomes(_TRAIN_PHASE, -1) << " "
-          << (*teiter)->numOutcomes(_TEST_PHASE, -1);
+    team *bestTeam = *(_Mroot.begin());
+    if (singleBest && teamId == -1) bestTeam = getBestTeam();
+    ostringstream tmposs;
+    map<point *, double, pointLexicalLessThan> allOutcomes;
+    // map < point *, double > :: iterator myoiter;
+    vector<int> behaviourSequence;
+    set<team *, teamIdComp> visitedTeams;
+    for (auto teiter = _M.begin(); teiter != _M.end(); teiter++) {
+        if ((!singleBest && (*teiter)->root() &&
+             teamId == -1) ||                             // all root teams
+            (!singleBest && (*teiter)->id_ == teamId) ||  // specific team
+            (singleBest &&
+             (*teiter)->id_ == bestTeam->id_))  // singleBest root team
+        {
+            oss << "tminfo t " << t << " id " << (*teiter)->id_ << " gtm "
+                << (*teiter)->gtime_ << " phs " << phase;
+            oss << " root " << ((*teiter)->root() ? 1 : 0);
+            oss << " sz " << (*teiter)->size();
+            oss << " age " << t - (*teiter)->gtime_;
+            // oss << " compl";
+            // oss << " " << (*teiter)->numActiveTeams_;
+            // oss << " " << (*teiter)->numActivePrograms_;
+            // oss << " " << (*teiter)->numEffectiveInstructions();
+            // oss << " " << (*teiter)->numActiveFeatures_;
+            oss << " nOut " << (*teiter)->numOutcomes(_TRAIN_PHASE, -1) << " "
+                << (*teiter)->numOutcomes(_TEST_PHASE, -1);
 
-      oss << setprecision(5) << fixed;
+            oss << setprecision(5) << fixed;
 
-      oss << " mnOut";
-      for (int phs : {0, 1, 2}) {
-        // bool allPhase = false;
-        // bool allTask = false;  // for genomic, set to true
+            oss << " mnOut";
+            for (int phs : {0, 1, 2}) {
+                // bool allPhase = false;
+                // bool allTask = false;  // for genomic, set to true
 
-        // multi-task
-        // statistics stored in aux doubles
-        for (int task = 0; task < GetState("n_task"); task++) {
-          for (int i = 0; i < GetParam<int>("n_point_aux_double"); i++) {
-            if ((*teiter)->numOutcomes(phs, task) > 0) {
-              oss << " p" << phs << "t" << task << "a" << i << " ";
-              // oss << (*teiter)->getQuickMean(task, GetState("fitMode"), phs);
-              oss << (*teiter)->getMeanOutcome(phs, task, i, false, false);
-            } else
-              oss << " p" << phs << "t" << task << "a" << i << " x";
-          }
+                // multi-task
+                // statistics stored in aux doubles
+                for (int task = 0; task < GetState("n_task"); task++) {
+                    for (int i = 0; i < GetParam<int>("n_point_aux_double");
+                         i++) {
+                        if ((*teiter)->numOutcomes(phs, task) > 0) {
+                            oss << " p" << phs << "t" << task << "a" << i
+                                << " ";
+                            // oss << (*teiter)->getQuickMean(task,
+                            // GetState("fitMode"), phs);
+                            oss << (*teiter)->getMeanOutcome(phs, task, i,
+                                                             false, false);
+                        } else
+                            oss << " p" << phs << "t" << task << "a" << i
+                                << " x";
+                    }
+                }
+            }
+
+            oss << " fit " << (*teiter)->fit_;
+
+            oss << setprecision(2) << fixed;
+
+            visitedTeams.clear();
+            vector<int> programInstructionCounts,
+                effectiveProgramInstructionCounts;
+            (*teiter)->policyInstructions(_teamMap, visitedTeams,
+                                          programInstructionCounts,
+                                          effectiveProgramInstructionCounts);
+
+            oss << " pIns "
+                << accumulate(programInstructionCounts.begin(),
+                              programInstructionCounts.end(), 0);
+            oss << " mnProgIns " << vecMean(programInstructionCounts);
+
+            oss << " ePIns "
+                << accumulate(effectiveProgramInstructionCounts.begin(),
+                              effectiveProgramInstructionCounts.end(), 0);
+            oss << " mnEProgIns " << vecMean(effectiveProgramInstructionCounts);
+            set<program *, programIdComp> programs;
+            // set<memoryEigen *, memoryEigenIdComp> memories;
+            set<team *, teamIdComp> visitedTeams2;
+            (*teiter)->GetAllNodes(_teamMap, visitedTeams2, programs);
+            oss << " nP " << programs.size();
+            oss << " nT " << visitedTeams2.size();
+            // oss << " nM " << memories.size();
+
+            // visitedTeams.clear();
+            // set<long> pF;
+            // (*teiter)->policyFeatures(_teamMap, visitedTeams, pF, true);
+            // oss << " pF " << (double)pF.size() / n_input_[];
+            // //GetParam<int>("n_input");
+
+            vector<int> op_countsSingle;
+            vector<int> op_countsTally;
+            op_countsTally.resize(instruction::NUM_OP);
+
+            fill(op_countsTally.begin(), op_countsTally.end(), 0);
+            for (auto it = programs.begin(); it != programs.end(); it++) {
+                (*it)->op_counts(op_countsSingle);
+                for (size_t i = 0; i < op_countsSingle.size(); i++)
+                    op_countsTally[i] += op_countsSingle[i];
+            }
+            oss << " nOp " << vecToStr(op_countsTally);
+
+            vector<int> tmSizesRoot, tmSizesSub;
+            tmSizesRoot.push_back((*teiter)->size());
+            for (auto teiter2 = visitedTeams2.begin();
+                 teiter2 != visitedTeams2.end(); teiter2++)
+                if ((*teiter2)->id_ !=
+                    (*teiter)->id_)  // not the root of this policy
+                    tmSizesSub.push_back((*teiter2)->size());
+            oss << " mnTmSzR " << vecMean(tmSizesRoot) << " mnTmSzS "
+                << (tmSizesSub.size() > 0 ? vecMean(tmSizesSub) : 0);
+
+            ////map < int, map< int, map <point *, double, pointLexicalLessThan
+            ///> > >
+            /// outs;
+            // map < int, map< int, map <int, point *> > > outs;
+            //(*teiter)->outcomes(outs);
+
+            // double maxVisitedTeams = 0;
+            // for (auto ouiter = outs.begin(); ouiter != outs.end();
+            // ouiter++){//tasks
+            //   for (auto ouiter2 = ouiter->second[2].begin(); ouiter2 !=
+            //   ouiter->second[2].end(); ouiter2++){//test outcomes, loop over
+            //   envSeed
+            //      maxVisitedTeams = max(maxVisitedTeams,
+            //      ouiter2->second->auxDouble(2));
+            //   }
+            // }
+            // oss << " maxVisitedTeams " << maxVisitedTeams << endl;
+
+            // oss << " outcomes";
+            // int nSolved = 0;
+            // for(auto ouiter = outs[0][0].begin(); ouiter != outs[0][0].end();
+            // ouiter++){
+            //    if ((ouiter->first)->auxDouble(0) > 1)
+            //       oss << " " << (ouiter->first)->auxDouble(0);
+            //    if ((ouiter->first)->auxDouble(0) >= 50)
+            //       nSolved++;
+            // }
+            // oss << " outcomesDesc";
+            // for(auto ouiter = outs[0][0].begin(); ouiter != outs[0][0].end();
+            // ouiter++){
+            //    if ((ouiter->first)->auxDouble(0) >= 50)
+            //       oss<< " " << (ouiter->first)->desc().c_str();
+            // }
+            // oss << " nSol " << nSolved;
+
+            // oss << " fBins";
+            // map <long, int> bins = (*teiter)->fitnessBins();
+            // for (auto iter = bins.begin(); iter != bins.end(); iter++)
+            //    oss << ":" << (*iter).first << "-" << (*iter).second;
+            oss << endl;
         }
-      }
-
-      oss << " fit " << (*teiter)->fit_;
-
-      oss << setprecision(2) << fixed;
-
-      visitedTeams.clear();
-      vector<int> programInstructionCounts, effectiveProgramInstructionCounts;
-      (*teiter)->policyInstructions(_teamMap, visitedTeams,
-                                    programInstructionCounts,
-                                    effectiveProgramInstructionCounts);
-
-      oss << " pIns "
-          << accumulate(programInstructionCounts.begin(),
-                        programInstructionCounts.end(), 0);
-      oss << " mnProgIns " << vecMean(programInstructionCounts);
-
-      oss << " ePIns "
-          << accumulate(effectiveProgramInstructionCounts.begin(),
-                        effectiveProgramInstructionCounts.end(), 0);
-      oss << " mnEProgIns " << vecMean(effectiveProgramInstructionCounts);
-      set<program *, programIdComp> programs;
-      // set<memoryEigen *, memoryEigenIdComp> memories;
-      set<team *, teamIdComp> visitedTeams2;
-      (*teiter)->GetAllNodes(_teamMap, visitedTeams2, programs);
-      oss << " nP " << programs.size();
-      oss << " nT " << visitedTeams2.size();
-      // oss << " nM " << memories.size();
-
-      // visitedTeams.clear();
-      // set<long> pF;
-      // (*teiter)->policyFeatures(_teamMap, visitedTeams, pF, true);
-      // oss << " pF " << (double)pF.size() / n_input_[];
-      // //GetParam<int>("n_input");
-
-      vector<int> op_countsSingle;
-      vector<int> op_countsTally;
-      op_countsTally.resize(instruction::NUM_OP);
-
-      fill(op_countsTally.begin(), op_countsTally.end(), 0);
-      for (auto it = programs.begin(); it != programs.end(); it++) {
-        (*it)->op_counts(op_countsSingle);
-        for (size_t i = 0; i < op_countsSingle.size(); i++)
-          op_countsTally[i] += op_countsSingle[i];
-      }
-      oss << " nOp " << vecToStr(op_countsTally);
-
-      vector<int> tmSizesRoot, tmSizesSub;
-      tmSizesRoot.push_back((*teiter)->size());
-      for (auto teiter2 = visitedTeams2.begin(); teiter2 != visitedTeams2.end();
-           teiter2++)
-        if ((*teiter2)->id_ != (*teiter)->id_)  // not the root of this policy
-          tmSizesSub.push_back((*teiter2)->size());
-      oss << " mnTmSzR " << vecMean(tmSizesRoot) << " mnTmSzS "
-          << (tmSizesSub.size() > 0 ? vecMean(tmSizesSub) : 0);
-
-      ////map < int, map< int, map <point *, double, pointLexicalLessThan > > >
-      /// outs;
-      // map < int, map< int, map <int, point *> > > outs;
-      //(*teiter)->outcomes(outs);
-
-      // double maxVisitedTeams = 0;
-      // for (auto ouiter = outs.begin(); ouiter != outs.end();
-      // ouiter++){//tasks
-      //   for (auto ouiter2 = ouiter->second[2].begin(); ouiter2 !=
-      //   ouiter->second[2].end(); ouiter2++){//test outcomes, loop over
-      //   envSeed
-      //      maxVisitedTeams = max(maxVisitedTeams,
-      //      ouiter2->second->auxDouble(2));
-      //   }
-      // }
-      // oss << " maxVisitedTeams " << maxVisitedTeams << endl;
-
-      // oss << " outcomes";
-      // int nSolved = 0;
-      // for(auto ouiter = outs[0][0].begin(); ouiter != outs[0][0].end();
-      // ouiter++){
-      //    if ((ouiter->first)->auxDouble(0) > 1)
-      //       oss << " " << (ouiter->first)->auxDouble(0);
-      //    if ((ouiter->first)->auxDouble(0) >= 50)
-      //       nSolved++;
-      // }
-      // oss << " outcomesDesc";
-      // for(auto ouiter = outs[0][0].begin(); ouiter != outs[0][0].end();
-      // ouiter++){
-      //    if ((ouiter->first)->auxDouble(0) >= 50)
-      //       oss<< " " << (ouiter->first)->desc().c_str();
-      // }
-      // oss << " nSol " << nSolved;
-
-      // oss << " fBins";
-      // map <long, int> bins = (*teiter)->fitnessBins();
-      // for (auto iter = bins.begin(); iter != bins.end(); iter++)
-      //    oss << ":" << (*iter).first << "-" << (*iter).second;
-      oss << endl;
     }
-  }
 }
 
 void TPG::trackTeamInfo(long t, int phase, bool singleBest, long teamId) {
-  string gen = std::to_string(t);
+    string gen = std::to_string(t);
 
-  team *bestTeam = *(_Mroot.begin());
-  if (singleBest && teamId == -1) bestTeam = getBestTeam();
-  ostringstream tmposs;
-  map<point *, double, pointLexicalLessThan> allOutcomes;
-  // map < point *, double > :: iterator myoiter;
-  vector<int> behaviourSequence;
-  set<team *, teamIdComp> visitedTeams;
-  for (auto teiter = _M.begin(); teiter != _M.end(); teiter++) {
-    if ((!singleBest && (*teiter)->root() && teamId == -1) ||  // all root teams
-        (!singleBest && (*teiter)->id_ == teamId) ||           // specific team
-        (singleBest &&
-         (*teiter)->id_ == bestTeam->id_))  // singleBest root team
-    {
-      api_client_->LogMetric("teamInfo/root", ((*teiter)->root() ? "1" : "0"),
-                             "", gen);
-      api_client_->LogMetric("teamInfo/sz", std::to_string((*teiter)->size()),
-                             "", gen);
-      api_client_->LogMetric("teamInfo/age",
-                             std::to_string(t - (*teiter)->gtime_), "", gen);
-      api_client_->LogMetric(
-          "teamInfo/nOutTrain",
-          std::to_string((*teiter)->numOutcomes(_TRAIN_PHASE, -1)), "", gen);
-      api_client_->LogMetric(
-          "teamInfo/nOutTest",
-          std::to_string((*teiter)->numOutcomes(_TEST_PHASE, -1)), "", gen);
-      api_client_->LogMetric("teamInfo/fit", std::to_string((*teiter)->fit_),
-                             "", gen);
+    team *bestTeam = *(_Mroot.begin());
+    if (singleBest && teamId == -1) bestTeam = getBestTeam();
+    ostringstream tmposs;
+    map<point *, double, pointLexicalLessThan> allOutcomes;
+    // map < point *, double > :: iterator myoiter;
+    vector<int> behaviourSequence;
+    set<team *, teamIdComp> visitedTeams;
+    for (auto teiter = _M.begin(); teiter != _M.end(); teiter++) {
+        if ((!singleBest && (*teiter)->root() &&
+             teamId == -1) ||                             // all root teams
+            (!singleBest && (*teiter)->id_ == teamId) ||  // specific team
+            (singleBest &&
+             (*teiter)->id_ == bestTeam->id_))  // singleBest root team
+        {
+            api_client_->LogMetric("teamInfo/root",
+                                   ((*teiter)->root() ? "1" : "0"), "", gen);
+            api_client_->LogMetric("teamInfo/sz",
+                                   std::to_string((*teiter)->size()), "", gen);
+            api_client_->LogMetric(
+                "teamInfo/age", std::to_string(t - (*teiter)->gtime_), "", gen);
+            api_client_->LogMetric(
+                "teamInfo/nOutTrain",
+                std::to_string((*teiter)->numOutcomes(_TRAIN_PHASE, -1)), "",
+                gen);
+            api_client_->LogMetric(
+                "teamInfo/nOutTest",
+                std::to_string((*teiter)->numOutcomes(_TEST_PHASE, -1)), "",
+                gen);
+            api_client_->LogMetric("teamInfo/fit",
+                                   std::to_string((*teiter)->fit_), "", gen);
 
-      visitedTeams.clear();
-      vector<int> programInstructionCounts, effectiveProgramInstructionCounts;
-      (*teiter)->policyInstructions(_teamMap, visitedTeams,
-                                    programInstructionCounts,
-                                    effectiveProgramInstructionCounts);
+            visitedTeams.clear();
+            vector<int> programInstructionCounts,
+                effectiveProgramInstructionCounts;
+            (*teiter)->policyInstructions(_teamMap, visitedTeams,
+                                          programInstructionCounts,
+                                          effectiveProgramInstructionCounts);
 
-      int pIns = accumulate(programInstructionCounts.begin(),
-                            programInstructionCounts.end(), 0);
-      double mnProgIns = vecMean(programInstructionCounts);
-      int ePIns = accumulate(effectiveProgramInstructionCounts.begin(),
-                             effectiveProgramInstructionCounts.end(), 0);
-      double mnEProgIns = vecMean(effectiveProgramInstructionCounts);
-      api_client_->LogMetric("teamInfo/pIns", std::to_string(pIns), "", gen);
-      api_client_->LogMetric("teamInfo/mnProgIns", std::to_string(mnProgIns),
-                             "", gen);
-      api_client_->LogMetric("teamInfo/ePIns", std::to_string(ePIns), "", gen);
-      api_client_->LogMetric("teamInfo/mnEProgIns", std::to_string(mnEProgIns),
-                             "", gen);
+            int pIns = accumulate(programInstructionCounts.begin(),
+                                  programInstructionCounts.end(), 0);
+            double mnProgIns = vecMean(programInstructionCounts);
+            int ePIns = accumulate(effectiveProgramInstructionCounts.begin(),
+                                   effectiveProgramInstructionCounts.end(), 0);
+            double mnEProgIns = vecMean(effectiveProgramInstructionCounts);
+            api_client_->LogMetric("teamInfo/pIns", std::to_string(pIns), "",
+                                   gen);
+            api_client_->LogMetric("teamInfo/mnProgIns",
+                                   std::to_string(mnProgIns), "", gen);
+            api_client_->LogMetric("teamInfo/ePIns", std::to_string(ePIns), "",
+                                   gen);
+            api_client_->LogMetric("teamInfo/mnEProgIns",
+                                   std::to_string(mnEProgIns), "", gen);
 
-      set<program *, programIdComp> programs;
-      // set<memoryEigen *, memoryEigenIdComp> memories;
-      set<team *, teamIdComp> visitedTeams2;
-      (*teiter)->GetAllNodes(_teamMap, visitedTeams2, programs);
-      api_client_->LogMetric("teamInfo/nP", std::to_string(programs.size()), "",
-                             gen);
-      api_client_->LogMetric("teamInfo/nT",
-                             std::to_string(visitedTeams2.size()), "", gen);
-      // api_client_->LogMetric("teamInfo/nM", std::to_string(memories.size()), "",
-      //                        gen);
+            set<program *, programIdComp> programs;
+            // set<memoryEigen *, memoryEigenIdComp> memories;
+            set<team *, teamIdComp> visitedTeams2;
+            (*teiter)->GetAllNodes(_teamMap, visitedTeams2, programs);
+            api_client_->LogMetric("teamInfo/nP",
+                                   std::to_string(programs.size()), "", gen);
+            api_client_->LogMetric(
+                "teamInfo/nT", std::to_string(visitedTeams2.size()), "", gen);
+            // api_client_->LogMetric("teamInfo/nM",
+            // std::to_string(memories.size()), "",
+            //                        gen);
 
-      vector<int> op_countsSingle;
-      vector<int> op_countsTally;
-      op_countsTally.resize(instruction::NUM_OP);
+            vector<int> op_countsSingle;
+            vector<int> op_countsTally;
+            op_countsTally.resize(instruction::NUM_OP);
 
-      fill(op_countsTally.begin(), op_countsTally.end(), 0);
-      for (auto it = programs.begin(); it != programs.end(); it++) {
-        (*it)->op_counts(op_countsSingle);
-        for (size_t i = 0; i < op_countsSingle.size(); i++)
-          op_countsTally[i] += op_countsSingle[i];
-      }
+            fill(op_countsTally.begin(), op_countsTally.end(), 0);
+            for (auto it = programs.begin(); it != programs.end(); it++) {
+                (*it)->op_counts(op_countsSingle);
+                for (size_t i = 0; i < op_countsSingle.size(); i++)
+                    op_countsTally[i] += op_countsSingle[i];
+            }
 
-      api_client_->LogMetric("teamInfo/nOp", vecToStr(op_countsTally), "", gen);
+            api_client_->LogMetric("teamInfo/nOp", vecToStr(op_countsTally), "",
+                                   gen);
 
-      vector<int> tmSizesRoot, tmSizesSub;
-      tmSizesRoot.push_back((*teiter)->size());
-      for (auto teiter2 = visitedTeams2.begin(); teiter2 != visitedTeams2.end();
-           teiter2++)
-        if ((*teiter2)->id_ != (*teiter)->id_)  // not the root of this policy
-          tmSizesSub.push_back((*teiter2)->size());
+            vector<int> tmSizesRoot, tmSizesSub;
+            tmSizesRoot.push_back((*teiter)->size());
+            for (auto teiter2 = visitedTeams2.begin();
+                 teiter2 != visitedTeams2.end(); teiter2++)
+                if ((*teiter2)->id_ !=
+                    (*teiter)->id_)  // not the root of this policy
+                    tmSizesSub.push_back((*teiter2)->size());
 
-      double mnTmSzR = vecMean(tmSizesRoot);
-      int mnTmSzS = (tmSizesSub.size() > 0 ? vecMean(tmSizesSub) : 0);
-      api_client_->LogMetric("teamInfo/mnTmSzR", std::to_string(mnTmSzR), "",
-                             gen);
-      api_client_->LogMetric("teamInfo/mnTmSzS", std::to_string(mnTmSzS), "",
-                             gen);
+            double mnTmSzR = vecMean(tmSizesRoot);
+            int mnTmSzS = (tmSizesSub.size() > 0 ? vecMean(tmSizesSub) : 0);
+            api_client_->LogMetric("teamInfo/mnTmSzR", std::to_string(mnTmSzR),
+                                   "", gen);
+            api_client_->LogMetric("teamInfo/mnTmSzS", std::to_string(mnTmSzS),
+                                   "", gen);
+        }
     }
-  }
 }
 
 /******************************************************************************/
@@ -2280,666 +2352,572 @@ void TPG::trackTeamInfo(long t, int phase, bool singleBest, long teamId) {
 void TPG::programCrossover(RegisterMachine *p1, RegisterMachine *p2,
                            RegisterMachine **c1, RegisterMachine **c2,
                            mt19937 &rng) {
-  int dcMax = min(p1->Size(), p2->Size());
-  int dsMax = dcMax;
-  int lsMax = dcMax;
+    int dcMax = min(p1->Size(), p2->Size());
+    int dsMax = dcMax;
+    int lsMax = dcMax;
 
-  *c1 = dynamic_cast<RegisterMachine *>(CloneProgram(p1));
-  *c2 = dynamic_cast<RegisterMachine *>(CloneProgram(p2));
+    *c1 = dynamic_cast<RegisterMachine *>(CloneProgram(p1));
+    *c2 = dynamic_cast<RegisterMachine *>(CloneProgram(p2));
 
-  int pos1, pos2;
+    int pos1, pos2;
 
-  vector<program *> parents{p1, p2};
-  vector<int> segLengths{1, 1};
+    vector<program *> parents{p1, p2};
+    vector<int> segLengths{1, 1};
 
-  if (p1->Size() > p2->Size()) swap(parents[0], parents[1]);
+    if (p1->Size() > p2->Size()) swap(parents[0], parents[1]);
 
-  // 1
-  uniform_int_distribution<> dis1(0, parents[0]->Size() - 1);
-  pos1 = dis1(rng);
-  uniform_int_distribution<> dis2(0, parents[1]->Size() - 1);
-  do {
-    pos2 = dis2(rng);
-  } while (abs(pos1 - pos2) > min(parents[0]->Size() - 1, dcMax));
+    // 1
+    uniform_int_distribution<> dis1(0, parents[0]->Size() - 1);
+    pos1 = dis1(rng);
+    uniform_int_distribution<> dis2(0, parents[1]->Size() - 1);
+    do {
+        pos2 = dis2(rng);
+    } while (abs(pos1 - pos2) > min(parents[0]->Size() - 1, dcMax));
 
-  // 2,3
-  uniform_int_distribution<> dis3(1, min(parents[0]->Size() - pos1, lsMax));
-  segLengths[0] = dis3(rng);
-  uniform_int_distribution<> dis4(1, min(parents[1]->Size() - pos2, lsMax));
-  do {
-    segLengths[1] = dis4(rng);
-  } while (abs(segLengths[0] - segLengths[1]) > dsMax);
+    // 2,3
+    uniform_int_distribution<> dis3(1, min(parents[0]->Size() - pos1, lsMax));
+    segLengths[0] = dis3(rng);
+    uniform_int_distribution<> dis4(1, min(parents[1]->Size() - pos2, lsMax));
+    do {
+        segLengths[1] = dis4(rng);
+    } while (abs(segLengths[0] - segLengths[1]) > dsMax);
 
-  // 4
-  if (segLengths[0] > segLengths[1]) swap(segLengths[0], segLengths[1]);
+    // 4
+    if (segLengths[0] > segLengths[1]) swap(segLengths[0], segLengths[1]);
 
-  // 5
-  if (p1->Size() - (segLengths[1] - segLengths[0]) < 1 ||
-      p2->Size() + (segLengths[1] - segLengths[0]) >
-          GetParam<int>("max_prog_size")) {
-    if (real_dist_(rng) < 0.5)
-      segLengths[1] = segLengths[0];
-    else
-      segLengths[0] = segLengths[1];
+    // 5
+    if (p1->Size() - (segLengths[1] - segLengths[0]) < 1 ||
+        p2->Size() + (segLengths[1] - segLengths[0]) >
+            GetParam<int>("max_prog_size")) {
+        if (real_dist_(rng) < 0.5)
+            segLengths[1] = segLengths[0];
+        else
+            segLengths[0] = segLengths[1];
 
-    if (pos1 + segLengths[0] > p1->Size())
-      segLengths[0] = segLengths[1] = p1->Size() - pos1;
-  }
+        if (pos1 + segLengths[0] > p1->Size())
+            segLengths[0] = segLengths[1] = p1->Size() - pos1;
+    }
 
-  vector<instruction *> parentProg1 = p1->bid_;
-  vector<instruction *> parentProg2 = p2->bid_;
+    vector<instruction *> parentProg1 = p1->bid_;
+    vector<instruction *> parentProg2 = p2->bid_;
 
-  vector<instruction *> childProg1 = p1->bid_;
-  vector<instruction *> childProg2 = p2->bid_;
+    vector<instruction *> childProg1 = p1->bid_;
+    vector<instruction *> childProg2 = p2->bid_;
 
-  // exchange seg1 in p1 by seg2 in p2
-  childProg1.clear();
-  auto start = parentProg1.begin();
-  auto end = parentProg1.begin() + pos1;
-  copy(start, end, back_inserter(childProg1));
-  start = parentProg2.begin() + pos2;
-  end = parentProg2.begin() + pos2 + segLengths[1];
-  copy(start, end, back_inserter(childProg1));
-  start = parentProg1.begin() + pos1 + segLengths[0];
-  end = parentProg1.end();
-  copy(start, end, back_inserter(childProg1));
+    // exchange seg1 in p1 by seg2 in p2
+    childProg1.clear();
+    auto start = parentProg1.begin();
+    auto end = parentProg1.begin() + pos1;
+    copy(start, end, back_inserter(childProg1));
+    start = parentProg2.begin() + pos2;
+    end = parentProg2.begin() + pos2 + segLengths[1];
+    copy(start, end, back_inserter(childProg1));
+    start = parentProg1.begin() + pos1 + segLengths[0];
+    end = parentProg1.end();
+    copy(start, end, back_inserter(childProg1));
 
-  // exchange seg2 in p2 by seg1 in p1
-  childProg2.clear();
-  start = parentProg2.begin();
-  end = parentProg2.begin() + pos2;
-  copy(start, end, back_inserter(childProg2));
-  start = parentProg1.begin() + pos1;
-  end = parentProg1.begin() + pos1 + segLengths[0];
-  copy(start, end, back_inserter(childProg2));
-  start = parentProg2.begin() + pos2 + segLengths[1];
-  end = parentProg2.end();
-  copy(start, end, back_inserter(childProg2));
+    // exchange seg2 in p2 by seg1 in p1
+    childProg2.clear();
+    start = parentProg2.begin();
+    end = parentProg2.begin() + pos2;
+    copy(start, end, back_inserter(childProg2));
+    start = parentProg1.begin() + pos1;
+    end = parentProg1.begin() + pos1 + segLengths[0];
+    copy(start, end, back_inserter(childProg2));
+    start = parentProg2.begin() + pos2 + segLengths[1];
+    end = parentProg2.end();
+    copy(start, end, back_inserter(childProg2));
 }
 
 /******************************************************************************/
 // Read in populations from a checkpoint file.
-// (This whole process needs a rewrite sometime.)
-void TPG::readCheckpoint(long t, int phase, int chkpID, bool fromString,
+// TODO(skelly): move reading logic to "deserialize" constructors and cleanup
+void TPG::ReadCheckpoint(long t, int phase, int chkpID, bool fromString,
                          const string &inString) {
-  finalize();  // clear populations
+    finalize();  // clear populations
 
-  string str;
+    string str;
 
-  if (fromString) {
-    str = inString;
-  } else {
-    char filename[80];
-    sprintf(filename, "%s/%s.%ld.%d.%lu.%d.rslt", "checkpoints", "cp", t,
-            chkpID, seeds_[TPG_SEED], phase);
-    ifstream t(filename);
-    t.seekg(0, ios::end);
-    str.reserve(t.tellg());
-    t.seekg(0, ios::beg);
-    str.assign((istreambuf_iterator<char>(t)), istreambuf_iterator<char>());
-  }
-
-  istringstream iss(str);
-
-  string oneline;
-  char delim = ':';
-  long memberId = 0;
-  long max_teamCount = -1;
-  long max_programCount = -1;
-  int f;
-
-  vector<string> outcomeFields;
-
-  while (getline(iss, oneline)) {
-    if (oneline.size() == 0) continue;
-    outcomeFields.clear();
-
-    SplitString(oneline, delim, outcomeFields);
-
-    if (outcomeFields[0].compare("teamPair") == 0) {
-      long id1 = atoi(outcomeFields[1].c_str());
-      long id2 = atoi(outcomeFields[2].c_str());
-      teamPair tp(_teamMap[id1], _teamMap[id2]);
-      _teamPairsToCompair.push_back(tp);
+    if (fromString) {
+        str = inString;
+    } else {
+        char filename[80];
+        sprintf(filename, "%s/%s.%ld.%d.%lu.%d.rslt", "checkpoints", "cp", t,
+                chkpID, seeds_[TPG_SEED], phase);
+        ifstream t(filename);
+        t.seekg(0, ios::end);
+        str.reserve(t.tellg());
+        t.seekg(0, ios::beg);
+        str.assign((istreambuf_iterator<char>(t)), istreambuf_iterator<char>());
     }
-    // TODO(skelly) would we ever want to re-seed here?
-    // else if (outcomeFields[0].compare("seed_tpg") == 0)
-    //   seed(TPG_SEED, atoi(outcomeFields[1].c_str()));
-    // else if (outcomeFields[0].compare("seed_aux") == 0)
-    //   seed(AUX_SEED, atoi(outcomeFields[1].c_str()));
-    else if (outcomeFields[0].compare("t") == 0)
-      state_["t_current"] = atoi(outcomeFields[1].c_str());
-    else if (outcomeFields[0].compare("active_task") == 0)
-      state_["active_task"] = atoi(outcomeFields[1].c_str());
-    // else if (outcomeFields[0].compare("internalTestNodeId") == 0)
-    //   state_["internal_test_node_id"] = atoi(outcomeFields[1].c_str());
-    else if (outcomeFields[0].compare("fitMode") == 0)
-      params_["fit_mode"] = atoi(outcomeFields[1].c_str());
-    else if (outcomeFields[0].compare("phase") == 0)
-      state_["phase"] = atoi(outcomeFields[1].c_str());
 
-    else if (outcomeFields[0].compare("memoryEigen") == 0) {
-      size_t i = 1;
-      long id = atoi(outcomeFields[i++].c_str());
-      int type = atoi(outcomeFields[i++].c_str());
-      int memoryIndices = atoi(outcomeFields[i++].c_str());
-      int memory_size = atoi(outcomeFields[i++].c_str());
-      int nrefs = atoi(outcomeFields[i++].c_str());
-      memoryEigen *mem =
-          new memoryEigen(id, type, memoryIndices, memory_size, nrefs);
-      // read in evolved constants
-      for (int idx = 0; idx < memoryIndices; idx++) {
-        if (type == memoryEigen::SCALAR_TYPE) {
-          mem->const_memory_[idx](0, 0) = stod(outcomeFields[i++].c_str());
-        } else if (type == memoryEigen::VECTOR_TYPE) {
-          for (int r = 0; r < memory_size; r++)
-            mem->const_memory_[idx](r, 0) = stod(outcomeFields[i++].c_str());
-        } else if (type == memoryEigen::MATRIX_TYPE) {
-          for (int r = 0; r < memory_size; r++)
-            for (int c = 0; c < memory_size; c++)
-              mem->const_memory_[idx](r, c) = stod(outcomeFields[i++].c_str());
+    istringstream iss(str);
+    string oneline;
+    char delim = ':';
+    long memberId = 0;
+    long max_teamCount = -1;
+    long max_programCount = -1;
+    long max_memoryCount = -1;
+    int f;
+
+    vector<string> outcomeFields;
+
+    while (getline(iss, oneline)) {
+        if (oneline.size() == 0) continue;
+        outcomeFields.clear();
+
+        SplitString(oneline, delim, outcomeFields);
+
+        if (outcomeFields[0].compare("teamPair") == 0) {
+            long id1 = atoi(outcomeFields[1].c_str());
+            long id2 = atoi(outcomeFields[2].c_str());
+            teamPair tp(_teamMap[id1], _teamMap[id2]);
+            _teamPairsToCompair.push_back(tp);
         }
-      }
-      AddMemory(mem);
+        else if (outcomeFields[0].compare("t") == 0)
+            state_["t_current"] = atoi(outcomeFields[1].c_str());
+        else if (outcomeFields[0].compare("active_task") == 0)
+            state_["active_task"] = atoi(outcomeFields[1].c_str());
+        else if (outcomeFields[0].compare("fitMode") == 0)
+            params_["fit_mode"] = atoi(outcomeFields[1].c_str());
+        else if (outcomeFields[0].compare("phase") == 0)
+            state_["phase"] = atoi(outcomeFields[1].c_str());
+        else if (outcomeFields[0].compare("memoryEigen") == 0) {
+            max_memoryCount =
+                std::max(max_memoryCount, atol(outcomeFields[1].c_str()));
+            AddMemory(new memoryEigen(outcomeFields));
+        }
+        else if (outcomeFields[0].compare("RegisterMachine") == 0) {
+            max_programCount =
+                std::max(max_programCount, atol(outcomeFields[1].c_str()));
+            AddProgram(new RegisterMachine(outcomeFields, _Memory, params_,
+                                           rngs_[TPG_SEED]));
+        } else if (outcomeFields[0].compare("team") == 0) {
+            team *m;
+            f = 1;
+            long id = atoi(outcomeFields[f++].c_str());
+            if (id > max_teamCount) max_teamCount = id;
+            long gtime = atoi(outcomeFields[f++].c_str());
+            m = new team(gtime, id);
+            m->_n_eval = atoi(outcomeFields[f++].c_str());
+            // add programs in order
+            for (size_t ii = f; ii < outcomeFields.size(); ii++) {
+                memberId = atoi(outcomeFields[ii].c_str());
+                m->AddProgram(_L[memberId]);
+            }
+            AddTeam(m);
+        } else if (outcomeFields[0].compare("incoming_progs") == 0) {
+            f = 1;
+            long id = atoi(outcomeFields[f++].c_str());
+            for (size_t ii = f; ii < outcomeFields.size(); ii++) {
+                long incomingId = atoi(outcomeFields[ii].c_str());
+                _teamMap[id]->AddIncomingProgram(incomingId);
+            }
+            _Mroot.erase(_teamMap[id]);
+        } else if (!fromString && outcomeFields[0].compare("phyloNode") == 0 &&
+                   find(outcomeFields.begin(), outcomeFields.end(), "gtime") ==
+                       outcomeFields.end()) {
+            f = 1;
+            long id = atoi(outcomeFields[f++].c_str());
+            _phyloGraph.insert(pair<long, phyloRecord>(id, phyloRecord()));
+            _phyloGraph[id].gtime = atoi(outcomeFields[f++].c_str());
+            _phyloGraph[id].dtime = atoi(outcomeFields[f++].c_str());
+            _phyloGraph[id].fitnessBin = atoi(outcomeFields[f++].c_str());
+            _phyloGraph[id].fitness = atof(outcomeFields[f++].c_str());
+            _phyloGraph[id].root =
+                atoi(outcomeFields[f++].c_str()) > 0 ? true : false;
+        } else if (!fromString && outcomeFields[0].compare("phyloLink") == 0 &&
+                   find(outcomeFields.begin(), outcomeFields.end(), "from") ==
+                       outcomeFields.end())
+            _phyloGraph[atoi(outcomeFields[1].c_str())].adj.push_back(
+                atoi(outcomeFields[2].c_str()));
+        else if (!fromString && outcomeFields[0].compare("ancestorIds") == 0) {
+            f = 1;
+            long id = atoi(outcomeFields[f++].c_str());
+            for (size_t ii = f; ii < outcomeFields.size(); ii++) {
+                long aid = atoi(outcomeFields[ii].c_str());
+                _phyloGraph[id].ancestorIds.insert(aid);
+            }
+        }
     }
-
-    else if (outcomeFields[0].compare("RegisterMachine") == 0) {
-      // vector<int> memTypeIds;
-      // memTypeIds.resize(memoryEigen::NUM_MEMORY_TYPES);
-      program *l;
-      f = 1;
-      long id = atoi(outcomeFields[f++].c_str());
-      if (id > max_programCount) max_programCount = id;
-      long gtime = atoi(outcomeFields[f++].c_str());
-      long action = atoi(outcomeFields[f++].c_str());
-      int stateful = atoi(outcomeFields[f++].c_str());
-      int nrefs = atoi(outcomeFields[f++].c_str());
-      int observation_buff_size = atoi(outcomeFields[f++].c_str());
-      int obs_index = atoi(outcomeFields[f++].c_str());
-      int memory_size = atoi(outcomeFields[f++].c_str());
-
-      vector<instruction *> bid;
-      for (size_t ii = f; ii < outcomeFields.size(); ii++) {
-        vector<string> instructionString;
-        SplitString(outcomeFields[ii], '_', instructionString);
-        instruction *in = new instruction(params_, rngs_[TPG_SEED]);
-        in->in1Src_ = stringToInt(instructionString[0]);
-        in->in2Src_ = stringToInt(instructionString[1]);
-        in->outIdx_ = stringToInt(instructionString[2]);
-        in->op_ = stringToInt(instructionString[3]);
-        in->in0Idx_ = stringToInt(instructionString[4]);
-        in->in1Idx_ = stringToInt(instructionString[5]);
-        in->in2Idx_ = stringToInt(instructionString[6]);
-        in->in3Idx_ = stringToInt(instructionString[7]);
-        in->memory_size_ = stringToInt(instructionString[8]);
-        bid.push_back(in);
-      }
-      l = new RegisterMachine(gtime, action, stateful, params_, id, nrefs, observation_buff_size, memory_size, bid);
-      l->obs_index_ = obs_index;
-
-      AddProgram(l);
-    } else if (outcomeFields[0].compare("team") == 0) {
-      team *m;
-      f = 1;
-      long id = atoi(outcomeFields[f++].c_str());
-      if (id > max_teamCount) max_teamCount = id;
-      long gtime = atoi(outcomeFields[f++].c_str());
-      m = new team(gtime, id);
-      m->_n_eval = atoi(outcomeFields[f++].c_str());
-      // add programs in order
-      for (size_t ii = f; ii < outcomeFields.size(); ii++) {
-        memberId = atoi(outcomeFields[ii].c_str());
-        m->AddProgram(_L[memberId]);
-      }
-      AddTeam(m);
-    } else if (outcomeFields[0].compare("teamIncoming") == 0) {
-      f = 1;
-      long id = atoi(outcomeFields[f++].c_str());
-      for (size_t ii = f; ii < outcomeFields.size(); ii++) {
-        long incomingId = atoi(outcomeFields[ii].c_str());
-        _teamMap[id]->AddIncomingProgram(incomingId);
-      }
-      _Mroot.erase(_teamMap[id]);
-    } else if (outcomeFields[0].compare("fBin") == 0) {
-      long id = atoi(outcomeFields[1].c_str());
-      team *tm = _teamMap[id];
-      for (size_t ii = 2; ii < outcomeFields.size(); ii++) {
-        vector<string> fb;
-        SplitString(outcomeFields[ii].c_str(), '-', fb);
-        tm->fitnessBin(atoi(fb[0].c_str()), fb[1]);
-      }
-    } else if (!fromString && outcomeFields[0].compare("phyloNode") == 0 &&
-               find(outcomeFields.begin(), outcomeFields.end(), "gtime") ==
-                   outcomeFields.end()) {
-      f = 1;
-      long id = atoi(outcomeFields[f++].c_str());
-      _phyloGraph.insert(pair<long, phyloRecord>(id, phyloRecord()));
-      _phyloGraph[id].gtime = atoi(outcomeFields[f++].c_str());
-      _phyloGraph[id].dtime = atoi(outcomeFields[f++].c_str());
-      _phyloGraph[id].fitnessBin = atoi(outcomeFields[f++].c_str());
-      _phyloGraph[id].fitness = atof(outcomeFields[f++].c_str());
-      _phyloGraph[id].root =
-          atoi(outcomeFields[f++].c_str()) > 0 ? true : false;
-    } else if (!fromString && outcomeFields[0].compare("phyloLink") == 0 &&
-               find(outcomeFields.begin(), outcomeFields.end(), "from") ==
-                   outcomeFields.end())
-      _phyloGraph[atoi(outcomeFields[1].c_str())].adj.push_back(
-          atoi(outcomeFields[2].c_str()));
-    else if (!fromString && outcomeFields[0].compare("ancestorIds") == 0) {
-      f = 1;
-      long id = atoi(outcomeFields[f++].c_str());
-      for (size_t ii = f; ii < outcomeFields.size(); ii++) {
-        long aid = atoi(outcomeFields[ii].c_str());
-        _phyloGraph[id].ancestorIds.insert(aid);
-      }
-    }
-  }
-
-  state_["program_count"] = max_programCount + 1;
-  state_["team_count"] = max_teamCount + 1;
-
-  // TODO(skelly): this might not make sense for evaluators because
-  // they only receive teams to evaluate
-  // SanityCheck();
+    state_["program_count"] = max_programCount + 1;
+    state_["team_count"] = max_teamCount + 1;
+    state_["memory_count"] = max_memoryCount + 1;
 }
 
 /******************************************************************************/
 void TPG::recalculateProgramRefs() {
-  for (auto p : _L) p.second->nrefs_ = 0;
-  for (auto tm : _M)
-    for (auto p : tm->members_) p->nrefs_++;
+    for (auto p : _L) p.second->nrefs_ = 0;
+    for (auto tm : _M)
+        for (auto p : tm->members_) p->nrefs_++;
 }
 
+/******************************************************************************/
 void TPG::SanityCheck() { TeamSizesMatchProgRefs(); }
 
 /******************************************************************************/
 void TPG::TeamSizesMatchProgRefs() {
-  int sum_team_sizes = 0;
-  int sum_prog_refs = 0;
-  for (auto tm : _M) sum_team_sizes += tm->size();
-  for (auto prog : _L) sum_prog_refs += prog.second->nrefs_;
-  if (sum_prog_refs != sum_team_sizes) {
-    std::string error_message = "Program reference mismatch. sum_team_sizes " +
-                                to_string(sum_team_sizes) + " sum_prog_refs " +
-                                to_string(sum_prog_refs);
-    die(__FILE__, __FUNCTION__, __LINE__, error_message.c_str());
-  }
+    int sum_team_sizes = 0;
+    int sum_prog_refs = 0;
+    for (auto tm : _M) sum_team_sizes += tm->size();
+    for (auto prog : _L) sum_prog_refs += prog.second->nrefs_;
+    if (sum_prog_refs != sum_team_sizes) {
+        std::string error_message =
+            "Program reference mismatch. sum_team_sizes " +
+            to_string(sum_team_sizes) + " sum_prog_refs " +
+            to_string(sum_prog_refs);
+        die(__FILE__, __FUNCTION__, __LINE__, error_message.c_str());
+    }
 }
 
 /******************************************************************************/
 void TPG::SelectTeams() {
-  set<team *, teamFitnessLexicalCompare> teams;
-  int numOldDeleted = 0;
-  int numDeleted = 0;
+    set<team *, teamFitnessLexicalCompare> teams;
+    int numOldDeleted = 0;
+    int numDeleted = 0;
 
-  deque<program *> programsWithNoRefs;
+    deque<program *> programsWithNoRefs;
 
-  for (auto teiter = _Mroot.begin(); teiter != _Mroot.end();) {
-    if (!(*teiter)->elite(GetState("phase")) &&
-        !isElitePS(*teiter, GetState("phase"))) {
-      if ((*teiter)->gtime_ < GetState("t_current")) numOldDeleted++;
-      _phyloGraph[(*teiter)->id_].dtime = GetState("t_current");
-      RemoveTeam(*teiter, programsWithNoRefs);
-      teiter = _Mroot.erase(teiter);
-      numDeleted++;
-    } else
-      teiter++;
-  }
-
-  CleanupProgramsWithNoRefs(programsWithNoRefs, false);
-
-  // TODO(skelly): check memory maintenance here
-  // maintain 1 shared memory per team
-  for (int mem_t = 0; mem_t < memoryEigen::NUM_MEMORY_TYPES; mem_t++) {
-    while (_Memory[mem_t].size() < _M.size()) {
-      auto mem = new memoryEigen(state_["memory_count"]++, mem_t, params_);
-      if (HaveParam("p_bid_mu_const")) {
-        mem->RandomizeConst();
-      }
-      AddMemory(mem);
+    for (auto teiter = _Mroot.begin(); teiter != _Mroot.end();) {
+        if (!(*teiter)->elite(GetState("phase")) &&
+            !isElitePS(*teiter, GetState("phase"))) {
+            if ((*teiter)->gtime_ < GetState("t_current")) numOldDeleted++;
+            _phyloGraph[(*teiter)->id_].dtime = GetState("t_current");
+            RemoveTeam(*teiter, programsWithNoRefs);
+            teiter = _Mroot.erase(teiter);
+            numDeleted++;
+        } else
+            teiter++;
     }
-  }
 
-  oss << "selTms t " << GetState("t_current") << " Msz " << _M.size() << " Lsz "
-      << _L.size() << " mrSz " << _Mroot.size() << " mSz";
-  for (int mem_t = 0; mem_t < memoryEigen::NUM_MEMORY_TYPES; mem_t++) {
-    oss << " " << _Memory[mem_t].size();
-  }
-  oss << " eLSz " << _numEliteTeamsCurrent[GetState("phase")] << " nDel "
-      << numDeleted << " nOldDel " << numOldDeleted << " nOldDelPr "
-      << (double)numOldDeleted / numDeleted;
-  oss << endl;
+    CleanupProgramsWithNoRefs(programsWithNoRefs, false);
+
+    oss << "selTms t " << GetState("t_current") << " Msz " << _M.size()
+        << " Lsz " << _L.size() << " mrSz " << _Mroot.size() << " mSz";
+    for (int mem_t = 0; mem_t < memoryEigen::NUM_MEMORY_TYPES; mem_t++) {
+        oss << " " << _Memory[mem_t].size();
+    }
+    oss << " eLSz " << _numEliteTeamsCurrent[GetState("phase")] << " nDel "
+        << numDeleted << " nOldDel " << numOldDeleted << " nOldDelPr "
+        << (double)numOldDeleted / numDeleted;
+    oss << endl;
 }
 
 /******************************************************************************/
 void TPG::CleanupProgramsWithNoRefs(deque<program *> &programsWithNoRefs,
                                     bool updateLidsImmediately) {
-  vector<long> deletedIds;
-  while (programsWithNoRefs.size() > 0) {
-    auto prog = programsWithNoRefs.front();
-    if (prog->nrefs_ > 0) {
-      programsWithNoRefs.pop_front();
-      continue;
+    vector<long> deletedIds;
+    while (programsWithNoRefs.size() > 0) {
+        auto prog = programsWithNoRefs.front();
+        if (prog->nrefs_ > 0) {
+            programsWithNoRefs.pop_front();
+            continue;
+        }
+        if (prog->action() >= 0) {
+            if (_teamMap[prog->action()]->inDeg() == 1) {
+                _Mroot.insert(_teamMap[prog->action()]);
+                _phyloGraph[_teamMap[prog->action()]->id_].root = true;
+            }
+            _teamMap[prog->action()]->removeIncomingProgram(prog->id_);
+            // if team was a subsumed root clone that has now become a root
+            // itself, just delete it
+            if (_teamMap[prog->action()]->root() &&
+                _teamMap[prog->action()]->cloneId_ != -1) {
+                auto it = _teamMap.find(_teamMap[prog->action()]->cloneId_);
+                if (it != _teamMap.end())
+                    it->second->clones_ = it->second->clones_ - 1;
+                team *tm = _teamMap[prog->action()];
+                _phyloGraph[tm->id_].dtime = GetState("t_current");
+                _Mroot.erase(tm);
+                RemoveTeam(tm, programsWithNoRefs);
+            }
+        }
+        // TODO(spkelly): remove shared memory code
+        // for (int mem_t = 0; mem_t < memoryEigen::NUM_MEMORY_TYPES; mem_t++) {
+        //   prog->MemGet(mem_t)->refDec();
+        //   if (prog->MemGet(mem_t)->refs() == 0) {
+        //     removeMemory(prog->MemGet(mem_t));
+        //     delete prog->MemGet(mem_t);
+        //   }
+        // }
+        removeProgram(prog, updateLidsImmediately);
+        if (!updateLidsImmediately) deletedIds.push_back(prog->id_);
+        delete prog;
+        programsWithNoRefs.pop_front();
     }
-    if (prog->action() >= 0) {
-      if (_teamMap[prog->action()]->inDeg() == 1) {
-        _Mroot.insert(_teamMap[prog->action()]);
-        _phyloGraph[_teamMap[prog->action()]->id_].root = true;
-      }
-      _teamMap[prog->action()]->removeIncomingProgram(prog->id_);
-      // if team was a subsumed root clone that has now become a root itself,
-      // just delete it
-      if (_teamMap[prog->action()]->root() &&
-          _teamMap[prog->action()]->cloneId_ != -1) {
-        auto it = _teamMap.find(_teamMap[prog->action()]->cloneId_);
-        if (it != _teamMap.end()) it->second->clones_ = it->second->clones_ - 1;
-        team *tm = _teamMap[prog->action()];
-        _phyloGraph[tm->id_].dtime = GetState("t_current");
-        _Mroot.erase(tm);
-        RemoveTeam(tm, programsWithNoRefs);
-      }
+    if (!updateLidsImmediately) {
+        sort(deletedIds.begin(), deletedIds.end());
+        sort(_Lids.begin(), _Lids.end());
+        vector<long> diff;
+        set_difference(_Lids.begin(), _Lids.end(), deletedIds.begin(),
+                       deletedIds.end(), inserter(diff, diff.begin()));
+        _Lids = diff;
     }
-    // TODO(spkelly): remove shared memory code
-    // for (int mem_t = 0; mem_t < memoryEigen::NUM_MEMORY_TYPES; mem_t++) {
-    //   prog->MemGet(mem_t)->refDec();
-    //   if (prog->MemGet(mem_t)->refs() == 0) {
-    //     removeMemory(prog->MemGet(mem_t));
-    //     delete prog->MemGet(mem_t);
-    //   }
-    // }
-    removeProgram(prog, updateLidsImmediately);
-    if (!updateLidsImmediately) deletedIds.push_back(prog->id_);
-    delete prog;
-    programsWithNoRefs.pop_front();
-  }
-  if (!updateLidsImmediately) {
-    sort(deletedIds.begin(), deletedIds.end());
-    sort(_Lids.begin(), _Lids.end());
-    vector<long> diff;
-    set_difference(_Lids.begin(), _Lids.end(), deletedIds.begin(),
-                   deletedIds.end(), inserter(diff, diff.begin()));
-    _Lids = diff;
-  }
 }
 
 /******************************************************************************/
 void TPG::teamTaskRank(int phase, const vector<int> &objectives) {
-  oss << "TPG::teamTaskRank <team:avgRank>";
-  for (auto teiterA = _M.begin(); teiterA != _M.end(); teiterA++) {
-    if (!(*teiterA)->root()) continue;
-    vector<int> ranks;
-    for (size_t i = 0; i < objectives.size(); i++) ranks.push_back(1);
-    for (size_t o = 0; o < objectives.size(); o++) {
-      for (auto teiterB = _M.begin(); teiterB != _M.end(); teiterB++) {
-        if (!(*teiterB)->root()) continue;
-        if ((*teiterB)->getMeanOutcome(
-                phase, objectives[o], GetParam<int>("fit_mode"), false, false) >
-            (*teiterA)->getMeanOutcome(phase, objectives[o],
-                                       GetParam<int>("fit_mode"), false, false))
-          ranks[o]++;
-      }
-    }
+    oss << "TPG::teamTaskRank <team:avgRank>";
+    for (auto teiterA = _M.begin(); teiterA != _M.end(); teiterA++) {
+        if (!(*teiterA)->root()) continue;
+        vector<int> ranks;
+        for (size_t i = 0; i < objectives.size(); i++) ranks.push_back(1);
+        for (size_t o = 0; o < objectives.size(); o++) {
+            for (auto teiterB = _M.begin(); teiterB != _M.end(); teiterB++) {
+                if (!(*teiterB)->root()) continue;
+                if ((*teiterB)->getMeanOutcome(phase, objectives[o],
+                                               GetParam<int>("fit_mode"), false,
+                                               false) >
+                    (*teiterA)->getMeanOutcome(phase, objectives[o],
+                                               GetParam<int>("fit_mode"), false,
+                                               false))
+                    ranks[o]++;
+            }
+        }
 
-    double rankSum = 0;
-    for (size_t i = 0; i < ranks.size(); i++) rankSum += ranks[i];
-    (*teiterA)->fit_ = 1 / (rankSum / ranks.size());
-    oss << " " << (*teiterA)->id_ << ":" << (*teiterA)->fit_;
-  }
-  oss << endl;
+        double rankSum = 0;
+        for (size_t i = 0; i < ranks.size(); i++) rankSum += ranks[i];
+        (*teiterA)->fit_ = 1 / (rankSum / ranks.size());
+        oss << " " << (*teiterA)->id_ << ":" << (*teiterA)->fit_;
+    }
+    oss << endl;
 }
 
 /******************************************************************************/
 void TPG::updateMODESFilters(bool roots) {
-  (void)roots;
-  vector<long> symbiontIntersection;
-  symbiontIntersection.reserve(100);
-  vector<long> symbiontUnion;
-  symbiontUnion.reserve(100);
+    (void)roots;
+    vector<long> symbiontIntersection;
+    symbiontIntersection.reserve(100);
+    vector<long> symbiontUnion;
+    symbiontUnion.reserve(100);
 
-  if (GetState("t_current") != GetState("t_start")) {
-    _persistenceFilterA.clear();
-    for (auto teiter = _Mroot.begin(); teiter != _Mroot.end(); teiter++) {
-      vector<long> ancestorIds;
-      (*teiter)->getAncestorIds(ancestorIds);
-      for (auto pr = _allComponentsA.begin(); pr != _allComponentsA.end(); pr++)
-        if (find(ancestorIds.begin(), ancestorIds.end(), (*pr).first) !=
-                ancestorIds.end() &&
-            (*teiter)->hasOutcome(0, _TRAIN_PHASE, 0)) {
-          // found an ancestor of *teiter in _allComponentsA, add *teiter to
-          // _persistenceFilterA
-          _persistenceFilterA.insert(
-              pair<long, modesRecord>((*teiter)->id_, modesRecord()));
-          // store active programs for novelty metric
-          set<team *, teamIdComp> teams;
-          set<program *, programIdComp> programs;
-          // set<memoryEigen *, memoryEigenIdComp> memories;
-          (*teiter)->GetAllNodes(_teamMap, teams, programs);
-          for (auto leiter = programs.begin(); leiter != programs.end();
-               leiter++) {
-            _persistenceFilterA[(*teiter)->id_].activeProgramIds.insert(
-                (*leiter)->id_);
-            _persistenceFilterA[(*teiter)->id_].effectiveInstructionsTotal +=
-                (*leiter)->SizeEffective();
-          }
-          for (auto teiter2 = teams.begin(); teiter2 != teams.end(); teiter2++)
-            _persistenceFilterA[(*teiter)->id_].activeTeamIds.insert(
-                (*teiter2)->id_);
-          _persistenceFilterA[(*teiter)->id_].runTimeComplexityIns =
-              (*teiter)->runTimeComplexityIns();
-          _persistenceFilterA[(*teiter)->id_].behaviourString =
-              (*teiter)->getBehaviourString(0, _TRAIN_PHASE);
-          break;
+    if (GetState("t_current") != GetState("t_start")) {
+        _persistenceFilterA.clear();
+        for (auto teiter = _Mroot.begin(); teiter != _Mroot.end(); teiter++) {
+            vector<long> ancestorIds;
+            (*teiter)->getAncestorIds(ancestorIds);
+            for (auto pr = _allComponentsA.begin(); pr != _allComponentsA.end();
+                 pr++)
+                if (find(ancestorIds.begin(), ancestorIds.end(), (*pr).first) !=
+                        ancestorIds.end() &&
+                    (*teiter)->hasOutcome(0, _TRAIN_PHASE, 0)) {
+                    // found an ancestor of *teiter in _allComponentsA, add
+                    // *teiter to _persistenceFilterA
+                    _persistenceFilterA.insert(
+                        pair<long, modesRecord>((*teiter)->id_, modesRecord()));
+                    // store active programs for novelty metric
+                    set<team *, teamIdComp> teams;
+                    set<program *, programIdComp> programs;
+                    // set<memoryEigen *, memoryEigenIdComp> memories;
+                    (*teiter)->GetAllNodes(_teamMap, teams, programs);
+                    for (auto leiter = programs.begin();
+                         leiter != programs.end(); leiter++) {
+                        _persistenceFilterA[(*teiter)->id_]
+                            .activeProgramIds.insert((*leiter)->id_);
+                        _persistenceFilterA[(*teiter)->id_]
+                            .effectiveInstructionsTotal +=
+                            (*leiter)->SizeEffective();
+                    }
+                    for (auto teiter2 = teams.begin(); teiter2 != teams.end();
+                         teiter2++)
+                        _persistenceFilterA[(*teiter)->id_]
+                            .activeTeamIds.insert((*teiter2)->id_);
+                    _persistenceFilterA[(*teiter)->id_].runTimeComplexityIns =
+                        (*teiter)->runTimeComplexityIns();
+                    _persistenceFilterA[(*teiter)->id_].behaviourString =
+                        (*teiter)->getBehaviourString(0, _TRAIN_PHASE);
+                    break;
+                }
         }
-    }
 
-    // do analysis here
-    int change = 0;
-    // double minNCD = 0;
-    double novelty = 0;
-    int complexityRTC = 0;
-    int complexityTeams = 0;
-    int complexityPrograms = 0;
-    int complexityInstructions = 0;
-    double ecology = 0;
-    for (auto prA = _persistenceFilterA.begin();
-         prA != _persistenceFilterA.end(); prA++) {
-      // change
-      if (_persistenceFilterA_t.find((*prA).first) ==
-          _persistenceFilterA_t.end())
-        change++;
-      // novelty
-      bool found = false;
-      for (auto prAll = _persistenceFilterAllTime.begin();
-           prAll != _persistenceFilterAllTime.end(); prAll++) {
-        // double ncd =
-        // normalizedCompressionDistance((*prAll).second.behaviourString,
-        // (*prA).second.behaviourString);
-        if ((*prAll).second.behaviourString.compare(
-                (*prA).second.behaviourString) == 0) {
-          found = true;
-          break;
+        // do analysis here
+        int change = 0;
+        // double minNCD = 0;
+        double novelty = 0;
+        int complexityRTC = 0;
+        int complexityTeams = 0;
+        int complexityPrograms = 0;
+        int complexityInstructions = 0;
+        double ecology = 0;
+        for (auto prA = _persistenceFilterA.begin();
+             prA != _persistenceFilterA.end(); prA++) {
+            // change
+            if (_persistenceFilterA_t.find((*prA).first) ==
+                _persistenceFilterA_t.end())
+                change++;
+            // novelty
+            bool found = false;
+            for (auto prAll = _persistenceFilterAllTime.begin();
+                 prAll != _persistenceFilterAllTime.end(); prAll++) {
+                // double ncd =
+                // normalizedCompressionDistance((*prAll).second.behaviourString,
+                // (*prA).second.behaviourString);
+                if ((*prAll).second.behaviourString.compare(
+                        (*prA).second.behaviourString) == 0) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) novelty++;
+
+            // complexity
+            complexityRTC =
+                max(complexityRTC, (int)(*prA).second.runTimeComplexityIns);
+            complexityTeams =
+                max(complexityTeams,
+                    (int)(*prA).second.activeTeamIds.size());  // transitions ?
+            complexityPrograms = max(
+                complexityPrograms, (int)(*prA).second.activeProgramIds.size());
+            complexityInstructions =
+                max(complexityInstructions,
+                    (int)(*prA).second.effectiveInstructionsTotal);
+
+            // ecology
+            double Pc = 0;
+            for (auto prA2 = _persistenceFilterA.begin();
+                 prA2 != _persistenceFilterA.end(); prA2++)
+                if ((*prA2).first != (*prA).first &&
+                    (*prA2).second.behaviourString.compare(
+                        (*prA).second.behaviourString) == 0)
+                    Pc++;
+            if (Pc > 0) {
+                Pc = Pc / _persistenceFilterA.size();
+                ecology += Pc * log2(Pc);
+            }
         }
-      }
-      if (!found) novelty++;
+        ecology *= -1;
 
-      // complexity
-      complexityRTC =
-          max(complexityRTC, (int)(*prA).second.runTimeComplexityIns);
-      complexityTeams =
-          max(complexityTeams,
-              (int)(*prA).second.activeTeamIds.size());  // transitions ?
-      complexityPrograms =
-          max(complexityPrograms, (int)(*prA).second.activeProgramIds.size());
-      complexityInstructions =
-          max(complexityInstructions,
-              (int)(*prA).second.effectiveInstructionsTotal);
+        oss << "TPG::MODES t " << GetState("t_current") << " pfASize "
+            << _persistenceFilterA.size() << " pfA_tSize "
+            << _persistenceFilterA_t.size();
+        oss << " change " << change << " novelty " << novelty;
+        oss << " complexityRTC " << complexityRTC << " complexityTeams "
+            << complexityTeams << " complexityPrograms " << complexityPrograms;
+        oss << " complexityInstructions " << complexityInstructions
+            << " ecology " << ecology << endl;
 
-      // ecology
-      double Pc = 0;
-      for (auto prA2 = _persistenceFilterA.begin();
-           prA2 != _persistenceFilterA.end(); prA2++)
-        if ((*prA2).first != (*prA).first &&
-            (*prA2).second.behaviourString.compare(
-                (*prA).second.behaviourString) == 0)
-          Pc++;
-      if (Pc > 0) {
-        Pc = Pc / _persistenceFilterA.size();
-        ecology += Pc * log2(Pc);
-      }
-    }
-    ecology *= -1;
-
-    oss << "TPG::MODES t " << GetState("t_current") << " pfASize "
-        << _persistenceFilterA.size() << " pfA_tSize "
-        << _persistenceFilterA_t.size();
-    oss << " change " << change << " novelty " << novelty;
-    oss << " complexityRTC " << complexityRTC << " complexityTeams "
-        << complexityTeams << " complexityPrograms " << complexityPrograms;
-    oss << " complexityInstructions " << complexityInstructions << " ecology "
-        << ecology << endl;
-
-    _persistenceFilterA_t.clear();
-    _persistenceFilterA_t.insert(_persistenceFilterA.begin(),
-                                 _persistenceFilterA.end());
-    _persistenceFilterAllTime.insert(_persistenceFilterA.begin(),
+        _persistenceFilterA_t.clear();
+        _persistenceFilterA_t.insert(_persistenceFilterA.begin(),
                                      _persistenceFilterA.end());
-  }
-
-  // for next t
-  _allComponentsA.clear();
-  // for(auto teiter = _M.begin(); teiter != _M.end(); teiter++)
-  //    if (!roots || (roots && (*teiter)->root()))
-  for (auto teiter = _Mroot.begin(); teiter != _Mroot.end(); teiter++)
-    _allComponentsA.insert(
-        pair<long, modesRecord>((*teiter)->id_, modesRecord()));
-}
-
-/******************************************************************************/
-void TPG::writeCheckpoint(long t, bool elite) {
-  ofstream ofs;
-  char filename[80];
-  sprintf(filename, "%s/%s.%ld.%d.%lu.%d.rslt", "checkpoints", "cp", t,
-          GetParam<int>("id"), seeds_[TPG_SEED], GetState("phase"));
-
-  if (fileExists(filename)) {
-    if (remove(filename) != 0) cerr << "error deleting " << filename << endl;
-  }
-  ofs.open(filename, ios::out);
-  if (!ofs.is_open() || ofs.fail()) {
-    cerr << "open failed for file: " << filename << " error:" << strerror(errno)
-         << '\n';
-    die(__FILE__, __FUNCTION__, __LINE__, "Can't open file.");
-  }
-
-  ofs << "seed_tpg:" << seeds_[TPG_SEED] << endl;
-  ofs << "seed_aux:" << seeds_[AUX_SEED] << endl;
-  ofs << "t:" << GetState("t_current") << endl;
-  ofs << "active_task:" << GetState("active_task") << endl;
-  ofs << "fitMode:" << GetParam<int>("fit_mode") << endl;
-
-  if (elite) {
-    set<program *, programIdComp> programs;
-    set<team *, teamIdComp> teams, teamsAll;
-    // set<memoryEigen *, memoryEigenIdComp> memories;
-
-    for (auto itr1 = _eliteTeamPS.begin(); itr1 != _eliteTeamPS.end();
-         itr1++)  // taskset
-      for (auto itr2 = itr1->second.begin(); itr2 != itr1->second.end();
-           itr2++)  // fitmode
-      // for (auto itr3 = itr2->second.begin(); itr3 != itr2->second.end();
-      //  itr3++) // phase
-      {
-        auto tm = itr2->second[2];
-        teams.clear();
-        tm->GetAllNodes(_teamMap, teams, programs);
-        teamsAll.insert(teams.begin(), teams.end());
-      }
-
-    // for (auto meiter = memories.begin(); meiter != memories.end(); meiter++)
-    //   ofs << (*meiter)->checkpoint();
-    for (auto leiter = programs.begin(); leiter != programs.end(); leiter++)
-      ofs << (*leiter)->checkpoint(true);  // all instructions
-    for (auto teiter = teamsAll.begin(); teiter != teamsAll.end(); teiter++)
-      ofs << (*teiter)->checkpoint(false);
-    for (auto teiter = teamsAll.begin(); teiter != teamsAll.end(); teiter++)
-      ofs << (*teiter)->checkpoint(true);
-  } else {
-    // for (int mem_t = 0; mem_t < memoryEigen::NUM_MEMORY_TYPES; mem_t++)
-    //   for (auto meiter = _Memory[mem_t].begin(); meiter != _Memory[mem_t].end();
-    //        meiter++)
-    //     ofs << meiter->second->checkpoint();
-    for (auto leiter = _L.begin(); leiter != _L.end(); leiter++)
-      ofs << leiter->second->checkpoint(true);  // all instructions
-    for (auto teiter = _M.begin(); teiter != _M.end(); teiter++)
-      ofs << (*teiter)->checkpoint(false);
-    for (auto teiter = _M.begin(); teiter != _M.end(); teiter++)
-      ofs << (*teiter)->checkpoint(true);
-
-    ofs << "phyloNode:id:gtime:dtime:fitness:root" << endl;
-    ofs << "phyloLink:from,to" << endl;
-    for (auto it = _phyloGraph.begin(); it != _phyloGraph.end(); it++) {
-      ofs << "phyloNode:" << (*it).first << ":" << (*it).second.gtime << ":"
-          << (*it).second.dtime << ":" << (*it).second.fitnessBin << ":"
-          << (*it).second.fitness << ":" << (*it).second.root << endl;
-      if ((*it).second.adj.size() > 0)
-        for (size_t i = 0; i < (*it).second.adj.size(); i++)
-          ofs << "phyloLink:" << (*it).first << ":" << (*it).second.adj[i]
-              << endl;
-      if ((*it).second.ancestorIds.size() > 0) {
-        ofs << "ancestorIds:" << (*it).first;
-        for (auto it2 = (*it).second.ancestorIds.begin();
-             it2 != (*it).second.ancestorIds.end(); it2++)
-          ofs << ":" << *it2;
-        ofs << endl;
-      }
+        _persistenceFilterAllTime.insert(_persistenceFilterA.begin(),
+                                         _persistenceFilterA.end());
     }
-  }
 
-  ofs << "end" << endl;
-  ofs.close();
-
-  // if (compress){
-  //    //compress this checkpoint
-  //    oss.str("");
-  //    oss << "tar czpf " << filename << ".tgz -C  checkpoints cp." << t << "."
-  //    << _id << "." << _seed << "." << GetState("phase") << ".rslt"; if
-  //    (system (oss.str().c_str()) != 0)
-  //       cerr << "error with system call" << endl;
-  //    if( remove(filename) != 0 )
-  //       cerr << "error deleting " << filename << endl;
-  //    oss.str("");
-  // }
-  ////delete previous (compressed) checkpoint
-  // if (previousT >= 0){
-  //    sprintf(filename, "%s/%s.%ld.%d.%d.%d.rslt%s", "checkpoints", "cp",
-  //    previousT, _id,_seed, GetState("phase"), compress ? ".tgz": ""); if
-  //    (ifstream(filename))
-  //       if( remove(filename) != 0 )
-  //          cerr << "error deleting " << filename << endl;
-  // }
-
-  oss << "TPG::writeCheckpoint " << " Msize " << _M.size() << " Lsize "
-      << _L.size() << " MrooSize " << _Mroot.size() << endl;
+    // for next t
+    _allComponentsA.clear();
+    // for(auto teiter = _M.begin(); teiter != _M.end(); teiter++)
+    //    if (!roots || (roots && (*teiter)->root()))
+    for (auto teiter = _Mroot.begin(); teiter != _Mroot.end(); teiter++)
+        _allComponentsA.insert(
+            pair<long, modesRecord>((*teiter)->id_, modesRecord()));
 }
 
 /******************************************************************************/
-void TPG::WriteMPICheckpoint(string &s, vector<team *> &rootTeams) {
-  set<program *, programIdComp> programs;
-  set<team *, teamIdComp> teams;
-  for (auto tm : rootTeams) tm->GetAllNodes(_teamMap, teams, programs);
-  stringstream ss;
-  ss << "seed_tpg:" << seeds_[TPG_SEED] << endl;
-  ss << "seed_aux:" << seeds_[AUX_SEED] << endl;
-  ss << "t:" << GetState("t_current") << endl;
-  ss << "active_task:" << GetState("active_task") << endl;
-  // ss << "internalTestNodeId:-1" << endl;
-  ss << "fitMode:" << GetParam<int>("fit_mode") << endl;
-  ss << "phase:" << GetState("phase") << endl;
-  for (auto prog : programs) {
-    // ss << prog->checkpoint(false);
-    ss << prog->checkpoint(GetParam<int>("skip_introns")); 
-  }
-  for (auto tm : teams) ss << tm->checkpoint(false);
-  ss << endl;
-  s = ss.str();
+void TPG::WriteCheckpoint(long t, bool elite) {
+    ofstream ofs;
+    char filename[80];
+    sprintf(filename, "%s/%s.%ld.%d.%lu.%d.rslt", "checkpoints", "cp", t,
+            GetParam<int>("id"), seeds_[TPG_SEED], GetState("phase"));
+    ofs.open(filename, ios::out);
+    if (!ofs.is_open() || ofs.fail()) {
+        cerr << "open failed for file: " << filename
+             << " error:" << strerror(errno) << '\n';
+        die(__FILE__, __FUNCTION__, __LINE__, "Can't open file.");
+    }
+    ofs << "seed_tpg:" << seeds_[TPG_SEED] << endl;
+    ofs << "seed_aux:" << seeds_[AUX_SEED] << endl;
+    ofs << "t:" << GetState("t_current") << endl;
+    ofs << "active_task:" << GetState("active_task") << endl;
+    ofs << "fitMode:" << GetParam<int>("fit_mode") << endl;
+
+    if (elite) {  // Include data for elite teams only
+        set<memoryEigen *, memoryEigenIdComp> memories;
+        set<program *, programIdComp> programs;
+        set<team *, teamIdComp> teams, teamsAll;
+        // Collect memories, progrms, teams in champions...
+        for (auto ps : _eliteTeamPS) {  // ...for each task set
+            for (auto fm : ps.second) {  // ...for each fitness mode
+                auto tm = fm.second[2];
+                teams.clear();
+                tm->GetAllNodes(_teamMap, teams, programs, memories);
+                teamsAll.insert(teams.begin(), teams.end());
+            }
+        }
+        for (auto mem : memories) {
+            ofs << mem->checkpoint();
+        }
+        for (auto prog : programs) {
+            ofs << prog->checkpoint(GetParam<int>("skip_introns"));
+        }
+        for (auto tm : teamsAll) {
+            ofs << tm->checkpoint();
+        }
+    } else {  // Include all memories, teams, and programs
+        for (int mem_t = 0; mem_t < memoryEigen::NUM_MEMORY_TYPES; mem_t++) {
+            for (auto key : _Memory[mem_t]) {
+                ofs << key.second->checkpoint();
+            }
+        }
+        for (auto key : _L) {
+            ofs << key.second->checkpoint(false);  // Write all instructions
+        }
+        for (auto tm : _M) {
+            ofs << tm->checkpoint();
+        }
+        ofs << SerializePhylogeny();
+    }
+    ofs << "end" << endl;
+    ofs.close();
+}
+
+/******************************************************************************/
+std::string TPG::SerializePhylogeny() {
+    std::stringstream ss;
+    ss << "phyloNode:id:gtime:dtime:fitness:root" << endl;
+    ss << "phyloLink:from,to" << endl;
+    for (auto it = _phyloGraph.begin(); it != _phyloGraph.end(); it++) {
+        ss << "phyloNode:" << (*it).first << ":" << (*it).second.gtime << ":"
+           << (*it).second.dtime << ":" << (*it).second.fitnessBin << ":"
+           << (*it).second.fitness << ":" << (*it).second.root << endl;
+        if ((*it).second.adj.size() > 0)
+            for (size_t i = 0; i < (*it).second.adj.size(); i++)
+                ss << "phyloLink:" << (*it).first << ":" << (*it).second.adj[i]
+                   << endl;
+        if ((*it).second.ancestorIds.size() > 0) {
+            ss << "ancestorIds:" << (*it).first;
+            for (auto it2 = (*it).second.ancestorIds.begin();
+                 it2 != (*it).second.ancestorIds.end(); it2++)
+                ss << ":" << *it2;
+            ss << endl;
+        }
+    }
+    return ss.str();
+}
+
+/******************************************************************************/
+void TPG::WriteMPICheckpoint(string &s, vector<team *> &root_teams) {
+    set<memoryEigen *, memoryEigenIdComp> memories;
+    set<program *, programIdComp> programs;
+    set<team *, teamIdComp> teams;
+    for (auto tm : root_teams) {
+        tm->GetAllNodes(_teamMap, teams, programs, memories);
+    }
+    stringstream ss;
+    ss << "seed_tpg:" << seeds_[TPG_SEED] << endl;
+    ss << "seed_aux:" << seeds_[AUX_SEED] << endl;
+    ss << "t:" << GetState("t_current") << endl;
+    ss << "active_task:" << GetState("active_task") << endl;
+    ss << "fitMode:" << GetParam<int>("fit_mode") << endl;
+    ss << "phase:" << GetState("phase") << endl;
+    for (auto mem : memories) {
+        ss << mem->checkpoint();
+    }
+    for (auto prog : programs) {
+        ss << prog->checkpoint(GetParam<int>("skip_introns"));
+    }
+    for (auto tm : teams) {
+        ss << tm->checkpoint();
+    }
+    ss << endl;
+    s = ss.str();
 }

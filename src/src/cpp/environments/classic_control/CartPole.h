@@ -1,45 +1,49 @@
-#ifndef cartpole_h
-#define cartpole_h
+#ifndef CARTPOLE_H
+#define CARTPOLE_H
+
 
 #include <math.h>
 #include <stdlib.h>
 
+#include <cmath>
 #include <iostream>
 
+#include <random>
+
 #include "ClassicControlEnv.h"
+
 #if !defined(CCANADA) && !defined(HPCC)
 #include <GL/gl.h>
 #include <GL/glut.h>
 #endif
 
-#define STATE_SIZE 4
+
+constexpr int kCartPoleStateSize = 4;
 
 class CartPole : public ClassicControlEnv {
    protected:
-    const double GRAVITY = 9.8;
-    const double MASSCART = 1.0;
-    const double MASSPOLE = 0.1;
-    const double TOTAL_MASS = (MASSPOLE + MASSCART);
-    const double LENGTH = 0.5; /* actually half the pole's length */
-    const double POLEMASS_LENGTH = (MASSPOLE * LENGTH);
-    const double FORCE_MAG = 10.0;
-    const double TAU = 0.02; /* seconds between state updates */
-    const double FOURTHIRDS = 1.3333333333333;
-    const double SIX_DEGREES = 0.1047198;
-    const double SEVEN_DEGREES = 0.1221730;
-    const double TEN_DEGREES = 0.1745329;
-    const double TWELVE_DEGREES = 0.2094384;
-    const double FIFTEEN_DEGREES = 0.2617993;
-    const double TWELVE_DEGREES_SQR = TWELVE_DEGREES * TWELVE_DEGREES;
+    static constexpr double kGravity = 9.8;
+    static constexpr double kMassCart = 1.0;
+    static constexpr double kMassPole = 0.1;
+    static constexpr double kTotalMass = (kMassPole + kMassCart);
+    static constexpr double kLength = 0.5; /* Actually half the pole's length */
+    static constexpr double kPoleMassLength = (kMassPole * kLength);
+    static constexpr double kForceMag = 10.0;
+    static constexpr double kTau = 0.02; /* Seconds between state updates */
+    static constexpr double kFourThirds = 1.3333333333333;
+    static constexpr double kSixDegrees = 0.1047198;
+    static constexpr double kSevenDegrees = 0.1221730;
+    static constexpr double kTenDegrees = 0.1745329;
+    static constexpr double kTwelveDegrees = 0.2094384;
+    static constexpr double kFifteenDegrees = 0.2617993;
+    static constexpr double kTwelveDegreesSquared =
+        kTwelveDegrees * kTwelveDegrees;
 
-    const double MIN_X = -1;
-    const double MAX_X = 1;
+    static constexpr double kMinX = -1;
+    static constexpr double kMaxX = 1;
 
-    // state array indexing
-    const int _x = 0;
-    const int _theta = 1;
-    const int _x_dot = 2;
-    const int _theta_dot = 3;
+    // State array indexing
+    enum StateIndex { kX = 0, kTheta = 1, kXDot = 2, kThetaDot = 3 };
 
     int lastActionD = 0;
 
@@ -48,16 +52,16 @@ class CartPole : public ClassicControlEnv {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        dis_reset = uniform_real_distribution<>(-0.05, 0.05);
+        dis_reset = std::uniform_real_distribution<>(-0.05, 0.05);
         actionsDiscrete.push_back(-FORCE_MAG);
         actionsDiscrete.push_back(0.0);
-        actionsDiscrete.push_back(FORCE_MAG);
+        actionsDiscrete.push_back(kForceMag);
         eval_type_ = "Control";
         max_step_ = 500;
-        state_.reserve(STATE_SIZE);
-        state_.resize(STATE_SIZE);
-        state_po_.reserve(STATE_SIZE - 2);
-        state_po_.resize(STATE_SIZE - 2);
+        state_.reserve(kCartPoleStateSize);
+        state_.resize(kCartPoleStateSize);
+        state_po_.reserve(kCartPoleStateSize - 2);
+        state_po_.resize(kCartPoleStateSize - 2);
     }
 
     ~CartPole() {
@@ -77,36 +81,42 @@ class CartPole : public ClassicControlEnv {
             return n_eval_test_;
     }
 
+
     //! Normalizes the state values for position and angle
-    void normalizeState(bool po) {
+    void NormalizeState(bool po) {
         if (po) {
-            state_po_[_x] /= MAX_X;
-            state_po_[_theta] /= TWELVE_DEGREES;
+            state_po_[StateIndex::kX] /= kMaxX;
+            state_po_[StateIndex::kTheta] /= kTwelveDegrees;
         }
     }
     
     //! Resets the CartPole environment to a initial state within specified ranges
-    void reset(mt19937& rng) {
-        state_po_[_x] = state_[_x] = dis_reset(rng);
-        state_po_[_theta] = state_[_theta] = dis_reset(rng);
-        state_[_x_dot] = dis_reset(rng);
-        state_[_theta_dot] = dis_reset(rng);
+    // TODO: Change function name once TaskEnv follows Google's C++ Styling
+    void reset(std::mt19937 &rng) {
+        state_po_[StateIndex::kX] = state_[StateIndex::kX] = dis_reset(rng);
+        state_po_[StateIndex::kTheta] = state_[StateIndex::kTheta] =
+            dis_reset(rng);
+        state_[StateIndex::kXDot] = dis_reset(rng);
+        state_[StateIndex::kThetaDot] = dis_reset(rng);
         reward = 0;
         step_ = 0;
         terminalState = false;
-        normalizeState(true);
+        NormalizeState(true);
     }
 
     //! Checks if the current state is terminal based on angle, position, or max steps
+    // TODO: Change function name once TaskEnv follows Google's C++ Styling
     bool terminal() {
-        if (step_ >= max_step_ || abs(state_[_theta]) > TWELVE_DEGREES ||
-            abs(state_[_x]) > MAX_X)
+        if (step_ >= max_step_ ||
+            std::abs(state_[StateIndex::kTheta]) > kTwelveDegrees ||
+            std::abs(state_[StateIndex::kX]) > kMaxX)
             terminalState = true;
         return terminalState;
     }
 
     //! Updates the environment state based on the given action
-    Results update(int actionD, double actionC, mt19937& rng) {
+    // TODO: Change function name once TaskEnv follows Google's C++ Styling
+    Results update(int actionD, double actionC, std::mt19937 &rng) {
         double xacc, thetaacc, force, costheta, sintheta, temp;
 
         (void)actionC;
@@ -125,40 +135,42 @@ class CartPole : public ClassicControlEnv {
         // if (actionC < 0) force = actionsDiscrete[0];
         // else force = actionsDiscrete[2];
 
-        costheta = cos(state_[_theta]);
-        sintheta = sin(state_[_theta]);
+        costheta = std::cos(state_[StateIndex::kTheta]);
+        sintheta = std::sin(state_[StateIndex::kTheta]);
 
-        temp = (force + POLEMASS_LENGTH * state_[_theta_dot] *
-                            state_[_theta_dot] * sintheta) /
-               TOTAL_MASS;
+        temp = (force + kPoleMassLength * state_[StateIndex::kThetaDot] *
+                            state_[StateIndex::kThetaDot] * sintheta) /
+               kTotalMass;
 
-        thetaacc = (GRAVITY * sintheta - costheta * temp) /
-                   (LENGTH *
-                    (FOURTHIRDS - MASSPOLE * costheta * costheta / TOTAL_MASS));
+        thetaacc = (kGravity * sintheta - costheta * temp) /
+                   (kLength * (kFourThirds -
+                               kMassPole * costheta * costheta / kTotalMass));
 
-        xacc = temp - POLEMASS_LENGTH * thetaacc * costheta / TOTAL_MASS;
+        xacc = temp - kPoleMassLength * thetaacc * costheta / kTotalMass;
 
         /*** Update the four state variables, using Euler's method. ***/
 
-        state_[_x] += TAU * state_[_x_dot];
-        state_po_[_x] = state_[_x];
+        state_[StateIndex::kX] += kTau * state_[StateIndex::kXDot];
+        state_po_[StateIndex::kX] = state_[StateIndex::kX];
 
-        state_[_x_dot] += TAU * xacc;
+        state_[StateIndex::kXDot] += kTau * xacc;
 
-        state_[_theta] += TAU * state_[_theta_dot];
-        state_po_[_theta] = state_[_theta];
+        state_[StateIndex::kTheta] += kTau * state_[StateIndex::kThetaDot];
+        state_po_[StateIndex::kTheta] = state_[StateIndex::kTheta];
 
-        state_[_theta_dot] += TAU * thetaacc;
+        state_[StateIndex::kThetaDot] += kTau * thetaacc;
 
         step_++;
 
         reward = 1.0;
 
-        normalizeState(true);
+        NormalizeState(true);
         return {reward, 0.0};
     }
 
     //! Displays the CartPole environment using OpenGL 
+    // TODO: Change function name once TaskEnv follows Google's C++ Styling
+    // OpenGL Display
     void display_function(int episode, int actionD, double actionC) {
         (void)actionC;
         (void)actionD;
@@ -174,25 +186,26 @@ class CartPole : public ClassicControlEnv {
         // cart
         glColor3f(0.0, 0.0, 1.0);
         glBegin(GL_TRIANGLES);
-        glVertex2f(state_[_x] - 0.15, 0.075);
-        glVertex2f(state_[_x] - 0.15, -0.075);
-        glVertex2f(state_[_x] + 0.15, 0.075);
-        glVertex2f(state_[_x] + 0.15, 0.075);
-        glVertex2f(state_[_x] - 0.15, -0.075);
-        glVertex2f(state_[_x] + 0.15, -0.075);
+        glVertex2f(state_[StateIndex::kX] - 0.15, 0.075);
+        glVertex2f(state_[StateIndex::kX] - 0.15, -0.075);
+        glVertex2f(state_[StateIndex::kX] + 0.15, 0.075);
+        glVertex2f(state_[StateIndex::kX] + 0.15, 0.075);
+        glVertex2f(state_[StateIndex::kX] - 0.15, -0.075);
+        glVertex2f(state_[StateIndex::kX] + 0.15, -0.075);
         glEnd();
 
         // pole
-        x2 = state_[_x] + r1 * cos(M_PI / 2 - state_[_theta]);
-        y2 = r1 * sin(M_PI / 2 - state_[_theta]);
+        x2 = state_[StateIndex::kX] +
+             r1 * std::cos(M_PI / 2 - state_[StateIndex::kTheta]);
+        y2 = r1 * std::sin(M_PI / 2 - state_[StateIndex::kTheta]);
         glColor3f(1.0, 1.0, 1.0);
         glBegin(GL_LINES);
-        glVertex2d(state_[_x], 0.0);
+        glVertex2d(state_[StateIndex::kX], 0.0);
         glVertex2d(x2, y2);
 
         // x bounds surface
-        glVertex2d(MIN_X, 0.0);
-        glVertex2d(MAX_X, 0.0);
+        glVertex2d(kMinX, 0.0);
+        glVertex2d(kMaxX, 0.0);
 
         glEnd();
 
@@ -225,11 +238,11 @@ class CartPole : public ClassicControlEnv {
         glColor3f(1.0, 1.0, 1.0);
         char c[80];
         if (step_ == 0)
-            sprintf(c, "CartPole Initial Conditions%s", ":");
+            std::sprintf(c, "CartPole Initial Conditions%s", ":");
         else if (terminal())
-            sprintf(c, "CartPole Terminal%s", ":");
+            std::sprintf(c, "CartPole Terminal%s", ":");
         else
-            sprintf(c, "CartPole%s", ":");
+            std::sprintf(c, "CartPole%s", ":");
 
         DrawStrokeText(c, -1.9, -1.7, 0);
 
@@ -238,4 +251,4 @@ class CartPole : public ClassicControlEnv {
     }
 };
 
-#endif
+#endif  // CARTPOLE_H
