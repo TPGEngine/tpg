@@ -12,93 +12,109 @@
 #include <GL/glut.h>
 #endif
 
-#define STATE_SIZE 4
-
-using namespace std;
+// Number of state variables in the mountain car environment
+constexpr int kMountainCarStateSize = 4;
 
 class MountainCar : public ClassicControlEnv {
    protected:
-    const double min_position = -1.2;
-    const double max_position = 0.6;
-    const double max_speed = 0.07;
-    const double goal_position = 0.5;
-    const double goal_velocity = 0.0;
-    const double force = 0.001;
-    const double gravity = 0.0025;
+    // Environment constants
+    static constexpr double kMinPosition = -1.2;
+    static constexpr double kMaxPosition = 0.6;
+    static constexpr double kMaxSpeed = 0.07;
+    static constexpr double kGoalPosition = 0.5;
+    static constexpr double kGoalVelocity = 0.0;
+    static constexpr double kForce = 0.001;
+    static constexpr double kGravity = 0.0025;
 
-    // state array indexing
-    const int _position = 0;
-    const int _velocity = 1;
+    // State array indices
+    enum StateIndex {
+        kPosition = 0,
+        kVelocity = 1,
+        kNoise1 = 2,
+        kNoise2 = 3
+    };
 
    public:
     MountainCar() {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        disReset = uniform_real_distribution<>(-0.6, -0.4);
+        // TODO: refactor with ClassicControlEnv
+        disReset = std::uniform_real_distribution<>(-0.6, -0.4);
         eval_type_ = "Control";
         max_step_ = 200;
-        state_.reserve(STATE_SIZE);
-        state_.resize(STATE_SIZE);
-        state_po_.reserve(STATE_SIZE);
-        state_po_.resize(STATE_SIZE);
+        state_.reserve(kMountainCarStateSize);
+        state_.resize(kMountainCarStateSize);
+        state_po_.reserve(kMountainCarStateSize);
+        state_po_.resize(kMountainCarStateSize);
     }
 
     ~MountainCar() {}
 
-    void normalizeState(bool po) {
-        if (po)
-            state_po_[_position] = (state_po_[_position] - min_position) /
-                                  (max_position - min_position);
+    void NormalizeState(bool partially_observable) {
+        if (partially_observable) {
+            state_po_[StateIndex::kPosition] = (state_po_[StateIndex::kPosition] - kMinPosition) /
+                                      (kMaxPosition - kMinPosition);
+        }
     }
 
-    void reset(mt19937 &rng) {
-        state_[_position] = state_po_[_position] = disReset(rng);
-        state_[_velocity] = 0;
+    // TODO: refactor with TaskEnv
+    void reset(std::mt19937& rng) override {
+        state_[StateIndex::kPosition] = state_po_[StateIndex::kPosition] = disReset(rng);
+        state_[StateIndex::kVelocity] = 0;
+        state_po_[StateIndex::kVelocity] = disNoise(rng);
 
-        state_po_[_velocity] = disNoise(rng);
-
-        state_[2] = disNoise(rng);
-        state_[3] = disNoise(rng);
+        state_[StateIndex::kNoise1] = disNoise(rng);
+        state_[StateIndex::kNoise2] = disNoise(rng);
 
         reward = 0;
-
         step_ = 0;
         terminalState = false;
-        normalizeState(true);
+        NormalizeState(true);
     }
 
-    bool terminal() {
-        if (step_ >= max_step_ ||
-            (state_[_position] >=
-             goal_position))  // && state_[_velocity] >= goal_velocity))
+    // TODO: refactor with TaskEnv
+    bool terminal() override {
+        if (step_ >= max_step_ || 
+            (state_[StateIndex::kPosition] >= kGoalPosition)) {
             terminalState = true;
+        }
         return terminalState;
     }
 
-    Results update(int actionD, double actionC, mt19937 &rng) {
-        (void)actionC;
+    // TODO: refactor with TaskEnv
+    Results update(int action_discrete, double action_continuous, 
+                  std::mt19937& rng) override {
+        (void)action_continuous;  // Unused parameter
 
-        state_[_velocity] +=
-            (actionD - 1) * force + cos(3 * state_[_position]) * -gravity;
-        state_[_velocity] = bound(state_[_velocity], -max_speed, max_speed);
-        state_[_position] += state_[_velocity];
-        state_[_position] = bound(state_[_position], min_position, max_position);
-        if (state_[_position] == min_position && state_[_velocity] < 0)
-            state_[_velocity] = 0;
+        state_[StateIndex::kVelocity] += 
+            (action_discrete - 1) * kForce + 
+            std::cos(3 * state_[StateIndex::kPosition]) * -kGravity;
+            
+        state_[StateIndex::kVelocity] = 
+            bound(state_[StateIndex::kVelocity], -kMaxSpeed, kMaxSpeed);
+        state_[StateIndex::kPosition] += state_[StateIndex::kVelocity];
+        state_[StateIndex::kPosition] = 
+            bound(state_[StateIndex::kPosition], kMinPosition, kMaxPosition);
 
-        state_po_[_position] = state_[_position];
-        state_po_[_velocity] = disNoise(rng);
+        if (state_[StateIndex::kPosition] == kMinPosition && 
+            state_[StateIndex::kVelocity] < 0) {
+            state_[StateIndex::kVelocity] = 0;
+        }
 
-        state_[2] = disNoise(rng);
-        state_[3] = disNoise(rng);
+        state_po_[StateIndex::kPosition] = state_[StateIndex::kPosition];
+        state_po_[StateIndex::kVelocity] = disNoise(rng);
+
+        state_[StateIndex::kNoise1] = disNoise(rng);
+        state_[StateIndex::kNoise2] = disNoise(rng);
 
         step_++;
 
         reward = -1.0;
 
-        normalizeState(true);
-        return {reward, 0.0};
+        NormalizeState(true);
+        Results result = {reward, 0.0};
+        return result;
     }
 
     // opengl
@@ -121,15 +137,15 @@ class MountainCar : public ClassicControlEnv {
         double goalX = 0;
         double goalXS = 0;
         double x = -2.0;
-        vector<double> xs = linspace(min_position, max_position, 100);
+        vector<double> xs = linspace(kMinPosition, kMaxPosition, 100);
         for (size_t i = 1; i < xs.size() - 1; i++) {
             glVertex2d(x, sin(3 * xs[i]) * .45 + .55);
-            if (state_[_position] >= xs[i - 1] &&
-                state_[_position] <= xs[i + 1]) {
+            if (state_[StateIndex::kPosition] >= xs[i - 1] &&
+                state_[StateIndex::kPosition] <= xs[i + 1]) {
                 carX = x;
                 carXS = xs[i];
             }
-            if (goal_position >= xs[i - 1] && goal_position <= xs[i + 1]) {
+            if (kGoalPosition >= xs[i - 1] && kGoalPosition <= xs[i + 1]) {
                 goalX = x;
                 goalXS = xs[i];
             }
