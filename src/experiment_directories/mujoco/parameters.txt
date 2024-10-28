@@ -83,10 +83,10 @@ n_generations 1000000
 mu_internal 0
 
 # Number of elite root teams (agents)
-n_elite 4000
+n_elite 1000
 
 # n_elite * n_elite_mul new teams are created each generation
-n_elite_mul 0.025
+n_elite_mul 0.02
 
 # Whether to use fitness proportional selection
 fit_prop_select 0
