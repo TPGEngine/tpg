@@ -26,7 +26,7 @@ class team {
   inline void addAncestorId(long aid) { ancestorIds_.push_back(aid); }
   inline void addEvalSeed(int s) { evalSeeds_.push_back(s); }
   inline void clearEvalSeeds() { evalSeeds_.clear(); }
-  void InitMemory(map<long, team *> &, bool);
+  void InitMemory(map<long, team *> &, std::unordered_map<std::string, std::any> &params);
   inline void getAncestorIds(vector<long> &a) { a = ancestorIds_; }
   inline void setAncestorIds(vector<long> &a) { ancestorIds_ = a; }
   inline int numAncestorIds() { return ancestorIds_.size(); }
@@ -62,6 +62,8 @@ class team {
                    bool) const;
   void GetAllNodes(map<long, team *> &teamMap, set<team *, teamIdComp> &,
                    set<program *, programIdComp> &) const;
+  void GetAllNodes(map<long, team *> &teamMap, set<team *, teamIdComp> &,
+                   set<program *, programIdComp> &, set<memoryEigen*, memoryEigenIdComp> &) const;
   void getBehaviourSequence(vector<int> &, int);
   double getMeanOutcome(int, int, int, bool, bool);
   double getMeanOutcome(int, int, int, int, long, bool, bool);
@@ -215,7 +217,7 @@ class team {
   }
   void AddProgram(program *, int position = -1);
   // bool AddProgramActive(program *);
-  string checkpoint(bool, long id = -1) const;
+  string checkpoint() const;
   void clone(map<long, phyloRecord> &, team **);
   inline void clearDistances() {
     distances_0_.clear();

@@ -18,11 +18,8 @@
 #include <boost/mpi.hpp>
 #include <chrono>
 #include <thread>
-
-#if !defined(CCANADA) && !defined(HPCC)
 #include <GL/gl.h>
 #include <GL/glut.h>
-#endif
 
 namespace mpi = boost::mpi;
 
@@ -86,6 +83,14 @@ void AssignTeamsToEvaluators(TPG &tpg, mpi::communicator &world,
         next(it) == teams_to_eval.end()) {
       string s = "";
       tpg.WriteMPICheckpoint(s, teams);
+
+      // ofstream ofs;
+      // char filename[80];
+      // sprintf(filename, "eval_main.%d.rslt", tpg.GetState("t_current"));
+      // ofs.open(filename, ios::out);
+      // ofs << s;
+      // ofs.close();
+
       world.send(mpi_job, 0, s);
       mpi_job++;
       teams.clear();
@@ -127,7 +132,6 @@ void evaluate_main(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks,
   for (int task : eval_tasks) {
     tpg.state_["active_task"] = task;
     auto teams_to_eval = GetTeamsToEval(tpg, tasks[task]);
-
     AssignTeamsToEvaluators(tpg, world, teams_to_eval, world_size_per_task,
                             evaluator);
   }
@@ -164,8 +168,18 @@ void evaluator(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks) {
   while (NotDoneAndActive(eval)) {
     world.recv(0, 0, eval.checkpointString);
     if (NotDoneAndActive(eval)) {
-      tpg.readCheckpoint(-1, _TRAIN_PHASE, -1, true, eval.checkpointString);
+      tpg.ReadCheckpoint(-1, _TRAIN_PHASE, -1, true, eval.checkpointString);
       tpg.getTeams(eval.teams, true);
+
+      // std::string s = "";
+      // tpg.WriteMPICheckpoint(s, eval.teams);
+      // ofstream ofs;
+      // char filename[80];
+      // sprintf(filename, "eval_sub.%d.rslt", tpg.GetState("t_current"));
+      // ofs.open(filename, ios::out);
+      // ofs << s;
+      // ofs.close();
+
       eval.task = tasks[tpg.GetState("active_task")];
       eval.eval_result = "";
       for (auto tm : eval.teams) {
@@ -173,7 +187,7 @@ void evaluator(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks) {
         for (eval.episode = 0; eval.episode < eval.tm->_n_eval;
              eval.episode++) {
           tpg.rngs_[AUX_SEED].seed(eval.episode);
-          eval.tm->InitMemory(tpg._teamMap, tpg.HaveParam("p_bid_mu_const"));
+          eval.tm->InitMemory(tpg._teamMap, tpg.params_);
           evaluator_map[eval.task->eval_type_](tpg, eval);
           eval.FinalizeStepData(tpg);
         }
@@ -202,33 +216,38 @@ void replayer_viz(TPG &tpg, vector<TaskEnv *> &tasks) {
     vector<int> steps_per_task(tpg.GetState("n_task"), 0);
     // TODO(skelly): clean up
     for (int task = 0; task < tpg.GetState("n_task"); task++) {
-    tpg.state_["active_task"] = task;
-    eval.task = tasks[tpg.GetState("active_task")];
-    if (eval.animate)
-      eval.tm->_n_eval = 1;
-    else {
-      eval.tm->_n_eval =
-          eval.task->GetNumEval(tpg.GetParam<int>("checkpoint_in_phase"));
-    }
-    for (eval.episode = 0; eval.episode < eval.tm->_n_eval; eval.episode++) {
-      tpg.rngs_[AUX_SEED].seed(eval.episode);
-      eval.tm->InitMemory(tpg._teamMap, tpg.HaveParam("p_bid_mu_const"));
+        tpg.state_["active_task"] = task;
+        eval.task = tasks[tpg.GetState("active_task")];
+        if (eval.animate) {
+            eval.tm->_n_eval = 1;
+        } else {
+            eval.tm->_n_eval =
+                eval.task->GetNumEval(tpg.GetParam<int>("checkpoint_in_phase"));
+        }
+        for (eval.episode = 0; eval.episode < eval.tm->_n_eval;
+             eval.episode++) {
+            tpg.rngs_[AUX_SEED].seed(eval.episode);
+            eval.tm->InitMemory(tpg._teamMap, tpg.params_);
 
-      if (eval.task->eval_type_ == "RecursiveForecast") {
-        EvalRecursiveForecastViz(tpg, eval, teamUseMapPerTask,
-                                 teams_visitedAllTasks,
-                                 steps_per_task[tpg.GetState("active_task")]);
-      } else if (eval.task->eval_type_ == "Control") {
-        EvalControlViz(tpg, eval, teamUseMapPerTask, teams_visitedAllTasks,
-                       steps_per_task[tpg.GetState("active_task")]);
-      } else {
-        EvalMujoco(tpg, eval);
-      }
-      eval.FinalizeStepData(tpg);
-    }
+            if (eval.task->eval_type_ == "RecursiveForecast") {
+                EvalRecursiveForecastViz(
+                    tpg, eval, teamUseMapPerTask, teams_visitedAllTasks,
+                    steps_per_task[tpg.GetState("active_task")]);
+            } else if (eval.task->eval_type_ == "Control") {
+                EvalControlViz(tpg, eval, teamUseMapPerTask,
+                               teams_visitedAllTasks,
+                               steps_per_task[tpg.GetState("active_task")]);
+            } else {
+                EvalMujoco(tpg, eval);
+            }
+            eval.FinalizeStepData(tpg);
+        }
     }
     tpg.printGraphDotGPTPXXI(eval.tm->id_, teams_visitedAllTasks,
                              teamUseMapPerTask, steps_per_task);
+    cout << " Evaluation result team:" << eval.tm->id_ << 
+      " score:" << eval.stats_double[REWARD1_IDX] << endl;
+
   }
 }
 

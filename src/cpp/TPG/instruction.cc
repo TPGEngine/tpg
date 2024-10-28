@@ -1,9 +1,5 @@
 #include "instruction.h"
 
-const std::vector<double> instruction::constants_ = {
-    -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1,
-    0.1,  0.2,  0.3,  0.4,  0.5,  0.6,  0.7,  0.8,  0.9};
-
 vector<vector<size_t> > instruction::op_mem_types_(NUM_OP);
 vector<instruction::operation> instruction::op_list_(NUM_OP);
 

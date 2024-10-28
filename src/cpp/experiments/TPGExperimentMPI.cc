@@ -188,7 +188,7 @@ int main(int argc, char **argv) {
 
         // Initialization //////////////////////////////////////////////////////
         if (tpg.GetParam<int>("start_from_checkpoint")) {
-            tpg.readCheckpoint(tpg.GetParam<int>("checkpoint_in_t"),
+            tpg.ReadCheckpoint(tpg.GetParam<int>("checkpoint_in_t"),
                                tpg.GetParam<int>("checkpoint_in_phase"), -1,
                                false, "");
         } else {
@@ -276,7 +276,7 @@ int main(int argc, char **argv) {
                 if (tpg.GetParam<int>("write_train_checkpoints") &&
                     tpg.GetState("t_current") % CHECKPOINT_MOD == 0) {
                     // Checkpoint the entire population.
-                    tpg.writeCheckpoint(tpg.GetState("t_current"), false);
+                    tpg.WriteCheckpoint(tpg.GetState("t_current"), false);
                 }
                 if (tpg.GetParam<int>("write_phylogeny")) {
                     tpg.printPhyloGraphDot(tpg.getBestTeam());
