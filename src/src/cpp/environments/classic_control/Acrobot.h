@@ -1,5 +1,5 @@
 #ifndef Acrobot_h
-#define ACROBOT_H
+#define Acrobot_h
 
 #include <math.h>
 #include <stdlib.h>
@@ -47,7 +47,7 @@ class Acrobot : public ClassicControlEnv {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        disReset = uniform_real_distribution<>(-0.1, 0.1);
+        dis_reset = std::uniform_real_distribution<>(-0.1, 0.1);
         actionsDiscrete.push_back(-1.0);
         actionsDiscrete.push_back(0.0);
         actionsDiscrete.push_back(1.0);
@@ -76,14 +76,14 @@ class Acrobot : public ClassicControlEnv {
     }
 
     //! Resets the Acrobot environment to a initial state within specified ranges - uniform_real_distribution<>(-0.1, 0.1);
-    void reset(mt19937& rng) {
-        state_po_[_theta1] = state_[_theta1] = disReset(rng);
+    void reset(std::mt19937& rng) {
+        state_po_[_theta1] = state_[_theta1] = dis_reset(rng);
 
-        state_po_[_theta2] = state_[_theta2] = disReset(rng);
+        state_po_[_theta2] = state_[_theta2] = dis_reset(rng);
 
-        state_[_theta1Dot] = disReset(rng);
+        state_[_theta1Dot] = dis_reset(rng);
 
-        state_[_theta2Dot] = disReset(rng);
+        state_[_theta2Dot] = dis_reset(rng);
 
         reward = 0;
 
@@ -94,12 +94,12 @@ class Acrobot : public ClassicControlEnv {
     }
 
     //! Updates Acrobot state based on the given action and returns the reward 
-    Results update(int actionD, double actionC, mt19937& rng) {
+    Results update(int actionD, double actionC, std::mt19937& rng) {
         (void)actionD;
         (void)rng;
 
         // double torque = actionsDiscrete[actionD];
-        double torque = bound(actionC, -1.0, 1.0);
+        double torque = Bound(actionC, -1.0, 1.0);
         double d1;
         double d2;
         double phi_2;
@@ -144,9 +144,9 @@ class Acrobot : public ClassicControlEnv {
             state_[_theta1] = wrap(state_[_theta1], -maxTheta1, maxTheta1);
             state_[_theta2] = wrap(state_[_theta2], -maxTheta2, maxTheta2);
             state_[_theta1Dot] =
-                bound(state_[_theta1Dot], -maxTheta1Dot, maxTheta1Dot);
+                Bound(state_[_theta1Dot], -maxTheta1Dot, maxTheta1Dot);
             state_[_theta2Dot] =
-                bound(state_[_theta2Dot], -maxTheta2Dot, maxTheta2Dot);
+                Bound(state_[_theta2Dot], -maxTheta2Dot, maxTheta2Dot);
         }
 
         state_po_[_theta1] = state_[_theta1];
@@ -220,14 +220,14 @@ class Acrobot : public ClassicControlEnv {
 
         if (step_ > 0) {
             glColor3f(1.0, 1.0, 1.0);
-            double torque = bound(actionC, -1.0, 1.0);
+            double torque = Bound(actionC, -1.0, 1.0);
             glLineWidth(2.0);
-            drawTrace(0, "Action:", torque / 1.0, 1.2);
+            DrawTrace(0, "Action:", torque / 1.0, 1.2);
         }
 
         glColor3f(1.0, 1.0, 1.0);
         glLineWidth(1.0);
-        drawEpisodeStepCounter(episode, step_, -1.9, -1.9);
+        DrawEpisodeStepCounter(episode, step_, -1.9, -1.9);
 
         char c[80];
         if (step_ == 0)
@@ -236,7 +236,7 @@ class Acrobot : public ClassicControlEnv {
             sprintf(c, "Acrobot Terminal%s", ":");
         else
             sprintf(c, "Acrobot%s", ":");
-        drawStrokeText(c, -1.9, -1.7, 0);
+        DrawStrokeText(c, -1.9, -1.7, 0);
 
         glFlush();
 #endif

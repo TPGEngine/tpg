@@ -29,12 +29,12 @@ void MaybeAnimateStep(EvalData &eval) {
     ClassicControlEnv *task = dynamic_cast<ClassicControlEnv *>(eval.task);
 #if !defined(CCANADA)
     if (eval.animate) {
-        task->display_function(eval.episode, WrapDiscreteAction(eval),
+        task->DisplayFunction(eval.episode, WrapDiscreteAction(eval),
                                WrapContinuousAction(eval));
         char filename[80];
         sprintf(filename, "%s_%05d_%03d_%05d_%05d_%05d.tga", "replay/frames/gl",
                 eval.save_frame++, eval.episode, eval.task->step_, 0, 0);
-        task->saveScreenshotToFile(filename, 1200, 1200);
+        task->SaveScreenshotToFile(filename, 1200, 1200);
         // this_thread::sleep_for(std::chrono::milliseconds(10)); TODO(skelly):
         // add
     }

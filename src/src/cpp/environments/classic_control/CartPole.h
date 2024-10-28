@@ -48,7 +48,7 @@ class CartPole : public ClassicControlEnv {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        disReset = uniform_real_distribution<>(-0.05, 0.05);
+        dis_reset = uniform_real_distribution<>(-0.05, 0.05);
         actionsDiscrete.push_back(-FORCE_MAG);
         actionsDiscrete.push_back(0.0);
         actionsDiscrete.push_back(FORCE_MAG);
@@ -64,7 +64,7 @@ class CartPole : public ClassicControlEnv {
         state_.clear();
         state_po_.clear();
         actionsDiscrete.clear();
-        actionTrace.clear();
+        action_trace.clear();
     }
 
     //! Returns the number of evaluations for a given phase (train, validation, or test)
@@ -87,10 +87,10 @@ class CartPole : public ClassicControlEnv {
     
     //! Resets the CartPole environment to a initial state within specified ranges
     void reset(mt19937& rng) {
-        state_po_[_x] = state_[_x] = disReset(rng);
-        state_po_[_theta] = state_[_theta] = disReset(rng);
-        state_[_x_dot] = disReset(rng);
-        state_[_theta_dot] = disReset(rng);
+        state_po_[_x] = state_[_x] = dis_reset(rng);
+        state_po_[_theta] = state_[_theta] = dis_reset(rng);
+        state_[_x_dot] = dis_reset(rng);
+        state_[_theta_dot] = dis_reset(rng);
         reward = 0;
         step_ = 0;
         terminalState = false;
@@ -216,11 +216,11 @@ class CartPole : public ClassicControlEnv {
             glVertex3f(dir * 0.12, -0.3, 0);
             glEnd();
             glLineWidth(2.0);
-            drawTrace(0, "Action:", force / FORCE_MAG, -1.0);
+            DrawTrace(0, "Action:", force / FORCE_MAG, -1.0);
         }
 
         glLineWidth(1.0);
-        drawEpisodeStepCounter(episode, step_, -1.9, -1.9);
+        DrawEpisodeStepCounter(episode, step_, -1.9, -1.9);
 
         glColor3f(1.0, 1.0, 1.0);
         char c[80];
@@ -231,7 +231,7 @@ class CartPole : public ClassicControlEnv {
         else
             sprintf(c, "CartPole%s", ":");
 
-        drawStrokeText(c, -1.9, -1.7, 0);
+        DrawStrokeText(c, -1.9, -1.7, 0);
 
         glFlush();
 #endif

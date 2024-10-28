@@ -34,7 +34,7 @@ class MountainCar : public ClassicControlEnv {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        disReset = uniform_real_distribution<>(-0.6, -0.4);
+        dis_reset = uniform_real_distribution<>(-0.6, -0.4);
         eval_type_ = "Control";
         max_step_ = 200;
         state_.reserve(STATE_SIZE);
@@ -54,13 +54,13 @@ class MountainCar : public ClassicControlEnv {
 
     //! Resets the environment to its initial state within specified ranges
     void reset(mt19937& rng) {
-        state_[_position] = state_po_[_position] = disReset(rng);
+        state_[_position] = state_po_[_position] = dis_reset(rng);
         state_[_velocity] = 0;
 
-        state_po_[_velocity] = disNoise(rng);
+        state_po_[_velocity] = dis_noise(rng);
 
-        state_[2] = disNoise(rng);
-        state_[3] = disNoise(rng);
+        state_[2] = dis_noise(rng);
+        state_[3] = dis_noise(rng);
 
         reward = 0;
 
@@ -92,10 +92,10 @@ class MountainCar : public ClassicControlEnv {
             state_[_velocity] = 0;
 
         state_po_[_position] = state_[_position];
-        state_po_[_velocity] = disNoise(rng);
+        state_po_[_velocity] = dis_noise(rng);
 
-        state_[2] = disNoise(rng);
-        state_[3] = disNoise(rng);
+        state_[2] = dis_noise(rng);
+        state_[3] = dis_noise(rng);
 
         step_++;
 
@@ -125,7 +125,7 @@ class MountainCar : public ClassicControlEnv {
         double goalX = 0;
         double goalXS = 0;
         double x = -2.0;
-        vector<double> xs = linspace(min_position, max_position, 100);
+        vector<double> xs = Linspace(min_position, max_position, 100);
         for (size_t i = 1; i < xs.size() - 1; i++) {
             glVertex2d(x, sin(3 * xs[i]) * .45 + .55);
             if (state_[_position] >= xs[i - 1] &&
@@ -169,9 +169,9 @@ class MountainCar : public ClassicControlEnv {
             glVertex3f(dir * 0.12, -0.3, 0);
             glEnd();
             glLineWidth(2.0);
-            drawTrace(0, "Action:", actionD - 1, -1.0);
+            DrawTrace(0, "Action:", actionD - 1, -1.0);
         }
-        drawEpisodeStepCounter(episode, step_, -1.9, 1.3);
+        DrawEpisodeStepCounter(episode, step_, -1.9, 1.3);
         glFlush();
 #endif
     }

@@ -33,8 +33,8 @@ class ClassicControlEnv : public TaskEnv {
     //! Saves current OpenGL frame buffer as a screenshot
     void SaveScreenshotToFile(std::string filename, int window_width,
                               int window_height) {
-        const int number_of_pixels = window_width * window_height * 3;
-        unsigned char pixels[number_of_pixels];
+        const int kNumberOfPixels = window_width * window_height * 3;
+        unsigned char pixels[kNumberOfPixels];
         glPixelStorei(GL_PACK_ALIGNMENT, 1);
         glReadBuffer(GL_FRONT);
         glReadPixels(0, 0, window_width, window_height, GL_BGR_EXT,
@@ -43,7 +43,7 @@ class ClassicControlEnv : public TaskEnv {
         short header[] = {
             0, 2, 0, 0, 0, 0, (short)window_width, (short)window_height, 24};
         std::fwrite(&header, sizeof(header), 1, output_file);
-        std::fwrite(pixels, number_of_pixels, 1, output_file);
+        std::fwrite(pixels, kNumberOfPixels, 1, output_file);
         std::fclose(output_file);
     }
 

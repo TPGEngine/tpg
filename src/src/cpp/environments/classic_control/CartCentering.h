@@ -35,7 +35,7 @@ class CartCentering : public ClassicControlEnv {
     const int V = 1;
 
     int lastActionD = -FORCE_MAG;
-    uniform_real_distribution<> disReset;
+    uniform_real_distribution<> dis_reset;
 
    public:
     /****************************************************************************/
@@ -43,7 +43,7 @@ class CartCentering : public ClassicControlEnv {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        disReset = uniform_real_distribution<>(MIN_VAR_INI, MAX_VAR_INI);
+        dis_reset = uniform_real_distribution<>(MIN_VAR_INI, MAX_VAR_INI);
         actionsDiscrete.push_back(-FORCE_MAG);
         actionsDiscrete.push_back(0.0);
         actionsDiscrete.push_back(FORCE_MAG);
@@ -68,19 +68,19 @@ class CartCentering : public ClassicControlEnv {
 
     /****************************************************************************/
     //! Resets the Acrobot environment to a initial state within specified ranges
-    void reset(mt19937& rng) {
+    void reset(std::mt19937& rng) {
         step_ = 0;
 
         do {
-            state_po_[X] = state_[X] = disReset(rng);
-            state_[V] = disReset(rng);
+            state_po_[X] = state_[X] = dis_reset(rng);
+            state_[V] = dis_reset(rng);
             terminalState = false;
         } while (terminal());
 
-        state_po_[V] = disNoise(rng);
+        state_po_[V] = dis_noise(rng);
 
-        state_[2] = disNoise(rng);
-        state_[3] = disNoise(rng);
+        state_[2] = dis_noise(rng);
+        state_[3] = dis_noise(rng);
 
         reward = 0;
 
@@ -122,10 +122,10 @@ class CartCentering : public ClassicControlEnv {
 
         state_[V] += TAU * acc_t;
         state_[V] = bound(state_[V], -MAX_V, MAX_V);
-        state_po_[V] = disNoise(rng);
+        state_po_[V] = dis_noise(rng);
 
-        state_[2] = disNoise(rng);
-        state_[3] = disNoise(rng);
+        state_[2] = dis_noise(rng);
+        state_[3] = dis_noise(rng);
 
         step_++;
 
@@ -218,12 +218,12 @@ class CartCentering : public ClassicControlEnv {
             }
             glEnd();
             glLineWidth(2.0);
-            drawTrace(0, "Action:", force / FORCE_MAG, -1.0);
+            DrawTrace(0, "Action:", force / FORCE_MAG, -1.0);
         }
 
         glColor3f(1.0, 1.0, 1.0);
         glLineWidth(1.0);
-        drawEpisodeStepCounter(episode, step_, -1.9, -1.9);
+        DrawEpisodeStepCounter(episode, step_, -1.9, -1.9);
 
         char c[80];
         if (step_ == 0)
@@ -232,7 +232,7 @@ class CartCentering : public ClassicControlEnv {
             sprintf(c, "CartCentering Terminal%s", ":");
         else
             sprintf(c, "CartCentering%s", ":");
-        drawStrokeText(c, -1.9, -1.7, 0);
+        DrawStrokeText(c, -1.9, -1.7, 0);
 
         glFlush();
 #endif

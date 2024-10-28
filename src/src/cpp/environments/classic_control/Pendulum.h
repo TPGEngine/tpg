@@ -25,7 +25,7 @@ class Pendulum : public ClassicControlEnv {
     const double l = 1.0;
     const double g = 10;
     const double dt = 0.05;
-    uniform_real_distribution<> disResetDot;
+    uniform_real_distribution<> dis_resetDot;
 
     // internal state differs from state for observation
     vector<double> internal_state_;
@@ -55,8 +55,8 @@ class Pendulum : public ClassicControlEnv {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        disReset = uniform_real_distribution<>(-M_PI, M_PI);
-        disResetDot = uniform_real_distribution<>(-1.0, 1.0);
+        dis_reset = uniform_real_distribution<>(-M_PI, M_PI);
+        dis_resetDot = uniform_real_distribution<>(-1.0, 1.0);
         actionsDiscrete.push_back(-maxTorque);
         actionsDiscrete.push_back(0.0);
         actionsDiscrete.push_back(maxTorque);
@@ -78,15 +78,15 @@ class Pendulum : public ClassicControlEnv {
 
     //! Resets the pendulum to a initial state based on specified bounds
     void reset(mt19937& rng) {
-        internal_state_[_theta] = disReset(rng);
-        internal_state_[_thetaDot] = disResetDot(rng);
+        internal_state_[_theta] = dis_reset(rng);
+        internal_state_[_thetaDot] = dis_resetDot(rng);
 
         state_[0] = state_po_[0] = cos(internal_state_[_theta]);
         state_[1] = state_po_[1] = sin(internal_state_[_theta]);
 
         state_[2] = internal_state_[_thetaDot];
 
-        // state[3] = disNoise(rng);
+        // state[3] = dis_noise(rng);
 
         reward = 0;
 
@@ -123,7 +123,7 @@ class Pendulum : public ClassicControlEnv {
 
         state_[2] = internal_state_[_thetaDot];
 
-        // state[3] = disNoise(rng);
+        // state[3] = dis_noise(rng);
 
         step_++;
 
@@ -191,11 +191,11 @@ class Pendulum : public ClassicControlEnv {
 
             // action trace
             glLineWidth(2.0);
-            drawTrace(0, "Action:", torque / maxTorque, -1.2);
+            DrawTrace(0, "Action:", torque / maxTorque, -1.2);
         }
         glColor3f(1.0, 1.0, 1.0);
         glLineWidth(1.0);
-        drawEpisodeStepCounter(episode, step_, -1.9, -1.9);
+        DrawEpisodeStepCounter(episode, step_, -1.9, -1.9);
 
         char c[80];
         if (step_ == 0)
@@ -204,7 +204,7 @@ class Pendulum : public ClassicControlEnv {
             sprintf(c, "Pendulum Terminal%s", ":");
         else
             sprintf(c, "Pendulum%s", ":");
-        drawStrokeText(c, -1.9, -1.7, 0);
+        DrawStrokeText(c, -1.9, -1.7, 0);
 
         glFlush();
 #endif
