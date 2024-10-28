@@ -29,8 +29,12 @@ class MountainCarContinuous : public ClassicControlEnv {
     static constexpr double kGravity = 0.0025;
 
     // State array indices
-    static constexpr int kPositionIndex = 0;
-    static constexpr int kVelocityIndex = 1;
+    enum StateIndex {
+        kPosition = 0,
+        kVelocity = 1,
+        kNoise1 = 2,
+        kNoise2 = 3
+    };
 
     double min_reward;
 
@@ -56,16 +60,16 @@ class MountainCarContinuous : public ClassicControlEnv {
 
     void normalizeState(bool po) {
         if (po) {
-            state_po_[kPositionIndex] = (state_po_[kPositionIndex] - kMinPosition) /
+            state_po_[kPosition] = (state_po_[kPosition] - kMinPosition) /
                                   (kMaxPosition - kMinPosition);
         }
     }
 
     void reset(mt19937 &rng) {
-        state_[kPositionIndex] = state_po_[kPositionIndex] = disReset(rng);
-        state_[kVelocityIndex] = 0;
+        state_[kPosition] = state_po_[kPosition] = disReset(rng);
+        state_[kVelocity] = 0;
 
-        state_po_[kVelocityIndex] = disNoise(rng);
+        state_po_[kVelocity] = disNoise(rng);
 
         state_[2] = disNoise(rng);
         state_[3] = disNoise(rng);
@@ -78,8 +82,8 @@ class MountainCarContinuous : public ClassicControlEnv {
     }
 
     bool terminal() {
-        if (step_ >= max_step_ || (state_[kPositionIndex] >= kGoalPosition &&
-                                 state_[kVelocityIndex] >= kGoalVelocity))
+        if (step_ >= max_step_ || (state_[kPosition] >= kGoalPosition &&
+                                 state_[kVelocity] >= kGoalVelocity))
             terminalState = true;
         return terminalState;
     }
@@ -87,15 +91,15 @@ class MountainCarContinuous : public ClassicControlEnv {
     Results update(int actionD, double actionC, mt19937 &rng) {
         (void)actionD;
         double force = bound(actionC, kMinAction, kMaxAction);
-        state_[kVelocityIndex] += force * kPower - kGravity * cos(3 * state_[kPositionIndex]);
-        state_[kVelocityIndex] = bound(state_[kVelocityIndex], -kMaxSpeed, kMaxSpeed);
-        state_[kPositionIndex] += state_[kVelocityIndex];
-        state_[kPositionIndex] = bound(state_[kPositionIndex], kMinPosition, kMaxPosition);
-        if (state_[kPositionIndex] == kMinPosition && state_[kVelocityIndex] < 0)
-            state_[kVelocityIndex] = 0;
+        state_[kVelocity] += force * kPower - kGravity * cos(3 * state_[kPosition]);
+        state_[kVelocity] = bound(state_[kVelocity], -kMaxSpeed, kMaxSpeed);
+        state_[kPosition] += state_[kVelocity];
+        state_[kPosition] = bound(state_[kPosition], kMinPosition, kMaxPosition);
+        if (state_[kPosition] == kMinPosition && state_[kVelocity] < 0)
+            state_[kVelocity] = 0;
 
-        state_po_[kPositionIndex] = state_[kPositionIndex];
-        state_po_[kVelocityIndex] = disNoise(rng);
+        state_po_[kPosition] = state_[kPosition];
+        state_po_[kVelocity] = disNoise(rng);
 
         state_[2] = disNoise(rng);
         state_[3] = disNoise(rng);
@@ -135,8 +139,8 @@ class MountainCarContinuous : public ClassicControlEnv {
         vector<double> xs = linspace(kMinPosition, kMaxPosition, 100);
         for (size_t i = 1; i < xs.size() - 1; i++) {
             glVertex2d(x, sin(3 * xs[i]) * .45 + .55);
-            if (state_[kPositionIndex] >= xs[i - 1] &&
-                state_[kPositionIndex] <= xs[i + 1]) {
+            if (state_[kPosition] >= xs[i - 1] &&
+                state_[kPosition] <= xs[i + 1]) {
                 carX = x;
                 carXS = xs[i];
             }

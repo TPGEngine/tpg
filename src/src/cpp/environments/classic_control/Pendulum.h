@@ -26,8 +26,16 @@ class Pendulum : public ClassicControlEnv {
     static constexpr double kTimeStep = 0.05;
 
     // State array indices
-    static constexpr int kThetaIndex = 0;
-    static constexpr int kThetaDotIndex = 1;
+    enum StateIndex {
+        kTheta = 0,
+        kThetaDot = 1
+    };
+
+    enum StateObservationIndex {
+        kCosTheta = 0,
+        kSinTheta = 1,
+        kThetaDotObs = 2
+    };
 
     // Internal state differs from state for observation
     std::vector<double> internal_state_;
@@ -45,8 +53,8 @@ class Pendulum : public ClassicControlEnv {
     double maxActionContinuous() const override { return kMaxTorque; }
     double minActionContinuous() const override { return -kMaxTorque; }
 
-    double theta() { return internal_state_[kThetaIndex]; }
-    double thetaDot() { return internal_state_[kThetaDotIndex]; }
+    double theta() { return internal_state_[StateIndex::kTheta]; }
+    double thetaDot() { return internal_state_[StateIndex::kThetaDot]; }
 
     Pendulum() {
         n_eval_train_ = 20;
@@ -71,12 +79,12 @@ class Pendulum : public ClassicControlEnv {
     }
 
     void reset(std::mt19937& rng) override {
-        internal_state_[kThetaIndex] = disReset(rng);
-        internal_state_[kThetaDotIndex] = reset_dot_distribution_(rng);
+        internal_state_[StateIndex::kTheta] = disReset(rng);
+        internal_state_[StateIndex::kThetaDot] = reset_dot_distribution_(rng);
 
-        state_[0] = state_po_[0] = cos(internal_state_[kThetaIndex]);
-        state_[1] = state_po_[1] = sin(internal_state_[kThetaIndex]);
-        state_[2] = internal_state_[kThetaDotIndex];
+        state_[StateObservationIndex::kCosTheta] = state_po_[StateObservationIndex::kCosTheta] = cos(internal_state_[StateIndex::kTheta]);
+        state_[StateObservationIndex::kSinTheta] = state_po_[StateObservationIndex::kSinTheta] = sin(internal_state_[StateIndex::kTheta]);
+        state_[StateObservationIndex::kThetaDotObs] = internal_state_[StateIndex::kThetaDot];
 
         reward = 0;
         step_ = 0;
@@ -93,21 +101,21 @@ class Pendulum : public ClassicControlEnv {
         (void)action_discrete;
         double torque = bound(action_continuous, -kMaxTorque, kMaxTorque);
 
-        double costs = pow(AngleNormalize(internal_state_[kThetaIndex]), 2) +
-                      0.1 * pow(internal_state_[kThetaDotIndex], 2) + 
+        double costs = pow(AngleNormalize(internal_state_[StateIndex::kTheta]), 2) +
+                      0.1 * pow(internal_state_[StateIndex::kThetaDot], 2) + 
                       0.001 * pow(torque, 2);
 
-        double new_theta_dot = internal_state_[kThetaDotIndex] + 
+        double new_theta_dot = internal_state_[StateIndex::kThetaDot] + 
             (-3 * kGravity / (2 * kLength) * 
-             sin(internal_state_[kThetaIndex] + M_PI) +
+             sin(internal_state_[StateIndex::kTheta] + M_PI) +
              3.0 / (kMass * pow(kLength, 2)) * torque) * kTimeStep;
 
-        internal_state_[kThetaIndex] += new_theta_dot * kTimeStep;
-        internal_state_[kThetaDotIndex] = bound(new_theta_dot, -kMaxSpeed, kMaxSpeed);
+        internal_state_[StateIndex::kTheta] += new_theta_dot * kTimeStep;
+        internal_state_[StateIndex::kThetaDot] = bound(new_theta_dot, -kMaxSpeed, kMaxSpeed);
 
-        state_[0] = state_po_[0] = cos(internal_state_[kThetaIndex]);
-        state_[1] = state_po_[1] = sin(internal_state_[kThetaIndex]);
-        state_[2] = internal_state_[kThetaDotIndex];
+        state_[StateObservationIndex::kCosTheta] = state_po_[StateObservationIndex::kCosTheta] = cos(internal_state_[StateIndex::kTheta]);
+        state_[StateObservationIndex::kSinTheta] = state_po_[StateObservationIndex::kSinTheta] = sin(internal_state_[StateIndex::kTheta]);
+        state_[StateObservationIndex::kThetaDotObs] = internal_state_[StateIndex::kThetaDot];
 
         step_++;
         reward = -costs;
@@ -127,8 +135,8 @@ class Pendulum : public ClassicControlEnv {
 
         glLineWidth(5.0);
 
-        x2 = radius * cos(M_PI / 2 - internal_state_[kThetaIndex]);
-        y2 = radius * sin(M_PI / 2 - internal_state_[kThetaIndex]);
+        x2 = radius * cos(M_PI / 2 - internal_state_[StateIndex::kTheta]);
+        y2 = radius * sin(M_PI / 2 - internal_state_[StateIndex::kTheta]);
         glColor3f(1.0, 1.0, 1.0);
         glBegin(GL_LINES);
         glVertex2d(0.0, 0.0);
