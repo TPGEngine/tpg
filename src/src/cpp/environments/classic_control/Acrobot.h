@@ -122,7 +122,7 @@ class Acrobot : public ClassicControlEnv {
         double theta1_ddot;
 
         int count = 0;
-        while (!terminal() && count < 4) {
+        while (!Terminal() && count < 4) {
             count++;
 
             d1 =
@@ -188,7 +188,7 @@ class Acrobot : public ClassicControlEnv {
     //! Provide boolean result to check if the current state is terminal based on step count or position
     // TODO: Change function name once TaskEnv follows Google's C++ Styling
 
-    bool terminal() {
+    bool Terminal() {
         if (step_ >= max_step_ || (-std::cos(state_[StateIndex::kTheta1]) -
                                        std::cos(state_[StateIndex::kTheta2] +
                                                 state_[StateIndex::kTheta1]) >
@@ -264,7 +264,7 @@ class Acrobot : public ClassicControlEnv {
         char c[80];
         if (step_ == 0)
             std::sprintf(c, "Acrobot Initial Conditions%s", ":");
-        else if (terminal())
+        else if (Terminal())
             std::sprintf(c, "Acrobot Terminal%s", ":");
         else
 

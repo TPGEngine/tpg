@@ -199,7 +199,7 @@ class Pendulum : public ClassicControlEnv {
         char text[80];
         if (step_ == 0)
             sprintf(text, "Pendulum Initial Conditions%s", ":");
-        else if (terminal())
+        else if (Terminal())
             sprintf(text, "Pendulum Terminal%s", ":");
         else
             sprintf(text, "Pendulum%s", ":");

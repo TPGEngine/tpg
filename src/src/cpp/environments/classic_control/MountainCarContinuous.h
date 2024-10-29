@@ -121,7 +121,7 @@ class MountainCarContinuous : public ClassicControlEnv {
     }
 
     //! Displays the current state of the environment using OpenGL
-    void display_function(int episode, int actionD, double actionC) {
+    void DisplayFunction(int episode, int actionD, double actionC) {
         (void)episode;
         (void)actionD;
         (void)actionC;
@@ -183,7 +183,7 @@ class MountainCarContinuous : public ClassicControlEnv {
         char c[80];
         if (step_ == 0)
             sprintf(c, "MountainCarContinuous Initial Conditions%s", ":");
-        else if (terminal())
+        else if (Terminal())
             sprintf(c, "MountainCarContinuous Terminal%s", ":");
         else
             sprintf(c, "Mountain Car%s", ":");
