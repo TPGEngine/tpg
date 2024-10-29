@@ -83,10 +83,10 @@ n_generations 1000000
 mu_internal 0
 
 # Number of elite root teams (agents)
-n_elite 1000
+n_elite 180
 
 # n_elite * n_elite_mul new teams are created each generation
-n_elite_mul 0.02
+n_elite_mul 1.0
 
 # Whether to use fitness proportional selection
 fit_prop_select 0
@@ -107,64 +107,36 @@ max_initial_team_size 10
 # Max team size
 max_team_size 1000000
 
-### Independent team mutation ops #############################################
-###############################################################################
+# Max teams per graph
+max_teams_per_graph 1000000
+
+# When changing action pointer, probability of selecting atomic action
+p_atomic 0.99
+
+# Team mutation: probability of deleting program from team
+pmd 0.5
+
+# Team mtation: probability of adding program to team
+pma 0.4
+
+# Team mutation: probability of mutating a program
+pmm 1.0
+
+# Team mutation: probability of mutating a program's action pointer
+pmn 0.2
+
+# Team mutation: probability of mutating program execution order
+pmw 0.2
 
 # Team variation: probability of team crossover
 pmx 0.5
+
 # Team variation: probability of team crossover adding each parent prog to child
 pmx_p 0.5
-
-# Team variation: probability of deleting program from team
-pmd 0.1
-
-# Team variation: probability of adding program to team
-pma 0.075
-
-# Team variation: probability of mutating program execution order
-pmw 0.1
 
 ################################################################################
 ## Program  parameters #########################################################
 ################################################################################
-
-### On average one program in the team will have these mutation ops applied ###
-###############################################################################
-
-# Program variation: probability of mutating a program's action pointer
-pmn 0.1
-# When changing action pointer, probability of selecting atomic action
-p_atomic 1.0
-
-# Program variation: probability of changing a random instruction
-p_bid_mutate 0.2
-
-# Program variation: probability of swaping the position of two instructions
-p_bid_swap 0.1
-
-# Program variation: probability of deleting an instruction
-p_bid_delete 0.1
-
-# program variation: probability of adding an instruction
-p_bid_add 0.075
-
-# Program variation: probability of linear crossover with another team
-p_bid_xover 0.0
-
-# Program variation: probability of adding noise to constants
-p_bid_mu_const 0.5
-
-# Program variation: stddev of normal noise added to each const
-bid_mu_const_stddev 0.05
-
-# Program variation: probability of changing observation_buff_size
-p_observation_buff_size 0.0
-
-# Program variation: probability of changing observation_index
-p_observation_index 0.1
-
-# Program variation: probability of changing memory_size
-p_memory_size 0.1
 
 # Use stateful programs
 # If set to 0, memories are set to 0 prior to each program execution
@@ -204,6 +176,36 @@ max_memory_size 27
 observation_buff_size 1
 min_observation_buff_size 1
 max_observation_buff_size 1
+
+# Program variation: probability of changing a random instruction
+p_bid_mutate 1.0
+
+# Program variation: probability of swaping the position of two instructions
+p_bid_swap 0.5
+
+# Program variation: probability of deleting an instruction
+p_bid_delete 0.5
+
+# program variation: probability of adding an instruction
+p_bid_add 0.4
+
+# Program variation: probability of linear crossover with another team
+p_bid_xover 0.0
+
+# Program variation: probability of adding noise to constants
+p_bid_mu_const 0.5
+
+# Program variation: stddev of normal noise added to each const
+bid_mu_const_stddev 0.05
+
+# Program variation: probability of changing observation_buff_size
+p_observation_buff_size 0.0
+
+# Program variation: probability of changing observation_index
+p_observation_index 0.2
+
+# Program variation: probability of changing memory_size
+p_memory_size 0.2
 
 ################################################################################
 ## General Task Parameters #####################################################
@@ -252,8 +254,8 @@ mj_model_path $TPG/datasets/mujoco_models/ant.xml
 
 mj_max_timestep 1000
 
-mj_n_eval_train 1
-mj_n_eval_test 1
+mj_n_eval_train 3
+mj_n_eval_test 3
 
 ################################################################################
 ## Operations, uncomment to activate ###########################################

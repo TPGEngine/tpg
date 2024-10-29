@@ -29,12 +29,12 @@ void MaybeAnimateStep(EvalData &eval) {
     ClassicControlEnv *task = dynamic_cast<ClassicControlEnv *>(eval.task);
 #if !defined(CCANADA)
     if (eval.animate) {
-        task->display_function(eval.episode, WrapDiscreteAction(eval),
+        task->DisplayFunction(eval.episode, WrapDiscreteAction(eval),
                                WrapContinuousAction(eval));
         char filename[80];
         sprintf(filename, "%s_%05d_%03d_%05d_%05d_%05d.tga", "replay/frames/gl",
                 eval.save_frame++, eval.episode, eval.task->step_, 0, 0);
-        task->saveScreenshotToFile(filename, 1200, 1200);
+        task->SaveScreenshotToFile(filename, 1200, 1200);
         // this_thread::sleep_for(std::chrono::milliseconds(10)); TODO(skelly):
         // add
     }
@@ -44,18 +44,18 @@ void MaybeAnimateStep(EvalData &eval) {
 /******************************************************************************/
 void EvalControl(TPG &tpg, EvalData &eval) {
     MaybeStartAnimation(tpg);
-    eval.task->reset(tpg.rngs_[AUX_SEED]);
+    eval.task->Reset(tpg.rngs_[AUX_SEED]);
     eval.n_prediction = 0;
     state *obs = new state(tpg.n_input_[tpg.GetState("active_task")]);
     obs->Set(eval.task->GetObsVec(eval.partially_observable));
-    while (!eval.task->terminal()) {
+    while (!eval.task->Terminal()) {
         eval.program_out = tpg.getAction(
             eval.tm, obs, true, eval.teams_visited, eval.instruction_count,
             eval.task->step_, eval.team_path, tpg.rngs_[AUX_SEED], false);
 
         MaybeAnimateStep(eval);
         TaskEnv::Results r =
-            eval.task->update(WrapDiscreteAction(eval),
+            eval.task->Update(WrapDiscreteAction(eval),
                               WrapContinuousAction(eval), tpg.rngs_[AUX_SEED]);
         eval.stats_double[REWARD1_IDX] += r.r1;
         eval.AccumulateStepData();
@@ -72,10 +72,10 @@ void EvalControlViz(TPG &tpg, EvalData &eval,
                     set<team *, teamIdComp> &teams_visitedAllTasks,
                     int &steps) {
     MaybeStartAnimation(tpg);
-    eval.task->reset(tpg.rngs_[AUX_SEED]);
+    eval.task->Reset(tpg.rngs_[AUX_SEED]);
     state *obs = new state(tpg.n_input_[tpg.GetState("active_task")]);
     obs->Set(eval.task->GetObsVec(eval.partially_observable));
-    while (!eval.task->terminal()) {
+    while (!eval.task->Terminal()) {
         eval.program_out = tpg.getAction(
             eval.tm, obs, true, eval.teams_visited, eval.instruction_count,
             eval.task->step_, eval.team_path, tpg.rngs_[AUX_SEED], false);
@@ -94,7 +94,7 @@ void EvalControlViz(TPG &tpg, EvalData &eval,
                                      eval.teams_visited.end());
         MaybeAnimateStep(eval);
         TaskEnv::Results r =
-            eval.task->update(WrapDiscreteAction(eval),
+            eval.task->Update(WrapDiscreteAction(eval),
                               WrapContinuousAction(eval), tpg.rngs_[AUX_SEED]);
         eval.stats_double[REWARD1_IDX] += r.r1;
         eval.AccumulateStepData();
