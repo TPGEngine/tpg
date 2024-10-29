@@ -1,10 +1,11 @@
 #ifndef Pendulum_h
 #define Pendulum_h
 
-#include <ClassicControlEnv.h>
 #include <math.h>
 #include <stdlib.h>
 #include <iostream>
+
+#include "ClassicControlEnv.h"
 
 #if !defined(CCANADA) && !defined(HPCC)
 #include <GL/gl.h>
@@ -49,9 +50,9 @@ class Pendulum : public ClassicControlEnv {
         return a >= 0 ? (a - M_PI) : (a + M_PI);
     }
 
-    bool discreteActions() const override { return false; }
-    double maxActionContinuous() const override { return kMaxTorque; }
-    double minActionContinuous() const override { return -kMaxTorque; }
+    bool DiscreteActions() const override { return false; }
+    double MaxActionContinuous() const override { return kMaxTorque; }
+    double MinActionContinuous() const override { return -kMaxTorque; }
 
     double theta() { return internal_state_[StateIndex::kTheta]; }
     double thetaDot() { return internal_state_[StateIndex::kThetaDot]; }
@@ -60,7 +61,7 @@ class Pendulum : public ClassicControlEnv {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        disReset = std::uniform_real_distribution<>(-M_PI, M_PI);
+        dis_reset = std::uniform_real_distribution<>(-M_PI, M_PI);
         reset_dot_distribution_ = std::uniform_real_distribution<>(-1.0, 1.0);
         actionsDiscrete.push_back(-kMaxTorque);
         actionsDiscrete.push_back(0.0);
@@ -78,8 +79,9 @@ class Pendulum : public ClassicControlEnv {
         state_po_.resize(kPendulumStateSize - 1);
     }
 
-    void reset(std::mt19937& rng) override {
-        internal_state_[StateIndex::kTheta] = disReset(rng);
+    //! Resets the pendulum to a initial state based on specified Bounds
+    void Reset(std::mt19937& rng) override {
+        internal_state_[StateIndex::kTheta] = dis_reset(rng);
         internal_state_[StateIndex::kThetaDot] = reset_dot_distribution_(rng);
 
         state_[StateObservationIndex::kCosTheta] = state_po_[StateObservationIndex::kCosTheta] = cos(internal_state_[StateIndex::kTheta]);
@@ -91,15 +93,17 @@ class Pendulum : public ClassicControlEnv {
         terminalState = false;
     }
 
-    bool terminal() override {
+    //! Checks if the current state is terminal based on steps
+    bool Terminal() override {
         terminalState = step_ >= max_step_;
         return terminalState;
     }
 
-    Results update(int action_discrete, double action_continuous, 
+    //! Updates the pendulum state based on the given action
+    Results Update(int action_discrete, double action_continuous, 
                   std::mt19937& rng) override {
         (void)action_discrete;
-        double torque = bound(action_continuous, -kMaxTorque, kMaxTorque);
+        double torque = Bound(action_continuous, -kMaxTorque, kMaxTorque);
 
         double costs = pow(AngleNormalize(internal_state_[StateIndex::kTheta]), 2) +
                       0.1 * pow(internal_state_[StateIndex::kThetaDot], 2) + 
@@ -111,7 +115,7 @@ class Pendulum : public ClassicControlEnv {
              3.0 / (kMass * pow(kLength, 2)) * torque) * kTimeStep;
 
         internal_state_[StateIndex::kTheta] += new_theta_dot * kTimeStep;
-        internal_state_[StateIndex::kThetaDot] = bound(new_theta_dot, -kMaxSpeed, kMaxSpeed);
+        internal_state_[StateIndex::kThetaDot] = Bound(new_theta_dot, -kMaxSpeed, kMaxSpeed);
 
         state_[StateObservationIndex::kCosTheta] = state_po_[StateObservationIndex::kCosTheta] = cos(internal_state_[StateIndex::kTheta]);
         state_[StateObservationIndex::kSinTheta] = state_po_[StateObservationIndex::kSinTheta] = sin(internal_state_[StateIndex::kTheta]);
@@ -123,7 +127,8 @@ class Pendulum : public ClassicControlEnv {
         return {reward, 0.0};
     }
 
-    void display_function(int episode, int action_discrete, 
+    //! Displays the pendulum state using OpenGL 
+    void DisplayFunction(int episode, int action_discrete, 
                          double action_continuous) {
         (void)episode;
         (void)action_discrete;
@@ -149,7 +154,7 @@ class Pendulum : public ClassicControlEnv {
 
         if (step_ > 0) {
             // Action visualization
-            double torque = bound(action_continuous, -kMaxTorque, kMaxTorque);
+            double torque = Bound(action_continuous, -kMaxTorque, kMaxTorque);
             const int sides = 40;
             const double arc_radius = 0.2;
 
@@ -184,21 +189,21 @@ class Pendulum : public ClassicControlEnv {
 
             // Action trace
             glLineWidth(2.0);
-            drawTrace(0, "Action:", torque / kMaxTorque, -1.2);
+            DrawTrace(0, "Action:", torque / kMaxTorque, -1.2);
         }
 
         glColor3f(1.0, 1.0, 1.0);
         glLineWidth(1.0);
-        drawEpisodeStepCounter(episode, step_, -1.9, -1.9);
+        DrawEpisodeStepCounter(episode, step_, -1.9, -1.9);
 
         char text[80];
         if (step_ == 0)
             sprintf(text, "Pendulum Initial Conditions%s", ":");
-        else if (terminal())
+        else if (Terminal())
             sprintf(text, "Pendulum Terminal%s", ":");
         else
             sprintf(text, "Pendulum%s", ":");
-        drawStrokeText(text, -1.9, -1.7, 0);
+        DrawStrokeText(text, -1.9, -1.7, 0);
 
         glFlush();
 #endif

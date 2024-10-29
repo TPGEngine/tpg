@@ -1,11 +1,12 @@
 #ifndef MountainCarContinuous_h
 #define MountainCarContinuous_h
 
-#include <ClassicControlEnv.h>
 #include <math.h>
 #include <stdlib.h>
 
 #include <iostream>
+
+#include "ClassicControlEnv.h"
 
 #if !defined(CCANADA) && !defined(HPCC)
 #include <GL/gl.h>
@@ -39,15 +40,15 @@ class MountainCarContinuous : public ClassicControlEnv {
     double min_reward;
 
    public:
-    bool discreteActions() const override { return false; }
-    double maxActionContinuous() const override { return kMaxAction; }
-    double minActionContinuous() const override { return kMinAction; }
+    bool DiscreteActions() const override { return false; }
+    double MaxActionContinuous() const override { return kMaxAction; }
+    double MinActionContinuous() const override { return kMinAction; }
 
     MountainCarContinuous() {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        disReset = std::uniform_real_distribution<>(-0.6, -0.4);
+        dis_reset = std::uniform_real_distribution<>(-0.6, -0.4);
         eval_type_ = "Control";
         max_step_ = 200;
         state_.reserve(kMountainCarContinuousStateSize);
@@ -58,66 +59,69 @@ class MountainCarContinuous : public ClassicControlEnv {
 
     ~MountainCarContinuous() {}
 
-    void normalizeState(bool po) {
+    //! Normalizes the state values for partially observable environments
+    void NormalizeState(bool po) {
         if (po) {
             state_po_[kPosition] = (state_po_[kPosition] - kMinPosition) /
                                   (kMaxPosition - kMinPosition);
         }
     }
-
-    void reset(mt19937 &rng) {
-        state_[kPosition] = state_po_[kPosition] = disReset(rng);
+    //! Resets the environment to its initial state
+    void reset(std::mt19937 &rng) {
+        state_[kPosition] = state_po_[kPosition] = dis_reset(rng);
         state_[kVelocity] = 0;
 
-        state_po_[kVelocity] = disNoise(rng);
+        state_po_[kVelocity] = dis_noise(rng);
 
-        state_[2] = disNoise(rng);
-        state_[3] = disNoise(rng);
+        state_[2] = dis_noise(rng);
+        state_[3] = dis_noise(rng);
 
         reward = 0;
 
         step_ = 0;
         terminalState = false;
-        normalizeState(true);
+        NormalizeState(true);
     }
 
-    bool terminal() {
+    //! Checks if the current state is terminal based on steps/position/velocity
+    bool Terminal() {
         if (step_ >= max_step_ || (state_[kPosition] >= kGoalPosition &&
                                  state_[kVelocity] >= kGoalVelocity))
             terminalState = true;
         return terminalState;
     }
 
-    Results update(int actionD, double actionC, mt19937 &rng) {
+    //! Updates the environment based on the given action
+    Results Update(int actionD, double actionC, std::mt19937& rng) {
         (void)actionD;
-        double force = bound(actionC, kMinAction, kMaxAction);
+        double force = Bound(actionC, kMinAction, kMaxAction);
         state_[kVelocity] += force * kPower - kGravity * cos(3 * state_[kPosition]);
-        state_[kVelocity] = bound(state_[kVelocity], -kMaxSpeed, kMaxSpeed);
+        state_[kVelocity] = Bound(state_[kVelocity], -kMaxSpeed, kMaxSpeed);
         state_[kPosition] += state_[kVelocity];
-        state_[kPosition] = bound(state_[kPosition], kMinPosition, kMaxPosition);
+        state_[kPosition] = Bound(state_[kPosition], kMinPosition, kMaxPosition);
         if (state_[kPosition] == kMinPosition && state_[kVelocity] < 0)
             state_[kVelocity] = 0;
 
         state_po_[kPosition] = state_[kPosition];
-        state_po_[kVelocity] = disNoise(rng);
+        state_po_[kVelocity] = dis_noise(rng);
 
-        state_[2] = disNoise(rng);
-        state_[3] = disNoise(rng);
+        state_[2] = dis_noise(rng);
+        state_[3] = dis_noise(rng);
 
         step_++;
 
         // reward 2
-        if (terminal() && step_ < max_step_)
+        if (Terminal() && step_ < max_step_)
             reward = 100;
         else
             reward = -(pow(force, 2) * 0.1);
 
-        normalizeState(true);
+        NormalizeState(true);
         return {reward, 0.0};
     }
 
-    // opengl
-    void display_function(int episode, int actionD, double actionC) {
+    //! Displays the current state of the environment using OpenGL
+    void DisplayFunction(int episode, int actionD, double actionC) {
         (void)episode;
         (void)actionD;
         (void)actionC;
@@ -136,7 +140,7 @@ class MountainCarContinuous : public ClassicControlEnv {
         double goalX = 0;
         double goalXS = 0;
         double x = -2.0;
-        vector<double> xs = linspace(kMinPosition, kMaxPosition, 100);
+        std::vector<double> xs = Linspace(kMinPosition, kMaxPosition, 100);
         for (size_t i = 1; i < xs.size() - 1; i++) {
             glVertex2d(x, sin(3 * xs[i]) * .45 + .55);
             if (state_[kPosition] >= xs[i - 1] &&
@@ -167,23 +171,23 @@ class MountainCarContinuous : public ClassicControlEnv {
         glEnd();
 
         if (step_ > 0) {
-            double force = bound(actionC, kMinAction, kMaxAction);
+            double force = Bound(actionC, kMinAction, kMaxAction);
             glLineWidth(2.0);
-            drawTrace(0, "Action:", force, -1.0);
+            DrawTrace(0, "Action:", force, -1.0);
         }
 
         glColor3f(1.0, 1.0, 1.0);
         glLineWidth(1.0);
-        drawEpisodeStepCounter(episode, step_, -1.9, -1.9);
+        DrawEpisodeStepCounter(episode, step_, -1.9, -1.9);
 
         char c[80];
         if (step_ == 0)
             sprintf(c, "MountainCarContinuous Initial Conditions%s", ":");
-        else if (terminal())
+        else if (Terminal())
             sprintf(c, "MountainCarContinuous Terminal%s", ":");
         else
             sprintf(c, "Mountain Car%s", ":");
-        drawStrokeText(c, -1.9, -1.7, 0);
+        DrawStrokeText(c, -1.9, -1.7, 0);
 
         glFlush();
 #endif

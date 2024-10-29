@@ -1,11 +1,14 @@
 #ifndef CARTCENTERING_H
 #define CARTCENTERING_H
 
+#include <math.h>
+
 #include <misc.h>
 #include <stdlib.h>
 
 #include <cmath>
 #include <iostream>
+
 #include <random>
 
 #include "ClassicControlEnv.h"
@@ -14,6 +17,7 @@
 #include <GL/gl.h>
 #include <GL/glut.h>
 #endif
+
 
 constexpr int kCartCenteringStateSize = 4;
 
@@ -35,6 +39,8 @@ class CartCentering : public ClassicControlEnv {
     // State array indexing
     enum StateIndex { kX = 0, kV = 1 };
 
+
+    uniform_real_distribution<> dis_reset;
     int last_action_d = -kForceMag;
 
    public:
@@ -42,7 +48,7 @@ class CartCentering : public ClassicControlEnv {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        disReset = std::uniform_real_distribution<>(kMinVarIni, kMaxVarIni);
+        dis_reset = std::uniform_real_distribution<>(kMinVarIni, kMaxVarIni);
         actionsDiscrete.push_back(-kForceMag);
         actionsDiscrete.push_back(0.0);
         actionsDiscrete.push_back(kForceMag);
@@ -63,28 +69,33 @@ class CartCentering : public ClassicControlEnv {
         }
     }
 
-    // TODO: Change function name once TaskEnv follows Google's C++ Styling
-    void reset(std::mt19937 &rng) {
+
+   //! Resets the CartCentering environment to a initial state within specified ranges
+    void Reset(std::mt19937 &rng) {
         step_ = 0;
 
         do {
-            state_po_[StateIndex::kX] = state_[StateIndex::kX] = disReset(rng);
-            state_[StateIndex::kV] = disReset(rng);
+            state_po_[StateIndex::kX] = state_[StateIndex::kX] = dis_reset(rng);
+            state_[StateIndex::kV] = dis_reset(rng);
             terminalState = false;
-        } while (terminal());
+        } while (Terminal());
 
-        state_po_[StateIndex::kV] = disNoise(rng);
+        state_po_[StateIndex::kV] = dis_noise(rng);
 
-        state_[2] = disNoise(rng);
-        state_[3] = disNoise(rng);
+
+        state_[2] = dis_noise(rng);
+        state_[3] = dis_noise(rng);
 
         reward = 0;
 
         NormalizeState(true);
     }
 
-    // TODO: Change function name once TaskEnv follows Google's C++ Styling
-    bool terminal() {
+
+    /****************************************************************************/
+    //! Checks if the current state is terminal based on step count, position, and velocity
+
+    bool Terminal() {
         terminalState =
             step_ >= max_step_ ||
                     (std::abs(state_[StateIndex::kX]) <= kNearOrigin &&
@@ -95,6 +106,8 @@ class CartCentering : public ClassicControlEnv {
         return terminalState;
     }
 
+    /****************************************************************************/
+    //! Updates the environment state based on the given action and returns the reward
     // TODO: Change function name once TaskEnv follows Google's C++ Styling
     Results update(int actionD, double actionC, std::mt19937 &rng) {
         (void)actionC;
@@ -115,16 +128,18 @@ class CartCentering : public ClassicControlEnv {
         state_[StateIndex::kX] += kTau * state_[StateIndex::kV];
         state_po_[StateIndex::kX] = state_[StateIndex::kX];
 
+
         state_[StateIndex::kV] += kTau * acc_t;
         state_[StateIndex::kV] = bound(state_[StateIndex::kV], -kMaxV, kMaxV);
-        state_po_[StateIndex::kV] = disNoise(rng);
+        state_po_[StateIndex::kV] = dis_noise(rng);
 
-        state_[2] = disNoise(rng);
-        state_[3] = disNoise(rng);
+
+        state_[2] = dis_noise(rng);
+        state_[3] = dis_noise(rng);
 
         step_++;
 
-        if (terminal())
+        if (Terminal())
             reward = -((((std::abs(state_[StateIndex::kX]) / kMaxX) +
                          (std::abs(state_[StateIndex::kV]) / kMaxV) / 2)) +
                        (((double)step_ / max_step_) * 0.1));
@@ -136,9 +151,10 @@ class CartCentering : public ClassicControlEnv {
         return {reward, 0.0};
     }
 
-    // TODO: Change function name once TaskEnv follows Google's C++ Styling
+    /****************************************************************************/
+    //! Renders the current state of the CartCentering environment using OpenGL
     // OpenGL Display
-    void display_function(int episode, int actionD, double actionC) {
+    void DisplayFunction(int episode, int actionD, double actionC) {
         (void)episode;
         (void)actionD;
         (void)actionC;
@@ -199,6 +215,7 @@ class CartCentering : public ClassicControlEnv {
             glVertex3f(dir * 0.12, -0.3, 0);
             glEnd();
 
+
             if (std::abs(state_[StateIndex::kX]) <= kNearOrigin &&
                 std::abs(state_[StateIndex::kV]) <= kNearOrigin) {
                 glColor3f(0.0, 1.0, 0.0);
@@ -212,25 +229,24 @@ class CartCentering : public ClassicControlEnv {
             }
             glEnd();
             glLineWidth(2.0);
-            drawTrace(0, "Action:", force / kForceMag, -1.0);
+            DrawTrace(0, "Action:", force / kForceMag, -1.0);
         }
 
         glColor3f(1.0, 1.0, 1.0);
         glLineWidth(1.0);
-        drawEpisodeStepCounter(episode, step_, -1.9, -1.9);
+        DrawEpisodeStepCounter(episode, step_, -1.9, -1.9);
 
         char c[80];
         if (step_ == 0)
             std::sprintf(c, "CartCentering Initial Conditions%s", ":");
-        else if (terminal())
+        else if (Terminal())
             std::sprintf(c, "CartCentering Terminal%s", ":");
         else
             std::sprintf(c, "CartCentering%s", ":");
-        drawStrokeText(c, -1.9, -1.7, 0);
-
+        DrawStrokeText(c, -1.9, -1.7, 0);
         glFlush();
 #endif
     }
 };
 
-#endif  // CARTCENTERING_H
+#endif  

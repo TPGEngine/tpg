@@ -1,11 +1,12 @@
 #ifndef MountainCar_h
 #define MountainCar_h
 
-#include <ClassicControlEnv.h>
 #include <math.h>
 #include <stdlib.h>
 
 #include <iostream>
+
+#include "ClassicControlEnv.h"
 
 #if !defined(CCANADA) && !defined(HPCC)
 #include <GL/gl.h>
@@ -39,8 +40,7 @@ class MountainCar : public ClassicControlEnv {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        // TODO: refactor with ClassicControlEnv
-        disReset = std::uniform_real_distribution<>(-0.6, -0.4);
+        dis_reset = std::uniform_real_distribution<>(-0.6, -0.4);
         eval_type_ = "Control";
         max_step_ = 200;
         state_.reserve(kMountainCarStateSize);
@@ -51,6 +51,7 @@ class MountainCar : public ClassicControlEnv {
 
     ~MountainCar() {}
 
+    //! Normalizes the state values for partially observable environments
     void NormalizeState(bool partially_observable) {
         if (partially_observable) {
             state_po_[StateIndex::kPosition] = (state_po_[StateIndex::kPosition] - kMinPosition) /
@@ -58,14 +59,14 @@ class MountainCar : public ClassicControlEnv {
         }
     }
 
-    // TODO: refactor with TaskEnv
-    void reset(std::mt19937& rng) override {
-        state_[StateIndex::kPosition] = state_po_[StateIndex::kPosition] = disReset(rng);
+    //! Resets the environment to its initial state within specified ranges
+    void Reset(std::mt19937& rng) override {
+        state_[StateIndex::kPosition] = state_po_[StateIndex::kPosition] = dis_reset(rng);
         state_[StateIndex::kVelocity] = 0;
-        state_po_[StateIndex::kVelocity] = disNoise(rng);
+        state_po_[StateIndex::kVelocity] = dis_noise(rng);
 
-        state_[StateIndex::kNoise1] = disNoise(rng);
-        state_[StateIndex::kNoise2] = disNoise(rng);
+        state_[StateIndex::kNoise1] = dis_noise(rng);
+        state_[StateIndex::kNoise2] = dis_noise(rng);
 
         reward = 0;
         step_ = 0;
@@ -73,8 +74,8 @@ class MountainCar : public ClassicControlEnv {
         NormalizeState(true);
     }
 
-    // TODO: refactor with TaskEnv
-    bool terminal() override {
+        //! Checks if the current state is terminal based on steps or position
+    bool Terminal() override {
         if (step_ >= max_step_ || 
             (state_[StateIndex::kPosition] >= kGoalPosition)) {
             terminalState = true;
@@ -82,8 +83,8 @@ class MountainCar : public ClassicControlEnv {
         return terminalState;
     }
 
-    // TODO: refactor with TaskEnv
-    Results update(int action_discrete, double action_continuous, 
+    //! Updates the environment based on the given action
+    Results Update(int action_discrete, double action_continuous, 
                   std::mt19937& rng) override {
         (void)action_continuous;  // Unused parameter
 
@@ -92,10 +93,10 @@ class MountainCar : public ClassicControlEnv {
             std::cos(3 * state_[StateIndex::kPosition]) * -kGravity;
             
         state_[StateIndex::kVelocity] = 
-            bound(state_[StateIndex::kVelocity], -kMaxSpeed, kMaxSpeed);
+            Bound(state_[StateIndex::kVelocity], -kMaxSpeed, kMaxSpeed);
         state_[StateIndex::kPosition] += state_[StateIndex::kVelocity];
         state_[StateIndex::kPosition] = 
-            bound(state_[StateIndex::kPosition], kMinPosition, kMaxPosition);
+            Bound(state_[StateIndex::kPosition], kMinPosition, kMaxPosition);
 
         if (state_[StateIndex::kPosition] == kMinPosition && 
             state_[StateIndex::kVelocity] < 0) {
@@ -103,10 +104,10 @@ class MountainCar : public ClassicControlEnv {
         }
 
         state_po_[StateIndex::kPosition] = state_[StateIndex::kPosition];
-        state_po_[StateIndex::kVelocity] = disNoise(rng);
+        state_po_[StateIndex::kVelocity] = dis_noise(rng);
 
-        state_[StateIndex::kNoise1] = disNoise(rng);
-        state_[StateIndex::kNoise2] = disNoise(rng);
+        state_[StateIndex::kNoise1] = dis_noise(rng);
+        state_[StateIndex::kNoise2] = dis_noise(rng);
 
         step_++;
 
@@ -117,7 +118,7 @@ class MountainCar : public ClassicControlEnv {
         return result;
     }
 
-    // opengl
+    //! Displays the current state of the environment using OpenGL
     void display_function(int episode, int actionD, double actionC) {
         (void)episode;
         (void)actionC;
@@ -137,7 +138,7 @@ class MountainCar : public ClassicControlEnv {
         double goalX = 0;
         double goalXS = 0;
         double x = -2.0;
-        vector<double> xs = linspace(kMinPosition, kMaxPosition, 100);
+        std::vector<double> xs = Linspace(kMinPosition, kMaxPosition, 100);
         for (size_t i = 1; i < xs.size() - 1; i++) {
             glVertex2d(x, sin(3 * xs[i]) * .45 + .55);
             if (state_[StateIndex::kPosition] >= xs[i - 1] &&
@@ -181,9 +182,9 @@ class MountainCar : public ClassicControlEnv {
             glVertex3f(dir * 0.12, -0.3, 0);
             glEnd();
             glLineWidth(2.0);
-            drawTrace(0, "Action:", actionD - 1, -1.0);
+            DrawTrace(0, "Action:", actionD - 1, -1.0);
         }
-        drawEpisodeStepCounter(episode, step_, -1.9, 1.3);
+        DrawEpisodeStepCounter(episode, step_, -1.9, 1.3);
         glFlush();
 #endif
     }

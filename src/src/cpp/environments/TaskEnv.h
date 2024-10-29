@@ -42,18 +42,18 @@ class TaskEnv {
     double GetObsVar(int var, bool po) {
         return po ? state_po_[var] : state_[var];
     }
-    void setStateVar(int var, double v) {
+    void SetStateVar(int var, double v) {
         state_po_[var] = v;
         state_[var] = v;
     }
     inline std::string EvalType() const { return eval_type_; }
-    virtual bool discreteActions() const { return true; }
-    virtual double minActionContinuous() const { return 0.0; }
-    virtual double maxActionContinuous() const { return 0.0; }
-    virtual void reset(std::mt19937 &) { step_ = 0; }
-    virtual Results update(int, double, std::mt19937 &) { return {0.0, 0.0}; };
-    Results sim_step(std::vector<double> &action) { return {0.0, 0.0}; }
-    virtual bool terminal() { return false; }
+    virtual bool DiscreteActions() const { return true; }
+    virtual double MinActionContinuous() const { return 0.0; }
+    virtual double MaxActionContinuous() const { return 0.0; }
+    virtual void Reset(std::mt19937 &) { step_ = 0; }
+    virtual Results Update(int, double, std::mt19937 &) { return {0.0, 0.0}; };
+    Results SimStep(std::vector<double> &action) { return {0.0, 0.0}; }
+    virtual bool Terminal() { return false; }
     int GetNumEval(int phase) {
         if (phase == 0)
             return n_eval_train_;

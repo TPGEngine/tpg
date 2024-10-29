@@ -1,5 +1,8 @@
-#ifndef ACROBOT_H_
-#define ACROBOT_H_
+#ifndef Acrobot_h
+#define Acrobot_h
+
+#include <math.h>
+#include <stdlib.h>
 
 #include <cmath>
 #include <cstdlib>
@@ -13,7 +16,9 @@
 #include <GL/glut.h>
 #endif
 
+
 constexpr int kAcrobotStateSize = 4;
+
 
 class Acrobot : public ClassicControlEnv {
    protected:
@@ -46,7 +51,7 @@ class Acrobot : public ClassicControlEnv {
         n_eval_train_ = 20;
         n_eval_validation_ = 0;
         n_eval_test_ = 100;
-        disReset = std::uniform_real_distribution<>(-0.1, 0.1);
+        dis_reset = std::uniform_real_distribution<>(-0.1, 0.1);
         actionsDiscrete.push_back(-1.0);
         actionsDiscrete.push_back(0.0);
         actionsDiscrete.push_back(1.0);
@@ -69,6 +74,7 @@ class Acrobot : public ClassicControlEnv {
     // TODO: Change function name once TaskEnv follows Google's C++ Styling
     double maxActionContinuous() const { return 1.0; }
 
+    //! Normalizes the state values by dividing them by their respective maximum values
     void NormalizeState(bool po) {
         if (po) {
             state_po_[StateIndex::kTheta1] /= kMaxTheta1;
@@ -76,17 +82,18 @@ class Acrobot : public ClassicControlEnv {
         }
     }
 
-    // TODO: Change function name once TaskEnv follows Google's C++ Styling
+    //! Resets the Acrobot environment to a initial state within specified ranges - uniform_real_distribution<>(-0.1, 0.1);
     void reset(std::mt19937 &rng) {
         state_po_[StateIndex::kTheta1] = state_[StateIndex::kTheta1] =
-            disReset(rng);
+            dis_reset(rng);
 
         state_po_[StateIndex::kTheta2] = state_[StateIndex::kTheta2] =
-            disReset(rng);
+            dis_reset(rng);
 
-        state_[StateIndex::kTheta1Dot] = disReset(rng);
+        state_[StateIndex::kTheta1Dot] = dis_reset(rng);
 
-        state_[StateIndex::kTheta2Dot] = disReset(rng);
+        state_[StateIndex::kTheta2Dot] = dis_reset(rng);
+
 
         reward = 0;
 
@@ -96,13 +103,16 @@ class Acrobot : public ClassicControlEnv {
         NormalizeState(true);
     }
 
+
     // TODO: Change function name once TaskEnv follows Google's C++ Styling
+    //! Updates Acrobot state based on the given action and returns the reward 
     Results update(int actionD, double actionC, std::mt19937 &rng) {
+
         (void)actionD;
         (void)rng;
 
         // double torque = actionsDiscrete[actionD];
-        double torque = bound(actionC, -1.0, 1.0);
+        double torque = Bound(actionC, -1.0, 1.0);
         double d1;
         double d2;
         double phi_2;
@@ -112,7 +122,7 @@ class Acrobot : public ClassicControlEnv {
         double theta1_ddot;
 
         int count = 0;
-        while (!terminal() && count < 4) {
+        while (!Terminal() && count < 4) {
             count++;
 
             d1 =
@@ -156,10 +166,11 @@ class Acrobot : public ClassicControlEnv {
                 Wrap(state_[StateIndex::kTheta1], -kMaxTheta1, kMaxTheta1);
             state_[StateIndex::kTheta2] =
                 Wrap(state_[StateIndex::kTheta2], -kMaxTheta2, kMaxTheta2);
-            state_[StateIndex::kTheta1Dot] = bound(
+            state_[StateIndex::kTheta1Dot] = Bound(
                 state_[StateIndex::kTheta1Dot], -kMaxTheta1Dot, kMaxTheta1Dot);
-            state_[StateIndex::kTheta2Dot] = bound(
+            state_[StateIndex::kTheta2Dot] = Bound(
                 state_[StateIndex::kTheta2Dot], -kMaxTheta2Dot, kMaxTheta2Dot);
+
         }
 
         state_po_[StateIndex::kTheta1] = state_[StateIndex::kTheta1];
@@ -173,8 +184,11 @@ class Acrobot : public ClassicControlEnv {
         return {reward, 0.0};
     }
 
+
+    //! Provide boolean result to check if the current state is terminal based on step count or position
     // TODO: Change function name once TaskEnv follows Google's C++ Styling
-    bool terminal() {
+
+    bool Terminal() {
         if (step_ >= max_step_ || (-std::cos(state_[StateIndex::kTheta1]) -
                                        std::cos(state_[StateIndex::kTheta2] +
                                                 state_[StateIndex::kTheta1]) >
@@ -183,13 +197,18 @@ class Acrobot : public ClassicControlEnv {
         return terminalState;
     }
 
+
+    //! Wraps a value x within the range [m, M] by adding or subtracting the difference 
     double Wrap(double x, double m, double M) {
         double diff = M - m;
-        while (x > M) x = x - diff;
-        while (x < m) x = x + diff;
+        while (x > M)
+            x = x - diff;
+        while (x < m)
+            x = x + diff;
         return x;
     }
 
+    //! Renders the current state of the Acrobot environment using OpenGL
     // TODO: Change function name once TaskEnv follows Google's C++ Styling
     // OpenGL Display
     void display_function(int episode, int actionD, double actionC) {
@@ -233,27 +252,27 @@ class Acrobot : public ClassicControlEnv {
 
         if (step_ > 0) {
             glColor3f(1.0, 1.0, 1.0);
-            double torque = bound(actionC, -1.0, 1.0);
+            double torque = Bound(actionC, -1.0, 1.0);
             glLineWidth(2.0);
-            drawTrace(0, "Action:", torque / 1.0, 1.2);
+            DrawTrace(0, "Action:", torque / 1.0, 1.2);
         }
 
         glColor3f(1.0, 1.0, 1.0);
         glLineWidth(1.0);
-        drawEpisodeStepCounter(episode, step_, -1.9, -1.9);
+        DrawEpisodeStepCounter(episode, step_, -1.9, -1.9);
 
         char c[80];
         if (step_ == 0)
             std::sprintf(c, "Acrobot Initial Conditions%s", ":");
-        else if (terminal())
+        else if (Terminal())
             std::sprintf(c, "Acrobot Terminal%s", ":");
         else
-            std::sprintf(c, "Acrobot%s", ":");
-        drawStrokeText(c, -1.9, -1.7, 0);
 
+            std::sprintf(c, "Acrobot%s", ":");
+        DrawStrokeText(c, -1.9, -1.7, 0);
         glFlush();
 #endif
     }
 };
 
-#endif  // ACROBOT_H
+#endif 
