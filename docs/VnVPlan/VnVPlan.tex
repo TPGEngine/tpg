@@ -147,40 +147,61 @@ how they relate to your VnV efforts.}
 
 \subsection{Verification and Validation Team}
 
-\wss{Your teammates.  Maybe your supervisor.
-  You should do more than list names.  You should say what each person's role is
-  for the project's verification.  A table is a good way to summarize this information.}
+\setlength{\arrayrulewidth}{0.5mm}
+\setlength{\tabcolsep}{13pt}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{ | m{5cm} | m{8cm} | } 
+\hline
+  \textbf{Name and Role} & \textbf{Responsibilites} \\ 
+  \hline
+    \textbf{Calvyn Siong} - CI/CD verification
+    & \begin{itemize}
+	\item Responsible for ensuring the continuous integration and continuous deployment (CI/CD) pipeline functions as intended, supporting automated testing, smooth deployments, and efficient integration of code changes. Verifies that the CI/CD pipeline adheres to project standards, minimizes deployment risks, and enables consistent checks for potential errors in the TPG framework.
+	
+\end{itemize}\\ 
+  \hline
+   \textbf{Mark Cruz} - Code verification & \begin{itemize}
+	\item Ensures that the codebase adheres to established software standards and project guidelines, including readability, maintainability, and overall code quality. Additionally, responsible for reviewing unit tests created to improve code reliability.
+       
+\end{itemize}\\ 
+  \hline
+    \textbf{Edward Gao} - Data Verification & \begin{itemize}
+	\item Responsible for validating and verifying all data utilized by the TPG framework, including inputs and outputs. This includes ensuring data integrity and accuracy for agent-environment interactions and simulator-generated data.
+\end{itemize}\\ 
+  \hline
+   \textbf{Cyruss Allen Amante} - SRS Verification & \begin{itemize}
+	\item Validates that the TPG framework and its integrations fulfill both functional and non-functional requirements as outlined in the Software Requirements Specification (SRS). Ensures that each requirement is accurately implemented.
+\end{itemize}\\ 
+  \hline
+    \textbf{Richard Li} - Performance Verification & \begin{itemize}
+	\item Ensures that the framework’s performance metrics, including response times, computational efficiency, and resource usage, meet the standards necessary for the TPG framework. 
+\end{itemize}\\ 
+  \hline
+
+\end{tabular}
+
+
+
 
 \subsection{SRS Verification Plan}
 
-\wss{List any approaches you intend to use for SRS verification.  This may
-  include ad hoc feedback from reviewers, like your classmates (like your
-  primary reviewer), or you may plan for something more rigorous/systematic.}
+To verify the SRS, routine inspections will be conducted to ensure that the TPG framework meets both functional and non-functional requirements as outlined in the SRS. These inspections will involve regular reviews by the development team and collaborators such as Professor Stephen Kelly’s team with the TPG framework, who can provide ongoing insights and feedback as the project progresses. 
 
-\wss{If you have a supervisor for the project, you shouldn't just say they will
-read over the SRS.  You should explain your structured approach to the review.
-Will you have a meeting?  What will you present?  What questions will you ask?
-Will you give them instructions for a task-based inspection?  Will you use your
-issue tracker?}
+Through these routine reviews, task based inspection will be leveraged to audit the most up to date progress made towards the project. This would involve walking through key tasks or scenarios (ie: new Mujoco environments, CI/CD integrations) that the system must support, and inspecting how each task complies to the SRS’s standards. Each review will employ a structured, scenario-based checklist that focuses on the specific tasks that the TPG framework needs to support, such as configuring simulations, setting up interactions with MuJoCo, and evaluating reinforcement learning performance metrics. By inspecting the SRS against these real-world tasks, the verification team will ensure that each requirement is clearly defined and actionable, supporting the development team in implementing functionality that aligns with user and system needs. In addition, the tasks/features implemented will be cross checked with the list of issues during the review section to display how each task satisfies the issue to ensure traceability.
 
-\wss{Maybe create an SRS checklist?}
 
 \subsection{Design Verification Plan}
 
-\wss{Plans for design verification}
+The plan is to verify that the design of the modifications made to the TPG framework meets the intended specifications and supports functionality aligned with project objectives set by Dr. Stephen Kelly. Thus as the primary stakeholders, Dr. Kelly’s team will actively participate in hands-on reviews to verify the framework's design.
 
-\wss{The review will include reviews by your classmates}
+This verification will include design review meetings and usability assessments. Design review meetings will be held monthly during regular project meetings, providing an opportunity for stakeholders to give informal feedback on the design. These reviews will address specific design elements, such as compatibility with the MuJoCo integration, degree of fitness changes to the new integrations, and robustness of the results.
 
-\wss{Create a checklists?}
+In addition to the regular reviews, usability assessments will be conducted with additional members from Dr. Kelly's team, focusing on the testing infrastructure being added to the TPG framework. Feedback gathered from these sessions will guide iterative design improvements, ensuring the framework’s usability.
+
 
 \subsection{Verification and Validation Plan Verification Plan}
 
-\wss{The verification and validation plan is an artifact that should also be
-verified.  Techniques for this include review and mutation testing.}
-
-\wss{The review will include reviews by your classmates}
-
-\wss{Create a checklists?}
+To verify the Verification and Validation Plan itself, peer review will be necessary to ensure that the listed test plans are properly conducted. The team will also conduct a review session with Dr Kelly when the project is completed. Dr. Kelly will review the Verification and Validation (V&V) document with the team to ensure that all tests outlined in the V&V plan were executed successfully. This collaborative review will confirm that the system meets the required specifications and that all verification and validation criteria have been addressed satisfactorily.
 
 \subsection{Implementation Verification Plan}
 
