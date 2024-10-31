@@ -239,59 +239,115 @@ the contents of the subsections.}
 
 \subsection{Tests for Functional Requirements}
 
-\wss{Subsets of the tests may be in related, so this section is divided into
-  different areas.  If there are no identifiable subsets for the tests, this
-  level of document structure can be removed.}
+The following section covers the test cases for functional requirements discussed in the SRS document. Every test is defined with control, type, initial state, input and output values, test case derivation and how the testing will be performed. Using this approach of testing will maintain the high-quality experience that users may look for when interacting with a software.
 
-\wss{Include a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good here.}
+\subsubsection{Interface that is Compatible with \href{https://mujoco.org/}{MuJoCo}}
 
-\subsubsection{Area of Testing1}
-
-\wss{It would be nice to have a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good here.  If a section
-  covers tests for input constraints, you should reference the data constraints
-  table in the SRS.}
-		
-\paragraph{Title for Test}
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item FR-1
+  \item FR-8
+\end{itemize}
 
 \begin{enumerate}
 
-\item{test-id1\\}
+\item{FR-SLN1}
 
-Control: Manual versus Automatic
+Control: Manual
 					
-Initial State: 
+Initial State: User has the repository open on their code editor with a terminal open to the experiment directory
 					
-Input: 
+Input: This \href{https://github.com/TPGEngine/tpg/blob/main/src/scripts/run/tpg-run-mpi.sh}{tpg-run-mpi.sh -n 4} script executes a given experiment
 					
-Output: \wss{The expected result for the given inputs.  Output is not how you
-are going to return the results of the test.  The output is the expected
-result.}
+Output: The output of the script is \textbf{Starting run ...} printed on the terminal. Note the experiment is running in the background.
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+Test Case Derivation: The script successfully executes the experiment and the output is printed. A user could also run htop to see the processes of the experiment running to confirm. Also another script \href{https://github.com/TPGEngine/tpg/blob/main/src/scripts/run/tpg-run-mpi.sh}{tpg-run-mpi.sh -m 1} can be run to output an OpenGL visualization of the experiment. 
+How test will be performed: The test can be performed across different Operating Systems. The interaction with the system is through the command line.
 					
-How test will be performed: 
-					
-\item{test-id2\\}
+\item{FR-SLN2}
 
-Control: Manual versus Automatic
+Control: Manual
 					
-Initial State: 
+Initial State: User wants to run the experiment using the Digital Research Alliance of Canada computational clusters. They have the experiment directory of the experiment they want to run open on the terminal.
 					
-Input: 
+Input: The TPG framework code base and a specific shell script \href{https://github.com/TPGEngine/tpg/blob/main/src/scripts/run/tpg-run-slurm.sh}{tpg-run-slurm.sh}
 					
-Output: \wss{The expected result for the given inputs}
+Output: The experiment can be trained and run for long periods of time in the cloud environment. The .std log files can be downloaded from the cloud environment which provides details of the training process in the cloud.
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+Test Case Derivation: After the experiment is run in the cloud environment, the user can download the .std logs to analyze what happened during the training process.
 
-How test will be performed: 
+How test will be performed: The test can be performed across different operating systems (Linux, MacOS, Windows) depending on what OS the user is using. The interaction with this test is through the command line.
 
 \end{enumerate}
 
-\subsubsection{Area of Testing2}
+\subsubsection{Experiment Visualization}
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item FR-2
+\end{itemize}
 
-...
+\begin{enumerate}
+ \item{FR-SLN3}
+
+  Control: Manual
+          
+  Initial State: Experiment has already started running. \textbf{Starting run ...} is printed on the terminal.
+            
+  Input: This \href{https://github.com/TPGEngine/tpg/blob/main/src/scripts/run/tpg-run-mpi.sh}{tpg-run-mpi.sh -m 1} script visualizes the current experiment
+            
+  Output: OpenGL animation of the current experiment is displayed on the users screen.
+
+  Test Case Derivation: Upon the script the above being run, the current experiment needs to be running in the background and can be validated running htop to see if those processes are running. When the script is run, the user will be able to see the animation appear on their display. The pop up is very visible and the user can see the experiment running in real time.
+            
+  How test will be performed: The test can be performed across different operating systems. The interaction with the system is through the command line.
+
+\end{enumerate}
+
+\subsubsection{Github Actions CI/CD Pipeline}
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item FR-3
+  \item FR-4
+  \item FR-5
+  \item FR-7
+\end{itemize}
+
+\begin{enumerate}
+  \item{FR-SLN4}
+  Control: Automated + Manual
+            
+  Initial State: New PR has been made and the changes have been approved and ready to merge back into main (Automated). Or the user wants to manually trigger the pipeline to merge code changes into the main branch (manual). 
+            
+  Input: New changes to the code base have been made and a PR has been made to merge the changes back into the main branch.
+            
+  Output: New code changes are merged to the main branch, if the validation fails then the user is notified that the pipeline has failed.
+
+  Test Case Derivation: When new code changes are being merged to the main branch, the Github Actions CI/CD pipeline is triggered to run to build, test, and deploy the new code. The pipeline is designed to automatically perform all those tasks.
+            
+  How test will be performed: Whenever new code changes are made, pipeline will be triggered. The tests will run on any web browser that supports GitHub.
+
+\end{enumerate}
+
+\subsubsection{Software Engineering Practices}
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item FR-6
+\end{itemize}
+
+\begin{enumerate}
+  \item{FR-SLN5}
+  Control: Automated
+            
+  Initial State: User has just made code changes and pushed to a feature branch.
+            
+  Input: Code that has been modified by the user.
+            
+  Output: Within our CI/CD pipeline, a “pre-commit” pipeline is ran and if successful it lints the files that were modified.
+  
+  Test Case Derivation: The user is able to see formatting changes proposed by clang-tidy and clang-format (two C++ linters that abide by the Google C++ style guide). The user can then choose to accept or reject the changes.
+            
+  How test will be performed: Whenever new code is committed after a user makes modifications to a codebase, the files which they edited will be linted to ensure proper formatting and the user will have the opportunity to manually validate.
+\end{enumerate}
 
 \subsection{Tests for Nonfunctional Requirements}
 
