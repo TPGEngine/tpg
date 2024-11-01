@@ -295,62 +295,293 @@ How test will be performed:
 
 \subsection{Tests for Nonfunctional Requirements}
 
-\wss{The nonfunctional requirements for accuracy will likely just reference the
-  appropriate functional tests from above.  The test cases should mention
-  reporting the relative error for these tests.  Not all projects will
-  necessarily have nonfunctional requirements related to accuracy.}
+The following section covers the test cases for non-functional requirements discussed in the SRS document. This focuses on the usability, performance, maintainability, operation and security of the system. Every test is defined with control, type, initial state, input and output values, test case derivation and how the testing will be performed. For control, various types of testing will be used, ranging from automated unit and integration testing to individuals manually interacting with the TPG framework to validate the system’s behavior. Using this approach of testing will maintain the high-quality experience that users may look for when interacting with a software.
 
-\wss{For some nonfunctional tests, you won't be setting a target threshold for
-passing the test, but rather describing the experiment you will do to measure
-the quality for different inputs.  For instance, you could measure speed versus
-the problem size.  The output of the test isn't pass/fail, but rather a summary
-table or graph.}
+\subsubsection{Clear and Comprehensive Documentation}
 
-\wss{Tests related to usability could include conducting a usability test and
-  survey.  The survey will be in the Appendix.}
-
-\wss{Static tests, review, inspections, and walkthroughs, will not follow the
-format for the tests given below.}
-
-\wss{If you introduce static tests in your plan, you need to provide details.
-How will they be done?  In cases like code (or document) walkthroughs, who will
-be involved? Be specific.}
-
-\subsubsection{Area of Testing1}
-		
-\paragraph{Title for Test}
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item 11.1.1, 11.3.1, 11.3.2, 11.4.1, 11.4.2, 11.5.1, 13.4, 14.1.2, 14.2.1
+\end{itemize}
 
 \begin{enumerate}
 
-\item{test-id1\\}
+\item{NFR-SLN1}
 
-Type: Functional, Dynamic, Manual, Static etc.
-					
-Initial State: 
-					
-Input/Condition: 
-					
-Output/Result: 
-					
-How test will be performed: 
-					
-\item{test-id2\\}
+Control: Manual
 
-Type: Functional, Dynamic, Manual, Static etc.
+Type: Usability, Operational and Environmental, Maintainability and Support
 					
-Initial State: 
+Initial State: System has documentation that covers all key sections is available on the repository, and is accessible to users
 					
-Input: 
+Input/Condition: Users open the documentation to get started using the framework
 					
-Output: 
-					
-How test will be performed: 
+Output/Result: Users are able to locate and follow along the instructions without any confusion or having to refer an outside source (ie. StackOverflow, Github Docs)
+
+Test Case Derivation: Concise and comprehensive documentation of the framework including helpful concepts, and step-by-step guide is provided within the README files inside the repository
+
+How test will be performed:
+  \begin{itemize}
+    \item Users will be granted access to perform tasks execution within the framework
+    \item Users will be instructed to follow along the published documentation, and locate specific information
+    \item At the end, a survey is available for users to provide a feedback on the documentation from a scale of 1 to 10
+  \end{itemize}
 
 \end{enumerate}
 
-\subsubsection{Area of Testing2}
+\subsubsection{Real-time, Accurate Message Logging}
 
-...
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item 11.1.2, 15.4.1
+\end{itemize}
+
+\begin{enumerate}
+
+\item NFR-SLN2
+
+Control: Automated + Manual
+
+Type: Usability, Security
+
+Initial State: System is in idle, and ready to log messages for tasks
+
+Input/Condition: User performs an action or an error during the action occurred
+
+Output/Result: Logging of messages in real-time with low latency
+
+Test case derivation: Each method, and command available to the user includes some sort of logging to provide users with step-by-step insights
+
+How test will be performed:
+\begin{itemize}
+  \item Manual
+  \begin{itemize}
+    \item Monitor message log in real-time, verify timestamp of each messages is accurate and confirm the action occurring at that time is aligned with the logs. Often, users will receive notification of a survey to provide a feedback on the system's logging from a scale of 1 to 10
+  \end{itemize}
+  \item Automated
+  \begin{itemize}
+    \item Create unit tests that checks message logs from certain functions and validate that the messages are sent with no later than 1 second delay through the timestamps
+  \end{itemize}
+\end{itemize}
+
+\end{enumerate}
+
+\subsubsection{Customizable MuJoCo Simulation Parameters}
+
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item 11.2.1
+\end{itemize}
+
+\begin{enumerate}
+\item NFR-SLN3
+
+Control: Manual
+
+Type: Usability
+
+Initial State: MuJoCo is integrated within TPG.
+
+Input/Condition: User modifies specified fields inside parameters.txt or overwrites default value of fields using command line flags.
+
+Output/Result: Simulations adhere to the desired parameters.
+
+Test case derivation: MuJoCo has default parameters that can be customized by the users if necessary, to adjust the behavior of every environment based on their specific needs.
+
+How test will be performed:
+\begin{itemize}
+  \item Modify MuJoCo parameters inside parameters.txt and run simulations
+  \item Verify the behavior of the newly adjusted simulations
+  \item Within the parameters.txt, a survey is available for users to provide feedback regarding the experience of using custom parameters from a scale of 1 to 10
+\end{itemize}
+
+\end{enumerate}
+
+\subsubsection{High Numerical Precision in Computation}
+
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item 12.2
+\end{itemize}
+
+\begin{enumerate}
+\item NFR-SLN4
+
+Control: Automated + Manual
+
+Type: Performance
+
+Initial State: System is initialized with calculations in mind for computation.
+
+Input/Condition: Users perform calculations that require high numerical precision such as floating point with low computation errors.
+
+Output/Result: Calculation results are within acceptable tolerance limits such as computational errors below 0.0001.
+
+Test case derivation: Due to finite number of available bits for storing numbers, computers are bound to have an error on numerical computation if numbers are too small or too big.
+
+How test will be performed:
+\begin{itemize}
+  \item Manual:
+  \begin{itemize}
+    \item Perform tasks that are precision critical and inspect their results by comparing to expected numerical values and verify that the computational error is below 0.0001
+  \end{itemize}
+  \item Automated:
+  \begin{itemize}
+    \item Run and create unit tests for functions comprising of high precision results and assert that the computational error is below 0.0001
+  \end{itemize}
+\end{itemize}
+
+\end{enumerate}
+
+\subsubsection{Handling Invalid Inputs and Unexpected Conditions}
+
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item 12.3, 12.6, 15.5.2
+\end{itemize}
+
+\begin{enumerate}
+\item NFR-SLN5
+
+Control: Automated
+
+Type: Performance, Security
+
+Initial State: System is idle and ready to process normal and unusual inputs.
+
+Input/Condition: Unusual inputs to simulate model failures.
+
+Output/Result: System shows meaningful error logs, and handles exceptions without terminating.
+
+Test case derivation: System will use try and catch blocks where possible to handle errors gracefully.
+
+How test will be performed:
+\begin{itemize}
+  \item Create and run unit and integration tests to check various types of invalid inputs
+  \item Verify that the system recovers gracefully and outputs a descriptive error message
+\end{itemize}
+
+\end{enumerate}
+
+\subsubsection{Cross Platform Compatibility}
+
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item 13.1, 14.2.2, 14.3.2
+\end{itemize}
+
+\begin{enumerate}
+\item NFR-SLN6
+
+Control: Manual
+
+Type: Operational and Environmental, Maintainability and Support
+
+Initial State: System is available to be downloaded across different OS environments.
+
+Input/Condition: Users perform core functionalities of the framework.
+
+Output/Result: System provides outputs that are similar across different OS environments.
+
+Test case derivation: TPG and the MuJoCo environment integration are used across different OS platforms (Windows, Linux, MacOS).
+
+How test will be performed:
+\begin{itemize}
+  \item Users will run the framework across different OS environments
+  \item Every user is tasked to run various core functionalities and verify that behaviors are similar across OS
+\end{itemize}
+
+\end{enumerate}
+
+\subsubsection{Secured and Robust Repository Management}
+
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item 14.2.1, 15.1.1, 15.1.2, 15.2.1, 15.5.1
+\end{itemize}
+
+\begin{enumerate}
+\item NFR-SLN7
+
+Control: Manual
+
+Type: Maintainability and Support, Security
+
+Initial State: System is available to be modified on a version control tool such as GitHub.
+
+Input/Condition: Repository is accessed by authorized and unauthorized users through various Git actions.
+
+Output/Result: Access attempts are blocked for unauthorized users, and granted for authorized users.
+
+Test case derivation: Repository must be protected to avoid unauthorized and defective code from getting integrated within the system.
+
+How test will be performed:
+\begin{itemize}
+  \item Simulate unauthorized and authorized access attempts on the repository
+  \item Validate that security protocols such as role-based access control, two-factor authentication, and protected branch are functional
+\end{itemize}
+
+\end{enumerate}
+
+\subsubsection{Data Privacy through Obfuscation}
+
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item 15.3.1
+\end{itemize}
+
+\begin{enumerate}
+\item NFR-SLN8
+
+Control: Automated + Manual
+
+Type: Security
+
+Initial State: System has the capability of storing and visualizing data in different shapes and formats.
+
+Input/Condition: Sensitive data is pushed into the public repository through Git.
+
+Output/Result: Obfuscation of sensitive data is implemented, protecting privacy of any entity.
+
+Test case derivation: Data, mostly stored in CSV files, are publicly stored across the framework.
+
+How test will be performed:
+\begin{itemize}
+  \item Automated: Create and run unit tests that verify that stored data shown in logs, files, and messages are obfuscated
+  \item Manual: Manually check stored data through each file within the framework
+\end{itemize}
+
+\end{enumerate}
+
+\subsubsection{Compliance with C++ Coding Best Practices}
+
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item 13.3, 17.1, 17.2
+\end{itemize}
+
+\begin{enumerate}
+\item NFR-SLN9
+
+Control: Automated
+
+Type: Operational and Environmental, Compliance
+
+Initial State: Codebase implements an established Google C++ Style Guide with proper support and documentation.
+
+Input/Condition: Codebase is analyzed for its compliance with the style guide.
+
+Output/Result: Codebase follows the style guide, improving maintainability and readability.
+
+Test case derivation: Following a C++ style guide will ensure the cleanliness and efficient maintenance of the codebase.
+
+How test will be performed:
+\begin{itemize}
+  \item clang-tidy and clang-format, standard linters for C++, are ran within the CI/CD pipeline to check for new code’s compliance with the C++ style guide
+\end{itemize}
+
+\end{enumerate}
+
 
 \subsection{Traceability Between Test Cases and Requirements}
 
