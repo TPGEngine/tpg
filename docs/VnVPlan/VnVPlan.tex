@@ -11,6 +11,7 @@
     urlcolor=blue
 }
 \usepackage[round]{natbib}
+\usepackage{longtable}
 
 \input{../Comments}
 \input{../Common}
@@ -410,8 +411,27 @@ How test will be performed:
 
 \subsection{Traceability Between Test Cases and Requirements}
 
-\wss{Provide a table that shows which test cases are supporting which
-  requirements.}
+\begin{longtable}{|p{0.45\linewidth}|p{0.45\linewidth}|}
+  \hline
+  \textbf{Req. ID} & \textbf{System Test ID} \\
+  \hline
+  FR-1 & FR-SLN1, FR-SLN2 \\
+  \hline
+  FR-2 & FR-SLN3 \\
+  \hline
+  FR-3 & FR-SLN4 \\
+  \hline
+  FR-4 & FR-SLN4 \\
+  \hline
+  FR-5 & FR-SLN4 \\
+  \hline
+  FR-6 & FR-SLN5 \\
+  \hline
+  FR-7 & FR-SLN4 \\
+  \hline
+  FR-8 & FR-SLN1, FR-SLN2 \\
+  \hline
+  \end{longtable}
 
 \section{Unit Test Description}
 
