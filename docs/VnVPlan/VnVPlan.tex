@@ -212,53 +212,31 @@ verified.  Techniques for this include review and mutation testing.}
 
 \subsection{Implementation Verification Plan}
 
-\wss{You should at least point to the tests listed in this document and the unit
-  testing plan.}
+The implementation verification process will focus on ensuring that our modifications to TPG and the MuJoCo integration meet the project's core requirements. This will be accomplished through several complementary approaches. \\
 
-\wss{In this section you would also give any details of any plans for static
-  verification of the implementation.  Potential techniques include code
-  walkthroughs, code inspection, static analyzers, etc.}
+Code review will serve as the primary verification mechanism. All pull requests will require review by at least one other team member before merging. During these reviews, we will verify adherence to the Google C++ Style Guide, completeness of documentation, potential impacts on existing TPG functionality, and the correctness of MuJoCo integration points. \\
 
-\wss{The final class presentation in CAS 741 could be used as a code
-walkthrough.  There is also a possibility of using the final presentation (in
-CAS741) for a partial usability survey.}
+Version control validation will be maintained through strict repository management practices. Branch protection rules will prevent direct pushes to the main branch, ensuring all changes go through the required review process. We will maintain regular synchronization between the GitHub and GitLab repositories to ensure consistency across development platforms. \\
+
+Manual testing and inspection will verify that core TPG functionality remains intact. This includes verifying program generation and mutation, team/graph evolution, and action selection mechanisms. For the MuJoCo integration specifically, we will verify basic environment setup, proper handling of state and action spaces, and compare performance against the existing implementations such as CartPole as a baseline.
 
 \subsection{Automated Testing and Verification Tools}
 
-\wss{What tools are you using for automated testing.  Likely a unit testing
-  framework and maybe a profiling tool, like ValGrind.  Other possible tools
-  include a static analyzer, make, continuous integration tools, test coverage
-  tools, etc.  Explain your plans for summarizing code coverage metrics.
-  Linters are another important class of tools.  For the programming language
-  you select, you should look at the available linters.  There may also be tools
-  that verify that coding standards have been respected, like flake9 for
-  Python.}
+Our primary automated verification will be implemented through a GitHub Actions CI/CD pipeline. This pipeline will perform automated build verification across multiple platforms including Linux, Mac, and Windows to ensure cross-platform compatibility. It will also run basic integration tests and enforce code style requirements. \\
 
-\wss{If you have already done this in the development plan, you can point to
-that document.}
-
-\wss{The details of this section will likely evolve as you get closer to the
-  implementation.}
+For manual verification, we will leverage TPG's existing suite of plotting and statistics tools to analyze performance and behavior. The OpenGL visualization capabilities built into TPG will allow us to inspect agent behaviors directly. Similarly, MuJoCo's built-in visualization tools will provide another avenue for verifying correct environment integration and agent behavior.
 
 \subsection{Software Validation Plan}
 
-\wss{If there is any external data that can be used for validation, you should
-  point to it here.  If there are no plans for validation, you should state that
-  here.}
+The software validation plan begins with establishing CartPole as a baseline for comparison. We will compare TPG's performance between the existing environment implementation and the new MuJoCo implementation. This comparison will include validating expected agent behaviors through visual inspection using both OpenGL and MuJoCo visualizations, as well as verifying that fitness scores achieve similar thresholds in both implementations. \\
 
-\wss{You might want to use review sessions with the stakeholder to check that
-the requirements document captures the right requirements.  Maybe task based
-inspection?}
+Core integration validation will focus on verifying TPG's ability to properly interact with MuJoCo environments. We will verify that TPG can successfully initialize MuJoCo environments, receive valid state information, send valid actions, and receive appropriate rewards. Throughout the training process, we will monitor the environment's response to agent actions and verify training progression through both fitness scores and visual behavior inspection. \\
 
-\wss{For those capstone teams with an external supervisor, the Rev 0 demo should 
-be used as an opportunity to validate the requirements.  You should plan on 
-demonstrating your project to your supervisor shortly after the scheduled Rev 0 demo.  
-The feedback from your supervisor will be very useful for improving your project.}
+Documentation validation will ensure that all necessary information is available to users and future developers. This includes verifying the completeness and accuracy of installation guides, with particular attention to environment setup steps and dependency management. Usage documentation will cover running experiments, visualizing results, and common troubleshooting procedures. \\
 
-\wss{For teams without an external supervisor, user testing can serve the same purpose 
-as a Rev 0 demo for the supervisor.}
+Research validation will be conducted through regular review meetings with Dr. Kelly to ensure the implementation supports the project's research goals. These reviews will validate that basic research capabilities are preserved and verify that new MuJoCo environments can be added as needed. We will assess TPG's behavior in baseline environments to ensure it provides a solid foundation for future research experiments. \\
 
-\wss{This section might reference back to the SRS verification section.}
+The entire validation process will be iterative, with feedback incorporated throughout development. Our focus is on ensuring the basic integration is sound and providing a foundation that will support future research experiments. Rather than attempting to validate against specific performance criteria, we will validate that the implementation provides the necessary capabilities for exploring research questions about TPG's behavior in MuJoCo environments.
 
 \section{System Tests}
 
@@ -566,10 +544,18 @@ graduate attribute of Lifelong Learning.
   Examples of possible knowledge and skills include dynamic testing knowledge,
   static testing knowledge, specific tool usage, Valgrind etc.  You should look to
   identify at least one item for each team member.
+  
+  \textbf{Edward:} One of the key knowledge areas I will need to develop is understanding the various indicators of correct agent behavior across different MuJoCo environments. This includes interpreting fitness scores, analyzing plot outputs, inspecting animations, and recognizing expected behavioral patterns. Since each environment has unique characteristics and learning dynamics, this will require developing a deeper familiarity with TPG's learning progression and how it manifests across different scenarios. Currently, the workflow involving running experiments, checking logs, interpreting plots, and debugging issues is still somewhat opaque, requiring significant guidance from Dr. Kelly to understand the nuances of what we're observing.
+
   \item For each of the knowledge areas and skills identified in the previous
   question, what are at least two approaches to acquiring the knowledge or
   mastering the skill?  Of the identified approaches, which will each team
   member pursue, and why did they make this choice?
+  
+  \textbf{Edward:} There are two main approaches I plan to pursue to develop this knowledge: \\ 
+  a) Build understanding incrementally through guided exploration. This involves starting with environments where we have clear expectations (like CartPole), consulting with Dr. Kelly to understand what indicators to look for, and documenting these learnings to apply to new environments. Regular communication with the team about observations and issues is crucial since everyone brings different insights to interpreting TPG's behavior.  \\
+  b) Take a systematic experimentation approach. This means making controlled modifications to environment parameters or TPG settings on separate GitHub branches, carefully documenting the impacts, and building a mental model of cause-and-effect relationships. By having a safe space to experiment without fear of breaking the main codebase, I can learn through trial and error while maintaining rigorous version control.
+
 \end{enumerate}
 
 \end{document}
