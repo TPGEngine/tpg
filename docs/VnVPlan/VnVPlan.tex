@@ -403,11 +403,11 @@ Type: Usability, Security
 
 Initial State: System is in idle, and ready to log messages for tasks
 
-Input/Condition: User performs an action or an error during the action occurred
+Input/Condition: User performs an action or an error during the action occurs
 
 Output/Result: Logging of messages in real-time with low latency
 
-Test case derivation: Each method, and command available to the user includes some sort of logging to provide users with step-by-step insights
+Test Case Derivation: Each method, and command available to the user includes some sort of logging to provide users with step-by-step insights
 
 How test will be performed:
 \begin{itemize}
@@ -443,12 +443,11 @@ Input/Condition: User modifies specified fields inside parameters.txt or overwri
 
 Output/Result: Simulations adhere to the desired parameters.
 
-Test case derivation: MuJoCo has default parameters that can be customized by the users if necessary, to adjust the behavior of every environment based on their specific needs.
+Test Case Derivation: MuJoCo has default parameters that can be customized by the users if necessary, to adjust the behavior of every environment based on their specific needs.
 
 How test will be performed:
 \begin{itemize}
-  \item Modify MuJoCo parameters inside parameters.txt and run simulations
-  \item Verify the behavior of the newly adjusted simulations
+  \item Modify MuJoCo parameters inside parameters.txt, run the simulations and verify that the behavior of the newly adjusted simulations complies with expected outcome from calculations
   \item Within the parameters.txt, a survey is available for users to provide feedback regarding the experience of using custom parameters from a scale of 1 to 10
 \end{itemize}
 
@@ -474,7 +473,7 @@ Input/Condition: Users perform calculations that require high numerical precisio
 
 Output/Result: Calculation results are within acceptable tolerance limits such as computational errors below 0.0001.
 
-Test case derivation: Due to finite number of available bits for storing numbers, computers are bound to have an error on numerical computation if numbers are too small or too big.
+Test Case Derivation: Due to finite number of available bits for storing numbers, computers are bound to have an error on numerical computation if numbers are too small or too big.
 
 How test will be performed:
 \begin{itemize}
@@ -484,7 +483,7 @@ How test will be performed:
   \end{itemize}
   \item Automated:
   \begin{itemize}
-    \item Run and create unit tests for functions comprising of high precision results and assert that the computational error is below 0.0001
+    \item Create and run automated testing for functions comprising of high precision results and assert that the computational error is below 0.0001 by comparing expected output to real output
   \end{itemize}
 \end{itemize}
 
@@ -510,11 +509,11 @@ Input/Condition: Unusual inputs to simulate model failures.
 
 Output/Result: System shows meaningful error logs, and handles exceptions without terminating.
 
-Test case derivation: System will use try and catch blocks where possible to handle errors gracefully.
+Test Case Derivation: System will use try and catch blocks where possible to handle errors gracefully.
 
 How test will be performed:
 \begin{itemize}
-  \item Create and run unit and integration tests to check various types of invalid inputs
+  \item Create and run automated unit and integration tests to check various types of invalid inputs such as infinity, and NaN
   \item Verify that the system recovers gracefully and outputs a descriptive error message
 \end{itemize}
 
@@ -540,7 +539,7 @@ Input/Condition: Users perform core functionalities of the framework.
 
 Output/Result: System provides outputs that are similar across different OS environments.
 
-Test case derivation: TPG and the MuJoCo environment integration are used across different OS platforms (Windows, Linux, MacOS).
+Test Case Derivation: TPG and the MuJoCo environment integration are used across different OS platforms (Windows, Linux, MacOS).
 
 How test will be performed:
 \begin{itemize}
@@ -570,7 +569,7 @@ Input/Condition: Repository is accessed by authorized and unauthorized users thr
 
 Output/Result: Access attempts are blocked for unauthorized users, and granted for authorized users.
 
-Test case derivation: Repository must be protected to avoid unauthorized and defective code from getting integrated within the system.
+Test Case Derivation: Repository must be protected to avoid unauthorized and defective code from getting integrated within the system.
 
 How test will be performed:
 \begin{itemize}
@@ -600,11 +599,11 @@ Input/Condition: Sensitive data is pushed into the public repository through Git
 
 Output/Result: Obfuscation of sensitive data is implemented, protecting privacy of any entity.
 
-Test case derivation: Data, mostly stored in CSV files, are publicly stored across the framework.
+Test Case Derivation: Data, mostly stored in CSV or .txt files, are publicly stored across the framework.
 
 How test will be performed:
 \begin{itemize}
-  \item Automated: Create and run unit tests that verify that stored data shown in logs, files, and messages are obfuscated
+  \item Automated: Create and run automated unit tests that verifies that ensures data shown in logs, files, and messages are obfuscated
   \item Manual: Manually check stored data through each file within the framework
 \end{itemize}
 
@@ -630,11 +629,11 @@ Input/Condition: Codebase is analyzed for its compliance with the style guide.
 
 Output/Result: Codebase follows the style guide, improving maintainability and readability.
 
-Test case derivation: Following a C++ style guide will ensure the cleanliness and efficient maintenance of the codebase.
+Test Case Derivation: Following a C++ style guide will ensure the cleanliness and efficient maintenance of the codebase.
 
 How test will be performed:
 \begin{itemize}
-  \item clang-tidy and clang-format, standard linters for C++, are ran within the CI/CD pipeline to check for new code’s compliance with the C++ style guide
+  \item clang-tidy and clang-format, standard linters and formatters for C++, are ran within the CI/CD pipeline to check for new code’s compliance with the Google's style guide
 \end{itemize}
 
 \end{enumerate}
@@ -662,7 +661,62 @@ How test will be performed:
   \hline
   FR-8 & FR-SLN1, FR-SLN2 \\
   \hline
-  \end{longtable}
+  NFR-11.1.1 & NFR-SLN1 \\
+  \hline
+  NFR-11.1.2 & NFR-SLN2 \\
+  \hline
+  NFR-11.2.1 & NFR-SLN3 \\
+  \hline
+  NFR-11.3.1 & NFR-SLN1 \\
+  \hline
+  NFR-11.3.2 & NFR-SLN1 \\
+  \hline
+  NFR-11.4.1 & NFR-SLN1 \\
+  \hline
+  NFR-11.4.2 & NFR-SLN1 \\
+  \hline
+  NFR-11.5.1 & NFR-SLN1 \\
+  \hline
+  NFR-12.2 & NFR-SLN4 \\
+  \hline
+  NFR-12.3 & NFR-SLN5 \\
+  \hline
+  NFR-12.6 & NFR-SLN5 \\
+  \hline
+  NFR-13.1 & NFR-SLN6 \\
+  \hline
+  NFR-13.3 & NFR-SLN9 \\
+  \hline
+  NFR-13.4 & NFR-SLN1 \\
+  \hline
+  NFR-14.1.2 & NFR-SLN1 \\
+  \hline
+  NFR-14.2.1 & NFR-SLN1, NFR-SLN7 \\
+  \hline
+  NFR-14.2.2 & NFR-SLN6 \\
+  \hline
+  NFR-14.3.2 & NFR-SLN6 \\
+  \hline
+  NFR-15.1.1 & NFR-SLN7 \\
+  \hline
+  NFR-15.1.2 & NFR-SLN7 \\
+  \hline
+  NFR-15.2.1 & NFR-SLN7 \\
+  \hline
+  NFR-15.3.1 & NFR-SLN8 \\
+  \hline
+  NFR-15.4.1 & NFR-SLN2 \\
+  \hline
+  NFR-15.5.1 & NFR-SLN7 \\
+  \hline
+  NFR-15.5.2 & NFR-SLN5 \\
+  \hline
+  NFR-17.1 & NFR-SLN9 \\
+  \hline
+  NFR-17.2 & NFR-SLN9 \\
+  \hline
+\end{longtable}
+
 
 \section{Unit Test Description}
 
