@@ -147,38 +147,22 @@ how they relate to your VnV efforts.}
 
 \subsection{Verification and Validation Team}
 
-\setlength{\arrayrulewidth}{0.5mm}
-\setlength{\tabcolsep}{13pt}
-\renewcommand{\arraystretch}{1.5}
-\begin{tabular}{ | m{5cm} | m{8cm} | } 
-\hline
-  \textbf{Name and Role} & \textbf{Responsibilites} \\ 
-  \hline
-    \textbf{Calvyn Siong} - CI/CD verification
-    & \begin{itemize}
-	\item Responsible for ensuring the continuous integration and continuous deployment (CI/CD) pipeline functions as intended, supporting automated testing, smooth deployments, and efficient integration of code changes. Verifies that the CI/CD pipeline adheres to project standards, minimizes deployment risks, and enables consistent checks for potential errors in the TPG framework.
-	
-\end{itemize}\\ 
-  \hline
-   \textbf{Mark Cruz} - Code verification & \begin{itemize}
-	\item Ensures that the codebase adheres to established software standards and project guidelines, including readability, maintainability, and overall code quality. Additionally, responsible for reviewing unit tests created to improve code reliability.
-       
-\end{itemize}\\ 
-  \hline
-    \textbf{Edward Gao} - Data Verification & \begin{itemize}
-	\item Responsible for validating and verifying all data utilized by the TPG framework, including inputs and outputs. This includes ensuring data integrity and accuracy for agent-environment interactions and simulator-generated data.
-\end{itemize}\\ 
-  \hline
-   \textbf{Cyruss Allen Amante} - SRS Verification & \begin{itemize}
-	\item Validates that the TPG framework and its integrations fulfill both functional and non-functional requirements as outlined in the Software Requirements Specification (SRS). Ensures that each requirement is accurately implemented.
-\end{itemize}\\ 
-  \hline
-    \textbf{Richard Li} - Performance Verification & \begin{itemize}
-	\item Ensures that the framework’s performance metrics, including response times, computational efficiency, and resource usage, meet the standards necessary for the TPG framework. 
-\end{itemize}\\ 
-  \hline
 
-\end{tabular}
+\begin{tabularx}{\textwidth}{p{5cm}p{8cm}X}
+  \toprule {\bf Name and Roles} & {\bf Responsibilites}\\
+  \midrule
+  {\bf Calvyn Siong}: CI/CD verification & Responsible for ensuring the continuous integration and continuous deployment (CI/CD) pipeline functions as intended, supporting automated testing, smooth deployments, and efficient integration of code changes. Verifies that the CI/CD pipeline adheres to project standards, minimizes deployment risks, and enables consistent checks for potential errors in the TPG framework.\\
+  {\bf Mark Cruz}: Code verification & Ensures that the codebase adheres to established software standards and project guidelines, including readability, maintainability, and overall code quality. Additionally, responsible for reviewing unit tests created to improve code reliability.\\
+
+  {\bf Richard Li}: Performance verification &Ensures that the framework’s performance metrics, including response times, computational efficiency, and resource usage, meet the standards necessary for the TPG framework. \\
+
+  {\bf Cyruss Allen Amante}: SRS verification &Validates that the TPG framework and its integrations fulfill both functional and non-functional requirements as outlined in the Software Requirements Specification (SRS). Ensures that each requirement is accurately implemented.\\
+
+  {\bf Edward Gao}: Data verification & Responsible for validating and verifying all data utilized by the TPG framework, including inputs and outputs. This includes ensuring data integrity and accuracy for agent-environment interactions and simulator-generated data.\\
+  \bottomrule
+  \end{tabularx}
+  
+  
 
 
 
@@ -525,7 +509,6 @@ Their values are defined in this section for easy maintenance.
 \newpage{}
 \section*{Appendix --- Reflection}
 
-\wss{This section is not required for CAS 741}
 
 The information in this section will be used to evaluate the team members on the
 graduate attribute of Lifelong Learning.
@@ -533,18 +516,96 @@ graduate attribute of Lifelong Learning.
 \input{../Reflection.tex}
 
 \begin{enumerate}
-  \item What went well while writing this deliverable? 
-  \item What pain points did you experience during this deliverable, and how
-    did you resolve them?
-  \item What knowledge and skills will the team collectively need to acquire to
+  \item \textbf{What went well while writing this deliverable?} 
+  
+  Due to the previous effort put into previous resources and documentation, our team was able to create well defined objectives with clear rationales based on our initial work. This groundwork made it much easier to develop a consistent direction for the Verification and Validation Plan, ensuring that each part of the project is aligned with the overarching goals. By referencing our Problem Statement, SRS, and Development Plan, we could confidently outline the project’s needs and avoid a lot of back-and-forth on high-level decisions. 
+
+Developing an outline for a collaborative process with Dr. Kelly’s team was another important part of this documentation. Establishing a feedback loop is important for our project, especially with MuJoCo integration, which is a challenging area. Regular check-ins ensure that we are not overlooking research requirements or deviating from the project’s core objectives. It is reassuring to have a system for catching issues early, keeping us on track, and ultimately supporting a more robust integration.
+
+  \item \textbf{What pain points did you experience during this deliverable, and how
+    did you resolve them?}
+
+    Some pain points include balancing clarity of our testing plan without a clear understanding of the effort or difficulty of it. Since certain aspects of MuJoCo integration and CI/CD setup were new to us, it was challenging to estimate how complex they would be to validate accurately. This lack of clarity makes it difficult to break down our validation plan into actionable steps, as we weren’t sure of the exact methods or tools we would need.
+
+To work through this, we decided to make certain high level goals for us to achieve in our testing plans, and also examined other open-source projects that implemented similar validation processes or functionality to what we are looking for to gain a better understanding.
+
+In addition, making sure our validation plans addressed both functional and non-functional requirements from the SRS felt particularly challenging. It required us to carefully think through how we would test each requirement practically. To tackle this, we created a checklist derived directly from the SRS document, ensuring every key requirement had an associated test or validation step. This checklist became a helpful guide in our regular review meetings, allowing us to confirm we weren’t overlooking critical areas.
+
+  \item \textbf{What knowledge and skills will the team collectively need to acquire to
   successfully complete the verification and validation of your project?
   Examples of possible knowledge and skills include dynamic testing knowledge,
   static testing knowledge, specific tool usage, Valgrind etc.  You should look to
-  identify at least one item for each team member.
-  \item For each of the knowledge areas and skills identified in the previous
+  identify at least one item for each team member.}
+
+    \newline
+    \newline
+
+
+    \textbf{Calvyn:}
+    
+     To complete the verification and validation process,  I’ll need to focus on gaining a stronger understanding of memory management and debugging tools specific to C++. C++ can be challenging to work with due to potential issues like memory leaks and undefined behavior, which are especially important to detect and resolve in our project due to its reinforcement learning and simulation components. With a better understanding of these tools, I’ll be better equipped to analyze our code for memory-related errors and optimize its performance, which will be crucial for ensuring stability and efficiency within our CI/CD pipeline.
+
+    
+
+    \textbf{Edward:}
+    
+     One of the key knowledge areas I will need to develop is understanding the various indicators of correct agent behavior across different MuJoCo environments. This includes interpreting fitness scores, analyzing plot outputs, inspecting animations, and recognizing expected behavioral patterns. Since each environment has unique characteristics and learning dynamics, this will require developing a deeper familiarity with TPG's learning progression and how it manifests across different scenarios. Currently, the workflow involving running experiments, checking logs, interpreting plots, and debugging issues is still somewhat opaque, requiring significant guidance from Dr. Kelly to understand the nuances of what we're observing.
+
+    
+
+    \textbf{Cyruss:}
+    
+     The knowledge and skills that the team will need to successfully acquire to complete the verification and validation of the project include a variety of testing knowledge such as unit testing, and automation testing. These verification and validation techniques will be beneficial to easily debug and determine any failures within the system. With the use of automation testing, it will be beneficial to automatically execute repetitive tests. This will ensure consistency and efficiency while reducing human error.
+
+
+    
+
+    \textbf{Mark:}
+    
+     The team will collectively have to acquire knowledge in both dynamic and static testing, a few testing tools such as clang-tidy, clang-format, Google Test, and CI/CD integration using Github Actions. Dynamic and static testing will help the team to perform manual testing across the framework. Clang-tidy, clang-format, and Google Test will help automate the testing and verification process, saving plenty of man hours from the team. Lastly, the CI/CD integration through Github Actions will provide a comprehensive set of testing and verification prior to the team committing newly developed code into the codebase, saving less headaches in the future.
+
+    
+
+    \textbf{Richard:}
+
+     The main knowledge areas for our project involves software engineering standards. An important thing for any open source framework is the ease of onboarding and utilizing the library. One way we can validate this is to be able to easily onboard and get an experiment running on any operating system that the user is using. The documentation also needs to be clear and concise to allow for the best developer experience. Specific knowledge related to cross platform C++ build tools, and containerizing the framework will be key for this. In addition, static code analysis will also be critical to evaluate the structure of our code. This is key because we want to ensure our code is robust, and also easy to use and build on top of since our supervisor Dr. Kelly wants this framework to be used as an open source tool.
+
+    
+
+
+
+  \item \textbf{For each of the knowledge areas and skills identified in the previous
   question, what are at least two approaches to acquiring the knowledge or
   mastering the skill?  Of the identified approaches, which will each team
-  member pursue, and why did they make this choice?
+  member pursue, and why did they make this choice?}
+
+
+  \textbf{Calvyn:}
+
+  I believe that the first method I should use to gain a better understanding of debugging errors is to utilize the regular feedback sessions with Dr. Kelly to discuss testing, debugging, and other technical issues. These sessions would allow team members to ask questions, review complex aspects of the project, and receive guidance on best practices for testing and validation, helping the team refine their approach and stay aligned with project goals. Another approach would be to browse existing threads that discuss testing issues and solutions related to C++ can offer valuable context and practical examples. Analyzing how other developers approach similar challenges can help the team apply these strategies to their own project, learning from both successes and mistakes of others.
+
+\textbf{Edward:}
+
+There are two main approaches I plan to pursue to develop this knowledge. The first would be to build understanding incrementally through guided exploration. This involves starting with environments where we have clear expectations (like CartPole), consulting with Dr. Kelly to understand what indicators to look for, and documenting these learnings to apply to new environments. Regular communication with the team about observations and issues is crucial since everyone brings different insights to interpreting TPG's behavior.
+Secondly, I would take a systematic experimentation approach. This means making controlled modifications to environment parameters or TPG settings on separate GitHub branches, carefully documenting the impacts, and building a mental model of cause-and-effect relationships. By having a safe space to experiment without fear of breaking the main codebase, I can learn through trial and error while maintaining rigorous version control.
+
+
+\textbf{Cyruss:}
+
+Two approaches to acquiring the knowledge of both skills include hands-on approach testing with different tools without any guidance, or using online self-learning techniques such as Linkedin Learning or Udemy. I will be pursuing the online self-learning approach as I work better with structured guidance and clear explanations. Additionally, these courses often include practical examples and quizzes, which will help reinforce my understanding.
+
+
+\textbf{Mark:}
+
+A few approaches that can be used to attain knowledge of these skills are reading documentations and watching visual tutorials. Documentations help users tremendously as most if not all are usually well made, especially if they are enterprise standard tools. Watching visual tutorials may be another way to master these areas and skills through the use of YouTube, or Coursera. Each person has a preferred way of learning. They can either go the non-visual part of reading documentations and articles or visual tutorials. It all comes down to what saves the contributor the most time, while having the most yield from the content.
+
+
+\textbf{Richard:}
+
+There are a few approaches I can take to attain knowledge. For one, there is a group in France that has built an open source framework on top of Dr. Kelly’s TPG framework is called Gegelati. The Gegelati project is open source on Github and has implemented a lot of the CI/CD infrastructure and also enables cross platform development. Additionally, there are numerous C++ libraries that build with cross platform tools such as MuJoCo itself (developed by Google DeepMind) so seeing those examples will help guide me. Second, is to view YouTube videos on the topic to see how other developers tackle and approach this problem. Getting more opinions and seeing best practices in a visual format will be beneficial. 
+
+
+
 \end{enumerate}
 
 \end{document}
