@@ -45,15 +45,20 @@ checkpoint_in_t 0
 # Test: 2
 checkpoint_in_phase 2
 
-# Save checkpoints during evolution
+# Save checkpoints when we discover a new champion in this phase
+# 0: Training phase
+# 1: Validation phase
+# 2: Test phase
+save_champ_checkpoints 0
+
+Whether to save training checkpoints at each generation
 write_train_checkpoints 0
-write_test_checkpoints 1
 
 # Save phylogenetic data
 write_phylogeny 0
 
 # How frequently to run test procedure
-test_mod 1
+test_mod 0
 
 # Number of tasks used each selection for evaluation 
 # The rest are estimated with phylogeny
@@ -82,11 +87,11 @@ n_generations 1000000
 # Allow mutation of internal teams (i.e. non-root teams (in-progress))
 mu_internal 0
 
-# Number of elite root teams (agents)
-n_elite 1000
+# Number of root teams (agents) to keep each generation
+n_root 720
 
-# n_elite * n_elite_mul new teams are created each generation
-n_elite_mul 0.02
+# Number of new root teams to create each generation
+n_root_gen 60
 
 # Whether to use fitness proportional selection
 fit_prop_select 0
@@ -134,7 +139,7 @@ pmw 0.1
 # Program variation: probability of mutating a program's action pointer
 pmn 0.1
 # When changing action pointer, probability of selecting atomic action
-p_atomic 1.0
+p_atomic 0.99
 
 # Program variation: probability of changing a random instruction
 p_bid_mutate 0.2
@@ -252,8 +257,9 @@ mj_model_path $TPG/datasets/mujoco_models/ant.xml
 
 mj_max_timestep 1000
 
-mj_n_eval_train 1
-mj_n_eval_test 1
+mj_n_eval_train 3
+mj_n_eval_validation 0
+mj_n_eval_test 0
 
 ################################################################################
 ## Operations, uncomment to activate ###########################################
