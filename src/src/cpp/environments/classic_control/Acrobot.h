@@ -201,7 +201,6 @@ class Acrobot : public ClassicControlEnv {
     }
 
     //! Renders the current state of the Acrobot environment using OpenGL
-    // TODO: Change function name once TaskEnv follows Google's C++ Styling
     // OpenGL Display
     void DisplayFunction(int episode, int actionD, double actionC) {
         (void)episode;
