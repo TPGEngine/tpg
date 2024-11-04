@@ -3,6 +3,8 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{float}
+
 \hypersetup{
     colorlinks,
     citecolor=blue,
@@ -31,7 +33,7 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-11/01/2024 & 0.0 & Initial draft of VnV plan.\\
+11/04/2024 & 0.0 & Initial draft of VnV plan.\\
 \bottomrule
 \end{tabularx}
 
@@ -55,30 +57,36 @@
 \tableofcontents
 
 \listoftables
-\wss{Remove this section if it isn't needed}
+% \wss{Remove this section if it isn't needed}
 
-\listoffigures
-\wss{Remove this section if it isn't needed}
+
+% \listoffigures
+% \wss{Remove this section if it isn't needed}
 
 \newpage
 
 \section{Symbols, Abbreviations, and Acronyms}
 
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{l l} 
-  \toprule		
-  \textbf{symbol} & \textbf{description}\\
-  \midrule 
-  TPG & Tangled Program Graphs\\
-  DNNs & Deep Neural Networks\\
-  RL & Reinforcement Learning\\
-  Multi-Task RL & Multi-Task Reinforcement Learning\\
-  SRS & Software Requirement Specification\\
-  FR & Functional Requirement\\
-  NFR & Non-Functional Requirement\\
-  MIS & Module Interface Specification\\
-  \bottomrule
-\end{tabular}\\
+\begin{table}[h]
+  \begin{tabular}{l l} 
+    \toprule		
+    \textbf{symbol} & \textbf{description}\\
+    \midrule 
+    TPG & Tangled Program Graphs\\
+    DNNs & Deep Neural Networks\\
+    RL & Reinforcement Learning\\
+    Multi-Task RL & Multi-Task Reinforcement Learning\\
+    SRS & Software Requirement Specification\\
+    FR & Functional Requirement\\
+    NFR & Non-Functional Requirement\\
+    MIS & Module Interface Specification\\
+    \bottomrule
+  \end{tabular}
+  \caption{Symbols, Abbreviations, and Acronyms}
+  \label{symbols}
+\end{table}
+
 
 % \wss{symbols, abbreviations, or acronyms --- you can simply reference the SRS
 %   \citep{SRS} tables, if appropriate}
@@ -168,32 +176,31 @@ The following documentation is considered to be relevant and may provide more co
 
 % \wss{Don't just list the other documents.  You should explain why they are relevant and 
 % how they relate to your VnV efforts.}
-
 \section{Plan}
 
-\wss{Introduce this section.  You can provide a roadmap of the sections to
-  come.}
+% \wss{Introduce this section.  You can provide a roadmap of the sections to
+%   come.}
 
 \subsection{Verification and Validation Team}
 
-
-\begin{tabularx}{\textwidth}{p{5cm}p{8cm}X}
+\begin{longtable}{|p{0.5\linewidth}|p{0.5\linewidth}|}
   \toprule {\bf Name and Roles} & {\bf Responsibilites}\\
-  \midrule
+  \hline
   {\bf Calvyn Siong}: CI/CD verification & Responsible for ensuring the continuous integration and continuous deployment (CI/CD) pipeline functions as intended, supporting automated testing, smooth deployments, and efficient integration of code changes. Verifies that the CI/CD pipeline adheres to project standards, minimizes deployment risks, and enables consistent checks for potential errors in the TPG framework.\\
+  \hline
   {\bf Mark Cruz}: Code verification & Ensures that the codebase adheres to established software standards and project guidelines, including readability, maintainability, and overall code quality. Additionally, responsible for reviewing unit tests created to improve code reliability.\\
+  \hline
 
   {\bf Richard Li}: Performance verification &Ensures that the framework’s performance metrics, including response times, computational efficiency, and resource usage, meet the standards necessary for the TPG framework. \\
+  \hline
 
   {\bf Cyruss Allen Amante}: SRS verification &Validates that the TPG framework and its integrations fulfill both functional and non-functional requirements as outlined in the Software Requirements Specification (SRS). Ensures that each requirement is accurately implemented.\\
-
+  \hline
   {\bf Edward Gao}: Data verification & Responsible for validating and verifying all data utilized by the TPG framework, including inputs and outputs. This includes ensuring data integrity and accuracy for agent-environment interactions and simulator-generated data.\\
   \bottomrule
-  \end{tabularx}
-  
-  
-
-
+  \caption{Verification and Validation Team}
+  \label{team}
+\end{longtable}
 
 
 \subsection{SRS Verification Plan}
@@ -205,16 +212,16 @@ Through these routine reviews, task based inspection will be leveraged to audit 
 
 \subsection{Design Verification Plan}
 
-The plan is to verify that the design of the modifications made to the TPG framework meets the intended specifications and supports functionality aligned with project objectives set by Dr. Stephen Kelly. Thus as the primary stakeholders, Dr. Kelly’s team will actively participate in hands-on reviews to verify the framework's design.
+The plan is to verify that the design of the modifications made to the TPG framework meets the intended specifications and supports functionality aligned with project objectives set by Dr. Stephen Kelly. Thus as the primary stakeholders, Dr.Kelly's team will actively participate in hands-on reviews to verify the framework's design.
 
 This verification will include design review meetings and usability assessments. Design review meetings will be held monthly during regular project meetings, providing an opportunity for stakeholders to give informal feedback on the design. These reviews will address specific design elements, such as compatibility with the MuJoCo integration, degree of fitness changes to the new integrations, and robustness of the results.
 
-In addition to the regular reviews, usability assessments will be conducted with additional members from Dr. Kelly's team, focusing on the testing infrastructure being added to the TPG framework. Feedback gathered from these sessions will guide iterative design improvements, ensuring the framework’s usability.
+In addition to the regular reviews, usability assessments will be conducted with additional members from Dr. Kelly's team, focusing on the testing infrastructure being added to the TPG framework. Feedback gathered from these sessions will guide iterative design improvements, ensuring the framework's usability.
 
 
 \subsection{Verification and Validation Plan Verification Plan}
 
-To verify the Verification and Validation Plan itself, peer review will be necessary to ensure that the listed test plans are properly conducted. The team will also conduct a review session with Dr Kelly when the project is completed. Dr. Kelly will review the Verification and Validation (V&V) document with the team to ensure that all tests outlined in the V&V plan were executed successfully. This collaborative review will confirm that the system meets the required specifications and that all verification and validation criteria have been addressed satisfactorily.
+To verify the Verification and Validation Plan itself, peer review will be necessary to ensure that the listed test plans are properly conducted. The team will also conduct a review session with Dr Kelly when the project is completed. Dr. Kelly will review the Verification and Validation (V\&V) document with the team to ensure that all tests outlined in the V\&V plan were executed successfully. This collaborative review will confirm that the system meets the required specifications and that all verification and validation criteria have been addressed satisfactorily.
 
 \subsection{Implementation Verification Plan}
 
@@ -246,8 +253,8 @@ The entire validation process will be iterative, with feedback incorporated thro
 
 \section{System Tests}
 
-\wss{There should be text between all headings, even if it is just a roadmap of
-the contents of the subsections.}
+% \wss{There should be text between all headings, even if it is just a roadmap of
+% the contents of the subsections.}
 
 \subsection{Tests for Functional Requirements}
 
@@ -726,133 +733,156 @@ How test will be performed:
   \hline
   NFR-17.2 & NFR-SLN9 \\
   \hline
+  \caption{Traceability Between Test Cases and Requirements}
+  \label{traceability}
 \end{longtable}
 
 
 \section{Unit Test Description}
 
-\wss{This section should not be filled in until after the MIS (detailed design
-  document) has been completed.}
+This section will be completed after the detailed design document has been completed.
 
-\wss{Reference your MIS (detailed design document) and explain your overall
-philosophy for test case selection.}  
+% \wss{This section should not be filled in until after the MIS (detailed design
+%   document) has been completed.}
 
-\wss{To save space and time, it may be an option to provide less detail in this section.  
-For the unit tests you can potentially layout your testing strategy here.  That is, you 
-can explain how tests will be selected for each module.  For instance, your test building 
-approach could be test cases for each access program, including one test for normal behaviour 
-and as many tests as needed for edge cases.  Rather than create the details of the input 
-and output here, you could point to the unit testing code.  For this to work, you code 
-needs to be well-documented, with meaningful names for all of the tests.}
+% \wss{Reference your MIS (detailed design document) and explain your overall
+% philosophy for test case selection.}  
+
+% \wss{To save space and time, it may be an option to provide less detail in this section.  
+% For the unit tests you can potentially layout your testing strategy here.  That is, you 
+% can explain how tests will be selected for each module.  For instance, your test building 
+% approach could be test cases for each access program, including one test for normal behaviour 
+% and as many tests as needed for edge cases.  Rather than create the details of the input 
+% and output here, you could point to the unit testing code.  For this to work, you code 
+% needs to be well-documented, with meaningful names for all of the tests.}
 
 \subsection{Unit Testing Scope}
 
-\wss{What modules are outside of the scope.  If there are modules that are
-  developed by someone else, then you would say here if you aren't planning on
-  verifying them.  There may also be modules that are part of your software, but
-  have a lower priority for verification than others.  If this is the case,
-  explain your rationale for the ranking of module importance.}
+% To be added after detailed design document is completed.
+% \wss{What modules are outside of the scope.  If there are modules that are
+%   developed by someone else, then you would say here if you aren't planning on
+%   verifying them.  There may also be modules that are part of your software, but
+%   have a lower priority for verification than others.  If this is the case,
+%   explain your rationale for the ranking of module importance.}
+This subsection will be completed after the detailed design document has been completed.
 
 \subsection{Tests for Functional Requirements}
 
-\wss{Most of the verification will be through automated unit testing.  If
-  appropriate specific modules can be verified by a non-testing based
-  technique.  That can also be documented in this section.}
+This subsection will be completed after the detailed design document has been completed.
+
+% To be added after detailed design document is completed.
+
+% \wss{Most of the verification will be through automated unit testing.  If
+%   appropriate specific modules can be verified by a non-testing based
+%   technique.  That can also be documented in this section.}
 
 \subsubsection{Module 1}
 
-\wss{Include a blurb here to explain why the subsections below cover the module.
-  References to the MIS would be good.  You will want tests from a black box
-  perspective and from a white box perspective.  Explain to the reader how the
-  tests were selected.}
+This subsection will be completed after the detailed design document has been completed.
 
-\begin{enumerate}
 
-\item{test-id1\\}
+% % \wss{Include a blurb here to explain why the subsections below cover the module.
+% %   References to the MIS would be good.  You will want tests from a black box
+% %   perspective and from a white box perspective.  Explain to the reader how the
+% %   tests were selected.}
 
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
+% \begin{enumerate}
+
+% \item{test-id1\\}
+
+% Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
+%   be automatic}
 					
-Initial State: 
+% Initial State: 
 					
-Input: 
+% Input: 
 					
-Output: \wss{The expected result for the given inputs}
+% Output: \wss{The expected result for the given inputs}
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+% Test Case Derivation: \wss{Justify the expected value given in the Output field}
 
-How test will be performed: 
+% How test will be performed: 
 					
-\item{test-id2\\}
+% \item{test-id2\\}
 
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
+% Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
+%   be automatic}
 					
-Initial State: 
+% Initial State: 
 					
-Input: 
+% Input: 
 					
-Output: \wss{The expected result for the given inputs}
+% Output: \wss{The expected result for the given inputs}
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+% Test Case Derivation: \wss{Justify the expected value given in the Output field}
 
-How test will be performed: 
+% How test will be performed: 
 
-\item{...\\}
+% \item{...\\}
     
-\end{enumerate}
+% \end{enumerate}
+
 
 \subsubsection{Module 2}
+This subsection will be completed after the detailed design document has been completed.
 
-...
+% ...
 
 \subsection{Tests for Nonfunctional Requirements}
+This subsection will be completed after the detailed design document has been completed.
 
-\wss{If there is a module that needs to be independently assessed for
-  performance, those test cases can go here.  In some projects, planning for
-  nonfunctional tests of units will not be that relevant.}
 
-\wss{These tests may involve collecting performance data from previously
-  mentioned functional tests.}
+
+% \wss{If there is a module that needs to be independently assessed for
+%   performance, those test cases can go here.  In some projects, planning for
+%   nonfunctional tests of units will not be that relevant.}
+
+% \wss{These tests may involve collecting performance data from previously
+%   mentioned functional tests.}
 
 \subsubsection{Module ?}
+This subsection will be completed after the detailed design document has been completed.
+
+
 		
-\begin{enumerate}
+% \begin{enumerate}
 
-\item{test-id1\\}
+% \item{test-id1\\}
 
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
+% Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
+%   be automatic}
 					
-Initial State: 
+% Initial State: 
 					
-Input/Condition: 
+% Input/Condition: 
 					
-Output/Result: 
+% Output/Result: 
 					
-How test will be performed: 
+% How test will be performed: 
 					
-\item{test-id2\\}
+% \item{test-id2\\}
 
-Type: Functional, Dynamic, Manual, Static etc.
+% Type: Functional, Dynamic, Manual, Static etc.
 					
-Initial State: 
+% Initial State: 
 					
-Input: 
+% Input: 
 					
-Output: 
+% Output: 
 					
-How test will be performed: 
+% How test will be performed: 
 
-\end{enumerate}
+% \end{enumerate}
 
 \subsubsection{Module ?}
-
-...
+This subsection will be completed after the detailed design document has been completed.
+% ...
 
 \subsection{Traceability Between Test Cases and Modules}
+This subsection will be completed after the detailed design document has been completed.
 
-\wss{Provide evidence that all of the modules have been considered.}
+
+% \wss{Provide evidence that all of the modules have been considered.}
 				
 \bibliographystyle{plainnat}
 
@@ -895,103 +925,77 @@ Here are some questions that may be asked regarding usability in the form of a s
 \section*{Appendix --- Reflection}
 
 
-The information in this section will be used to evaluate the team members on the
-graduate attribute of Lifelong Learning.
+% The information in this section will be used to evaluate the team members on the
+% graduate attribute of Lifelong Learning.
 
-\input{../Reflection.tex}
+% \input{../Reflection.tex}
 
-\begin{enumerate}
-  \item \textbf{What went well while writing this deliverable?} 
+\textbf{What went well while writing this deliverable?} 
+\\
   
-  Due to the previous effort put into previous resources and documentation, our team was able to create well defined objectives with clear rationales based on our initial work. This groundwork made it much easier to develop a consistent direction for the Verification and Validation Plan, ensuring that each part of the project is aligned with the overarching goals. By referencing our Problem Statement, SRS, and Development Plan, we could confidently outline the project’s needs and avoid a lot of back-and-forth on high-level decisions. 
+Due to the previous effort put into previous resources and documentation, our team was able to create well defined objectives with clear rationales based on our initial work. This groundwork made it much easier to develop a consistent direction for the Verification and Validation Plan, ensuring that each part of the project is aligned with the overarching goals. By referencing our Problem Statement, SRS, and Development Plan, we could confidently outline the project’s needs and avoid a lot of back-and-forth on high-level decisions. 
 
 Developing an outline for a collaborative process with Dr. Kelly’s team was another important part of this documentation. Establishing a feedback loop is important for our project, especially with MuJoCo integration, which is a challenging area. Regular check-ins ensure that we are not overlooking research requirements or deviating from the project’s core objectives. It is reassuring to have a system for catching issues early, keeping us on track, and ultimately supporting a more robust integration.
+\\\\
+\textbf{What pain points did you experience during this deliverable, and how did you resolve them?}\\
 
-  \item \textbf{What pain points did you experience during this deliverable, and how
-    did you resolve them?}
-
-    Some pain points include balancing clarity of our testing plan without a clear understanding of the effort or difficulty of it. Since certain aspects of MuJoCo integration and CI/CD setup were new to us, it was challenging to estimate how complex they would be to validate accurately. This lack of clarity makes it difficult to break down our validation plan into actionable steps, as we weren’t sure of the exact methods or tools we would need.
+Some pain points include balancing clarity of our testing plan without a clear understanding of the effort or difficulty of it. Since certain aspects of MuJoCo integration and CI/CD setup were new to us, it was challenging to estimate how complex they would be to validate accurately. This lack of clarity makes it difficult to break down our validation plan into actionable steps, as we weren’t sure of the exact methods or tools we would need.
 
 To work through this, we decided to make certain high level goals for us to achieve in our testing plans, and also examined other open-source projects that implemented similar validation processes or functionality to what we are looking for to gain a better understanding.
 
 In addition, making sure our validation plans addressed both functional and non-functional requirements from the SRS felt particularly challenging. It required us to carefully think through how we would test each requirement practically. To tackle this, we created a checklist derived directly from the SRS document, ensuring every key requirement had an associated test or validation step. This checklist became a helpful guide in our regular review meetings, allowing us to confirm we weren’t overlooking critical areas.
-
-  \item \textbf{What knowledge and skills will the team collectively need to acquire to
+\\\\
+\textbf{What knowledge and skills will the team collectively need to acquire to
   successfully complete the verification and validation of your project?
   Examples of possible knowledge and skills include dynamic testing knowledge,
-  static testing knowledge, specific tool usage, Valgrind etc.  You should look to
-
-  identify at least one item for each team member.}
-
-    \newline
-    \newline
-
-
-    \textbf{Calvyn:}
+  static testing knowledge, specific tool usage, Valgrind etc.  You should look to identify at least one item for each team member.}
+\\\\
+    \textbf{Calvyn:}\\
     
-     To complete the verification and validation process,  I’ll need to focus on gaining a stronger understanding of memory management and debugging tools specific to C++. C++ can be challenging to work with due to potential issues like memory leaks and undefined behavior, which are especially important to detect and resolve in our project due to its reinforcement learning and simulation components. With a better understanding of these tools, I’ll be better equipped to analyze our code for memory-related errors and optimize its performance, which will be crucial for ensuring stability and efficiency within our CI/CD pipeline.
-
+    \noindent To complete the verification and validation process,  I’ll need to focus on gaining a stronger understanding of memory management and debugging tools specific to C++. C++ can be challenging to work with due to potential issues like memory leaks and undefined behavior, which are especially important to detect and resolve in our project due to its reinforcement learning and simulation components. With a better understanding of these tools, I’ll be better equipped to analyze our code for memory-related errors and optimize its performance, which will be crucial for ensuring stability and efficiency within our CI/CD pipeline.
+\\\\
+    \textbf{Edward:}\\
+  
+    \noindent One of the key knowledge areas I will need to develop is understanding the various indicators of correct agent behavior across different MuJoCo environments. This includes interpreting fitness scores, analyzing plot outputs, inspecting animations, and recognizing expected behavioral patterns. Since each environment has unique characteristics and learning dynamics, this will require developing a deeper familiarity with TPG's learning progression and how it manifests across different scenarios. Currently, the workflow involving running experiments, checking logs, interpreting plots, and debugging issues is still somewhat opaque, requiring significant guidance from Dr. Kelly to understand the nuances of what we're observing.
+\\\\
+    \textbf{Cyruss:}\\
     
-
-    \textbf{Edward:}
+    \noindent The knowledge and skills that the team will need to successfully acquire to complete the verification and validation of the project include a variety of testing knowledge such as unit testing, and automation testing. These verification and validation techniques will be beneficial to easily debug and determine any failures within the system. With the use of automation testing, it will be beneficial to automatically execute repetitive tests. This will ensure consistency and efficiency while reducing human error.
+\\\\
+     \textbf{Mark:}\\
     
-     One of the key knowledge areas I will need to develop is understanding the various indicators of correct agent behavior across different MuJoCo environments. This includes interpreting fitness scores, analyzing plot outputs, inspecting animations, and recognizing expected behavioral patterns. Since each environment has unique characteristics and learning dynamics, this will require developing a deeper familiarity with TPG's learning progression and how it manifests across different scenarios. Currently, the workflow involving running experiments, checking logs, interpreting plots, and debugging issues is still somewhat opaque, requiring significant guidance from Dr. Kelly to understand the nuances of what we're observing.
+     \noindent The team will collectively have to acquire knowledge in both dynamic and static testing, a few testing tools such as clang-tidy, clang-format, Google Test, and CI/CD integration using Github Actions. Dynamic and static testing will help the team to perform manual testing across the framework. Clang-tidy, clang-format, and Google Test will help automate the testing and verification process, saving plenty of man hours from the team. Lastly, the CI/CD integration through Github Actions will provide a comprehensive set of testing and verification prior to the team committing newly developed code into the codebase, saving less headaches in the future.
+\\\\
+    \textbf{Richard:}\\
 
-    
-
-    \textbf{Cyruss:}
-    
-     The knowledge and skills that the team will need to successfully acquire to complete the verification and validation of the project include a variety of testing knowledge such as unit testing, and automation testing. These verification and validation techniques will be beneficial to easily debug and determine any failures within the system. With the use of automation testing, it will be beneficial to automatically execute repetitive tests. This will ensure consistency and efficiency while reducing human error.
-
-
-    
-
-    \textbf{Mark:}
-    
-     The team will collectively have to acquire knowledge in both dynamic and static testing, a few testing tools such as clang-tidy, clang-format, Google Test, and CI/CD integration using Github Actions. Dynamic and static testing will help the team to perform manual testing across the framework. Clang-tidy, clang-format, and Google Test will help automate the testing and verification process, saving plenty of man hours from the team. Lastly, the CI/CD integration through Github Actions will provide a comprehensive set of testing and verification prior to the team committing newly developed code into the codebase, saving less headaches in the future.
-
-    
-
-    \textbf{Richard:}
-
-     The main knowledge areas for our project involves software engineering standards. An important thing for any open source framework is the ease of onboarding and utilizing the library. One way we can validate this is to be able to easily onboard and get an experiment running on any operating system that the user is using. The documentation also needs to be clear and concise to allow for the best developer experience. Specific knowledge related to cross platform C++ build tools, and containerizing the framework will be key for this. In addition, static code analysis will also be critical to evaluate the structure of our code. This is key because we want to ensure our code is robust, and also easy to use and build on top of since our supervisor Dr. Kelly wants this framework to be used as an open source tool.
-
-    
-
-
-
-  \item \textbf{For each of the knowledge areas and skills identified in the previous
+    \noindent The main knowledge areas for our project involves software engineering standards. An important thing for any open source framework is the ease of onboarding and utilizing the library. One way we can validate this is to be able to easily onboard and get an experiment running on any operating system that the user is using. The documentation also needs to be clear and concise to allow for the best developer experience. Specific knowledge related to cross platform C++ build tools, and containerizing the framework will be key for this. In addition, static code analysis will also be critical to evaluate the structure of our code. This is key because we want to ensure our code is robust, and also easy to use and build on top of since our supervisor Dr. Kelly wants this framework to be used as an open source tool.
+\\\\
+\textbf{For each of the knowledge areas and skills identified in the previous
   question, what are at least two approaches to acquiring the knowledge or
   mastering the skill?  Of the identified approaches, which will each team
   member pursue, and why did they make this choice?}
+\\\\
 
+\noindent \textbf{Calvyn:}\\
 
-  \textbf{Calvyn:}
+\noindent I believe that the first method I should use to gain a better understanding of debugging errors is to utilize the regular feedback sessions with Dr. Kelly to discuss testing, debugging, and other technical issues. These sessions would allow team members to ask questions, review complex aspects of the project, and receive guidance on best practices for testing and validation, helping the team refine their approach and stay aligned with project goals. Another approach would be to browse existing threads that discuss testing issues and solutions related to C++ can offer valuable context and practical examples. Analyzing how other developers approach similar challenges can help the team apply these strategies to their own project, learning from both successes and mistakes of others.
+\\\\
+\textbf{Edward:}\\
 
-  I believe that the first method I should use to gain a better understanding of debugging errors is to utilize the regular feedback sessions with Dr. Kelly to discuss testing, debugging, and other technical issues. These sessions would allow team members to ask questions, review complex aspects of the project, and receive guidance on best practices for testing and validation, helping the team refine their approach and stay aligned with project goals. Another approach would be to browse existing threads that discuss testing issues and solutions related to C++ can offer valuable context and practical examples. Analyzing how other developers approach similar challenges can help the team apply these strategies to their own project, learning from both successes and mistakes of others.
-
-\textbf{Edward:}
-
-There are two main approaches I plan to pursue to develop this knowledge. The first would be to build understanding incrementally through guided exploration. This involves starting with environments where we have clear expectations (like CartPole), consulting with Dr. Kelly to understand what indicators to look for, and documenting these learnings to apply to new environments. Regular communication with the team about observations and issues is crucial since everyone brings different insights to interpreting TPG's behavior.
+\noindent There are two main approaches I plan to pursue to develop this knowledge. The first would be to build understanding incrementally through guided exploration. This involves starting with environments where we have clear expectations (like CartPole), consulting with Dr. Kelly to understand what indicators to look for, and documenting these learnings to apply to new environments. Regular communication with the team about observations and issues is crucial since everyone brings different insights to interpreting TPG's behavior.
 Secondly, I would take a systematic experimentation approach. This means making controlled modifications to environment parameters or TPG settings on separate GitHub branches, carefully documenting the impacts, and building a mental model of cause-and-effect relationships. By having a safe space to experiment without fear of breaking the main codebase, I can learn through trial and error while maintaining rigorous version control.
+\\\\
 
+\noindent \textbf{Cyruss:}\\
 
-\textbf{Cyruss:}
-
-Two approaches to acquiring the knowledge of both skills include hands-on approach testing with different tools without any guidance, or using online self-learning techniques such as Linkedin Learning or Udemy. I will be pursuing the online self-learning approach as I work better with structured guidance and clear explanations. Additionally, these courses often include practical examples and quizzes, which will help reinforce my understanding.
-
-
+\noindent Two approaches to acquiring the knowledge of both skills include hands-on approach testing with different tools without any guidance, or using online self-learning techniques such as Linkedin Learning or Udemy. I will be pursuing the online self-learning approach as I work better with structured guidance and clear explanations. Additionally, these courses often include practical examples and quizzes, which will help reinforce my understanding.
+\\\\
 \textbf{Mark:}
-
+\\
 A few approaches that can be used to attain knowledge of these skills are reading documentations and watching visual tutorials. Documentations help users tremendously as most if not all are usually well made, especially if they are enterprise standard tools. Watching visual tutorials may be another way to master these areas and skills through the use of YouTube, or Coursera. Each person has a preferred way of learning. They can either go the non-visual part of reading documentations and articles or visual tutorials. It all comes down to what saves the contributor the most time, while having the most yield from the content.
+\\\\
+\textbf{Richard:}\\
 
-
-\textbf{Richard:}
-
-There are a few approaches I can take to attain knowledge. For one, there is a group in France that has built an open source framework on top of Dr. Kelly’s TPG framework is called Gegelati. The Gegelati project is open source on Github and has implemented a lot of the CI/CD infrastructure and also enables cross platform development. Additionally, there are numerous C++ libraries that build with cross platform tools such as MuJoCo itself (developed by Google DeepMind) so seeing those examples will help guide me. Second, is to view YouTube videos on the topic to see how other developers tackle and approach this problem. Getting more opinions and seeing best practices in a visual format will be beneficial. 
-
-
-
-\end{enumerate}
+\noindent There are a few approaches I can take to attain knowledge. For one, there is a group in France that has built an open source framework on top of Dr. Kelly's TPG framework is called Gegelati. The Gegelati project is open source on Github and has implemented a lot of the CI/CD infrastructure and also enables cross platform development. Additionally, there are numerous C++ libraries that build with cross platform tools such as MuJoCo itself (developed by Google DeepMind) so seeing those examples will help guide me. Second, is to view YouTube videos on the topic to see how other developers tackle and approach this problem. Getting more opinions and seeing best practices in a visual format will be beneficial. 
 
 \end{document}
