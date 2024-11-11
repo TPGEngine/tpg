@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - src/src/cpp/**
+  workflow_dispatch:
 
 jobs:
   linting:
