@@ -77,16 +77,16 @@ seed_tpg 42
 seed_aux 42
 
 # Max number of generations
-n_generations 1000000
+n_generations 100000
 
 # Allow mutation of internal teams (i.e. non-root teams (in-progress))
 mu_internal 0
 
 # Number of elite root teams (agents)
-n_elite 1000
+n_elite 400
 
 # n_elite * n_elite_mul new teams are created each generation
-n_elite_mul 0.02
+n_elite_mul 2.0
 
 # Whether to use fitness proportional selection
 fit_prop_select 0
@@ -211,7 +211,7 @@ max_observation_buff_size 1
 
 # Which tasks are active
 # Right-hand-side should be a single task name or a comma-separated list
-active_tasks Mujoco_Ant_v4
+active_tasks Mujoco_Inverted_Pendulum_v4
 
 # Use the partially-observable version of a task, if available
 # Currently only available for calssic control and Mujoco tasks
@@ -248,7 +248,7 @@ forecast_n_eval_val 10
 ## Parameters Specific to Mujoco ###############################################
 ################################################################################
 
-mj_model_path $TPG/datasets/mujoco_models/ant.xml
+mj_model_path $TPG/datasets/mujoco_models/inverted_pendulum.xml
 
 mj_max_timestep 1000
 
