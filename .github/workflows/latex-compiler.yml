@@ -1,7 +1,7 @@
 name: Compile LaTeX Documentation
 
 on:
-  pull_request:
+  push:
     branches: [main]
     paths:
       - "docs/**/*.tex"
