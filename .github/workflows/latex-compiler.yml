@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - "docs/**/*.tex"
-  workflow_dipatch:
+  workflow_dispatch:
 
 jobs:
   compile-documentation:
