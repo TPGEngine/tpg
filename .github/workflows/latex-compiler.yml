@@ -1,7 +1,7 @@
 name: Compile LaTeX Documentation
 
 on:
-  push:
+  pull-request:
     branches: [main]
     paths:
       - "docs/**/*.tex"
@@ -50,5 +50,5 @@ jobs:
         with:
           add: --force docs/**/*.pdf
           message: Compiled Latex PDF
-          committer_name: GitHub Actions
-          committer_email: actions@github.com
+          committer_name: GitHub Action
+          committer_email: action@github.com
