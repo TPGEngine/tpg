@@ -23,6 +23,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip
+          mkdir  ~/.mujoco
+          wget https://github.com/google-deepmind/mujoco/releases/download/3.2.2/mujoco-3.2.2-linux-x86_64.tar.gz  -O ~/.mujoco/mujoco.tar.gz 
+          tar -xzvf ~/.mujoco/mujoco.tar.gz -C ~/.mujoco
           cd src
           sudo xargs --arg-file requirements.txt apt install
           sudo apt-get install libglfw3 libglfw3-dev
@@ -31,7 +34,9 @@ jobs:
       - name: Set environment variables
         run: |
           echo "export TPG=${{ github.workspace }}/tpg" >> $GITHUB_ENV
-          echo "export MUJOCO=<YOUR_PATH_TO_MUJOCO>/mujoco-3.2.2" >> $GITHUB_ENV
+          echo "export PATH=$PATH:$TPG/scripts/plot" >> $GITHUB_ENV
+          echo "export PATH=$PATH:$TPG/scripts/run" >> $GITHUB_ENV
+          echo "export MUJOCO=/.mujoco/mujoco-3.2.2" >> $GITHUB_ENV
           echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:\$MUJOCO/lib/" >> $GITHUB_ENV
 
       - name: Compile the project
