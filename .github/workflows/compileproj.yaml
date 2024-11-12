@@ -25,6 +25,7 @@ jobs:
           sudo apt-get install -y python3-pip
           cd src
           sudo xargs --arg-file requirements.txt apt install
+          sudo apt-get install libglfw3 libglfw3-dev
           cd ../
 
       - name: Set environment variables
