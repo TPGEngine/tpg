@@ -24,29 +24,33 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip
-          mkdir  ~/.mujoco
-          wget https://github.com/google-deepmind/mujoco/releases/download/3.2.2/mujoco-3.2.2-linux-x86_64.tar.gz  -O ~/.mujoco/mujoco.tar.gz 
-          tar -xzvf ~/.mujoco/mujoco.tar.gz -C ~/.mujoco
+          mkdir  ./mujoco
+
+
+          if [ -d "./mujoco" ]; then
+            echo "Mujoco folder created"
+          else 
+              echo "Mujoco folder not created"
+          fi
+          wget https://github.com/google-deepmind/mujoco/releases/download/3.2.2/mujoco-3.2.2-linux-x86_64.tar.gz  -O ./mujoco/mujoco.tar.gz 
+          tar -xzvf ./mujoco/mujoco.tar.gz -C ./mujoco
           cd src
           sudo xargs --arg-file requirements.txt apt install
           sudo apt-get install libglfw3 libglfw3-dev
           cd ../
 
           # Check if ~/.mujoco exists
-          if [ -d "~/.mujoco" ]; then
-              echo "~/.mujoco exists"
+          if [ -d "./mujoco" ]; then
+              echo "Mujoco folder exists"
               echo "Files and directories in ~/.mujoco:"
-              ls -l "~/.mujoco"  # List files and directories with details
-          else
-              echo "~/.mujoco does not exist"
-          fi
+              ls -l "./mujoco"  # List files and directories with details
 
       - name: Set environment variables
         run: |
           echo "export TPG=./src/tpg" >> $GITHUB_PATH
           echo "export PATH=$PATH:$TPG/scripts/plot" >> $GITHUB_PATH
           echo "export PATH=$PATH:$TPG/scripts/run" >> $GITHUB_PATH
-          echo "export MUJOCO=/.mujoco/mujoco-3.2.2" >> $GITHUB_PATH
+          echo "export MUJOCO=./mujoco/mujoco-3.2.2" >> $GITHUB_PATH
           echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:\$MUJOCO/lib/" >> $GITHUB_PATH
 
       - name: Compile the project
