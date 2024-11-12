@@ -29,6 +29,8 @@ jobs:
 
           if [ -d "./mujoco" ]; then
             echo "Mujoco folder created"
+            echo "Files and directories in ~/.mujoco:"
+            ls -l "./mujoco"  # List files and directories with details
           else 
               echo "Mujoco folder not created"
           fi
@@ -39,11 +41,7 @@ jobs:
           sudo apt-get install libglfw3 libglfw3-dev
           cd ../
 
-          # Check if ~/.mujoco exists
-          if [ -d "./mujoco" ]; then
-              echo "Mujoco folder exists"
-              echo "Files and directories in ~/.mujoco:"
-              ls -l "./mujoco"  # List files and directories with details
+             
 
       - name: Set environment variables
         run: |
