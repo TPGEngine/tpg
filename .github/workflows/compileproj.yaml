@@ -48,6 +48,7 @@ jobs:
           echo "export PATH=$PATH:$(pwd)/tpg/scripts/run" >> $GITHUB_ENV
           echo "export MUJOCO=$(pwd)/mujoco/mujoco-3.2.2" >> $GITHUB_ENV
           echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/mujoco/mujoco-3.2.2/lib" >> $GITHUB_ENV
+          echo "export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:$(pwd)/mujoco/mujoco-3.2.2/include" >> $GITHUB_ENV
 
       - name: Print GitHub environment variables
         run: |
