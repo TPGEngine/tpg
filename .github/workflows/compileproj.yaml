@@ -43,7 +43,7 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo "export TPG=$(pwd)/tpg" >> $GITHUB_ENV
+          echo "export TPG=$(pwd)/src" >> $GITHUB_ENV
           echo "export PATH=$PATH:$(pwd)/tpg/scripts/plot" >> $GITHUB_ENV
           echo "export PATH=$PATH:$(pwd)/tpg/scripts/run" >> $GITHUB_ENV
           echo "export MUJOCO=$(pwd)/mujoco/mujoco-3.2.2" >> $GITHUB_ENV
