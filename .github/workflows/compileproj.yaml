@@ -48,12 +48,17 @@ jobs:
         shell: bash
         run: |
           ls
-          echo "export TPG=$(pwd)/src" >> "$HOME/.bash_profile"
-          echo "export PATH=$PATH:$(pwd)/tpg/scripts/plot" >>  "$HOME/.bash_profile"
-          echo "export PATH=$PATH:$(pwd)/tpg/scripts/run" >>  "$HOME/.bash_profile"
+          
+          ls src/
+          
+          echo "export TPG=./src" >> "$HOME/.bash_profile"
+          echo "export PATH=$PATH:./src/scripts/plot" >>  "$HOME/.bash_profile"
+          echo "export PATH=$PATH:./src/scripts/run" >>  "$HOME/.bash_profile"
           echo "export MUJOCO=./mujoco/mujoco-3.2.2" >>  "$HOME/.bash_profile"
           echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/mujoco/mujoco-3.2.2/lib" >>  "$HOME/.bash_profile"
           echo "export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:$(pwd)/mujoco/mujoco-3.2.2/include" >>  "$HOME/.bash_profile"
+
+          source "$HOME/.bash_profile"
           
           
 
@@ -62,6 +67,7 @@ jobs:
           echo  "$HOME/.bash_profile"
           cat "$HOME/.bash_profile"
 
+          echo "Checking Mujoco path"
           echo $MUJOCO
           cd $MUJOCO
           
