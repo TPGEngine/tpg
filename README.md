@@ -11,6 +11,23 @@ Date of project start: September 12, 2024
 
 This project is developing an interface to test the evolutionary machine learning framework Tangle Programming Graphs (TPG) in a robotic simulation engine called MuJoCo created by Google Deepmind.
 
+
+### **Key Features**
+
+1. **Integration with new complex environments like Mujoco**  
+
+TPG framework will have numerous integrations between basic agents and several environments provide by Mujoco
+
+2. **CI/CD integration to improve development practises**
+
+The TPG framework will have an integrated CI/CD pipeline that will automatically run linting processes, build project to ensure it's compatible on different platforms with new changes and run automated unit tests
+
+3. **Experiments to measure reinforncement learning performance**
+
+Series of experiments to evaluate the behavior and performance of agents controlled by the TPG algorithm within the MuJoCo environment.
+
+
+
 The folders and files for this project are as follows:
 
 `docs` - Documentation for the project
