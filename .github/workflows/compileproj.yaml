@@ -3,7 +3,7 @@ name: Build TPG Project
 on:
   push:
     branches:
-      - main
+      - '*'
   pull_request:
     branches:
       - main
@@ -11,16 +11,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Set up environment
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip
           pip3 install -r requirements.txt
+          sudo xargs --arg-file requirements.txt apt install
 
       - name: Set environment variables
         run: |
