@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{pdflscape}
 \usepackage{enumitem}
+\usepackage[round]{natbib}
 
 \hypersetup{
     colorlinks=true,       % false: boxed links; true: colored links
@@ -63,7 +64,8 @@ This document describes the potential hazards of the TPG capstone project. Detai
 The definition of a hazard utilized in this document is based on the definition by Nancy Leveson: 
 \\\\
 A \underline{hazard} is any potential condition within the system that could harm or damage the project. This includes unexpected conditions such as security risks and safety hazards. 
-
+\\\\
+For some terminology used within the Hazard Analysis, such as \textbf{agent} or \textbf{environment}, please refer to the SRS documentation \citep{SRS}.
 \section{Scope and Purpose of Hazard Analysis}
 
 % \wss{You should say what \textbf{loss} could be incurred because of the
@@ -191,7 +193,11 @@ Before this deliverable, we definitely thought of the GitHub Actions related ris
     software products. Why are they important to consider?}
 
 Two other types of software product risk include security and compliance risks. Security risks are important to consider to protect the product itself. If some malicious actors are looking to cause harm to the system, mitigation strategies and prevention are important to keep the system and any critical data such as user information, safe as well. Compliance risks are important to consider as if any crucial changes are made to the system, it is necessary to make sure all laws and guidelines such as PIPEDA, are still being followed.
-    
+
 \end{enumerate}
+
+\bibliographystyle{plainnat}
+
+\bibliography{../../refs/References}
 
 \end{document}
