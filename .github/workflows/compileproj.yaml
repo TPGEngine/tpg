@@ -21,6 +21,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Set up environment
+        shell: bash
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip
@@ -44,20 +45,24 @@ jobs:
              
 
       - name: Set environment variables
+        shell: bash
         run: |
-          echo "export TPG=$(pwd)/src" >> $GITHUB_ENV
-          echo "export PATH=$PATH:$(pwd)/tpg/scripts/plot" >> $GITHUB_ENV
-          echo "export PATH=$PATH:$(pwd)/tpg/scripts/run" >> $GITHUB_ENV
-          echo "export MUJOCO=$(pwd)/mujoco/mujoco-3.2.2" >> $GITHUB_ENV
-          echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/mujoco/mujoco-3.2.2/lib" >> $GITHUB_ENV
-          echo "export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:$(pwd)/mujoco/mujoco-3.2.2/include" >> $GITHUB_ENV
+          echo "export TPG=$(pwd)/src" >> "$HOME/.bash_profile"
+          echo "export PATH=$PATH:$(pwd)/tpg/scripts/plot" >>  "$HOME/.bash_profile"
+          echo "export PATH=$PATH:$(pwd)/tpg/scripts/run" >>  "$HOME/.bash_profile"
+          echo "export MUJOCO=$(pwd)/mujoco/mujoco-3.2.2" >>  "$HOME/.bash_profile"
+          echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/mujoco/mujoco-3.2.2/lib" >>  "$HOME/.bash_profile"
+          echo "export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:$(pwd)/mujoco/mujoco-3.2.2/include" >>  "$HOME/.bash_profile"
+          
+          
 
       - name: Print GitHub environment variables
         run: |
-          echo "GitHub Environment Variables:"
-          cat $GITHUB_ENV
-
+          echo  "$HOME/.bash_profile"
+          cat "$HOME/.bash_profile"
+          
       - name: Compile the project
+        shell: bash
         run: |
           cd src
           scons --opt
