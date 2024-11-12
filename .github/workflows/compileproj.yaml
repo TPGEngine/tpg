@@ -43,15 +43,16 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo "export TPG=./src/tpg" >> $GITHUB_PATH
-          echo "export PATH=$PATH:$TPG/scripts/plot" >> $GITHUB_PATH
-          echo "export PATH=$PATH:$TPG/scripts/run" >> $GITHUB_PATH
-          echo "export MUJOCO=./mujoco/mujoco-3.2.2" >> $GITHUB_PATH
-          echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:\$MUJOCO/lib/" >> $GITHUB_PATH
+          echo "export TPG=$(pwd)/tpg" >> $GITHUB_ENV
+          echo "export PATH=$PATH:$(pwd)/tpg/scripts/plot" >> $GITHUB_ENV
+          echo "export PATH=$PATH:$(pwd)/tpg/scripts/run" >> $GITHUB_ENV
+          echo "export MUJOCO=$(pwd)/mujoco/mujoco-3.2.2" >> $GITHUB_ENV
+          echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/mujoco/mujoco-3.2.2/lib" >> $GITHUB_ENV
 
-      - name: Check Path variables
+      - name: Print GitHub environment variables
         run: |
-          echo "$PATH"
+          echo "GitHub Environment Variables:"
+          cat $GITHUB_ENV
 
       - name: Compile the project
         run: |
