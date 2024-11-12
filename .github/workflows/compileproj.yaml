@@ -24,9 +24,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip
+          cd src
           mkdir  ./mujoco
           wget https://github.com/google-deepmind/mujoco/releases/download/3.2.2/mujoco-3.2.2-linux-x86_64.tar.gz  -O ./mujoco/mujoco.tar.gz 
           tar -xzvf ./mujoco/mujoco.tar.gz -C ./mujoco
+          sudo xargs --arg-file requirements.txt apt install
+          sudo apt-get install libglfw3 libglfw3-dev
           if [ -d "./mujoco" ]; then
             echo "Mujoco folder created"
             echo "Files and directories in ~/.mujoco:"
@@ -34,10 +37,9 @@ jobs:
           else 
               echo "Mujoco folder not created"
           fi
-          cd src
-          sudo xargs --arg-file requirements.txt apt install
-          sudo apt-get install libglfw3 libglfw3-dev
           cd ../
+         
+
 
              
 
