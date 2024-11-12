@@ -59,8 +59,7 @@ jobs:
         with:
           add: --force docs/**/*.pdf
           message: Compiled Latex PDF
-          committer_name: GitHub Action
-          committer_email: action@github.com
+          push: false
       
       - name: Push changes
         uses: ad-m/github-push-action@master
