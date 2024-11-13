@@ -53,7 +53,7 @@ jobs:
           ls src/
           echo $GITHUB_WORKSPACE
           
-          echo "export TPG= $GITHUB_WORKSPACE/src" >> "$HOME/.bash_profile"
+          echo "export TPG=$GITHUB_WORKSPACE/src" >> "$HOME/.bash_profile"
           echo "export PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/plot" >>  "$HOME/.bash_profile"
           echo "export PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/run" >>  "$HOME/.bash_profile"
           echo "export MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >>  "$HOME/.bash_profile"
