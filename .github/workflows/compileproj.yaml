@@ -12,8 +12,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env: 
-      MUJOCO: ${{ env.GITHUB_WORKSPACE }}/src/mujoco/mujoco-3.2.2
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -64,6 +62,8 @@ jobs:
           
 
       - name: Print GitHub environment variables
+        env: 
+          MUJOCO: ${{ env.GITHUB_WORKSPACE }}/src/mujoco/mujoco-3.2.2
         run: |
           echo  "$HOME/.bash_profile"
           cat "$HOME/.bash_profile"
@@ -73,6 +73,8 @@ jobs:
           cd $MUJOCO
           
       - name: Compile the project
+        env: 
+          MUJOCO: ${{ env.GITHUB_WORKSPACE }}/src/mujoco/mujoco-3.2.2
         shell: bash
         run: |
           cd src
