@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env: 
-      MUJOCO: $GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2
+      MUJOCO: ${{ env.GITHUB_WORKSPACE }}/src/mujoco/mujoco-3.2.2
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
