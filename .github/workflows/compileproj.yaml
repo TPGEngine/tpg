@@ -56,14 +56,14 @@ jobs:
           echo "export PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/run" >>  "$HOME/.bash_profile"
           echo "export MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >>  "$HOME/.bash_profile"
           echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2/lib" >>  "$HOME/.bash_profile"
+          echo "MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >> "$GITHUB_ENV"
+
 
           source "$HOME/.bash_profile"
           
           
 
       - name: Print GitHub environment variables
-        env: 
-          MUJOCO: ${{ env.GITHUB_WORKSPACE }}/src/mujoco/mujoco-3.2.2
         run: |
           echo  "$HOME/.bash_profile"
           cat "$HOME/.bash_profile"
@@ -73,8 +73,6 @@ jobs:
           cd $MUJOCO
           
       - name: Compile the project
-        env: 
-          MUJOCO: ${{ env.GITHUB_WORKSPACE }}/src/mujoco/mujoco-3.2.2
         shell: bash
         run: |
           cd src
