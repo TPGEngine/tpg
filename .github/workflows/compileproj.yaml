@@ -12,7 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+    env: 
+      MUJOCO: $GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -50,13 +51,13 @@ jobs:
           ls
           
           ls src/
+          echo $GITHUB_WORKSPACE
           
-          echo "export TPG=./src" >> "$HOME/.bash_profile"
-          echo "export PATH=$PATH:./src/scripts/plot" >>  "$HOME/.bash_profile"
-          echo "export PATH=$PATH:./src/scripts/run" >>  "$HOME/.bash_profile"
-          echo "export MUJOCO=./mujoco/mujoco-3.2.2" >>  "$HOME/.bash_profile"
-          echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/mujoco/mujoco-3.2.2/lib" >>  "$HOME/.bash_profile"
-          echo "export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:$(pwd)/mujoco/mujoco-3.2.2/include" >>  "$HOME/.bash_profile"
+          echo "export TPG= $GITHUB_WORKSPACE/src" >> "$HOME/.bash_profile"
+          echo "export PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/plot" >>  "$HOME/.bash_profile"
+          echo "export PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/run" >>  "$HOME/.bash_profile"
+          echo "export MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >>  "$HOME/.bash_profile"
+          echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2/lib" >>  "$HOME/.bash_profile"
 
           source "$HOME/.bash_profile"
           
