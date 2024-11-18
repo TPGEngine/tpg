@@ -67,7 +67,7 @@ class MountainCarContinuous : public ClassicControlEnv {
         }
     }
     //! Resets the environment to its initial state
-    void reset(std::mt19937 &rng) {
+    void Reset(std::mt19937 &rng) {
         state_[kPosition] = state_po_[kPosition] = dis_reset(rng);
         state_[kVelocity] = 0;
 

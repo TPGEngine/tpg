@@ -138,7 +138,7 @@ max_prog_size 1000000
 
 # number of memory indices
 # each memory index points to a data structure (scalar, vector, or matrix)
-memory_indices 8
+n_memories 8
 
 # Dimensionality for vector & matrix memory
 memory_size 2
@@ -151,25 +151,25 @@ min_observation_buff_size 1
 max_observation_buff_size 32
 
 # program variation: probability of changing a random instruction
-p_bid_mutate 1.0
+p_instructions_mutate 1.0
 
 # program variation: probability of swaping the position of two instructions
-p_bid_swap 0.5
+p_instructions_swap 0.5
 
 # program variation: probability of deleting an instruction
-p_bid_delete 0.5
+p_instructions_delete 0.5
 
 # program variation: probability of adding an instruction
-p_bid_add 0.4
+p_instructions_add 0.4
 
 # program variation: probability of linear crossover with another team
-p_bid_xover 0.0
+p_instructions_xover 0.0
 
 # program variation: probability of adding noise to constants
-#p_bid_mu_const 1.0
+#p_instructions_mu_const 1.0
 
 # program variation: stddev of normal noise added to each const
-bid_mu_const_stddev 0.05
+instructions_mu_const_stddev 0.05
 
 # program variation: probability of changing observation_buff_size
 p_observation_buff_size 0.0

@@ -108,8 +108,7 @@ class CartCentering : public ClassicControlEnv {
 
     /****************************************************************************/
     //! Updates the environment state based on the given action and returns the reward
-    // TODO: Change function name once TaskEnv follows Google's C++ Styling
-    Results update(int actionD, double actionC, std::mt19937 &rng) {
+    Results Update(int actionD, double actionC, std::mt19937 &rng) {
         (void)actionC;
         double force;
 

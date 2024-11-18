@@ -35,6 +35,7 @@ int main(int argc, char **argv) {
    mpi::communicator world;
    TPG tpg;
    tpg.params_["id"] = -1;  // remove later
+   tpg.state_["world_rank"] = world.rank();
    tpg.SetParams(argc, argv);
 
    APIClient *apiClient = nullptr;
@@ -103,13 +104,6 @@ int main(int argc, char **argv) {
          tasks.push_back(new RecursiveForecast("Bach"));
       else if (substr == "Mujoco_Ant_v4")
          tasks.push_back(new Mujoco_Ant_v4(tpg.params_));  // TODO(skelly):fix
-      else if (substr == "Mujoco_Inverted_Pendulum_v4")
-         tasks.push_back(
-             new Mujoco_Inverted_Pendulum_v4(tpg.params_));  // TODO(skelly):fix
-
-      else if (substr == "Mujoco_Half_Cheetah_v4")
-         tasks.push_back(
-             new Mujoco_Half_Cheetah_v4(tpg.params_));  // TODO(skelly):fix
       else {
          cerr << "Unrecognised task:" << substr << endl;
          exit(1);
@@ -206,7 +200,7 @@ int main(int argc, char **argv) {
       tpg.state_["phase"] = _TRAIN_PHASE;
       if (tpg.GetParam<int>("replay")) {
          tpg.state_["phase"] = _TEST_PHASE;
-         tpg.state_["active_task"] = tpg.state_["replay_task"];
+         tpg.state_["active_task"] = tpg.state_["task_to_replay"];
          tpg.ProcessParams();
          replayer_viz(tpg, tasks);
       } else {
@@ -252,8 +246,9 @@ int main(int argc, char **argv) {
 
             // Accounting and reporting ////////////////////////////////////
             startReport = chrono::system_clock::now();
-            if (tpg.GetState("t_current") % tpg.GetParam<int>("test_mod") ==
-                0) {
+            if (tpg.GetParam<int>("test_mod") != 0 &&
+                tpg.GetState("t_current") % tpg.GetParam<int>("test_mod") ==
+                    0) {
                // validation
                tpg.state_["phase"] = _VALIDATION_PHASE;
                evaluate_main(tpg, world, tasks, taskIndices);

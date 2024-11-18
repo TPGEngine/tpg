@@ -16,3 +16,6 @@ vim
 htop
 libcurlpp-dev
 jq
+libglfw3
+libglfw3-dev
+libglew-dev

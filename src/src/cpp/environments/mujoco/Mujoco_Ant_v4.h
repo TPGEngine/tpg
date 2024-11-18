@@ -20,9 +20,8 @@ class Mujoco_Ant_v4 : public MujocoEnv {
     Mujoco_Ant_v4(std::unordered_map<std::string, std::any>& params) {
         eval_type_ = "Mujoco";
         n_eval_train_ = std::any_cast<int>(params["mj_n_eval_train"]);
-        n_eval_validation_ = 0;
-        n_eval_test_ = n_eval_train_ =
-            std::any_cast<int>(params["mj_n_eval_test"]);
+        n_eval_validation_ = std::any_cast<int>(params["mj_n_eval_validation"]);
+        n_eval_test_ = std::any_cast<int>(params["mj_n_eval_test"]);
         max_step_ = std::any_cast<int>(params["mj_max_timestep"]);
         model_path_ =
             ExpandEnvVars(std::any_cast<string>(params["mj_model_path"]));

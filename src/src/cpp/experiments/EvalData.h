@@ -36,7 +36,7 @@ struct EvalData {
     vector<int> stats_int;
 
     // Programs which have won an auction in this eval
-    set<program *, programIdComp> active;
+    set<RegisterMachine *, RegisterMachineIdComp> active;
 
     /* Per episode data *******************************************************/
     int n_prediction;  // Number or predictions in eval (if known)
@@ -54,7 +54,7 @@ struct EvalData {
     long instruction_count;
     set<team *, teamIdComp> teams_visited;  // Overwritten for each prediction
     // Program which defines the output in the current timestep
-    program *program_out;
+    RegisterMachine *program_out;
     bool animate;            // whether or not to draw animation
     state *obs;              // Observation input
     list<double> obs_list;   // Obs as a list (tmp use only)

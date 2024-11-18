@@ -1,103 +1,136 @@
 #ifndef RegisterMachine_h
 #define RegisterMachine_h
-#include <any>
-#include <bitset>
-#include <random>
 
 #include "instruction.h"
-#include "memoryEigen.h"
-#include "program.h"
 
-struct instructionDecoded;
+#define MAX_GRAPH_DEPTH 1000.0
 
-class RegisterMachine : public program {
- public:
-  // Bid program, a list of instructions
-  std::vector<instruction *> bid_;
-  std::vector<instruction *> bidEffective_;
+class RegisterMachine {
+  public:
+   bool from_string_;        // TODO(skelly):remove
+   bool use_evolved_const_;  // Fixed parameter: whether to use constants
+   bool stateful_;           // Fixed parameter: whether memories maintain state
 
-  inline void AddToInputMemoryBuff(Matrix<double, Dynamic, Dynamic> &mat,
-                                   int mem_t) {
-    observation_memory_buff_[mem_t]->working_memory_.push_front(mat);
-    observation_memory_buff_[mem_t]->working_memory_.pop_back();
-  }
-  void CopyObservationToMemoryBuff(state *obs, size_t memory_type);
-  void MarkFeatures(instruction *istr, int in);
-  void MarkIntrons(std::unordered_map<std::string, std::any> &params_);
-  double Run(state *, int &time_step, const size_t &graph_depth, bool &verbose);
-  std::string checkpoint(bool);
-  // Create arbitrary RegisterMachine
-  RegisterMachine(long action,
-                  std::unordered_map<std::string, std::any> & params,
-                   std::unordered_map<std::string, int>& state,
-                  mt19937 &rng, 
-                  std::vector<bool> &legalOps);
-  // Create RegisterMachine from another RegisterMachine
-  RegisterMachine(RegisterMachine &plr,
-                  std::unordered_map<std::string, std::any> &params,
-                  std::unordered_map<std::string, int> &state);
-  // Create RegisterMachine from checkpoint file
-  RegisterMachine(std::vector<std::string> outcomeFields, 
-    std::vector<std::map<long, memoryEigen *>>& memory_maps,
-      std::unordered_map<std::string, std::any> &params, 
-      mt19937& rng);
-  ~RegisterMachine();
-  // Mutate bid
-  void Mutate(std::unordered_map<std::string, std::any> &, mt19937 &, std::vector<bool> &);
-  void SetupMemory(std::unordered_map<std::string, std::any> &params, std::unordered_map<std::string, int>& state);
-  // void MutateObsBuffSize(size_t max_observation_buff_size, mt19937& rng);
-  void MutateMemorySize(std::unordered_map<std::string, std::any> & params, mt19937 & rng);
-  void ResizeMemory(std::unordered_map<std::string, std::any> &params);
-  inline int Size() { return bid_.size(); }
-  inline int SizeEffective() { return bidEffective_.size(); }
+   int action_;                 // Mutable: discrete action
+   int obs_index_;              // Mutable: index into observation space
+   int observation_buff_size_;  // Mutable: observation buff size
 
-  inline void CheckMemorySizes(int memory_indices) {
-    std::string error_message = "memory_size_error";
+   std::vector<instruction *> instructions_;
+   std::vector<instruction *> instructions_effective_;
+   vector<int> op_counts_;  // Count op each op in instructions_effective_
 
-    for (int i = 0; i < memory_indices; i++) {
-      if (privateMemory_[memoryEigen::VECTOR_TYPE]->working_memory_[i].rows() !=
-          memory_size_)
-        die(__FILE__, __FUNCTION__, __LINE__, error_message.c_str());
-    }
+   // Vector storing 1 MemoryEigen* of each type (SCALAR, VECTOR, MATRIX)
+   vector<MemoryEigen *> private_memory_;
 
-    for (int i = 0; i < memory_indices; i++) {
-      if (privateMemory_[memoryEigen::MATRIX_TYPE]->working_memory_[i].rows() !=
-              memory_size_ ||
-          privateMemory_[memoryEigen::MATRIX_TYPE]->working_memory_[i].cols() !=
-              memory_size_)
-        die(__FILE__, __FUNCTION__, __LINE__, error_message.c_str());
-    }
+   // Vector storing id of each private memory (required for ToString)
+   vector<long> private_memory_ids_;
 
-    int i = 0;
-    if (observation_memory_buff_[memoryEigen::VECTOR_TYPE]
-            ->working_memory_[i]
-            .rows() != memory_size_)
-      die(__FILE__, __FUNCTION__, __LINE__, error_message.c_str());
+   // Vector storing 1 MemoryEigen* of each type (SCALAR, VECTOR, MATRIX)
+   vector<MemoryEigen *> observation_memory_buff_;
 
-    if (observation_memory_buff_[memoryEigen::MATRIX_TYPE]
-                ->working_memory_[i]
-                .rows() != memory_size_ ||
-        observation_memory_buff_[memoryEigen::MATRIX_TYPE]
-                ->working_memory_[i]
-                .cols() != memory_size_)
-      die(__FILE__, __FUNCTION__, __LINE__, error_message.c_str());
+   long id_;             // Unique id
+   double bid_val_;      // Temporarily store the most recent bid value
+   set<long> features_;  // Features indexed by this RegisterMachine
+   long gtime_;          // Generation created
+   int nrefs_;           // Number of references by teams
 
-    for (auto istr : bid_)
-      if (istr->memory_size_ != memory_size_)
-        die(__FILE__, __FUNCTION__, __LINE__, error_message.c_str());
-    for (auto istr : bidEffective_)
-      if (istr->memory_size_ != memory_size_)
-        die(__FILE__, __FUNCTION__, __LINE__, error_message.c_str());
-  }
+   // Create arbitrary RegisterMachine
+   RegisterMachine(long action,
+                   std::unordered_map<std::string, std::any> &params,
+                   std::unordered_map<std::string, int> &state, mt19937 &rng,
+                   std::vector<bool> &legalOps);
 
-  void CopyEvolvedConstants(RegisterMachine& prog) {
-      for (size_t m = 0; m < privateMemory_.size(); m++) {
-          for (size_t i = 0; i < privateMemory_[m]->memoryIndices_; i++) {
-              privateMemory_[m]->const_memory_[i] =
-                  prog.privateMemory_[m]->const_memory_[i];
-          }
+   // Copy contructor
+   RegisterMachine(RegisterMachine &rm);
+
+   // Copy assignment operator
+   RegisterMachine &operator=(RegisterMachine &rm);
+
+    // Clone RegisterMachine with new id
+   RegisterMachine(RegisterMachine &plr,
+                   std::unordered_map<std::string, std::any> &params,
+                   std::unordered_map<std::string, int> &state);
+
+   // Create RegisterMachine from checkpoint string
+   RegisterMachine(std::vector<std::string> outcomeFields,
+                   std::vector<std::map<long, MemoryEigen *>> &memory_maps,
+                   std::unordered_map<std::string, std::any> &params,
+                   mt19937 &rng);
+
+   ~RegisterMachine();
+
+   inline void AddToInputMemoryBuff(MatrixDynamic &mat, int mem_t) {
+      observation_memory_buff_[mem_t]->working_memory_.push_front(mat);
+      observation_memory_buff_[mem_t]->working_memory_.pop_back();
+   }
+
+   inline void ClearWorkingMemory() {
+      for (auto memory : private_memory_) memory->ClearWorking();
+      for (auto memory : observation_memory_buff_) memory->ClearWorking();
+   }
+
+   inline void CopyPrivateConstToWorkingMemory() {
+      for (auto m : private_memory_) {
+         m->CopyConstToWorking();
       }
-  }
+   }
+
+   void CopyObservationToMemoryBuff(state *obs, size_t memory_type);
+
+   // Determine which observation variables of used in effetive instructions,
+   // store in features_
+   void MarkFeatures(instruction *istr, int in);
+
+   // Determine which instructions are effective,
+   // store in instructions_effective_
+   void MarkIntrons(std::unordered_map<std::string, std::any> &params_);
+
+   // Execute this register machine
+   void Run(state *, int &time_step, const size_t &graph_depth, bool &verbose);
+
+   std::string ToString(bool);
+   std::string ToStringMemory();
+
+   void Mutate(std::unordered_map<std::string, std::any> &params,
+               std::unordered_map<std::string, int> &state, mt19937 &rng,
+               std::vector<bool> &legal_ops);
+
+   void MutateMemorySize(std::unordered_map<std::string, std::any> &params,
+                         std::unordered_map<std::string, int> &state,
+                         mt19937 &rng);
+
+   void ResizeMemory(std::unordered_map<std::string, std::any> &params,
+                     std::unordered_map<std::string, int> &state,
+                     int new_memory_size);
+
+   void SetupMemory(std::unordered_map<std::string, int> &state, int n_memories,
+                    int memory_size);
+
+   // Copy constants from prog to this register machine
+   void CopyEvolvedConstants(RegisterMachine &prog) {
+      for (size_t m = 0; m < private_memory_.size(); m++) {
+         for (size_t i = 0; i < private_memory_[m]->n_memories_; i++) {
+            private_memory_[m]->const_memory_[i] =
+                prog.private_memory_[m]->const_memory_[i];
+         }
+      }
+   }
+};
+
+struct RegisterMachineBidLexicalCompare {
+   bool operator()(RegisterMachine *rm1, RegisterMachine *rm2) const {
+      if (rm1->bid_val_ != rm2->bid_val_) {
+         return rm1->bid_val_ > rm2->bid_val_;
+      } else {
+         return rm1->id_ < rm2->id_;
+      }
+   }
+};
+
+struct RegisterMachineIdComp {
+   bool operator()(RegisterMachine *rm1, RegisterMachine *rm2) const {
+      return rm1->id_ < rm2->id_;
+   }
 };
 
 #endif
