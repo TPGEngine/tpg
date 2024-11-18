@@ -9,8 +9,8 @@
 
 #include "misc.h"
 #include "point.h"
-#include "program.h"
 #include "state.h"
+#include "RegisterMachine.h"
 
 #define MEMBERS_RUN_ENTROPY_INDEX 3
 #define NUM_TEAM_DISTANCE_MEASURES 3
@@ -57,13 +57,13 @@ class team {
   }
   inline map<long, string> fitnessBins() { return fitnessBins_; }
   void GetAllMemories(map<long, team *> &, set<team *, teamIdComp> &,
-                      set<memoryEigen *, memoryEigenIdComp> &) const;
+                      set<MemoryEigen *> &) const;
   void GetAllNodes(map<long, team *> &teamMap, set<team *, teamIdComp> &, long,
                    bool) const;
   void GetAllNodes(map<long, team *> &teamMap, set<team *, teamIdComp> &,
-                   set<program *, programIdComp> &) const;
+                   set<RegisterMachine *, RegisterMachineIdComp> &) const;
   void GetAllNodes(map<long, team *> &teamMap, set<team *, teamIdComp> &,
-                   set<program *, programIdComp> &, set<memoryEigen*, memoryEigenIdComp> &) const;
+                   set<RegisterMachine *, RegisterMachineIdComp> &, set<MemoryEigen*> &) const;
   void getBehaviourSequence(vector<int> &, int);
   double getMeanOutcome(int, int, int, bool, bool);
   double getMeanOutcome(int, int, int, int, long, bool, bool);
@@ -79,12 +79,12 @@ class team {
   inline void incomingPrograms(set<long> &icp) const {
     icp = incomingPrograms_;
   }
-  set<program *, programIdComp> CopyMembers() {
-    set<program *, programIdComp> m;
+  set<RegisterMachine *, RegisterMachineIdComp> CopyMembers() {
+    set<RegisterMachine *, RegisterMachineIdComp> m;
     copy(members_.begin(), members_.end(), inserter(m, m.end()));
     return m;
   }
-  // inline void SetMembers(list<program *> &m) {
+  // inline void SetMembers(list<RegisterMachine *> &m) {
   //   members_.clear();
   //   members_.assign(m.begin(), m.end());
   //  }
@@ -126,10 +126,10 @@ class team {
   int policyFeatures(
       map<long, team *> &teamMap, set<team *, teamIdComp> &, set<long> &,
       bool) const;  // populates last set with features and returns number of
-                    // nodes(programs) in policy
+                    // nodes(RegisterMachines) in policy
   void policyInstructions(map<long, team *> &, set<team *, teamIdComp> &,
                           vector<int> &, vector<int> &) const;
-  void RemoveProgram(program *prog);
+  void RemoveProgram(RegisterMachine *prog);
   bool RemoveRandomProgram(mt19937 &rng);
   void resetOutcomes(int); /* Delete all outcomes from phase. */
   inline bool root() const { return incomingPrograms_.size() == 0; }
@@ -215,8 +215,8 @@ class team {
     else if (type == 2)
       distances_2_.insert(d);
   }
-  void AddProgram(program *, int position = -1);
-  // bool AddProgramActive(program *);
+  void AddProgram(RegisterMachine *, int position = -1);
+  // bool AddProgramActive(RegisterMachine *);
   string checkpoint() const;
   void clone(map<long, phyloRecord> &, team **);
   inline void clearDistances() {
@@ -225,20 +225,20 @@ class team {
     distances_2_.clear();
   }
   // void deleteOutcome(point *); /* Delete outcome. */
-  program *getAction(state *, map<long, team *> &, bool,
+  RegisterMachine *getAction(state *, map<long, team *> &, bool,
                      set<team *, teamIdComp> &, long &, int, vector<team *> &,
                      mt19937 &, bool &);
-  program *getAction(state *, map<long, team *> &, bool,
+  RegisterMachine *getAction(state *, map<long, team *> &, bool,
                      set<team *, teamIdComp> &, long &, int,
-                     vector<program *> &, vector<program *> &,
+                     vector<RegisterMachine *> &, vector<RegisterMachine *> &,
                      vector<set<long>> &,
-                     //  vector<set<memoryEigen *, memoryEigenIdComp>> &,
+                     //  vector<set<MemoryEigen *, MemoryEigenIdComp>> &,
                      vector<team *> &, mt19937 &, bool &);
   // double ncdBehaviouralDistance(team*, int);
   void Shuffle(mt19937 &rng) {
-    vector<program *> vec(members_.begin(), members_.end());
+    vector<RegisterMachine *> vec(members_.begin(), members_.end());
     shuffle(vec.begin(), vec.end(), rng);
-    list<program *> shuffled_list{vec.begin(), vec.end()};
+    list<RegisterMachine *> shuffled_list{vec.begin(), vec.end()};
     members_.swap(shuffled_list);
   }
   void updateActiveMembersFromIds(vector<long> &);
@@ -264,8 +264,8 @@ class team {
   set<long> incomingPrograms_;
   double key_; /* For sorting. */
   int lastCompareFactor_;
-  std::list<program *> members_;   // team members for fast variation
-  vector<program *> members_run_;  // team members for fast direct access
+  std::list<RegisterMachine *> members_;   // team members for fast variation
+  vector<RegisterMachine *> members_run_;  // team members for fast direct access
   int n_atomic_;
   int _n_eval;
   int numLinearM_;
@@ -349,23 +349,5 @@ struct teamFitComplexLexCompare {
 struct teamInDegCompare {
   bool operator()(team *t1, team *t2) { return t1->inDeg() < t2->inDeg(); }
 };
-
-struct teamPair {
-  set<team *, teamIdComp> teams;
-  teamPair(team *t1, team *t2) {
-    teams.insert(t1);
-    teams.insert(t2);
-  }
-};
-
-inline bool operator<(const teamPair &tmp1, const teamPair &tmp2) {
-  if (tmp1.teams == tmp2.teams) return false;
-  auto t1 = tmp1.teams.begin();
-  auto t2 = tmp2.teams.begin();
-  if ((*t1)->id_ != (*t2)->id_) return (*t1)->id_ < (*t2)->id_;
-  advance(t1, 1);
-  advance(t2, 1);
-  return (*t1)->id_ < (*t2)->id_;
-}
 
 #endif

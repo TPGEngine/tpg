@@ -4,7 +4,7 @@
 // if (crossover && GetParam<double>("p_atomic") == 1.0 && pm1->size() == 1 &&
 //     pm2->size() == 1 &&
 //     real_dist_(_rngs[TPG_SEED]) <
-//         GetParam<double>("p_bid_xover")) {
+//         GetParam<double>("p_instructions_xover")) {
 //   _phyloGraph[(*cm)->id_].ancestorIds.insert(pm2->id_);
 //   (*cm)->addAncestorId(pm2->id_);
 
@@ -54,7 +54,7 @@
 //   while (p1liter != p1programs->end() || p2liter != p2programs->end()) {
 //     if (p1liter != p1programs->end() &&
 //         (int)(*cm)->size() < GetParam<int>("max_team_size") &&
-//         (((*p1liter)->action() < 0 && (*cm)->numAtomic_ < 1) ||
+//         (((*p1liter)->action_ < 0 && (*cm)->numAtomic_ < 1) ||
 //          find(p2programs->begin(), p2programs->end(), *p1liter) !=
 //              p2programs->end()))
 //       (*cm)->addProgram(*p1liter);
@@ -78,19 +78,19 @@
 //     (*cm)->addProgram(*p1liter);
 /****************************************************************************/
 
-// if (bid_.size() != bidEffective_.size()) {
-//   cerr << endl << "dbg Mark bid_s " << bid_.size() << " bidE_s "
-//        << bidEffective_.size() << endl;
+// if (instructions_.size() != instructions_effective_.size()) {
+//   cerr << endl << "dbg Mark instructions_s " << instructions_.size() << " bidE_s "
+//        << instructions_effective_.size() << endl;
 
-//   cerr << "bid_ exec" << endl;
-//   for (auto i : bid_) {
+//   cerr << "instructions_ exec" << endl;
+//   for (auto i : instructions_) {
 //     i->exec(true);
 //     cerr << endl;
 //   }
 //   cerr << "exec done" << endl;
 
 //   cerr << "bidE_ exec" << endl;
-//   for (auto i : bidEffective_) {
+//   for (auto i : instructions_effective_) {
 //     i->exec(true);
 //     cerr << endl;
 //   }
@@ -107,27 +107,27 @@ double linearM::run(state *obs, int timeStep, int graphDepth, mt19937 &rng) {
   // reset memory
   if (!stateful_) CopySharedConstToWorking();
 
-  privateMemory_[memoryEigen::SCALAR_TYPE]->working_memory_[0].setZero();
-  privateMemory_[memoryEigen::SCALAR_TYPE]->working_memory_[1].setZero();
+  private_memory_[memoryEigen::kScalarType_]->working_memory_[0].setZero();
+  private_memory_[memoryEigen::kScalarType_]->working_memory_[1].setZero();
 
-  for (auto istr : bidEffective_) {
+  for (auto istr : instructions_effective_) {
     // read inputs
     size_t idx = 0;
     for (size_t in = 0; in < 2; in++) {
-      if (istr->inType(in) != memoryEigen::NA_TYPE) {
+      if (istr->inType(in) != memoryEigen::kNAType) {
         if (istr->IsInput(in)) {
           // if (dbg) dbg_file << "in" << in << " fRef ";
           // in this case inMem(in) will be inputMemory_ and we use index 0
-          if (istr->inType(in) == memoryEigen::SCALAR_TYPE)
+          if (istr->inType(in) == memoryEigen::kScalarType_)
             istr->inMem(in)->working_memory_[idx](0, 0) =
                 obs->stateValueAtIndex(istr->inIdx(in));
-          else if (istr->inType(in) == memoryEigen::VECTOR_TYPE)
+          else if (istr->inType(in) == memoryEigen::kVectorType_)
             for (size_t f = istr->inIdx(in), row = 0;
                  row < istr->inMem(in)->memoryRows(); row++)
               istr->inMem(in)->working_memory_[idx](row, 0) =
                   obs->stateValueAtIndex(
                       f++ % num_input_);  //(*feature)[f++ % num_input_];
-          else if (istr->inType(in) == memoryEigen::MATRIX_TYPE)
+          else if (istr->inType(in) == memoryEigen::kMatrixType_)
             for (size_t f = istr->inIdx(in), row = 0;
                  row < istr->inMem(in)->memoryRows(); row++)
               for (size_t col = 0; col < istr->inMem(in)->memoryCols(); col++)
@@ -151,15 +151,15 @@ double linearM::run(state *obs, int timeStep, int graphDepth, mt19937 &rng) {
   }
   // if (dbg) {
   //   dbg_file << "id: " << id_ << " outs ";
-  //   dbg_file << privateMemory_[memoryEigen::SCALAR_TYPE]
+  //   dbg_file << private_memory_[memoryEigen::kScalarType_]
   //               ->working_memory_[0](0, 0);
   //   dbg_file << " ";
-  //   dbg_file << privateMemory_[memoryEigen::SCALAR_TYPE]
+  //   dbg_file << private_memory_[memoryEigen::kScalarType_]
   //               ->working_memory_[1](0, 0);
   //   dbg_file << endl;
   // }
   // dbg_file.close();
-  return privateMemory_[memoryEigen::SCALAR_TYPE]->working_memory_[0](0, 0);
+  return private_memory_[memoryEigen::kScalarType_]->working_memory_[0](0, 0);
 }
 
 // /******************************************************************************
@@ -175,43 +175,43 @@ double linearM::run(state *obs, int timeStep, int graphDepth, mt19937 &rng) {
 //   // keep track of which memories are effective with a map
 //   map<int, vector<bool> > Reff;  // maps [memory type][index]->true/false
 
-//   for (int mem_t = 0; mem_t < memoryEigen::NUM_MEMORY_TYPES; mem_t++)
+//   for (int mem_t = 0; mem_t < memoryEigen::kNumMemoryType_; mem_t++)
 //     Reff[mem_t] =
-//         vector<bool>(std::any_cast<int>(params["memory_indices"]), false);
+//         vector<bool>(std::any_cast<int>(params["n_memories"]), false);
 
-//   Reff[memoryEigen::SCALAR_TYPE][0] = true;  // mark bid output memory
+//   Reff[memoryEigen::kScalarType_][0] = true;  // mark bid output memory
 
 //   if (std::any_cast<int>(params["continuous_output"]))
-//     Reff[memoryEigen::SCALAR_TYPE][1] = true;  // mark continuous output
+//     Reff[memoryEigen::kScalarType_][1] = true;  // mark continuous output
 //     memory
 
 //   features_.clear();
-//   bidEffective_.clear();
+//   instructions_effective_.clear();
 
 //   // From last to first instruction.
 //   // vector<instruction *>::reverse_iterator riter;
-//   for (auto riter = bid_.rbegin(); riter != bid_.rend(); riter++) {
+//   for (auto riter = instructions_.rbegin(); riter != instructions_.rend(); riter++) {
 //     if (!skipIntrons_ || Reff[(*riter)->outType()][(*riter)->outIdx_]) {
-//       bidEffective_.insert(bidEffective_.begin(), *riter);
+//       instructions_effective_.insert(instructions_effective_.begin(), *riter);
 //       op_counts_[(*riter)->op_]++;
 //       // output TODO(spkelly) this is always true now
-//       (*riter)->out_ = privateMemory_[(*riter)->outType()];
+//       (*riter)->out_ = private_memory_[(*riter)->outType()];
 //       // inputs
 //       for (int in = 0; in < 2; in++) {
 //         // if this input is actually used for this op
-//         if ((*riter)->inType(in) != memoryEigen::NA_TYPE) {
+//         if ((*riter)->inType(in) != memoryEigen::kNAType) {
 //           if ((*riter)->IsInput(in)) {  // this input is a feature ref
 //             (*riter)->inMem(in,
 //             inputMemoryPointers_[in][(*riter)->inType(in)]);
 //             // mark features (accounting, should have no effect behaviour)
-//             if ((*riter)->inType(in) == memoryEigen::SCALAR_TYPE) {
+//             if ((*riter)->inType(in) == memoryEigen::kScalarType_) {
 //               features_.insert((*riter)->inIdx(in));
-//             } else if ((*riter)->inType(in) == memoryEigen::VECTOR_TYPE) {
+//             } else if ((*riter)->inType(in) == memoryEigen::kVectorType_) {
 //               for (size_t f = (*riter)->inIdx(in), row = 0;
 //                    row < (*riter)->inMem(in)->memoryRows(); row++) {
 //                 features_.insert(f++ % num_input_);  // toroidal
 //               }
-//             } else if ((*riter)->inType(in) == memoryEigen::MATRIX_TYPE) {
+//             } else if ((*riter)->inType(in) == memoryEigen::kMatrixType_) {
 //               for (size_t f = (*riter)->inIdx(in), row = 0;
 //                    row < (*riter)->inMem(in)->memoryRows(); row++) {
 //                 for (size_t col = 0; col < (*riter)->inMem(in)->memoryCols();
@@ -222,7 +222,7 @@ double linearM::run(state *obs, int timeStep, int graphDepth, mt19937 &rng) {
 //             }
 //           } else {  // this input is a memory ref
 //             (*riter)->inMem(in,
-//             privateMemory_[(*riter)->inType(in)]);
+//             private_memory_[(*riter)->inType(in)]);
 //             Reff[(*riter)->inType(in)][(*riter)->inIdx(in)] = true;
 //           }
 //         }

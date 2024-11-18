@@ -171,15 +171,6 @@ void evaluator(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks) {
       tpg.ReadCheckpoint(-1, _TRAIN_PHASE, -1, true, eval.checkpointString);
       tpg.getTeams(eval.teams, true);
 
-      // std::string s = "";
-      // tpg.WriteMPICheckpoint(s, eval.teams);
-      // ofstream ofs;
-      // char filename[80];
-      // sprintf(filename, "eval_sub.%d.rslt", tpg.GetState("t_current"));
-      // ofs.open(filename, ios::out);
-      // ofs << s;
-      // ofs.close();
-
       eval.task = tasks[tpg.GetState("active_task")];
       eval.eval_result = "";
       for (auto tm : eval.teams) {
@@ -195,7 +186,7 @@ void evaluator(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks) {
       gather(world, eval.eval_result, 0);
     }
   }
-  tpg.finalize();
+  // tpg.finalize();
 }
 
 /******************************************************************************/

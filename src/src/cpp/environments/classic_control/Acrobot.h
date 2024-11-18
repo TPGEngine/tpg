@@ -65,14 +65,9 @@ class Acrobot : public ClassicControlEnv {
 
     ~Acrobot() {}
 
-    // TODO: Change function name once TaskEnv follows Google's C++ Styling
-    bool discreteActions() const { return false; }
-
-    // TODO: Change function name once TaskEnv follows Google's C++ Styling
-    double minActionContinuous() const { return -1.0; }
-
-    // TODO: Change function name once TaskEnv follows Google's C++ Styling
-    double maxActionContinuous() const { return 1.0; }
+    bool DiscreteActions() const { return false; }
+    double MinActionContinuous() const { return -1.0; }
+    double MaxActionContinuous() const { return 1.0; }
 
     //! Normalizes the state values by dividing them by their respective maximum values
     void NormalizeState(bool po) {
@@ -83,7 +78,7 @@ class Acrobot : public ClassicControlEnv {
     }
 
     //! Resets the Acrobot environment to a initial state within specified ranges - uniform_real_distribution<>(-0.1, 0.1);
-    void reset(std::mt19937 &rng) {
+    void Reset(std::mt19937 &rng) {
         state_po_[StateIndex::kTheta1] = state_[StateIndex::kTheta1] =
             dis_reset(rng);
 
@@ -104,9 +99,8 @@ class Acrobot : public ClassicControlEnv {
     }
 
 
-    // TODO: Change function name once TaskEnv follows Google's C++ Styling
     //! Updates Acrobot state based on the given action and returns the reward 
-    Results update(int actionD, double actionC, std::mt19937 &rng) {
+    Results Update(int actionD, double actionC, std::mt19937 &rng) {
 
         (void)actionD;
         (void)rng;
@@ -186,8 +180,6 @@ class Acrobot : public ClassicControlEnv {
 
 
     //! Provide boolean result to check if the current state is terminal based on step count or position
-    // TODO: Change function name once TaskEnv follows Google's C++ Styling
-
     bool Terminal() {
         if (step_ >= max_step_ || (-std::cos(state_[StateIndex::kTheta1]) -
                                        std::cos(state_[StateIndex::kTheta2] +
@@ -209,9 +201,8 @@ class Acrobot : public ClassicControlEnv {
     }
 
     //! Renders the current state of the Acrobot environment using OpenGL
-    // TODO: Change function name once TaskEnv follows Google's C++ Styling
     // OpenGL Display
-    void display_function(int episode, int actionD, double actionC) {
+    void DisplayFunction(int episode, int actionD, double actionC) {
         (void)episode;
         (void)actionD;
         (void)actionC;

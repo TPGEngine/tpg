@@ -23,7 +23,7 @@ id_to_replay = 0
 
 # Which task in which to replay the individual
 # Index in active_tasks list starting at 0
-replay_task 0
+task_to_replay 0
 
 # Re-evaluate an individual from a checkpoint file and animate behaviour, 
 # if available
@@ -45,15 +45,20 @@ checkpoint_in_t 0
 # Test: 2
 checkpoint_in_phase 2
 
-# Save checkpoints during evolution
+# Save checkpoints when we discover a new champion in this phase
+# 0: Training phase
+# 1: Validation phase
+# 2: Test phase
+save_champ_checkpoints 0
+
+Whether to save training checkpoints at each generation
 write_train_checkpoints 0
-write_test_checkpoints 1
 
 # Save phylogenetic data
 write_phylogeny 0
 
 # How frequently to run test procedure
-test_mod 1
+test_mod 0
 
 # Number of tasks used each selection for evaluation 
 # The rest are estimated with phylogeny
@@ -66,10 +71,6 @@ n_fit_mode 1
 # Range is [0, n_fit_mode)
 fit_mode 0
 
-# Which behaviour characterization function to use, if multiple available
-# Range is [0, n_dist_mode)
-dist_mode 0
-
 # Main seed for evolution
 seed_tpg 42
 
@@ -79,20 +80,11 @@ seed_aux 42
 # Max number of generations
 n_generations 100000
 
-# Allow mutation of internal teams (i.e. non-root teams (in-progress))
-mu_internal 0
+# Number of root teams (agents) to keep each generation
+n_root 500
 
-# Number of elite root teams (agents)
-n_elite 400
-
-# n_elite * n_elite_mul new teams are created each generation
-n_elite_mul 2.0
-
-# Whether to use fitness proportional selection
-fit_prop_select 0
-
-# Which diversity mode to use, if available
-diversity_mode 0
+# Number of new root teams to create each generation
+n_root_gen 250
 
 # Whether to constrain parent selection to root teams
 parent_select_roots_only 0
@@ -128,34 +120,39 @@ pmw 0.1
 ## Program  parameters #########################################################
 ################################################################################
 
-### On average one program in the team will have these mutation ops applied ###
-###############################################################################
+### On average one program in the team will have these variation ops applied ###
+################################################################################
+
+# Program variation: probability of cloning program before modifying
+# If program is cloned, modify the clone only (adds 1 new program to pop)
+# If not cloned, all other variation ops will modify the program in place
+p_clone_program 1.0
 
 # Program variation: probability of mutating a program's action pointer
 pmn 0.1
 # When changing action pointer, probability of selecting atomic action
-p_atomic 1.0
+p_atomic 0.99
 
 # Program variation: probability of changing a random instruction
-p_bid_mutate 0.2
+p_instructions_mutate 0.1
 
 # Program variation: probability of swaping the position of two instructions
-p_bid_swap 0.1
+p_instructions_swap 0.1
 
 # Program variation: probability of deleting an instruction
-p_bid_delete 0.1
+p_instructions_delete 0.1
 
 # program variation: probability of adding an instruction
-p_bid_add 0.075
+p_instructions_add 0.075
 
 # Program variation: probability of linear crossover with another team
-p_bid_xover 0.0
+p_instructions_xover 0.0
 
 # Program variation: probability of adding noise to constants
-p_bid_mu_const 0.5
+p_instructions_mu_const 0.5
 
 # Program variation: stddev of normal noise added to each const
-bid_mu_const_stddev 0.05
+instructions_mu_const_stddev 0.05
 
 # Program variation: probability of changing observation_buff_size
 p_observation_buff_size 0.0
@@ -193,12 +190,12 @@ max_prog_size 1000000
 
 # Number of memory indices
 # Each memory index points to a data structure (scalar, vector, or matrix)
-memory_indices 8
+n_memories 8
 
 # Dimensionality for vector & matrix memory
 memory_size 8
 min_memory_size 2
-max_memory_size 27
+max_memory_size 29
 
 # Observations are stored in a buffer with this time window
 observation_buff_size 1
@@ -252,8 +249,9 @@ mj_model_path $TPG/datasets/mujoco_models/half_cheetah.xml
 
 mj_max_timestep 1000
 
-mj_n_eval_train 1
-mj_n_eval_test 1
+mj_n_eval_train 10
+mj_n_eval_validation 0
+mj_n_eval_test 0
 
 ################################################################################
 ## Operations, uncomment to activate ###########################################

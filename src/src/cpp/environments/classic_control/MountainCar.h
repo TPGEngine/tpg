@@ -119,7 +119,7 @@ class MountainCar : public ClassicControlEnv {
     }
 
     //! Displays the current state of the environment using OpenGL
-    void display_function(int episode, int actionD, double actionC) {
+    void DisplayFunction(int episode, int actionD, double actionC) {
         (void)episode;
         (void)actionC;
         (void)actionD;

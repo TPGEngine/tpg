@@ -1,5 +1,5 @@
-#ifndef CARTPOLE_H
-#define CARTPOLE_H
+#ifndef CartPole_h
+#define CartPole_h
 
 
 #include <math.h>

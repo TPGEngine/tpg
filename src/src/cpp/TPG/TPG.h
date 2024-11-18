@@ -9,7 +9,7 @@
 #include "RegisterMachine.h"
 #include "api_client.h"
 #include "instruction.h"
-#include "memoryEigen.h"
+#include "MemoryEigen.h"
 #include "point.h"
 #include "state.h"
 #include "team.h"
@@ -24,12 +24,11 @@ class TPG {
     TPG(const TPG &);
     ~TPG();
 
-    void AddProgram(program *p);
-    void removeProgram(program *p, bool updateLids);
+    void AddProgram(RegisterMachine *p);
+    void removeProgram(RegisterMachine *p, bool updateLids);
     void AddTeam(team *tm);
-    void RemoveTeam(team *tm, deque<program *> &programsWithNoRefs);
-    void AddMemory(memoryEigen *m);
-    void removeMemory(memoryEigen *m);
+    void RemoveTeam(team *tm, deque<RegisterMachine *> &RegisterMachinesWithNoRefs);
+    void AddMemory(long prog_id, MemoryEigen *m);
     team *getTeamByID(long id);
     bool haveEliteTeam(string taskset, int fitMode, int phase);
     void Seed(size_t i, uint_fast32_t s);
@@ -39,7 +38,7 @@ class TPG {
      * Methods to implement the TPG algorithm.
      **************************************************************************/
     void checkRefCounts(const char *);
-    void CleanupProgramsWithNoRefs(deque<program *> &, bool);
+    void CleanupProgramsWithNoRefs(deque<RegisterMachine *> &, bool);
     void clearMemory();
     void countRefs();
     void finalize();
@@ -49,34 +48,34 @@ class TPG {
     void TeamMutator_AddPrograms(team *team_to_mu);
     void TeamMutator_RemovePrograms(team *team_to_mu);
     team *CloneTeam(team *team_to_clone);
-    program *CloneProgram(program *prog);
-    void ProgramMutator_MemoryPointer(program *prog_to_mu);
-    void ProgramMutator_Instructions(program *prog_to_mu);
-    void ProgramMutator_ActionPointer(program *prog_to_mu, team *new_team,
+    RegisterMachine *CloneProgram(RegisterMachine *prog);
+    // void ProgramMutator_Memory(RegisterMachine *&prog_to_mu);
+    void ProgramMutator_Instructions(RegisterMachine *prog_to_mu);
+    void ProgramMutator_ActionPointer(RegisterMachine *prog_to_mu, team *new_team,
                                       int &n_new_teams);
     void AddAncestorToPhylogeny(team *parent, team *new_team);
     void AddTeamToPhylogeny(team *new_team);
     void ApplyVariationOps(team *team_to_modify, int &n_new_teams);
     team *genTeamsInternal(long, mt19937 &, set<team *, teamIdComp> &,
                            map<long, team *> &);
-    int genUniqueProgram(program *, set<program *, programIdComp>);
-    program *getAction(team *tm, state *s, bool updateActive,
+    int genUniqueProgram(RegisterMachine *, set<RegisterMachine *, RegisterMachineIdComp>);
+    RegisterMachine *getAction(team *tm, state *s, bool updateActive,
                        set<team *, teamIdComp> &visitedTeams,
                        long &decisionInstructions, int timeStep,
                        vector<team *> &teamPath, mt19937 &rng, bool verbose);
 
-    program *getAction(
+    RegisterMachine *getAction(
         team *tm, state *s, bool updateActive,
         set<team *, teamIdComp> &visitedTeams, long &decisionInstructions,
-        int timeStep, vector<program *> &allPrograms,
-        vector<program *> &winningPrograms, vector<set<long>> &decisionFeatures,
-        // vector<set<memoryEigen *, memoryEigenIdComp>> &decisionMemories,
+        int timeStep, vector<RegisterMachine *> &allPrograms,
+        vector<RegisterMachine *> &winningPrograms, vector<set<long>> &decisionFeatures,
+        // vector<set<MemoryEigen *, MemoryEigenIdComp>> &decisionMemories,
         vector<team *> &teamPath, mt19937 &rng, bool verbose);
     void GetAllNodes(team *tm, set<team *, teamIdComp> &teams,
-                     set<program *, programIdComp> &programs);
+                     set<RegisterMachine *, RegisterMachineIdComp> &RegisterMachines);
     // void GetAllNodes(team *tm, set<team *, teamIdComp> &teams,
-    //                  set<program *, programIdComp> &programs,
-    //                  set<memoryEigen *, memoryEigenIdComp> &memories);
+    //                  set<RegisterMachine *, RegisterMachineIdComp> &RegisterMachines,
+    //                  set<MemoryEigen *, MemoryEigenIdComp> &memories);
     team *getBestTeam();
     // map<long, team *> GetTeams(bool) const;
     vector<team *> GetTeamsInVec(bool) const;
@@ -91,9 +90,9 @@ class TPG {
     void policyFeatures(int, set<long> &, bool);
     // void printGraphDot(
     //     team *, size_t frame, int episode, int step, size_t depth,
-    //     vector<program *> allPrograms, vector<program *> winningPrograms,
+    //     vector<RegisterMachine *> allPrograms, vector<RegisterMachine *> winningPrograms,
     //     vector<set<long>> decisionFeatures,
-    //     vector<set<memoryEigen *, memoryEigenIdComp>> decisionMemories,
+    //     vector<set<MemoryEigen *, MemoryEigenIdComp>> decisionMemories,
     //     vector<team *> teamPath, bool drawPath,
     //     set<team *, teamIdComp> visitedTeamsAllTasks);
     // void printGraphDotGPEM(long rootTeamId, map<long, string> &teamColMap,
@@ -105,8 +104,8 @@ class TPG {
                               vector<int> &steps_per_task);
     // void printGraphDotGPEMAnimate(long rootTeamId, size_t frame, int episode,
     //                               int step, size_t depth,
-    //                               vector<program *> allPrograms,
-    //                               vector<program *> winningPrograms,
+    //                               vector<RegisterMachine *> allPrograms,
+    //                               vector<RegisterMachine *> winningPrograms,
     //                               set<team *, teamIdComp>
     //                               &visitedTeamsAllTasks, vector<map<long,
     //                               double>> &teamUseMapPerTask, vector<team *>
@@ -119,7 +118,7 @@ class TPG {
     void printOss(ostringstream &o);
     void printTeamInfo(long, int, bool, long teamId = -1);
     void trackTeamInfo(long, int, bool, long teamId = -1);
-    void programCrossover(RegisterMachine *p1, RegisterMachine *p2,
+    void RegisterMachineCrossover(RegisterMachine *p1, RegisterMachine *p2,
                           RegisterMachine **c1, RegisterMachine **c2,
                           mt19937 &);
     void ReadCheckpoint(long, int, int, bool, const string &);
@@ -160,16 +159,15 @@ class TPG {
     //  Populations
     set<team *, teamIdComp> _M;      // Teams
     set<team *, teamIdComp> _Mroot;  // Root teams for fast lookup
-    // Map team id -> team* for program graph traversal
+    // Map team id -> team* for RegisterMachine graph traversal
     map<long, team *> _teamMap;
     // keep track of which teams are elites wrt each taskSet
     map<string, vector<team *>> task_set_map_;
-    map<long, program *> _L;
+    map<long, RegisterMachine *> _L;
     vector<long> _Lids;
     vector<vector<long>> _Memids;
     // one map for each memory type: id->memory*
-    vector<map<long, memoryEigen *>> _Memory;
-    vector<teamPair> _teamPairsToCompair;
+    vector<map<long, MemoryEigen *>> _Memory;
 
     // Phylogeny data
     map<long, phyloRecord> _phyloGraph;
@@ -179,7 +177,7 @@ class TPG {
     map<long, modesRecord> _persistenceFilterA_t;
     map<long, modesRecord> _persistenceFilterAllTime;
 
-    vector<bool> _ops;  // legel program operations
+    vector<bool> _ops;  // legel RegisterMachine operations
     set<team *, teamIdComp> _eliteTeams;
     // keys: taskSet, fitMode, phase
     map<string, map<int, map<int, team *>>> _eliteTeamPS;
@@ -207,8 +205,8 @@ class TPG {
     int GetState(string p) { return state_[p]; }
     void ProcessParams();
     void SetParams(int argc, char **argv);
-    void MutateActionToTerminal(program *prog_to_mu, team *new_team);
-    void MutateActionToTeam(program *prog_to_mu, team *new_team,
+    void MutateActionToTerminal(RegisterMachine *prog_to_mu, team *new_team);
+    void MutateActionToTeam(RegisterMachine *prog_to_mu, team *new_team,
                             int &n_new_teams);
 };
 
