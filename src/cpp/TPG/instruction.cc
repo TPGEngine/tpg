@@ -1,6 +1,6 @@
 #include "instruction.h"
 
-vector<vector<size_t> > instruction::op_mem_types_(NUM_OP);
+vector<vector<size_t> > instruction::op_signatures_(NUM_OP);
 vector<instruction::operation> instruction::op_list_(NUM_OP);
 
 string instruction::checkpoint() {
@@ -13,375 +13,371 @@ string instruction::checkpoint() {
   oss << in1Idx_ << "_";
   oss << in2Idx_ << "_";
   oss << in3Idx_ << "_";
-  oss << memory_size_ << "_";
   return oss.str();
 }
 
 void instruction::SetupOps() {
-  op_mem_types_[SCALAR_SUM_OP_] = {memoryEigen::SCALAR_TYPE,
-                                   memoryEigen::SCALAR_TYPE,
-                                   memoryEigen::SCALAR_TYPE};
+  op_signatures_[SCALAR_SUM_OP_] = {MemoryEigen::kScalarType_,
+                                   MemoryEigen::kScalarType_,
+                                   MemoryEigen::kScalarType_};
   op_list_[SCALAR_SUM_OP_] = (&instruction::ExecuteScalarSumOp);
 
-  op_mem_types_[SCALAR_DIFF_OP_] = {memoryEigen::SCALAR_TYPE,
-                                    memoryEigen::SCALAR_TYPE,
-                                    memoryEigen::SCALAR_TYPE};
+  op_signatures_[SCALAR_DIFF_OP_] = {MemoryEigen::kScalarType_,
+                                    MemoryEigen::kScalarType_,
+                                    MemoryEigen::kScalarType_};
   op_list_[SCALAR_DIFF_OP_] = (&instruction::ExecuteScalarDiffOp);
 
-  op_mem_types_[SCALAR_PRODUCT_OP_] = {memoryEigen::SCALAR_TYPE,
-                                       memoryEigen::SCALAR_TYPE,
-                                       memoryEigen::SCALAR_TYPE};
+  op_signatures_[SCALAR_PRODUCT_OP_] = {MemoryEigen::kScalarType_,
+                                       MemoryEigen::kScalarType_,
+                                       MemoryEigen::kScalarType_};
   op_list_[SCALAR_PRODUCT_OP_] = (&instruction::ExecuteScalarProductOp);
 
-  op_mem_types_[SCALAR_DIVISION_OP_] = {memoryEigen::SCALAR_TYPE,
-                                        memoryEigen::SCALAR_TYPE,
-                                        memoryEigen::SCALAR_TYPE};
+  op_signatures_[SCALAR_DIVISION_OP_] = {MemoryEigen::kScalarType_,
+                                        MemoryEigen::kScalarType_,
+                                        MemoryEigen::kScalarType_};
   op_list_[SCALAR_DIVISION_OP_] = (&instruction::ExecuteScalarDivisionOp);
 
-  op_mem_types_[SCALAR_ABS_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::SCALAR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_ABS_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kScalarType_};
   op_list_[SCALAR_ABS_OP_] = (&instruction::ExecuteScalarAbsOp);
 
-  op_mem_types_[SCALAR_SIN_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::SCALAR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_SIN_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kScalarType_};
   op_list_[SCALAR_SIN_OP_] = (&instruction::ExecuteScalarSinOp);
 
-  op_mem_types_[SCALAR_COS_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::SCALAR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_COS_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kScalarType_};
   op_list_[SCALAR_COS_OP_] = (&instruction::ExecuteScalarCosOp);
 
-  op_mem_types_[SCALAR_TAN_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::SCALAR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_TAN_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kScalarType_};
   op_list_[SCALAR_TAN_OP_] = (&instruction::ExecuteScalarTanOp);
 
-  op_mem_types_[SCALAR_EXP_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::SCALAR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_EXP_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kScalarType_};
   op_list_[SCALAR_EXP_OP_] = (&instruction::ExecuteScalarExpOp);
 
-  op_mem_types_[SCALAR_LOG_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::SCALAR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_LOG_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kScalarType_};
   op_list_[SCALAR_LOG_OP_] = (&instruction::ExecuteScalarLogOp);
 
-  op_mem_types_[SCALAR_RECIPROCAL_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::SCALAR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_RECIPROCAL_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kScalarType_};
   op_list_[SCALAR_RECIPROCAL_OP_] = (&instruction::ExecuteScalarReciprocalOp);
 
-  op_mem_types_[SCALAR_SIN_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::SCALAR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_SIN_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kScalarType_};
   op_list_[SCALAR_SIN_OP_] = (&instruction::ExecuteScalarSinOp);
 
-  op_mem_types_[SCALAR_COS_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::SCALAR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_COS_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kScalarType_};
   op_list_[SCALAR_COS_OP_] = (&instruction::ExecuteScalarCosOp);
 
-  op_mem_types_[SCALAR_ARCSIN_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::SCALAR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_ARCSIN_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kScalarType_};
   op_list_[SCALAR_ARCSIN_OP_] = (&instruction::ExecuteScalarArcSinOp);
 
-  op_mem_types_[SCALAR_ARCCOS_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::SCALAR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_ARCCOS_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kScalarType_};
   op_list_[SCALAR_ARCCOS_OP_] = (&instruction::ExecuteScalarArcCosOp);
 
-  op_mem_types_[SCALAR_ARCTAN_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::SCALAR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_ARCTAN_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kScalarType_};
   op_list_[SCALAR_ARCTAN_OP_] = (&instruction::ExecuteScalarArcTanOp);
 
-  op_mem_types_[SCALAR_HEAVYSIDE_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::SCALAR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_HEAVYSIDE_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kScalarType_};
   op_list_[SCALAR_HEAVYSIDE_OP_] = (&instruction::ExecuteScalarHeavisideOp);
 
-  op_mem_types_[VECTOR_HEAVYSIDE_OP_] = {
-      memoryEigen::VECTOR_TYPE, memoryEigen::VECTOR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[VECTOR_HEAVYSIDE_OP_] = {
+      MemoryEigen::kVectorType_, MemoryEigen::kVectorType_};
   op_list_[VECTOR_HEAVYSIDE_OP_] = (&instruction::ExecuteVectorHeavisideOp);
 
-  op_mem_types_[MATRIX_HEAVYSIDE_OP_] = {
-      memoryEigen::MATRIX_TYPE, memoryEigen::MATRIX_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[MATRIX_HEAVYSIDE_OP_] = {
+      MemoryEigen::kMatrixType_, MemoryEigen::kMatrixType_};
   op_list_[MATRIX_HEAVYSIDE_OP_] = (&instruction::ExecuteMatrixHeavisideOp);
 
-  op_mem_types_[SCALAR_VECTOR_PRODUCT_OP_] = {memoryEigen::VECTOR_TYPE,
-                                              memoryEigen::SCALAR_TYPE,
-                                              memoryEigen::VECTOR_TYPE};
+  op_signatures_[SCALAR_VECTOR_PRODUCT_OP_] = {MemoryEigen::kVectorType_,
+                                              MemoryEigen::kScalarType_,
+                                              MemoryEigen::kVectorType_};
   op_list_[SCALAR_VECTOR_PRODUCT_OP_] =
       (&instruction::ExecuteScalarVectorProductOp);
 
-  op_mem_types_[SCALAR_BROADCAST_OP_] = {
-      memoryEigen::VECTOR_TYPE, memoryEigen::SCALAR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_BROADCAST_OP_] = {
+      MemoryEigen::kVectorType_, MemoryEigen::kScalarType_};
   op_list_[SCALAR_BROADCAST_OP_] = (&instruction::ExecuteScalarBroadcastOp);
 
-  op_mem_types_[VECTOR_RECIPROCAL_OP_] = {
-      memoryEigen::VECTOR_TYPE, memoryEigen::VECTOR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[VECTOR_RECIPROCAL_OP_] = {
+      MemoryEigen::kVectorType_, MemoryEigen::kVectorType_};
   op_list_[VECTOR_RECIPROCAL_OP_] = (&instruction::ExecuteVectorReciprocalOp);
 
-  op_mem_types_[VECTOR_NORM_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::VECTOR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[VECTOR_NORM_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kVectorType_};
   op_list_[VECTOR_NORM_OP_] = (&instruction::ExecuteVectorNormOp);
 
-  op_mem_types_[VECTOR_ABS_OP_] = {
-      memoryEigen::VECTOR_TYPE, memoryEigen::VECTOR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[VECTOR_ABS_OP_] = {
+      MemoryEigen::kVectorType_, MemoryEigen::kVectorType_};
   op_list_[VECTOR_ABS_OP_] = (&instruction::ExecuteVectorAbsOp);
 
-  op_mem_types_[VECTOR_SUM_OP_] = {memoryEigen::VECTOR_TYPE,
-                                   memoryEigen::VECTOR_TYPE,
-                                   memoryEigen::VECTOR_TYPE};
+  op_signatures_[VECTOR_SUM_OP_] = {MemoryEigen::kVectorType_,
+                                   MemoryEigen::kVectorType_,
+                                   MemoryEigen::kVectorType_};
   op_list_[VECTOR_SUM_OP_] = (&instruction::ExecuteVectorSumOp);
 
-  op_mem_types_[VECTOR_DIFF_OP_] = {memoryEigen::VECTOR_TYPE,
-                                    memoryEigen::VECTOR_TYPE,
-                                    memoryEigen::VECTOR_TYPE};
+  op_signatures_[VECTOR_DIFF_OP_] = {MemoryEigen::kVectorType_,
+                                    MemoryEigen::kVectorType_,
+                                    MemoryEigen::kVectorType_};
   op_list_[VECTOR_DIFF_OP_] = (&instruction::ExecuteVectorDiffOp);
 
-  op_mem_types_[VECTOR_PRODUCT_OP_] = {memoryEigen::VECTOR_TYPE,
-                                       memoryEigen::VECTOR_TYPE,
-                                       memoryEigen::VECTOR_TYPE};
+  op_signatures_[VECTOR_PRODUCT_OP_] = {MemoryEigen::kVectorType_,
+                                       MemoryEigen::kVectorType_,
+                                       MemoryEigen::kVectorType_};
   op_list_[VECTOR_PRODUCT_OP_] = (&instruction::ExecuteVectorProductOp);
 
-  op_mem_types_[VECTOR_DIVISION_OP_] = {memoryEigen::VECTOR_TYPE,
-                                        memoryEigen::VECTOR_TYPE,
-                                        memoryEigen::VECTOR_TYPE};
+  op_signatures_[VECTOR_DIVISION_OP_] = {MemoryEigen::kVectorType_,
+                                        MemoryEigen::kVectorType_,
+                                        MemoryEigen::kVectorType_};
   op_list_[VECTOR_DIVISION_OP_] = (&instruction::ExecuteVectorDivisionOp);
 
-  op_mem_types_[VECTOR_INNER_PRODUCT_OP_] = {memoryEigen::SCALAR_TYPE,
-                                             memoryEigen::VECTOR_TYPE,
-                                             memoryEigen::VECTOR_TYPE};
+  op_signatures_[VECTOR_INNER_PRODUCT_OP_] = {MemoryEigen::kScalarType_,
+                                             MemoryEigen::kVectorType_,
+                                             MemoryEigen::kVectorType_};
   op_list_[VECTOR_INNER_PRODUCT_OP_] =
       (&instruction::ExecuteVectorInnerProductOp);
 
-  op_mem_types_[VECTOR_OUTER_PRODUCT_OP_] = {memoryEigen::MATRIX_TYPE,
-                                             memoryEigen::VECTOR_TYPE,
-                                             memoryEigen::VECTOR_TYPE};
+  op_signatures_[VECTOR_OUTER_PRODUCT_OP_] = {MemoryEigen::kMatrixType_,
+                                             MemoryEigen::kVectorType_,
+                                             MemoryEigen::kVectorType_};
   op_list_[VECTOR_OUTER_PRODUCT_OP_] =
       (&instruction::ExecuteVectorOuterProductOp);
 
-  op_mem_types_[SCALAR_MATRIX_PRODUCT_OP_] = {memoryEigen::MATRIX_TYPE,
-                                              memoryEigen::SCALAR_TYPE,
-                                              memoryEigen::MATRIX_TYPE};
+  op_signatures_[SCALAR_MATRIX_PRODUCT_OP_] = {MemoryEigen::kMatrixType_,
+                                              MemoryEigen::kScalarType_,
+                                              MemoryEigen::kMatrixType_};
   op_list_[SCALAR_MATRIX_PRODUCT_OP_] =
       (&instruction::ExecuteScalarMatrixProductOp);
 
-  op_mem_types_[MATRIX_RECIPROCAL_OP_] = {
-      memoryEigen::MATRIX_TYPE, memoryEigen::MATRIX_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[MATRIX_RECIPROCAL_OP_] = {
+      MemoryEigen::kMatrixType_, MemoryEigen::kMatrixType_};
   op_list_[MATRIX_RECIPROCAL_OP_] = (&instruction::ExecuteMatrixReciprocalOp);
 
-  op_mem_types_[MATRIX_VECTOR_PRODUCT_OP_] = {memoryEigen::VECTOR_TYPE,
-                                              memoryEigen::MATRIX_TYPE,
-                                              memoryEigen::VECTOR_TYPE};
+  op_signatures_[MATRIX_VECTOR_PRODUCT_OP_] = {MemoryEigen::kVectorType_,
+                                              MemoryEigen::kMatrixType_,
+                                              MemoryEigen::kVectorType_};
   op_list_[MATRIX_VECTOR_PRODUCT_OP_] =
       (&instruction::ExecuteMatrixVectorProductOp);
 
-  op_mem_types_[VECTOR_COLUMN_BROADCAST_OP_] = {
-      memoryEigen::MATRIX_TYPE, memoryEigen::VECTOR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[VECTOR_COLUMN_BROADCAST_OP_] = {
+      MemoryEigen::kMatrixType_, MemoryEigen::kVectorType_};
   op_list_[VECTOR_COLUMN_BROADCAST_OP_] =
       (&instruction::ExecuteVectorColumnBroadcastOp);
 
-  op_mem_types_[VECTOR_ROW_BROADCAST_OP_] = {
-      memoryEigen::MATRIX_TYPE, memoryEigen::VECTOR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[VECTOR_ROW_BROADCAST_OP_] = {
+      MemoryEigen::kMatrixType_, MemoryEigen::kVectorType_};
   op_list_[VECTOR_ROW_BROADCAST_OP_] =
       (&instruction::ExecuteVectorRowBroadcastOp);
 
-  op_mem_types_[MATRIX_NORM_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::MATRIX_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[MATRIX_NORM_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kMatrixType_};
   op_list_[MATRIX_NORM_OP_] = (&instruction::ExecuteMatrixNormOp);
 
-  op_mem_types_[MATRIX_COLUMN_NORM_OP_] = {
-      memoryEigen::VECTOR_TYPE, memoryEigen::MATRIX_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[MATRIX_COLUMN_NORM_OP_] = {
+      MemoryEigen::kVectorType_, MemoryEigen::kMatrixType_};
   op_list_[MATRIX_COLUMN_NORM_OP_] = (&instruction::ExecuteMatrixColumnNormOp);
 
-  op_mem_types_[MATRIX_ROW_NORM_OP_] = {
-      memoryEigen::VECTOR_TYPE, memoryEigen::MATRIX_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[MATRIX_ROW_NORM_OP_] = {
+      MemoryEigen::kVectorType_, MemoryEigen::kMatrixType_};
   op_list_[MATRIX_ROW_NORM_OP_] = (&instruction::ExecuteMatrixRowNormOp);
 
-  op_mem_types_[MATRIX_TRANSPOSE_OP_] = {
-      memoryEigen::MATRIX_TYPE, memoryEigen::MATRIX_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[MATRIX_TRANSPOSE_OP_] = {
+      MemoryEigen::kMatrixType_, MemoryEigen::kMatrixType_};
   op_list_[MATRIX_TRANSPOSE_OP_] = (&instruction::ExecuteMatrixTransposeOp);
 
-  op_mem_types_[MATRIX_ABS_OP_] = {
-      memoryEigen::MATRIX_TYPE, memoryEigen::MATRIX_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[MATRIX_ABS_OP_] = {
+      MemoryEigen::kMatrixType_, MemoryEigen::kMatrixType_};
   op_list_[MATRIX_ABS_OP_] = (&instruction::ExecuteMatrixAbsOp);
 
-  op_mem_types_[MATRIX_SUM_OP_] = {memoryEigen::MATRIX_TYPE,
-                                   memoryEigen::MATRIX_TYPE,
-                                   memoryEigen::MATRIX_TYPE};
+  op_signatures_[MATRIX_SUM_OP_] = {MemoryEigen::kMatrixType_,
+                                   MemoryEigen::kMatrixType_,
+                                   MemoryEigen::kMatrixType_};
   op_list_[MATRIX_SUM_OP_] = (&instruction::ExecuteMatrixSumOp);
 
-  op_mem_types_[MATRIX_DIFF_OP_] = {memoryEigen::MATRIX_TYPE,
-                                    memoryEigen::MATRIX_TYPE,
-                                    memoryEigen::MATRIX_TYPE};
+  op_signatures_[MATRIX_DIFF_OP_] = {MemoryEigen::kMatrixType_,
+                                    MemoryEigen::kMatrixType_,
+                                    MemoryEigen::kMatrixType_};
   op_list_[MATRIX_DIFF_OP_] = (&instruction::ExecuteMatrixDiffOp);
 
-  op_mem_types_[MATRIX_PRODUCT_OP_] = {memoryEigen::MATRIX_TYPE,
-                                       memoryEigen::MATRIX_TYPE,
-                                       memoryEigen::MATRIX_TYPE};
+  op_signatures_[MATRIX_PRODUCT_OP_] = {MemoryEigen::kMatrixType_,
+                                       MemoryEigen::kMatrixType_,
+                                       MemoryEigen::kMatrixType_};
   op_list_[MATRIX_PRODUCT_OP_] = (&instruction::ExecuteMatrixProductOp);
 
-  op_mem_types_[MATRIX_DIVISION_OP_] = {memoryEigen::MATRIX_TYPE,
-                                        memoryEigen::MATRIX_TYPE,
-                                        memoryEigen::MATRIX_TYPE};
+  op_signatures_[MATRIX_DIVISION_OP_] = {MemoryEigen::kMatrixType_,
+                                        MemoryEigen::kMatrixType_,
+                                        MemoryEigen::kMatrixType_};
   op_list_[MATRIX_DIVISION_OP_] = (&instruction::ExecuteMatrixDivisionOp);
 
-  op_mem_types_[MATRIX_MATRIX_PRODUCT_OP_] = {memoryEigen::MATRIX_TYPE,
-                                              memoryEigen::MATRIX_TYPE,
-                                              memoryEigen::MATRIX_TYPE};
+  op_signatures_[MATRIX_MATRIX_PRODUCT_OP_] = {MemoryEigen::kMatrixType_,
+                                              MemoryEigen::kMatrixType_,
+                                              MemoryEigen::kMatrixType_};
   op_list_[MATRIX_MATRIX_PRODUCT_OP_] =
       (&instruction::ExecuteMatrixMatrixProductOp);
 
-  op_mem_types_[SCALAR_MIN_OP_] = {memoryEigen::SCALAR_TYPE,
-                                   memoryEigen::SCALAR_TYPE,
-                                   memoryEigen::SCALAR_TYPE};
+  op_signatures_[SCALAR_MIN_OP_] = {MemoryEigen::kScalarType_,
+                                   MemoryEigen::kScalarType_,
+                                   MemoryEigen::kScalarType_};
   op_list_[SCALAR_MIN_OP_] = (&instruction::ExecuteScalarMinOp);
 
-  op_mem_types_[VECTOR_MIN_OP_] = {memoryEigen::VECTOR_TYPE,
-                                   memoryEigen::VECTOR_TYPE,
-                                   memoryEigen::VECTOR_TYPE};
+  op_signatures_[VECTOR_MIN_OP_] = {MemoryEigen::kVectorType_,
+                                   MemoryEigen::kVectorType_,
+                                   MemoryEigen::kVectorType_};
   op_list_[VECTOR_MIN_OP_] = (&instruction::ExecuteVectorMinOp);
 
-  op_mem_types_[MATRIX_MIN_OP_] = {memoryEigen::MATRIX_TYPE,
-                                   memoryEigen::MATRIX_TYPE,
-                                   memoryEigen::MATRIX_TYPE};
+  op_signatures_[MATRIX_MIN_OP_] = {MemoryEigen::kMatrixType_,
+                                   MemoryEigen::kMatrixType_,
+                                   MemoryEigen::kMatrixType_};
   op_list_[MATRIX_MIN_OP_] = (&instruction::ExecuteMatrixMinOp);
 
-  op_mem_types_[SCALAR_MAX_OP_] = {memoryEigen::SCALAR_TYPE,
-                                   memoryEigen::SCALAR_TYPE,
-                                   memoryEigen::SCALAR_TYPE};
+  op_signatures_[SCALAR_MAX_OP_] = {MemoryEigen::kScalarType_,
+                                   MemoryEigen::kScalarType_,
+                                   MemoryEigen::kScalarType_};
   op_list_[SCALAR_MAX_OP_] = (&instruction::ExecuteScalarMaxOp);
 
-  op_mem_types_[VECTOR_MAX_OP_] = {memoryEigen::VECTOR_TYPE,
-                                   memoryEigen::VECTOR_TYPE,
-                                   memoryEigen::VECTOR_TYPE};
+  op_signatures_[VECTOR_MAX_OP_] = {MemoryEigen::kVectorType_,
+                                   MemoryEigen::kVectorType_,
+                                   MemoryEigen::kVectorType_};
   op_list_[VECTOR_MAX_OP_] = (&instruction::ExecuteVectorMaxOp);
 
-  op_mem_types_[MATRIX_MAX_OP_] = {memoryEigen::MATRIX_TYPE,
-                                   memoryEigen::MATRIX_TYPE,
-                                   memoryEigen::MATRIX_TYPE};
+  op_signatures_[MATRIX_MAX_OP_] = {MemoryEigen::kMatrixType_,
+                                   MemoryEigen::kMatrixType_,
+                                   MemoryEigen::kMatrixType_};
   op_list_[MATRIX_MAX_OP_] = (&instruction::ExecuteMatrixMaxOp);
 
-  op_mem_types_[VECTOR_MEAN_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::VECTOR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[VECTOR_MEAN_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kVectorType_};
   op_list_[VECTOR_MEAN_OP_] = (&instruction::ExecuteVectorMeanOp);
 
-  op_mem_types_[MATRIX_MEAN_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::MATRIX_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[MATRIX_MEAN_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kMatrixType_};
   op_list_[MATRIX_MEAN_OP_] = (&instruction::ExecuteMatrixMeanOp);
 
-  op_mem_types_[MATRIX_ROW_MEAN_OP_] = {
-      memoryEigen::VECTOR_TYPE, memoryEigen::MATRIX_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[MATRIX_ROW_MEAN_OP_] = {
+      MemoryEigen::kVectorType_, MemoryEigen::kMatrixType_};
   op_list_[MATRIX_ROW_MEAN_OP_] = (&instruction::ExecuteMatrixRowMeanOp);
 
-  op_mem_types_[MATRIX_ROW_ST_DEV_OP_] = {
-      memoryEigen::VECTOR_TYPE, memoryEigen::MATRIX_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[MATRIX_ROW_ST_DEV_OP_] = {
+      MemoryEigen::kVectorType_, MemoryEigen::kMatrixType_};
   op_list_[MATRIX_ROW_ST_DEV_OP_] = (&instruction::ExecuteMatrixRowStDevOp);
 
-  op_mem_types_[VECTOR_ST_DEV_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::MATRIX_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[VECTOR_ST_DEV_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kMatrixType_};
   op_list_[VECTOR_ST_DEV_OP_] = (&instruction::ExecuteVectorStDevOp);
 
-  op_mem_types_[MATRIX_ST_DEV_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::MATRIX_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[MATRIX_ST_DEV_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kMatrixType_};
   op_list_[MATRIX_ST_DEV_OP_] = (&instruction::ExecuteMatrixStDevOp);
 
-  op_mem_types_[SCALAR_CONST_SET_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::SCALAR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_CONST_SET_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kScalarType_};
   op_list_[SCALAR_CONST_SET_OP_] = (&instruction::ExecuteScalarConstSetOp);
 
-  op_mem_types_[VECTOR_CONST_SET_OP_] = {
-      memoryEigen::VECTOR_TYPE, memoryEigen::VECTOR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[VECTOR_CONST_SET_OP_] = {
+      MemoryEigen::kVectorType_, MemoryEigen::kVectorType_};
   op_list_[VECTOR_CONST_SET_OP_] = (&instruction::ExecuteVectorConstSetOp);
 
-  op_mem_types_[MATRIX_CONST_SET_OP_] = {
-      memoryEigen::MATRIX_TYPE, memoryEigen::MATRIX_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[MATRIX_CONST_SET_OP_] = {
+      MemoryEigen::kMatrixType_, MemoryEigen::kMatrixType_};
   op_list_[MATRIX_CONST_SET_OP_] = (&instruction::ExecuteMatrixConstSetOp);
 
-  op_mem_types_[SCALAR_UNIFORM_SET_OP_] = {memoryEigen::SCALAR_TYPE,
-                                           memoryEigen::SCALAR_TYPE,
-                                           memoryEigen::SCALAR_TYPE};
+  op_signatures_[SCALAR_UNIFORM_SET_OP_] = {MemoryEigen::kScalarType_,
+                                           MemoryEigen::kScalarType_,
+                                           MemoryEigen::kScalarType_};
   op_list_[SCALAR_UNIFORM_SET_OP_] = (&instruction::ExecuteScalarUniformSetOp);
 
-  op_mem_types_[VECTOR_UNIFORM_SET_OP_] = {memoryEigen::VECTOR_TYPE,
-                                           memoryEigen::SCALAR_TYPE,
-                                           memoryEigen::SCALAR_TYPE};
+  op_signatures_[VECTOR_UNIFORM_SET_OP_] = {MemoryEigen::kVectorType_,
+                                           MemoryEigen::kScalarType_,
+                                           MemoryEigen::kScalarType_};
   op_list_[VECTOR_UNIFORM_SET_OP_] = (&instruction::ExecuteVectorUniformSetOp);
 
-  op_mem_types_[MATRIX_UNIFORM_SET_OP_] = {memoryEigen::MATRIX_TYPE,
-                                           memoryEigen::SCALAR_TYPE,
-                                           memoryEigen::SCALAR_TYPE};
+  op_signatures_[MATRIX_UNIFORM_SET_OP_] = {MemoryEigen::kMatrixType_,
+                                           MemoryEigen::kScalarType_,
+                                           MemoryEigen::kScalarType_};
   op_list_[MATRIX_UNIFORM_SET_OP_] = (&instruction::ExecuteMatrixUniformSetOp);
 
-  op_mem_types_[SCALAR_GAUSSIAN_SET_OP_] = {memoryEigen::SCALAR_TYPE,
-                                            memoryEigen::SCALAR_TYPE,
-                                            memoryEigen::SCALAR_TYPE};
+  op_signatures_[SCALAR_GAUSSIAN_SET_OP_] = {MemoryEigen::kScalarType_,
+                                            MemoryEigen::kScalarType_,
+                                            MemoryEigen::kScalarType_};
   op_list_[SCALAR_GAUSSIAN_SET_OP_] =
       (&instruction::ExecuteScalarGaussianSetOp);
 
-  op_mem_types_[VECTOR_GAUSSIAN_SET_OP_] = {memoryEigen::VECTOR_TYPE,
-                                            memoryEigen::SCALAR_TYPE,
-                                            memoryEigen::SCALAR_TYPE};
+  op_signatures_[VECTOR_GAUSSIAN_SET_OP_] = {MemoryEigen::kVectorType_,
+                                            MemoryEigen::kScalarType_,
+                                            MemoryEigen::kScalarType_};
   op_list_[VECTOR_GAUSSIAN_SET_OP_] =
       (&instruction::ExecuteVectorGaussianSetOp);
 
-  op_mem_types_[MATRIX_GAUSSIAN_SET_OP_] = {memoryEigen::MATRIX_TYPE,
-                                            memoryEigen::SCALAR_TYPE,
-                                            memoryEigen::SCALAR_TYPE};
+  op_signatures_[MATRIX_GAUSSIAN_SET_OP_] = {MemoryEigen::kMatrixType_,
+                                            MemoryEigen::kScalarType_,
+                                            MemoryEigen::kScalarType_};
   op_list_[MATRIX_GAUSSIAN_SET_OP_] =
       (&instruction::ExecuteMatrixGaussianSetOp);
 
-  op_mem_types_[SCALAR_CONDITIONAL_OP_] = {memoryEigen::SCALAR_TYPE,
-                                           memoryEigen::SCALAR_TYPE,
-                                           memoryEigen::SCALAR_TYPE};
+  op_signatures_[SCALAR_CONDITIONAL_OP_] = {MemoryEigen::kScalarType_,
+                                           MemoryEigen::kScalarType_,
+                                           MemoryEigen::kScalarType_};
   op_list_[SCALAR_CONDITIONAL_OP_] = (&instruction::ExecuteScalarConditionalOp);
 
-  op_mem_types_[SCALAR_POW_OP_] = {memoryEigen::SCALAR_TYPE,
-                                   memoryEigen::SCALAR_TYPE,
-                                   memoryEigen::SCALAR_TYPE};
+  op_signatures_[SCALAR_POW_OP_] = {MemoryEigen::kScalarType_,
+                                   MemoryEigen::kScalarType_,
+                                   MemoryEigen::kScalarType_};
   op_list_[SCALAR_POW_OP_] = (&instruction::ExecuteScalarPowOp);
 
-  op_mem_types_[SCALAR_SQR_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::SCALAR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_SQR_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kScalarType_};
   op_list_[SCALAR_SQR_OP_] = (&instruction::ExecuteScalarSqrOp);
 
-  op_mem_types_[SCALAR_CUBE_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::SCALAR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_CUBE_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kScalarType_};
   op_list_[SCALAR_CUBE_OP_] = (&instruction::ExecuteScalarCubeOp);
 
-  op_mem_types_[SCALAR_TANH_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::SCALAR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_TANH_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kScalarType_};
   op_list_[SCALAR_TANH_OP_] = (&instruction::ExecuteScalarTanhOp);
 
-  op_mem_types_[SCALAR_SQRT_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::SCALAR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_SQRT_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kScalarType_};
   op_list_[SCALAR_SQRT_OP_] = (&instruction::ExecuteScalarSqrtOp);
 
-  op_mem_types_[SCALAR_VECTOR_ASSIGN_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::VECTOR_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_VECTOR_ASSIGN_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kVectorType_};
   op_list_[SCALAR_VECTOR_ASSIGN_OP_] =
       (&instruction::ExecuteScalarVectorAssignOp);
 
-  op_mem_types_[SCALAR_MATRIX_ASSIGN_OP_] = {
-      memoryEigen::SCALAR_TYPE, memoryEigen::MATRIX_TYPE, memoryEigen::NA_TYPE};
+  op_signatures_[SCALAR_MATRIX_ASSIGN_OP_] = {
+      MemoryEigen::kScalarType_, MemoryEigen::kMatrixType_};
   op_list_[SCALAR_MATRIX_ASSIGN_OP_] =
       (&instruction::ExecuteScalarMatrixAssignOp);
 
-  op_mem_types_[OBS_BUFF_SLICE_OP_] =
-      {memoryEigen::VECTOR_TYPE, memoryEigen::VECTOR_TYPE,
-       memoryEigen::NA_TYPE};
+  op_signatures_[OBS_BUFF_SLICE_OP_] =
+      {MemoryEigen::kVectorType_, MemoryEigen::kVectorType_};
   op_list_[OBS_BUFF_SLICE_OP_] = {&instruction::ExecuteObsBuffSliceOp};
 }
 
-// constructor
+// Constructor
 instruction::instruction(std::unordered_map<string, std::any> &params,
                          mt19937 &rng) {
-  memory_size_ = std::any_cast<int>(params["memory_size"]);
-  memIndices_ = std::any_cast<int>(params["memory_indices"]);
+  memIndices_ = std::any_cast<int>(params["n_memories"]);
   rng_ = rng;
 }
 
-// copy construction
+// Copy constructor
 instruction::instruction(instruction &i) {
   // TODO(skelly): check which things actually need to be copied
-  memory_size_ = i.memory_size_;
   memIndices_ = i.memIndices_;
   out_ = i.out_;
   in1_ = i.in1_;
   in2_ = i.in2_;
-  op_mem_types_ = i.op_mem_types_;
+  op_signatures_ = i.op_signatures_;
   op_list_ = i.op_list_;
 
   in1Src_ = i.in1Src_;
@@ -396,23 +392,9 @@ instruction::instruction(instruction &i) {
   rng_ = i.rng_;
 }
 
-// // Protect input indices from ranges larger than memory data structures.
-// void instruction::BoundMemoryIndices(int observation_buff_size) {   
-//   for (int in = 0; in < 2; in++) {
-//     if (IsObs(in)) {
-//       SetInIdx(in, GetInIdx(in) % max(1, observation_buff_size - 1));
-//     } else {
-//       SetInIdx(in, GetInIdx(in) % memIndices_);
-//     }
-//   }
-//   memory_size_ = observation_buff_size;
-//   in2Idx_ = in2Idx_ % (max(1, memory_size_ - 1));
-//   in3Idx_ = in3Idx_ % (max(1, memory_size_ - 1));
-// }
-
 void instruction::Mutate(bool randomize, vector<bool> &legal_ops,
                          int observation_buff_size, mt19937 &rng) {
-  const int max_index = 100; 
+  const int max_index = 1000000;  // TODO(skelly): fix magic
   auto dis_index = std::uniform_int_distribution<>(0, max_index);                         
   if (randomize) {  // Randomly set each part of this instruction.
     std::uniform_int_distribution<> dis(0, 1);
