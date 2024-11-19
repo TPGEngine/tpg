@@ -84,7 +84,7 @@ n_generations 1000000
 n_root 500
 
 # Number of new root teams to create each generation
-n_root_gen 250
+n_root_gen 100
 
 # Whether to constrain parent selection to root teams
 parent_select_roots_only 0
@@ -249,7 +249,7 @@ mj_model_path $TPG/datasets/mujoco_models/ant.xml
 
 mj_max_timestep 1000
 
-mj_n_eval_train 10
+mj_n_eval_train 5
 mj_n_eval_validation 0
 mj_n_eval_test 0
 
