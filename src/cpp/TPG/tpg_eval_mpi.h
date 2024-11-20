@@ -163,14 +163,12 @@ void evaluator(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks) {
   evaluator_map["Control"] = &EvalControl;
   evaluator_map["RecursiveForecast"] = &EvalRecursiveForecast;
   evaluator_map["Mujoco"] = &EvalMujoco;
-  // MaybeStartAnimation(tpg);
   EvalData eval(tpg);
   while (NotDoneAndActive(eval)) {
     world.recv(0, 0, eval.checkpointString);
     if (NotDoneAndActive(eval)) {
       tpg.ReadCheckpoint(-1, _TRAIN_PHASE, -1, true, eval.checkpointString);
       tpg.getTeams(eval.teams, true);
-
       eval.task = tasks[tpg.GetState("active_task")];
       eval.eval_result = "";
       for (auto tm : eval.teams) {
