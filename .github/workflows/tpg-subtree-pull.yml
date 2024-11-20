@@ -45,7 +45,7 @@ jobs:
           TIMESTAMP=$(date +'%Y%m%d%H%M%S')
 
           git checkout -b update-subtree-${TIMESTAMP}
-          git subtree pull --prefix src gitlab main --squash
+          git subtree pull --prefix src gitlab main --squash || true
 
           git merge --strategy=recursive --strategy-option=theirs FETCH_HEAD || true
 
@@ -55,12 +55,17 @@ jobs:
       - name: Commit and Push Changes
         run: |
           git add .
+
+          git status
+
           git commit -m "Resolved conflicts by accepting GitLab changes" || echo "No changes to commit"
+
+
+          git status
+
           git push origin HEAD
 
-      - name: Echo the Branch Name for PR
-        run: |
-          echo "Creating pull request for branch: update-subtree-${{ env.timestamp }}"
+          git status
 
       - name: Create Pull Request
         id: create_pr
