@@ -3,6 +3,9 @@ name: Update TPG Subtree from GitLab
 on:
   schedule:
     - cron: "0 2 * * *" # Runs daily at 9PM UTC
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
