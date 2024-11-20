@@ -47,8 +47,6 @@ jobs:
           git checkout -b update-subtree-${TIMESTAMP}
           git subtree pull --prefix src gitlab main --squash || true
 
-          git merge --strategy=recursive --strategy-option=theirs FETCH_HEAD || true
-
           # Save the branch name as an output for later use
           echo "timestamp=${TIMESTAMP}" >> $GITHUB_ENV
 
@@ -59,7 +57,6 @@ jobs:
           git status
 
           git commit -m "Resolved conflicts by accepting GitLab changes" || echo "No changes to commit"
-
 
           git status
 
