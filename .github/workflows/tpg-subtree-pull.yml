@@ -43,7 +43,8 @@ jobs:
       - name: Pull Changes into Subtree
         run: |
           git checkout -b update-subtree-$(date +'%Y%m%d%H%M%S')
-          git subtree pull --prefix src gitlab main --squash || true # Continue even if merge fails
+          git subtree pull --prefix src gitlab main --squash || true
+          git merge --strategy=recursive --strategy-option=theirs FETCH_HEAD || true
 
       - name: Commit and Push Changes
         run: |
