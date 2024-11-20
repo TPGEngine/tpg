@@ -66,10 +66,12 @@ jobs:
         run: |
           git push origin HEAD
 
-      - name: Create Pull Request
-        id: create_pr
+      - name: Echo the Branch Name for PR
         run: |
           echo "Creating pull request for branch: update-subtree-${{ env.timestamp }}"
+
+      - name: Create Pull Request
+        id: create_pr
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
