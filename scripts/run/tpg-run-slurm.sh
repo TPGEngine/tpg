@@ -1,5 +1,5 @@
 #!/bin/bash 
-#SBATCH --account=def-skelly
+#SBATCH --account=def-ned
 
 # # single node
 # #SBATCH --nodes=1
@@ -25,7 +25,7 @@ do
 done
 
 if [ $mode -eq 0 ]; then
-  srun ../build/release/cpp/experiments/TPGExperimentMPI -s $seed \
+  srun ../../build/release/cpp/experiments/TPGExperimentMPI -s $seed \
   1> tpg.$seed.$$.std 2> tpg.$seed.$$.err
 fi
 
