@@ -43,12 +43,13 @@ jobs:
       - name: Pull Changes into Subtree
         run: |
           git checkout -b update-subtree-$(date +'%Y%m%d%H%M%S')
-          git subtree pull --prefix src gitlab main --squash
+          git subtree pull --prefix src gitlab main --squash || true
+          git merge --strategy=recursive --strategy-option=theirs FETCH_HEAD || true
 
-      - name: Push Feature Branch
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit and Push Changes
         run: |
+          git add .
+          git commit -m "Force update of TPG subtree from GitLab, resolving conflicts by preferring GitLab changes"
           git push origin HEAD
 
       - name: Create Pull Request
@@ -61,4 +62,4 @@ jobs:
           base: main
           title: "Update TPG Subtree from GitLab"
           body: |
-            This pull request updates the `src` subtree with the latest changes from the GitLab repository.
+            This pull request updates the `src` subtree with the latest changes from the GitLab repository. Conflicts were resolved by accepting the GitLab version.
