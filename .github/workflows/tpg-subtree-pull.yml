@@ -1,0 +1,61 @@
+name: Update TPG Subtree from GitLab
+
+on:
+  schedule:
+    - cron: "0 2 * * *" # Runs daily at 9PM UTC
+  workflow_dispatch:
+
+jobs:
+  update-subtree:
+    name: Update Subtree from GitLab
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Check and Close Old PRs
+        id: close_prs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr list --state open --json number,title,headRefName \
+            --jq '.[] | select(.title | contains("Update TPG Subtree from GitLab")) | .number' | while read pr_number; do
+            echo "Closing PR #$pr_number"
+            gh pr close $pr_number --delete-branch
+          done
+
+      - name: Add GitLab Remote
+        run: |
+          git remote add gitlab https://gitlab.cas.mcmaster.ca/kellys32/tpg.git
+          git fetch gitlab main
+
+      - name: Pull Changes into Subtree
+        run: |
+          git checkout -b update-subtree-$(date +'%Y%m%d%H%M%S')
+          git subtree pull --prefix src gitlab main --squash
+
+      - name: Push Feature Branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git push origin HEAD
+
+      - name: Create Pull Request
+        id: create_pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Update TPG subtree from GitLab"
+          branch: ${{ github.ref_name }}
+          base: main
+          title: "Update TPG Subtree from GitLab"
+          body: |
+            This pull request updates the `src` subtree with the latest changes from the GitLab repository.
