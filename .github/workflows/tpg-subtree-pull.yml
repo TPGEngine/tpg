@@ -48,13 +48,14 @@ jobs:
           git subtree pull --prefix src gitlab main --squash || true
           git merge --strategy=recursive --strategy-option=theirs FETCH_HEAD || true
 
+          git status
+
           # Save the branch name as an output for later use
           echo "timestamp=${TIMESTAMP}" >> $GITHUB_ENV
 
       - name: Commit and Push Changes
         run: |
           git add .
-          # Commit the conflict resolution
           git commit -m "Resolved conflicts by accepting GitLab changes"
           git push origin HEAD
 
