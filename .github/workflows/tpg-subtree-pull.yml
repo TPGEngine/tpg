@@ -47,6 +47,8 @@ jobs:
           git checkout -b update-subtree-${TIMESTAMP}
           git subtree pull --prefix src gitlab main --squash
 
+          git merge --strategy=recursive --strategy-option=theirs FETCH_HEAD || true
+
           # Save the branch name as an output for later use
           echo "timestamp=${TIMESTAMP}" >> $GITHUB_ENV
 
