@@ -15,15 +15,25 @@ class Mujoco_Half_Cheetah_v4 : public MujocoEnv {
    Mujoco_Half_Cheetah_v4(std::unordered_map<std::string, std::any>& params) {
       eval_type_ = "Mujoco";
       n_eval_train_ = std::any_cast<int>(params["mj_n_eval_train"]);
+<<<<<<< HEAD
       n_eval_validation_ = 0;
       n_eval_test_ = n_eval_train_ =
           std::any_cast<int>(params["mj_n_eval_test"]);
+=======
+      n_eval_validation_ = std::any_cast<int>(params["mj_n_eval_validation"]);
+      n_eval_test_ = std::any_cast<int>(params["mj_n_eval_test"]);
+>>>>>>> 8e79b9bed86810a6a07c6a21930b650a5ba50f4c
       max_step_ = std::any_cast<int>(params["mj_max_timestep"]);
       model_path_ =
           ExpandEnvVars(std::any_cast<string>(params["mj_model_path"]));
       initialize_simulation();
       obs_size_ = 17;
+<<<<<<< HEAD
       if (!exclude_current_positions_from_observation_) obs_size_ += 1;
+=======
+      if (!exclude_current_positions_from_observation_)
+         obs_size_ += 1;
+>>>>>>> 8e79b9bed86810a6a07c6a21930b650a5ba50f4c
       state_.resize(obs_size_);
    }
 
@@ -44,7 +54,12 @@ class Mujoco_Half_Cheetah_v4 : public MujocoEnv {
 
    double control_cost(std::vector<double>& action) {
       double cost = 0;
+<<<<<<< HEAD
       for (auto& a : action) cost += a * a;
+=======
+      for (auto& a : action)
+         cost += a * a;
+>>>>>>> 8e79b9bed86810a6a07c6a21930b650a5ba50f4c
       return control_cost_weight_ * cost;
    }
 

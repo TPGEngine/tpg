@@ -195,7 +195,7 @@ n_memories 8
 # Dimensionality for vector & matrix memory
 memory_size 8
 min_memory_size 2
-max_memory_size 29
+max_memory_size 32
 
 # Observations are stored in a buffer with this time window
 observation_buff_size 1
@@ -208,7 +208,11 @@ max_observation_buff_size 1
 
 # Which tasks are active
 # Right-hand-side should be a single task name or a comma-separated list
+<<<<<<< HEAD
 active_tasks Mujoco_Half_Cheetah_v4
+=======
+active_tasks Mujoco_Inverted_Pendulum_v4
+>>>>>>> 8e79b9bed86810a6a07c6a21930b650a5ba50f4c
 
 # Use the partially-observable version of a task, if available
 # Currently only available for calssic control and Mujoco tasks
@@ -245,7 +249,15 @@ forecast_n_eval_val 10
 ## Parameters Specific to Mujoco ###############################################
 ################################################################################
 
+<<<<<<< HEAD
 mj_model_path $TPG/datasets/mujoco_models/half_cheetah.xml
+=======
+# Uncomment one model path
+#mj_model_path $TPG/datasets/mujoco_models/ant.xml
+#mj_model_path $TPG/datasets/mujoco_models/half_cheetah.xml
+mj_model_path $TPG/datasets/mujoco_models/inverted_pendulum.xml
+#mj_model_path $TPG/datasets/mujoco_models/reacher.xml
+>>>>>>> 8e79b9bed86810a6a07c6a21930b650a5ba50f4c
 
 mj_max_timestep 1000
 

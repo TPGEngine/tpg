@@ -10,9 +10,14 @@ class Mujoco_Inverted_Pendulum_v4 : public MujocoEnv {
        std::unordered_map<std::string, std::any>& params) {
       eval_type_ = "Mujoco";
       n_eval_train_ = std::any_cast<int>(params["mj_n_eval_train"]);
+<<<<<<< HEAD
       n_eval_validation_ = 0;
       n_eval_test_ = n_eval_train_ =
           std::any_cast<int>(params["mj_n_eval_test"]);
+=======
+      n_eval_validation_ = std::any_cast<int>(params["mj_n_eval_validation"]);
+      n_eval_test_ = std::any_cast<int>(params["mj_n_eval_test"]);
+>>>>>>> 8e79b9bed86810a6a07c6a21930b650a5ba50f4c
       max_step_ = std::any_cast<int>(params["mj_max_timestep"]);
       model_path_ =
           ExpandEnvVars(std::any_cast<string>(params["mj_model_path"]));
@@ -38,9 +43,17 @@ class Mujoco_Inverted_Pendulum_v4 : public MujocoEnv {
 
    bool terminal() {
       for (int i = 0; i < m_->nq; i++)
+<<<<<<< HEAD
          if (!std::isfinite(d_->qpos[i])) return true;
       for (int i = 0; i < m_->nv; i++)
          if (!std::isfinite(d_->qvel[i])) return true;
+=======
+         if (!std::isfinite(d_->qpos[i]))
+            return true;
+      for (int i = 0; i < m_->nv; i++)
+         if (!std::isfinite(d_->qvel[i]))
+            return true;
+>>>>>>> 8e79b9bed86810a6a07c6a21930b650a5ba50f4c
       return step_ >= max_step_ || (std::abs(d_->qpos[1]) > 0.2);
    }
 
