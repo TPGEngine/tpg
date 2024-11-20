@@ -6,6 +6,10 @@
 #include <Mujoco_Ant_v4.h>
 #include <Mujoco_Half_Cheetah_v4.h>
 #include <Mujoco_Inverted_Pendulum_v4.h>
+<<<<<<< HEAD
+=======
+#include <Mujoco_Reacher_v4.h>
+>>>>>>> 860dfb8415f59f61cf6aadf4fb32f78aa12cb84c
 #include <Pendulum.h>
 #include <RecursiveForecast.h>
 #include <TPG.h>
@@ -82,7 +86,7 @@ int main(int argc, char **argv) {
          tasks.push_back(new CartCentering());
       else if (substr == "Pendulum")
          tasks.push_back(new Pendulum());
-      else if (substr == "Mountaincar")
+      else if (substr == "MountainCar")
          tasks.push_back(new MountainCar());
       else if (substr == "MountainCarContinuous")
          tasks.push_back(new MountainCarContinuous());
@@ -103,6 +107,7 @@ int main(int argc, char **argv) {
       else if (substr == "Bach")
          tasks.push_back(new RecursiveForecast("Bach"));
       else if (substr == "Mujoco_Ant_v4")
+<<<<<<< HEAD
          tasks.push_back(new Mujoco_Ant_v4(tpg.params_));  // TODO(skelly):fix
       else if (substr == "Mujoco_Inverted_Pendulum_v4")
          tasks.push_back(
@@ -110,6 +115,17 @@ int main(int argc, char **argv) {
       else if (substr == "Mujoco_Half_Cheetah_v4")
          tasks.push_back(
              new Mujoco_Half_Cheetah_v4(tpg.params_));  // TODO(skelly):fix
+=======
+         tasks.push_back(new Mujoco_Ant_v4(tpg.params_));
+      else if (substr == "Mujoco_Inverted_Pendulum_v4")
+         tasks.push_back(
+             new Mujoco_Inverted_Pendulum_v4(tpg.params_));
+      else if (substr == "Mujoco_Half_Cheetah_v4")
+         tasks.push_back(
+             new Mujoco_Half_Cheetah_v4(tpg.params_));
+      else if (substr == "Mujoco_Reacher_v4")
+	 tasks.push_back(new Mujoco_Reacher_v4(tpg.params_));
+>>>>>>> 860dfb8415f59f61cf6aadf4fb32f78aa12cb84c
       else {
          cerr << "Unrecognised task:" << substr << endl;
          exit(1);
@@ -320,7 +336,6 @@ int main(int argc, char **argv) {
                                     gen);
                apiClient->LogMetric("lost", std::to_string(lost), "", gen);
             }
-
             os << setprecision(5) << fixed;
             os << "gTime t " << tpg.GetState("t_current");
             os << " sec " << endGen.count();
