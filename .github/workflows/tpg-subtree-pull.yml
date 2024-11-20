@@ -46,6 +46,17 @@ jobs:
           git subtree pull --prefix src gitlab main --squash || true
           git merge --strategy=recursive --strategy-option=theirs FETCH_HEAD || true
 
+          # Check if conflicts remain
+          if git diff --name-only --diff-filter=U; then
+            echo "Conflicts detected, resolving..."
+            # Stage all resolved files
+            git add . 
+            # Commit the conflict resolution
+            git commit -m "Resolved conflicts by accepting GitLab changes"
+          else
+            echo "No conflicts, changes already resolved"
+          fi
+
       - name: Commit and Push Changes
         run: |
           git add .
