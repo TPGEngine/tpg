@@ -43,13 +43,12 @@ jobs:
       - name: Pull Changes into Subtree
         run: |
           git checkout -b update-subtree-$(date +'%Y%m%d%H%M%S')
-          git subtree pull --prefix src gitlab main --squash || true
-          git merge --strategy=recursive --strategy-option=theirs FETCH_HEAD || true
+          git subtree pull --prefix src gitlab main --squash || true # Continue even if merge fails
 
       - name: Commit and Push Changes
         run: |
           git add .
-          git commit -m "Force update of TPG subtree from GitLab, resolving conflicts by preferring GitLab changes"
+          git commit -m "Update TPG subtree from GitLab"
           git push origin HEAD
 
       - name: Create Pull Request
