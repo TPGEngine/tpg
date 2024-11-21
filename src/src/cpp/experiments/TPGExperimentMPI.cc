@@ -7,6 +7,7 @@
 #include <Mujoco_Half_Cheetah_v4.h>
 #include <Mujoco_Hopper_v4.h>
 #include <Mujoco_Inverted_Pendulum_v4.h>
+#include <Mujoco_Reacher_v4.h>
 #include <Pendulum.h>
 #include <RecursiveForecast.h>
 #include <TPG.h>
@@ -83,7 +84,7 @@ int main(int argc, char** argv) {
          tasks.push_back(new CartCentering());
       else if (substr == "Pendulum")
          tasks.push_back(new Pendulum());
-      else if (substr == "Mountaincar")
+      else if (substr == "MountainCar")
          tasks.push_back(new MountainCar());
       else if (substr == "MountainCarContinuous")
          tasks.push_back(new MountainCarContinuous());
@@ -109,6 +110,8 @@ int main(int argc, char** argv) {
          tasks.push_back(new Mujoco_Inverted_Pendulum_v4(tpg.params_));
       else if (substr == "Mujoco_Half_Cheetah_v4")
          tasks.push_back(new Mujoco_Half_Cheetah_v4(tpg.params_));
+      else if (substr == "Mujoco_Reacher_v4")
+         tasks.push_back(new Mujoco_Reacher_v4(tpg.params_));
       else if (substr == "Mujoco_Hopper_v4")
          tasks.push_back(new Mujoco_Hopper_v4(tpg.params_));
       else {
@@ -323,7 +326,6 @@ int main(int argc, char** argv) {
                                     gen);
                apiClient->LogMetric("lost", std::to_string(lost), "", gen);
             }
-
             os << setprecision(5) << fixed;
             os << "gTime t " << tpg.GetState("t_current");
             os << " sec " << endGen.count();
