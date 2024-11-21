@@ -7,6 +7,7 @@
 #include <Mujoco_Half_Cheetah_v4.h>
 #include <Mujoco_Inverted_Pendulum_v4.h>
 #include <Mujoco_Reacher_v4.h>
+#include <Mujoco_Humanoid_Standup_v4>
 #include <Pendulum.h>
 #include <RecursiveForecast.h>
 #include <TPG.h>
@@ -113,6 +114,8 @@ int main(int argc, char **argv) {
              new Mujoco_Half_Cheetah_v4(tpg.params_));
       else if (substr == "Mujoco_Reacher_v4")
 	      tasks.push_back(new Mujoco_Reacher_v4(tpg.params_));
+      else if (substr == "Mujoco_Humanoid_Standup_v4")
+         tasks.push_back(new Mujoco_Humanoid_Standup_v4(tpg.params_));
       else {
          cerr << "Unrecognised task:" << substr << endl;
          exit(1);
