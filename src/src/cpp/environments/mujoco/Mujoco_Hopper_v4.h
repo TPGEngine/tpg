@@ -17,7 +17,7 @@ class Mujoco_Hopper_v4 : public MujocoEnv {
    double reset_noise_scale_ = 5e-3;
    bool exclude_current_positions_from_observation_ = true;
 
-   Mujoco_Ant_v4(std::unordered_map<std::string, std::any>& params) {
+   Mujoco_Hopper_v4(std::unordered_map<std::string, std::any>& params) {
       eval_type_ = "Mujoco";
       n_eval_train_ = std::any_cast<int>(params["mj_n_eval_train"]);
       n_eval_validation_ = std::any_cast<int>(params["mj_n_eval_validation"]);
@@ -72,13 +72,16 @@ class Mujoco_Hopper_v4 : public MujocoEnv {
       double min_angle, max_angle = healthy_z_range_[0],
                         healthy_angle_range_[1];
 
-      bool healthy_state = true;
-      for (double s : state_) {
-         if (!(min_state < s && s < max_state)) {
-            healthy_state = false;
-            break;
-         }
-      }
+      // Extract the state starting from the 3rd element of qpos
+      std::vector<double> state(d_->qpos + 2, d_->qpos + m_->nq);
+
+      // Check state within the healthy range
+      bool healthy_state =
+          std::all_of(state.begin(), state.end(), [this](double value) {
+             return healthy_state_range_[0] < value &&
+                    value < healthy_state_range_[1];
+          });
+
       bool healthy_z = min_z < z < max_z;
       bool healthy_angle = min_angle < angle < max_angle;
       return healthy_state && healthy_z && healthy_angle;
@@ -103,7 +106,7 @@ class Mujoco_Hopper_v4 : public MujocoEnv {
 
       get_obs(state_);
       step_++;
-      return {reward, 0.0};  // TODO(skelly): maybe add gym 'info' to results
+      return {reward, 0.0};
    }
 
    void get_obs(std::vector<double>& obs) {
