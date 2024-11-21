@@ -42,16 +42,21 @@ class Mujoco_Humanoid_Standup_v4 : public MujocoEnv {
       auto pos_after = d_->qpos[2];
       auto uph_cost = (pos_after - 0) / m_->opt.timestep;
 
-      double quad_ctrl_cost =
-          0.1 * std::accumulate(d_->ctrl.begin(), d_->ctrl.end(), 0.0,
-                                [](double acc, double value) {
-                                   return acc + value * value;
-                                });
-      double quad_impact_cost =
-          0.5e-6 * std::accumulate(d_->cfrc_ext.begin(), d_->cfrc_ext.end(),
-                                   0.0, [](double acc, double value) {
-                                      return acc + value * value;
-                                   });
+      double ctrl_square_sum = 0;
+      double cfrc_ext_square_sum = 0;
+
+      // For ctrl
+      for (auto i = 0; i < m_->nu; ++i) {
+         ctrl_square_sum += d_->ctrl[i] * d_->ctrl[i];
+      }
+
+      // For cfrc_ext
+      for (auto i = 0; i < m_->nbody * 6; ++i) {
+         cfrc_ext_square_sum += d_->cfrc_ext[i] * d_->cfrc_ext[i];
+      }
+
+      double quad_ctrl_cost = 0.1 * ctrl_square_sum;
+      double quad_impact_cost = 0.5e-6 * cfrc_ext_square_sum;
       quad_impact_cost = std::min(quad_impact_cost, 10.0);
 
       double reward = uph_cost - quad_ctrl_cost - quad_impact_cost + 1.0;
@@ -63,16 +68,27 @@ class Mujoco_Humanoid_Standup_v4 : public MujocoEnv {
    }
 
    void get_obs(std::vector<double>& obs) {
-      std::vector<double> obs;
+      size_t position_size = m_->nq - 2;   // excluding root position (qpos[2:])
+      size_t velocity_size = m_->nv;       // qvel size
+      size_t cinert_size = m_->nbody * 3;  // cinert size
+      size_t cvel_size = m_->nbody * 6;    // cvel size
+      size_t qfrc_size = m_->nu;           // qfrc actuator size
+      size_t cfrc_size = m_->nbody * 6;    // cfrc external size
 
-      obs.insert(obs.end(), d_->qpos.begin() + 2, d_->qpos.end());
-      obs.insert(obs.end(), d_->qvel.begin(), d_->qvel.end());
-      obs.insert(obs.end(), d_->cinert.begin(), d_->cinert.end());
-      obs.insert(obs.end(), d_->cvel.begin(), d_->cvel.end());
-      obs.insert(obs.end(), d_->qfrc_actuator.begin(), d_->qfrc_actuator.end());
-      obs.insert(obs.end(), d_->cfrc_ext.begin(), d_->cfrc_ext.end());
-
-      return obs;
+      obs.resize(position_size + velocity_size + cinert_size + cvel_size +
+                 qfrc_size + cfrc_size);
+      std::copy_n(d_->qpos + 2, position_size, obs.begin());
+      std::copy_n(d_->qvel, velocity_size, obs.begin() + position_size);
+      std::copy_n(d_->cinert, cinert_size,
+                  obs.begin() + position_size + velocity_size);
+      std::copy_n(d_->cvel, cvel_size,
+                  obs.begin() + position_size + velocity_size + cinert_size);
+      std::copy_n(d_->qfrc_actuator, qfrc_size,
+                  obs.begin() + position_size + velocity_size + cinert_size +
+                      cvel_size);
+      std::copy_n(d_->cfrc_ext, cfrc_size,
+                  obs.begin() + position_size + velocity_size + cinert_size +
+                      cvel_size + qfrc_size);
    }
 
    void reset(mt19937& rng) {

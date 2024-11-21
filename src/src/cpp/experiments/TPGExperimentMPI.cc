@@ -7,7 +7,7 @@
 #include <Mujoco_Half_Cheetah_v4.h>
 #include <Mujoco_Inverted_Pendulum_v4.h>
 #include <Mujoco_Reacher_v4.h>
-#include <Mujoco_Humanoid_Standup_v4>
+#include <Mujoco_Humanoid_Standup_v4.h>
 #include <Pendulum.h>
 #include <RecursiveForecast.h>
 #include <TPG.h>
