@@ -45,12 +45,11 @@ class Mujoco_Humanoid_Standup_v4 : public MujocoEnv {
       double ctrl_square_sum = 0;
       double cfrc_ext_square_sum = 0;
 
-      // For ctrl
+      // Squaring and summing values
       for (auto i = 0; i < m_->nu; ++i) {
          ctrl_square_sum += d_->ctrl[i] * d_->ctrl[i];
       }
 
-      // For cfrc_ext
       for (auto i = 0; i < m_->nbody * 6; ++i) {
          cfrc_ext_square_sum += d_->cfrc_ext[i] * d_->cfrc_ext[i];
       }
@@ -68,15 +67,13 @@ class Mujoco_Humanoid_Standup_v4 : public MujocoEnv {
    }
 
    void get_obs(std::vector<double>& obs) {
-      size_t position_size = m_->nq - 2;   // excluding root position (qpos[2:])
-      size_t velocity_size = m_->nv;       // qvel size
-      size_t cinert_size = m_->nbody * 3;  // cinert size
-      size_t cvel_size = m_->nbody * 6;    // cvel size
-      size_t qfrc_size = m_->nu;           // qfrc actuator size
-      size_t cfrc_size = m_->nbody * 6;    // cfrc external size
+      size_t position_size = m_->nq - 2;  // excluding root position (qpos[2:])
+      size_t velocity_size = m_->nv;
+      size_t cinert_size = m_->nbody * 3;
+      size_t cvel_size = m_->nbody * 6;
+      size_t qfrc_size = m_->nu;
+      size_t cfrc_size = m_->nbody * 6;
 
-      obs.resize(position_size + velocity_size + cinert_size + cvel_size +
-                 qfrc_size + cfrc_size);
       std::copy_n(d_->qpos + 2, position_size, obs.begin());
       std::copy_n(d_->qvel, velocity_size, obs.begin() + position_size);
       std::copy_n(d_->cinert, cinert_size,
