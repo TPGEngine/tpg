@@ -44,8 +44,7 @@ jobs:
         run: |
           TIMESTAMP=$(date +'%Y%m%d%H%M%S')
 
-          git checkout main
-          git pull origin main
+          git checkout -B main origin/main
           git checkout -b update-subtree-${TIMESTAMP}
           git subtree pull --prefix src gitlab main --squash || true
 
