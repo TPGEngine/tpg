@@ -1,5 +1,5 @@
-#ifndef CARTCENTERING_H
-#define CARTCENTERING_H
+#ifndef CartCentering_h
+#define CartCentering_h
 
 #include <math.h>
 
