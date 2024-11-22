@@ -44,6 +44,7 @@ jobs:
         run: |
           TIMESTAMP=$(date +'%Y%m%d%H%M%S')
 
+          git checkout -B subtree-pull-workflow origin/subtree-pull-workflow
           git checkout -b update-subtree-${TIMESTAMP}
           git subtree pull --prefix src gitlab main --squash || true
 
