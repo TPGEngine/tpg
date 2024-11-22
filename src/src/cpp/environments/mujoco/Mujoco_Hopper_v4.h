@@ -3,6 +3,7 @@
 
 #include <MujocoEnv.h>
 #include <misc.h>
+#include <iostream>
 
 class Mujoco_Hopper_v4 : public MujocoEnv {
   public:
@@ -26,13 +27,13 @@ class Mujoco_Hopper_v4 : public MujocoEnv {
       model_path_ =
           ExpandEnvVars(std::any_cast<string>(params["mj_model_path"]));
       healthy_state_range_ = {-100.0, 100.0};
-      healthy_z_range_ = {0.2, float(INFINITY)};
+      healthy_z_range_ = {0.7, float(INFINITY)};
       healthy_angle_range_ = {-0.2, 0.2};
       initialize_simulation();
 
-      obs_size_ = 11;
-      if (!exclude_current_positions_from_observation_)
-         obs_size_ = 12;
+      obs_size_ = 12;
+      if (exclude_current_positions_from_observation_)
+         obs_size_ = 11;
 
       state_.resize(obs_size_);
    }
@@ -65,25 +66,20 @@ class Mujoco_Hopper_v4 : public MujocoEnv {
    }
 
    bool is_healthy() {
-      double z, = d_->qpos[1], d_->qpos[2];
-      double min_state, max_state = healthy_state_range_[0],
-                        healthy_state_range_[1];
-      double min_z, max_z = healthy_z_range_[0], healthy_z_range_[1];
-      double min_angle, max_angle = healthy_z_range_[0],
-                        healthy_angle_range_[1];
+      double z = d_->qpos[1];
+      double angle = d_->qpos[2];
 
-      // Extract the state starting from the 3rd element of qpos
-      std::vector<double> state(d_->qpos + 2, d_->qpos + m_->nq);
+      bool healthy_state = true;
+      for (double s : state_) {
+         if (!(healthy_state_range_[0] < s && s < healthy_state_range_[1])) {
+            healthy_state = false;
+            break;
+         }
+      }
 
-      // Check state within the healthy range
-      bool healthy_state =
-          std::all_of(state.begin(), state.end(), [this](double value) {
-             return healthy_state_range_[0] < value &&
-                    value < healthy_state_range_[1];
-          });
-
-      bool healthy_z = min_z < z < max_z;
-      bool healthy_angle = min_angle < angle < max_angle;
+      bool healthy_z = healthy_z_range_[0] < z && z < healthy_z_range_[1];
+      bool healthy_angle =
+          healthy_angle_range_[0] < angle && angle < healthy_angle_range_[1];
       return healthy_state && healthy_z && healthy_angle;
    }
 
@@ -110,38 +106,38 @@ class Mujoco_Hopper_v4 : public MujocoEnv {
    }
 
    void get_obs(std::vector<double>& obs) {
-      size_t position_size =
+      auto position_size =
           exclude_current_positions_from_observation_ ? m_->nq - 1 : m_->nq;
 
       if (exclude_current_positions_from_observation_) {
-         std::copy_n(d_->qpos + 1, position_size, , state_.begin());
+         std::copy_n(d_->qpos + 1, position_size, state_.begin());
       } else {
          std::copy_n(d_->qpos, position_size, state_.begin());
       }
       std::copy_n(d_->qvel, m_->nv, state_.begin() + position_size);
 
-      for (size_t i = 0; i < m_->nv; ++i) {
+      for (int i = 0; i < m_->nv; ++i) {
          state_[position_size + i] =
              std::clamp(state_[position_size + i], -10.0, 10.0);
       }
    }
-}
 
    void reset(mt19937& rng) {
-   std::uniform_real_distribution<> dis_pos(-reset_noise_scale_,
-                                            reset_noise_scale_);
-   std::vector<double> qpos(m_->nq);
-   for (size_t i = 0; i < qpos.size(); i++) {
-      qpos[i] = init_qpos_[i] + dis_pos(rng);
-   }
-   std::uniform_real_distribution<> dis_vel(0.0, reset_noise_scale_);
-   std::vector<double> qvel(m_->nv);
-   for (size_t i = 0; i < qvel.size(); i++) {
-      qvel[i] = init_qvel_[i] + dis_vel(rng);
-   }
-   mj_resetData(m_, d_);
-   set_state(qpos, qvel);
-   step_ = 0;
+      std::uniform_real_distribution<> dis_pos(-reset_noise_scale_,
+                                               reset_noise_scale_);
+      std::vector<double> qpos(m_->nq);
+      for (size_t i = 0; i < qpos.size(); i++) {
+         qpos[i] = init_qpos_[i] + dis_pos(rng);
+      }
+      std::uniform_real_distribution<> dis_vel(0.0, reset_noise_scale_);
+      std::vector<double> qvel(m_->nv);
+      for (size_t i = 0; i < qvel.size(); i++) {
+         qvel[i] = init_qvel_[i] + dis_vel(rng);
+      }
+      mj_resetData(m_, d_);
+      set_state(qpos, qvel);
+      step_ = 0;
+   };
 };
 
 #endif
