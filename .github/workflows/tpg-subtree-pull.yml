@@ -72,7 +72,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "Update TPG subtree from GitLab"
           branch: update-subtree-${{ env.timestamp }}
-          base: main
+          base: subtree-pull-workflow
           title: "Update TPG Subtree from GitLab"
           body: |
             This pull request updates the `src` subtree with the latest changes from the GitLab repository. Conflicts were resolved by accepting the GitLab version.
