@@ -47,22 +47,23 @@ jobs:
           git checkout -b update-subtree-${TIMESTAMP}
           git subtree pull --prefix src gitlab main --squash || true
 
+          # Handle conflicts if any
+          if git ls-files -u | grep .; then
+            echo "Conflicts detected. Resolving by accepting GitLab changes."
+            for file in $(git diff --name-only --diff-filter=U); do
+              echo "Resolving $file"
+              git checkout --theirs "$file"
+            done
+            git add .
+          fi
+
           # Save the branch name as an output for later use
           echo "timestamp=${TIMESTAMP}" >> $GITHUB_ENV
 
       - name: Commit and Push Changes
         run: |
-          git add .
-
-          git status
-
-          git commit -m "Resolved conflicts by accepting GitLab changes" || echo "No changes to commit"
-
-          git status
-
+          git commit -m "Update subtree and resolve conflicts by accepting GitLab changes" || echo "No changes to commit"
           git push origin HEAD
-
-          git status
 
       - name: Create Pull Request
         id: create_pr
