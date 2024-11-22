@@ -18,13 +18,13 @@ class MujocoEnv : public TaskEnv {
     std::vector<double> init_qpos_;  // Initial positions
     std::vector<double> init_qvel_;  // Initial velocities
 
-    string model_path_;  // Absolute path to model xml file
+    std::string model_path_;  // Absolute path to model xml file
     int frame_skip_ = 1;  // Number of frames per simlation step
     int obs_size_;  // Number of variables in observation vector
 
     MujocoEnv() {}
     ~MujocoEnv() {}
-    virtual void reset(mt19937& rng) = 0;
+    virtual void reset(std::mt19937& rng) = 0;
     virtual bool terminal() = 0;
     virtual Results sim_step(std::vector<double>& action) = 0;
 
@@ -53,7 +53,7 @@ class MujocoEnv : public TaskEnv {
         mj_forward(m_, d_);
     }
 
-    void do_simulation(vector<double>& ctrl, int n_frames) {
+    void do_simulation(std::vector<double>& ctrl, int n_frames) {
         for (int i = 0; i < m_->nu && i < static_cast<int>(ctrl.size()); i++) {
             d_->ctrl[i] = ctrl[i];
         }

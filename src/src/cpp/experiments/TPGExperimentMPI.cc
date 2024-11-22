@@ -3,7 +3,7 @@
 #include <CartPole.h>
 #include <MountainCar.h>
 #include <MountainCarContinuous.h>
-#include <Mujoco_Ant_v4.h>
+#include <Mujoco_Pusher_v5.h>
 #include <Mujoco_Half_Cheetah_v4.h>
 #include <Mujoco_Inverted_Pendulum_v4.h>
 #include <Mujoco_Reacher_v4.h>
@@ -113,6 +113,8 @@ int main(int argc, char **argv) {
              new Mujoco_Half_Cheetah_v4(tpg.params_));
       else if (substr == "Mujoco_Reacher_v4")
 	      tasks.push_back(new Mujoco_Reacher_v4(tpg.params_));
+      else if (substr == "Mujoco_Pusher_v5")
+	      tasks.push_back(new Mujoco_Pusher_v5(tpg.params_));
       else {
          cerr << "Unrecognised task:" << substr << endl;
          exit(1);
