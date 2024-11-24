@@ -2,6 +2,7 @@
 #include <CartCentering.h>
 #include <CartPole.h>
 #include <MountainCar.h>
+#include <Mujoco_Ant_v4.h>
 #include <MountainCarContinuous.h>
 #include <Mujoco_Pusher_v5.h>
 #include <Mujoco_Half_Cheetah_v4.h>

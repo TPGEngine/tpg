@@ -53,6 +53,20 @@ class MujocoEnv : public TaskEnv {
         mj_forward(m_, d_);
     }
 
+    // Method to return the Cartesian position of a body frame
+    std::vector<double> get_body_com(const std::string& body_name) {
+        // Get the body ID from the model using the body name
+        int body_id = mj_name2id(m_, mjOBJ_BODY, body_name.c_str());
+        
+        // Check if the body ID is valid
+        if (body_id < 0) {
+            throw std::invalid_argument("Body name not found: " + body_name);
+        }
+
+        // Return the position of the body
+        return {d_->xpos[body_id * 3], d_->xpos[body_id * 3 + 1], d_->xpos[body_id * 3 + 2]};
+    }
+
     void do_simulation(std::vector<double>& ctrl, int n_frames) {
         for (int i = 0; i < m_->nu && i < static_cast<int>(ctrl.size()); i++) {
             d_->ctrl[i] = ctrl[i];
