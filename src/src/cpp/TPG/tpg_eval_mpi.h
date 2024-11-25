@@ -20,6 +20,9 @@
 #include <thread>
 #include <GL/gl.h>
 #include <GL/glut.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 namespace mpi = boost::mpi;
 
@@ -202,50 +205,50 @@ void replayer_viz(TPG &tpg, vector<TaskEnv *> &tasks) {
         eval.tm = tm;
 
         vector<int> steps_per_task(tpg.GetState("n_task"), 0);
-        for (int task = 0; task < tpg.GetState("n_task"); task++) {
-            tpg.state_["active_task"] = task;
-            eval.task = tasks[tpg.GetState("active_task")];
-            if (eval.animate) {
-                eval.tm->_n_eval = 1;
-            } else {
-                eval.tm->_n_eval =
-                    eval.task->GetNumEval(tpg.GetParam<int>("checkpoint_in_phase"));
-            }
-            for (eval.episode = 0; eval.episode < eval.tm->_n_eval;
-                 eval.episode++) {
-                tpg.rngs_[AUX_SEED].seed(eval.episode);
-                eval.tm->InitMemory(tpg._teamMap, tpg.params_);
-
-                if (eval.task->eval_type_ == "RecursiveForecast") {
-                    EvalRecursiveForecastViz(
-                        tpg, eval, teamUseMapPerTask, teams_visitedAllTasks,
-                        steps_per_task[tpg.GetState("active_task")]);
-                } else if (eval.task->eval_type_ == "Control") {
-                    EvalControlViz(tpg, eval, teamUseMapPerTask,
-                                   teams_visitedAllTasks,
-                                   steps_per_task[tpg.GetState("active_task")]);
-                } else if (eval.task->eval_type_ == "Mujoco") {
-                    EvalMujoco(tpg, eval);
-                } else {
-                    std::cerr << "Unknown eval_type_: " << eval.task->eval_type_ << std::endl;
-                }
-                eval.FinalizeStepData(tpg);
-            }
+        // Evaluate only the task specified
+        tpg.state_["active_task"] = tpg.state_["task_to_replay"];
+        eval.task = tasks[tpg.GetState("active_task")];
+        if (eval.animate) {
+            eval.tm->_n_eval = 1;
+        } else {
+            eval.tm->_n_eval =
+                eval.task->GetNumEval(tpg.GetParam<int>("checkpoint_in_phase"));
         }
+        for (eval.episode = 0; eval.episode < eval.tm->_n_eval;
+             eval.episode++) {
+            tpg.rngs_[AUX_SEED].seed(eval.episode);
+            eval.tm->InitMemory(tpg._teamMap, tpg.params_);
+
+            if (eval.task->eval_type_ == "Mujoco") {
+                EvalMujoco(tpg, eval);
+            } else if (eval.task->eval_type_ == "RecursiveForecast") {
+                EvalRecursiveForecastViz(
+                    tpg, eval, teamUseMapPerTask, teams_visitedAllTasks,
+                    steps_per_task[tpg.GetState("active_task")]);
+            } else if (eval.task->eval_type_ == "Control") {
+                EvalControlViz(tpg, eval, teamUseMapPerTask,
+                               teams_visitedAllTasks,
+                               steps_per_task[tpg.GetState("active_task")]);
+            }
+            eval.FinalizeStepData(tpg);
+        }
+
         tpg.printGraphDotGPTPXXI(eval.tm->id_, teams_visitedAllTasks,
                                  teamUseMapPerTask, steps_per_task);
         cout << " Evaluation result team:" << eval.tm->id_
              << " score:" << eval.stats_double[REWARD1_IDX] << endl;
     }
 
-    // Assemble images into video if frames were saved
-    if (IsHeadless() && GetFrameCounter() > 0) {
-        std::cout << "Assembling frames into video..." << std::endl;
-        int result = system("ffmpeg -y -framerate 30 -i replay/frames/frame_%05d.png -c:v libx264 -pix_fmt yuv420p replay/video.mp4");
-        if (result != 0) {
-            std::cerr << "Failed to assemble frames into video. ffmpeg returned " << result << std::endl;
-        } else {
-            std::cout << "Video saved to replay/video.mp4" << std::endl;
+    // If headless mode and frames were saved, create video
+    if (headless && frame_idx > 0) {
+        int ret = system("ffmpeg -y -framerate 30 -i frames/frame_%05d.ppm -c:v libx264 -pix_fmt yuv420p replay/videos/output.mp4");
+        if (ret != 0) {
+            cerr << "Error creating video file" << endl;
+        }
+        // Remove frames if desired
+        ret = system("rm frames/frame_*.ppm");
+        if (ret != 0) {
+            cerr << "Error removing frame files" << endl;
         }
     }
 }
