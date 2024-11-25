@@ -194,18 +194,17 @@ void evaluator(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks) {
 
 /******************************************************************************/
 void replayer_viz(TPG &tpg, vector<TaskEnv *> &tasks) {
-  // MaybeStartAnimation(tpg);
-  EvalData eval(tpg);
+    EvalData eval(tpg);
 
-  vector<map<long, double>> teamUseMapPerTask;
-  teamUseMapPerTask.resize(tpg.GetState("n_task"));
-  std::set<team *, teamIdComp> teams_visitedAllTasks;
+    vector<map<long, double>> teamUseMapPerTask;
+    teamUseMapPerTask.resize(tpg.GetState("n_task"));
+    std::set<team *, teamIdComp> teams_visitedAllTasks;
 
-  tpg.getTeams(eval.teams, true);
-  eval.eval_result = "";
-  for (auto tm : eval.teams) {
-    if (tm->id_ != tpg.GetParam<int>("id_to_replay")) continue;
-    eval.tm = tm;
+    tpg.getTeams(eval.teams, true);
+    eval.eval_result = "";
+    for (auto tm : eval.teams) {
+        if (tm->id_ != tpg.GetParam<int>("id_to_replay")) continue;
+        eval.tm = tm;
 
     vector<int> steps_per_task(tpg.GetState("n_task"), 0);
     // TODO(skelly): clean up
@@ -223,26 +222,38 @@ void replayer_viz(TPG &tpg, vector<TaskEnv *> &tasks) {
              eval.episode++) {
             eval.tm->InitMemory(tpg._teamMap, tpg.params_);
 
-            if (eval.task->eval_type_ == "RecursiveForecast") {
-                EvalRecursiveForecastViz(
-                    tpg, eval, teamUseMapPerTask, teams_visitedAllTasks,
-                    steps_per_task[tpg.GetState("active_task")]);
-            } else if (eval.task->eval_type_ == "Control") {
-                EvalControlViz(tpg, eval, teamUseMapPerTask,
-                               teams_visitedAllTasks,
-                               steps_per_task[tpg.GetState("active_task")]);
-            } else {
-                EvalMujoco(tpg, eval);
+                if (eval.task->eval_type_ == "RecursiveForecast") {
+                    EvalRecursiveForecastViz(
+                        tpg, eval, teamUseMapPerTask, teams_visitedAllTasks,
+                        steps_per_task[tpg.GetState("active_task")]);
+                } else if (eval.task->eval_type_ == "Control") {
+                    EvalControlViz(tpg, eval, teamUseMapPerTask,
+                                   teams_visitedAllTasks,
+                                   steps_per_task[tpg.GetState("active_task")]);
+                } else if (eval.task->eval_type_ == "Mujoco") {
+                    EvalMujoco(tpg, eval);
+                } else {
+                    std::cerr << "Unknown eval_type_: " << eval.task->eval_type_ << std::endl;
+                }
+                eval.FinalizeStepData(tpg);
             }
-            eval.FinalizeStepData(tpg);
+        }
+        tpg.printGraphDotGPTPXXI(eval.tm->id_, teams_visitedAllTasks,
+                                 teamUseMapPerTask, steps_per_task);
+        cout << " Evaluation result team:" << eval.tm->id_
+             << " score:" << eval.stats_double[REWARD1_IDX] << endl;
+    }
+
+    // Assemble images into video if frames were saved
+    if (IsHeadless() && GetFrameCounter() > 0) {
+        std::cout << "Assembling frames into video..." << std::endl;
+        int result = system("ffmpeg -y -framerate 30 -i replay/frames/frame_%05d.png -c:v libx264 -pix_fmt yuv420p replay/video.mp4");
+        if (result != 0) {
+            std::cerr << "Failed to assemble frames into video. ffmpeg returned " << result << std::endl;
+        } else {
+            std::cout << "Video saved to replay/video.mp4" << std::endl;
         }
     }
-    tpg.printGraphDotGPTPXXI(eval.tm->id_, teams_visitedAllTasks,
-                             teamUseMapPerTask, steps_per_task);
-    cout << " Evaluation result team:" << eval.tm->id_ << 
-      " score:" << eval.stats_double[REWARD1_IDX] << endl;
-
-  }
 }
 
 #endif
