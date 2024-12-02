@@ -43,6 +43,7 @@ class TPG {
     void countRefs();
     void finalize();
     void genSampleSets(size_t);
+    team* TeamSelector_Tournament(vector<team*> &candidate_parent_teams);
     void GenerateNewTeams();
     void TeamMutator_ProgramOrder(team *team_to_mu);
     void TeamMutator_AddPrograms(team *team_to_mu);
@@ -119,8 +120,7 @@ class TPG {
     void printTeamInfo(long, int, bool, long teamId = -1);
     void trackTeamInfo(long, int, bool, long teamId = -1);
     void RegisterMachineCrossover(RegisterMachine *p1, RegisterMachine *p2,
-                          RegisterMachine **c1, RegisterMachine **c2,
-                          mt19937 &);
+                          RegisterMachine **c1, RegisterMachine **c2);
     void ReadCheckpoint(long, int, int, bool, const string &);
 
     void ReadParameters(string file_name,
