@@ -1,5 +1,5 @@
 AddOption('--dbg', action='append_const', dest='cflags', const='-g')
-AddOption('--opt', action='append_const', dest='cflags', const='-Os')
+AddOption('--opt', action='append_const', dest='cflags', const='-O3 -fno-math-errno -DNDEBUG')
 
 import os
 common_env=Environment(ENV=os.environ)

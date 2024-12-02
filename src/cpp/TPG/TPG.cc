@@ -622,6 +622,22 @@ team *TPG::TeamXover(vector<team *> &parents) {
 
    team *child_team = new team(GetState("t_current"), state_["team_count"]++);
 
+   // TODO(skelly): linear crossover
+   if (pm1->size() == 1 && pm2->size() == 1) {
+      RegisterMachine* parent_1 = pm1->members_.front();
+      RegisterMachine* parent_2 = pm2->members_.front();
+      RegisterMachine* child_1;
+      RegisterMachine* child_2;
+      RegisterMachineCrossover(parent_1, parent_2, &child_1, &child_2);
+      if (real_dist_(rngs_[TPG_SEED]) < 0.5) {
+         child_team->AddProgram(child_1);
+         delete child_2;
+      } else {
+         child_team->AddProgram(child_2);
+         delete child_1;
+      }
+   } else {
+   // TODO(skelly): intertwine crossover
    while (p1liter != p1programs.end() || p2liter != p2programs.end()) {
       if (p1liter != p1programs.end()) {
          if ((*p1liter)->action_ < 0 && child_team->n_atomic_ < 1) {
@@ -647,10 +663,27 @@ team *TPG::TeamXover(vector<team *> &parents) {
       die(__FILE__, __FUNCTION__, __LINE__,
           "Crossover must leave the fail-safe atomic program!");
    }
+   }
+
+
    AddTeamToPhylogeny(child_team);
    AddAncestorToPhylogeny(pm1, child_team);
    AddAncestorToPhylogeny(pm2, child_team);
    return child_team;
+}
+
+/******************************************************************************/
+team* TPG::TeamSelector_Tournament(vector<team*>& candidate_parent_teams) {
+   uniform_int_distribution<int> dis(0, candidate_parent_teams.size() - 1);
+   auto tournament_size = GetParam<int>("tournament_size");
+   auto tm = candidate_parent_teams[dis(rngs_[TPG_SEED])];
+   while (tournament_size-- > 0) {
+      auto i = dis(rngs_[TPG_SEED]);
+      if (candidate_parent_teams[i]->fit_ > tm->fit_) {
+         tm = candidate_parent_teams[i];
+      }
+   }
+   return tm;
 }
 
 /******************************************************************************/
@@ -666,6 +699,7 @@ void TPG::GenerateNewTeams() {
       std::copy(_M.begin(), _M.end(), candidate_parent_teams.begin());
    }
    for (auto &subset : task_power_set) {
+      //TODO(skelly): put selection in a separate function
       if (GetParam<int>("parent_select_roots_only")) {
          if (task_set_map_[vecToStrNoSpace(subset)].size() == 0) continue;
          candidate_parent_teams = task_set_map_[vecToStrNoSpace(subset)];
@@ -674,9 +708,14 @@ void TPG::GenerateNewTeams() {
       for (int i = 0; i < n_new_teams_per_set; i++) {
          team *child_team;
          if (real_dist_(rngs_[TPG_SEED]) < GetParam<double>("pmx"))
-            child_team = TeamXover(candidate_parent_teams);
+            child_team = TeamXover(candidate_parent_teams);   
          else {
-            auto parent_team = candidate_parent_teams[disP(rngs_[TPG_SEED])];
+            team* parent_team;
+            if (GetParam<int>("tournament_size") > 0) {
+              parent_team = TeamSelector_Tournament(candidate_parent_teams);
+            } else {  // Random selection
+              parent_team = candidate_parent_teams[disP(rngs_[TPG_SEED])];
+            }
             child_team = CloneTeam(parent_team);
             AddTeamToPhylogeny(child_team);
             AddAncestorToPhylogeny(parent_team, child_team);
@@ -1194,7 +1233,9 @@ void TPG::InitTeams() {
                                  ? GetParam<int>("n_discrete_action") - 1
                                  : 0;
    uniform_int_distribution<int> dis_actions(0, max_discrete_action);
-   int initial_team_size = 2;
+   uniform_int_distribution<int> dis_team_size(
+       1, GetParam<int>("max_initial_team_size"));
+   int initial_team_size = dis_team_size(rngs_[TPG_SEED]);
    for (int t = 0; t < GetParam<int>("n_root"); t++) {
       auto new_team = new team(GetState("t_current"), state_["team_count"]++);
       for (int p = 0; p < initial_team_size; p++) {
@@ -1206,17 +1247,9 @@ void TPG::InitTeams() {
          AddProgram(new_prog);  // add program to program population
       }
       AddTeam(new_team);  // add team to team population
-      _phyloGraph.insert(pair<long, phyloRecord>(new_team->id_, phyloRecord()));
+      phyloRecord p;  // TODO(skelly): make pointer?
+      _phyloGraph.insert(pair<long, phyloRecord>(new_team->id_, p));
       _phyloGraph[new_team->id_].gtime = 0;
-   }
-   // Fill teams from learner population
-   uniform_int_distribution<int> dis_team_size(
-       2, GetParam<int>("max_initial_team_size"));
-   uniform_int_distribution<int> dis_programs(0, _L.size() - 1);
-   for (auto tm : _M) {
-      auto team_size = dis_team_size(rngs_[TPG_SEED]);
-      while (tm->size() < team_size)
-         tm->AddProgram(_L[dis_programs(rngs_[TPG_SEED])]);
    }
    oss << "InitTms Msz " << _M.size() << " Lsz " << _L.size() << " rSz "
        << _Mroot.size() << " mSz";
@@ -2315,8 +2348,7 @@ void TPG::trackTeamInfo(long t, int phase, bool singleBest, long teamId) {
 /******************************************************************************/
 // Algorithm 5.1 (linear crossover)
 void TPG::RegisterMachineCrossover(RegisterMachine *p1, RegisterMachine *p2,
-                           RegisterMachine **c1, RegisterMachine **c2,
-                           mt19937 &rng) {
+                           RegisterMachine **c1, RegisterMachine **c2) {
    int dcMax = min(p1->instructions_.size(), p2->instructions_.size());
    int dsMax = dcMax;
    int lsMax = dcMax;
@@ -2333,18 +2365,18 @@ void TPG::RegisterMachineCrossover(RegisterMachine *p1, RegisterMachine *p2,
 
    // 1
    uniform_int_distribution<> dis1(0, parents[0]->instructions_.size() - 1);
-   pos1 = dis1(rng);
+   pos1 = dis1(rngs_[TPG_SEED]);
    uniform_int_distribution<> dis2(0, parents[1]->instructions_.size() - 1);
    do {
-      pos2 = dis2(rng);
+      pos2 = dis2(rngs_[TPG_SEED]);
    } while (abs(pos1 - pos2) > min(static_cast<int>(parents[0]->instructions_.size()) - 1, dcMax));
 
    // 2,3
    uniform_int_distribution<> dis3(1, min(static_cast<int>(parents[0]->instructions_.size()) - pos1, lsMax));
-   segLengths[0] = dis3(rng);
+   segLengths[0] = dis3(rngs_[TPG_SEED]);
    uniform_int_distribution<> dis4(1, min(static_cast<int>(parents[1]->instructions_.size()) - pos2, lsMax));
    do {
-      segLengths[1] = dis4(rng);
+      segLengths[1] = dis4(rngs_[TPG_SEED]);
    } while (abs(segLengths[0] - segLengths[1]) > dsMax);
 
    // 4
@@ -2354,7 +2386,7 @@ void TPG::RegisterMachineCrossover(RegisterMachine *p1, RegisterMachine *p2,
    if (static_cast<int>(p1->instructions_.size()) - (segLengths[1] - segLengths[0]) < 1 ||
        static_cast<int>(p2->instructions_.size()) + (segLengths[1] - segLengths[0]) >
            GetParam<int>("max_prog_size")) {
-      if (real_dist_(rng) < 0.5)
+      if (real_dist_(rngs_[TPG_SEED]) < 0.5)
          segLengths[1] = segLengths[0];
       else
          segLengths[0] = segLengths[1];
@@ -2788,9 +2820,6 @@ void TPG::WriteCheckpoint(long t, bool elite) {
             teamsAll.insert(teams.begin(), teams.end());
          }
       }
-      // for (auto mem : memories) {
-      //    ofs << mem->ToString();
-      // }
       for (auto prog : programs) {
          ofs << prog->ToStringMemory();
       }
@@ -2801,11 +2830,6 @@ void TPG::WriteCheckpoint(long t, bool elite) {
          ofs << tm->checkpoint();
       }
    } else {  // Include all memories, teams, and programs
-      // for (size_t mem_t = 0; mem_t < MemoryEigen::kNumMemoryType_; mem_t++) {
-      //    for (auto key : _Memory[mem_t]) {
-      //       ofs << key.second->ToString();
-      //    }
-      // }
       for (auto key : _L) {
          ofs << key.second->ToStringMemory();
       }
