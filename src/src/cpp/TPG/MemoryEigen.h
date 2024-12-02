@@ -82,19 +82,19 @@ class MemoryEigen {
       n_memories_ = std::atoi(outcome_fields[i++].c_str());
       memory_size_ = std::atoi(outcome_fields[i++].c_str());
 
-      size_t expected_size;
-      if (type_ == 0)
-         expected_size = 5 + 8;
-      else if (type_ == 1)
-         expected_size = 5 + (8 * memory_size_);
-      else
-         expected_size = 5 + (8 * (memory_size_ * memory_size_));
-      if (outcome_fields.size() != expected_size) {
-         cerr << "dbg memory_size_ " << memory_size_ << " sz "
-              << outcome_fields.size() << " ex " << expected_size << endl;
-         cerr << "str " << vecToStr(outcome_fields) << endl;
-         die(__FILE__, __FUNCTION__, __LINE__, "Bad memory size.");
-      }
+      // size_t expected_size;
+      // if (type_ == 0)
+      //    expected_size = 5 + 8;
+      // else if (type_ == 1)
+      //    expected_size = 5 + (8 * memory_size_);
+      // else
+      //    expected_size = 5 + (8 * (memory_size_ * memory_size_));
+      // if (outcome_fields.size() != expected_size) {
+      //    cerr << "dbg memory_size_ " << memory_size_ << " sz "
+      //         << outcome_fields.size() << " ex " << expected_size << endl;
+      //    cerr << "str " << vecToStr(outcome_fields) << endl;
+      //    die(__FILE__, __FUNCTION__, __LINE__, "Bad memory size.");
+      // }
       ResizeMemory();
       // Read in evolved constants
       for (size_t idx = 0; idx < n_memories_; idx++) {
