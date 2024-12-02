@@ -81,10 +81,10 @@ seed_aux 42
 n_generations 100000
 
 # Number of root teams (agents) to keep each generation
-n_root 500
+n_root 600
 
 # Number of new root teams to create each generation
-n_root_gen 100
+n_root_gen 200
 
 # Whether to constrain parent selection to root teams
 parent_select_roots_only 0
@@ -161,7 +161,7 @@ p_observation_buff_size 0.0
 p_observation_index 0.1
 
 # Program variation: probability of changing memory_size
-p_memory_size 0.1
+p_memory_size 0.0
 
 # Use stateful programs
 # If set to 0, memories are set to 0 prior to each program execution
@@ -193,7 +193,7 @@ max_prog_size 1000000
 n_memories 8
 
 # Dimensionality for vector & matrix memory
-memory_size 8
+memory_size 10
 min_memory_size 2
 max_memory_size 32
 
@@ -208,7 +208,7 @@ max_observation_buff_size 1
 
 # Which tasks are active
 # Right-hand-side should be a single task name or a comma-separated list
-active_tasks Mujoco_Half_Cheetah_v4
+active_tasks Mujoco_Reacher_v4
 
 # Use the partially-observable version of a task, if available
 # Currently only available for calssic control and Mujoco tasks
@@ -247,13 +247,13 @@ forecast_n_eval_val 10
 
 # Uncomment one model path
 #mj_model_path $TPG/datasets/mujoco_models/ant.xml
-mj_model_path $TPG/datasets/mujoco_models/half_cheetah.xml
+#mj_model_path $TPG/datasets/mujoco_models/half_cheetah.xml
 #mj_model_path $TPG/datasets/mujoco_models/inverted_pendulum.xml
-#mj_model_path $TPG/datasets/mujoco_models/reacher.xml
+mj_model_path $TPG/datasets/mujoco_models/reacher.xml
 
-mj_max_timestep 1000
+mj_max_timestep 50
 
-mj_n_eval_train 5
+mj_n_eval_train 100
 mj_n_eval_validation 0
 mj_n_eval_test 0
 
