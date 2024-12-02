@@ -7,6 +7,7 @@
 #include <Mujoco_Half_Cheetah_v4.h>
 #include <Mujoco_Hopper_v4.h>
 #include <Mujoco_Inverted_Pendulum_v4.h>
+#include <Mujoco_Inverted_Double_Pendulum_v4.h>
 #include <Mujoco_Reacher_v4.h>
 #include <Mujoco_Humanoid_Standup_v4.h>
 #include <Pendulum.h>
@@ -109,6 +110,8 @@ int main(int argc, char** argv) {
          tasks.push_back(new Mujoco_Ant_v4(tpg.params_));
       else if (substr == "Mujoco_Inverted_Pendulum_v4")
          tasks.push_back(new Mujoco_Inverted_Pendulum_v4(tpg.params_));
+      else if (substr == "Mujoco_Inverted_Double_Pendulum_v4")
+         tasks.push_back(new Mujoco_Inverted_Double_Pendulum_v4(tpg.params_));
       else if (substr == "Mujoco_Half_Cheetah_v4")
          tasks.push_back(new Mujoco_Half_Cheetah_v4(tpg.params_));
       else if (substr == "Mujoco_Reacher_v4")
