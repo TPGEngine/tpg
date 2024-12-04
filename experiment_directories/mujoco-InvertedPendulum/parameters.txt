@@ -78,26 +78,31 @@ seed_tpg 42
 seed_aux 42
 
 # Max number of generations
-n_generations 100000
+n_generations 1000000
 
 # Number of root teams (agents) to keep each generation
-n_root 600
+n_root 1000
 
 # Number of new root teams to create each generation
-n_root_gen 200
+n_root_gen 100
 
 # Whether to constrain parent selection to root teams
 parent_select_roots_only 0
+
+tournament_size 3
+
+# Whether to keep evaluation outcome over time or re-evaluate each generation
+keep_old_outcomes 1
 
 ################################################################################
 ## Team  parameters ############################################################
 ################################################################################
 
 # Initial team size
-max_initial_team_size 10
+max_initial_team_size 1
 
 # Max team size
-max_team_size 1000000
+max_team_size 1
 
 ### Independent team mutation ops #############################################
 ###############################################################################
@@ -131,7 +136,7 @@ p_clone_program 1.0
 # Program variation: probability of mutating a program's action pointer
 pmn 0.1
 # When changing action pointer, probability of selecting atomic action
-p_atomic 0.99
+p_atomic 1.0
 
 # Program variation: probability of changing a random instruction
 p_instructions_mutate 0.1
@@ -149,7 +154,7 @@ p_instructions_add 0.075
 p_instructions_xover 0.0
 
 # Program variation: probability of adding noise to constants
-p_instructions_mu_const 0.5
+p_instructions_mu_const 1.0
 
 # Program variation: stddev of normal noise added to each const
 instructions_mu_const_stddev 0.05
@@ -186,14 +191,14 @@ n_input 0
 max_initial_prog_size 10
 
 # Max program size
-max_prog_size 1000000
+max_prog_size 100
 
 # Number of memory indices
 # Each memory index points to a data structure (scalar, vector, or matrix)
 n_memories 8
 
 # Dimensionality for vector & matrix memory
-memory_size 10
+memory_size 4
 min_memory_size 2
 max_memory_size 32
 
@@ -208,7 +213,7 @@ max_observation_buff_size 1
 
 # Which tasks are active
 # Right-hand-side should be a single task name or a comma-separated list
-active_tasks Mujoco_Reacher_v4
+active_tasks Mujoco_Inverted_Pendulum_v4
 
 # Use the partially-observable version of a task, if available
 # Currently only available for calssic control and Mujoco tasks
@@ -248,12 +253,12 @@ forecast_n_eval_val 10
 # Uncomment one model path
 #mj_model_path $TPG/datasets/mujoco_models/ant.xml
 #mj_model_path $TPG/datasets/mujoco_models/half_cheetah.xml
-#mj_model_path $TPG/datasets/mujoco_models/inverted_pendulum.xml
-mj_model_path $TPG/datasets/mujoco_models/reacher.xml
+mj_model_path $TPG/datasets/mujoco_models/inverted_pendulum.xml
+#mj_model_path $TPG/datasets/mujoco_models/reacher.xml
 
-mj_max_timestep 50
+mj_max_timestep 1000
 
-mj_n_eval_train 100
+mj_n_eval_train 20
 mj_n_eval_validation 0
 mj_n_eval_test 0
 
