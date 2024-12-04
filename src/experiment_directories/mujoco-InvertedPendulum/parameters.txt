@@ -198,7 +198,7 @@ max_prog_size 100
 n_memories 8
 
 # Dimensionality for vector & matrix memory
-memory_size 10
+memory_size 4
 min_memory_size 2
 max_memory_size 32
 
@@ -213,7 +213,7 @@ max_observation_buff_size 1
 
 # Which tasks are active
 # Right-hand-side should be a single task name or a comma-separated list
-active_tasks Mujoco_Pusher_v5
+active_tasks Mujoco_Inverted_Pendulum_v4
 
 # Use the partially-observable version of a task, if available
 # Currently only available for calssic control and Mujoco tasks
@@ -253,13 +253,12 @@ forecast_n_eval_val 10
 # Uncomment one model path
 #mj_model_path $TPG/datasets/mujoco_models/ant.xml
 #mj_model_path $TPG/datasets/mujoco_models/half_cheetah.xml
-#mj_model_path $TPG/datasets/mujoco_models/inverted_pendulum.xml
+mj_model_path $TPG/datasets/mujoco_models/inverted_pendulum.xml
 #mj_model_path $TPG/datasets/mujoco_models/reacher.xml
-mj_model_path $TPG/datasets/mujoco_models/pusher.xml
 
-mj_max_timestep 50
+mj_max_timestep 1000
 
-mj_n_eval_train 50
+mj_n_eval_train 20
 mj_n_eval_validation 0
 mj_n_eval_test 0
 
