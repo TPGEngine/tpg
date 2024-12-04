@@ -35,9 +35,7 @@ RegisterMachine::RegisterMachine(
    id_ = state["program_count"]++;
    nrefs_ = 0;
    observation_buff_size_ = std::any_cast<int>(params["observation_buff_size"]);
-   const int max_index = 1000000;
-   uniform_int_distribution<int> dis(0, max_index);
-   obs_index_ = dis(rng);
+   obs_index_ = 0;
    uniform_int_distribution<int> disP(
        1, std::any_cast<int>(params["max_initial_prog_size"]));
    int prog_size = disP(rng);

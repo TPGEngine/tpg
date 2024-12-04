@@ -25,6 +25,13 @@ double WrapContinuousActionSigmoid(EvalData &eval) {
     return 1 / (1 + exp(-p));
 }
 
+vector<double> WrapVectorAction(EvalData &eval) {
+    auto mat = eval.program_out->private_memory_[MemoryEigen::kVectorType_]
+                   ->working_memory_[1];
+    vector<double> vec(mat.data(), mat.data() + mat.rows() * mat.cols());
+    return vec;
+}
+
 vector<double> WrapVectorActionSigmoid(EvalData &eval) {
     auto mat = eval.program_out->private_memory_[MemoryEigen::kVectorType_]
                    ->working_memory_[1];

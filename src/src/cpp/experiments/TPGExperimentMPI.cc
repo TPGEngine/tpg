@@ -6,8 +6,11 @@
 #include <MountainCarContinuous.h>
 #include <Mujoco_Pusher_v5.h>
 #include <Mujoco_Half_Cheetah_v4.h>
+#include <Mujoco_Hopper_v4.h>
 #include <Mujoco_Inverted_Pendulum_v4.h>
+#include <Mujoco_Inverted_Double_Pendulum_v4.h>
 #include <Mujoco_Reacher_v4.h>
+#include <Mujoco_Humanoid_Standup_v4.h>
 #include <Pendulum.h>
 #include <RecursiveForecast.h>
 #include <TPG.h>
@@ -32,7 +35,7 @@
 #define NUM_POINT_AUX_INT 4
 #define MODES_T 1000000000
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
    mpi::environment env(argc, argv);
    mpi::communicator world;
    TPG tpg;
@@ -40,7 +43,7 @@ int main(int argc, char **argv) {
    tpg.state_["world_rank"] = world.rank();
    tpg.SetParams(argc, argv);
 
-   APIClient *apiClient = nullptr;
+   APIClient* apiClient = nullptr;
 
    if (tpg.GetParam<int>("track_experiments")) {
       // Only instantiate APIClient if trackExperiment is true
@@ -49,7 +52,7 @@ int main(int argc, char **argv) {
 
       // Track run parameters
       cout << "Tracking experiment parameters" << endl;
-      for (auto &param : tpg.params_) {
+      for (auto& param : tpg.params_) {
          std::string value;
 
          if (param.second.type() == typeid(int)) {
@@ -71,7 +74,7 @@ int main(int argc, char **argv) {
 
    /****************************************************************************/
    // Read task sets from parameters and create environments.
-   vector<TaskEnv *> tasks;
+   vector<TaskEnv*> tasks;
    stringstream ss(tpg.GetParam<string>("active_tasks"));
    while (ss.good()) {
       string substr;
@@ -107,23 +110,27 @@ int main(int argc, char **argv) {
       else if (substr == "Mujoco_Ant_v4")
          tasks.push_back(new Mujoco_Ant_v4(tpg.params_));
       else if (substr == "Mujoco_Inverted_Pendulum_v4")
-         tasks.push_back(
-             new Mujoco_Inverted_Pendulum_v4(tpg.params_));
+         tasks.push_back(new Mujoco_Inverted_Pendulum_v4(tpg.params_));
+      else if (substr == "Mujoco_Inverted_Double_Pendulum_v4")
+         tasks.push_back(new Mujoco_Inverted_Double_Pendulum_v4(tpg.params_));
       else if (substr == "Mujoco_Half_Cheetah_v4")
-         tasks.push_back(
-             new Mujoco_Half_Cheetah_v4(tpg.params_));
+         tasks.push_back(new Mujoco_Half_Cheetah_v4(tpg.params_));
       else if (substr == "Mujoco_Reacher_v4")
 	      tasks.push_back(new Mujoco_Reacher_v4(tpg.params_));
       else if (substr == "Mujoco_Pusher_v5")
 	      tasks.push_back(new Mujoco_Pusher_v5(tpg.params_));
+      else if (substr == "Mujoco_Hopper_v4")
+         tasks.push_back(new Mujoco_Hopper_v4(tpg.params_));
+      else if (substr == "Mujoco_Humanoid_Standup_v4")
+         tasks.push_back(new Mujoco_Humanoid_Standup_v4(tpg.params_));
       else {
          cerr << "Unrecognised task:" << substr << endl;
          exit(1);
       }
 
       if (tasks[tasks.size() - 1]->eval_type_ == "RecursiveForecast") {
-         RecursiveForecast *task =
-             dynamic_cast<RecursiveForecast *>(tasks.back());
+         RecursiveForecast* task =
+             dynamic_cast<RecursiveForecast*>(tasks.back());
          task->n_prime_ = tpg.GetParam<int>("forecast_prime_steps");
          task->n_predict_[0] = tpg.GetParam<int>("forecast_horizon_train");
          task->n_predict_[1] = tpg.GetParam<int>("forecast_horizon_val");
@@ -143,7 +150,8 @@ int main(int argc, char **argv) {
 
    // Create task indices vector
    vector<int> taskIndices;
-   for (int i = 0; i < (int)tasks.size(); i++) taskIndices.push_back(i);
+   for (int i = 0; i < (int)tasks.size(); i++)
+      taskIndices.push_back(i);
 
    // Read number of inpts per task from parameters
    ss.clear();
@@ -155,7 +163,8 @@ int main(int argc, char **argv) {
    }
 
    string allTaskString = "";
-   for (size_t i = 0; i < tasks.size(); i++) allTaskString += to_string(i);
+   for (size_t i = 0; i < tasks.size(); i++)
+      allTaskString += to_string(i);
 
    tpg.state_["n_task"] = (int)tasks.size();
    tpg.state_["active_task"] = 0;
@@ -168,9 +177,9 @@ int main(int argc, char **argv) {
    }
 
    // placeholders for logging stats only
-   set<team *, teamIdComp> visitedTeamsAll;
-   vector<set<team *, teamIdComp>> visitedTeamsAllPerTask;
-   set<team *, teamIdComp> visitedTeamsAllTasks;
+   set<team*, teamIdComp> visitedTeamsAll;
+   vector<set<team*, teamIdComp>> visitedTeamsAllPerTask;
+   set<team*, teamIdComp> visitedTeamsAllTasks;
    map<long, double>
        teamUseMap;  // maps team to frequency of use for a particular task;
    vector<map<long, double>> teamUseMapPerTask;
@@ -341,7 +350,8 @@ int main(int argc, char **argv) {
             tpg.printOss(os);
 
             startGen = chrono::system_clock::now();
-            if (tpg.GetState("t_current") % PRINT_MOD == 0) tpg.printOss();
+            if (tpg.GetState("t_current") % PRINT_MOD == 0)
+               tpg.printOss();
             tpg.SanityCheck();
             tpg.state_["t_current"]++;
          }
@@ -356,7 +366,8 @@ int main(int argc, char **argv) {
       evaluator(tpg, world, tasks);
    }
    tpg.finalize();
-   for (size_t tsk = 0; tsk < tasks.size(); tsk++) delete tasks[tsk];
+   for (size_t tsk = 0; tsk < tasks.size(); tsk++)
+      delete tasks[tsk];
    tasks.clear();
    return 0;
 }

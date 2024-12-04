@@ -73,9 +73,10 @@ if [ $mode -eq 1 ]; then
 
    echo "Fitness:$best_fitness Generation:$checkpoint_in_t Team:$tm_id"
    
-   #  for dbg mpirun --oversubscribe -np 1 xterm -hold -e gdb -ex run --args \
-   mpirun --oversubscribe \
-     -np 1 $TPG/build/release/cpp/experiments/TPGExperimentMPI \
+   #  for dbg 
+  #  mpirun --oversubscribe -np 1 xterm -hold -e gdb -ex run \
+    mpirun --oversubscribe -np 1 \
+     $TPG/build/release/cpp/experiments/TPGExperimentMPI \
      replay=1 animate=1 id_to_replay=$tm_id task_to_replay=$task_to_replay \
      checkpoint_in_phase=$phase checkpoint_in_t=$checkpoint_in_t \
      seed_tpg=$seed_tpg seed_aux=$seed_aux \

@@ -89,6 +89,11 @@ n_root_gen 250
 # Whether to constrain parent selection to root teams
 parent_select_roots_only 0
 
+tournament_size 3
+
+# Whether to keep evaluation outcome over time or re-evaluate each generation
+keep_old_outcomes 1
+
 ################################################################################
 ## Team  parameters ############################################################
 ################################################################################
