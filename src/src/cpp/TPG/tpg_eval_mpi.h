@@ -20,6 +20,9 @@
 #include <thread>
 #include <GL/gl.h>
 #include <GL/glut.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 namespace mpi = boost::mpi;
 
@@ -194,18 +197,17 @@ void evaluator(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks) {
 
 /******************************************************************************/
 void replayer_viz(TPG &tpg, vector<TaskEnv *> &tasks) {
-  // MaybeStartAnimation(tpg);
-  EvalData eval(tpg);
+    EvalData eval(tpg);
 
-  vector<map<long, double>> teamUseMapPerTask;
-  teamUseMapPerTask.resize(tpg.GetState("n_task"));
-  std::set<team *, teamIdComp> teams_visitedAllTasks;
+    vector<map<long, double>> teamUseMapPerTask;
+    teamUseMapPerTask.resize(tpg.GetState("n_task"));
+    std::set<team *, teamIdComp> teams_visitedAllTasks;
 
-  tpg.getTeams(eval.teams, true);
-  eval.eval_result = "";
-  for (auto tm : eval.teams) {
-    if (tm->id_ != tpg.GetParam<int>("id_to_replay")) continue;
-    eval.tm = tm;
+    tpg.getTeams(eval.teams, true);
+    eval.eval_result = "";
+    for (auto tm : eval.teams) {
+        if (tm->id_ != tpg.GetParam<int>("id_to_replay")) continue;
+        eval.tm = tm;
 
     vector<int> steps_per_task(tpg.GetState("n_task"), 0);
     // TODO(skelly): clean up
@@ -223,7 +225,30 @@ void replayer_viz(TPG &tpg, vector<TaskEnv *> &tasks) {
              eval.episode++) {
             eval.tm->InitMemory(tpg._teamMap, tpg.params_);
 
-            if (eval.task->eval_type_ == "RecursiveForecast") {
+                if (eval.task->eval_type_ == "RecursiveForecast") {
+                    EvalRecursiveForecastViz(
+                        tpg, eval, teamUseMapPerTask, teams_visitedAllTasks,
+                        steps_per_task[tpg.GetState("active_task")]);
+                } else if (eval.task->eval_type_ == "Control") {
+                    EvalControlViz(tpg, eval, teamUseMapPerTask,
+                                   teams_visitedAllTasks,
+                                   steps_per_task[tpg.GetState("active_task")]);
+                } else if (eval.task->eval_type_ == "Mujoco") {
+                    EvalMujoco(tpg, eval);
+                } else {
+                    std::cerr << "Unknown eval_type_: " << eval.task->eval_type_ << std::endl;
+                }
+                eval.FinalizeStepData(tpg);
+            }
+        }
+        for (eval.episode = 0; eval.episode < eval.tm->_n_eval;
+             eval.episode++) {
+            tpg.rngs_[AUX_SEED].seed(eval.episode);
+            eval.tm->InitMemory(tpg._teamMap, tpg.params_);
+
+            if (eval.task->eval_type_ == "Mujoco") {
+                EvalMujoco(tpg, eval);
+            } else if (eval.task->eval_type_ == "RecursiveForecast") {
                 EvalRecursiveForecastViz(
                     tpg, eval, teamUseMapPerTask, teams_visitedAllTasks,
                     steps_per_task[tpg.GetState("active_task")]);
@@ -231,18 +256,28 @@ void replayer_viz(TPG &tpg, vector<TaskEnv *> &tasks) {
                 EvalControlViz(tpg, eval, teamUseMapPerTask,
                                teams_visitedAllTasks,
                                steps_per_task[tpg.GetState("active_task")]);
-            } else {
-                EvalMujoco(tpg, eval);
             }
             eval.FinalizeStepData(tpg);
         }
-    }
-    tpg.printGraphDotGPTPXXI(eval.tm->id_, teams_visitedAllTasks,
-                             teamUseMapPerTask, steps_per_task);
-    cout << " Evaluation result team:" << eval.tm->id_ << 
-      " score:" << eval.stats_double[REWARD1_IDX] << endl;
 
-  }
+        tpg.printGraphDotGPTPXXI(eval.tm->id_, teams_visitedAllTasks,
+                                 teamUseMapPerTask, steps_per_task);
+        cout << " Evaluation result team:" << eval.tm->id_
+             << " score:" << eval.stats_double[REWARD1_IDX] << endl;
+    }
+
+    // If headless mode and frames were saved, create video
+    if (headless && frame_idx > 0) {
+        int ret = system("ffmpeg -y -framerate 30 -i frames/frame_%05d.ppm -c:v libx264 -pix_fmt yuv420p replay/videos/output.mp4");
+        if (ret != 0) {
+            cerr << "Error creating video file" << endl;
+        }
+        // Remove frames if desired
+        ret = system("rm frames/frame_*.ppm");
+        if (ret != 0) {
+            cerr << "Error removing frame files" << endl;
+        }
+    }
 }
 
 #endif
