@@ -152,76 +152,76 @@ The following table is taken directly from the Module Guide document for this pr
 \newpage
 ~\newpage
 
-\section{MIS of \wss{Module Name}} \label{Module} \wss{Use labels for
-  cross-referencing}
-
-\wss{You can reference SRS labels, such as R\ref{R_Inputs}.}
-
-\wss{It is also possible to use \LaTeX for hypperlinks to external documents.}
+\section{MIS of Visualization Module} \label{Visualization Module}
 
 \subsection{Module}
-
-\wss{Short name for the module}
+The visualization module implements visualization functionality of a TPG experiment with graphs, charts, video playback, and a realtime simulation.
 
 \subsection{Uses}
+The visualization module is used to visualize the results of a TPG experiment while it is running or after the experiemnt has completed. This information contains data pertaining to what is going on in an experiment, and performance metrics.
 
 
 \subsection{Syntax}
 
 \subsubsection{Exported Constants}
+N/A
 
 \subsubsection{Exported Access Programs}
-
 \begin{center}
-\begin{tabular}{p{2cm} p{4cm} p{4cm} p{2cm}}
-\hline
-\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-\hline
-\wss{accessProg} & - & - & - \\
-\hline
-\end{tabular}
-\end{center}
+  \begin{tabular}{p{2cm} p{4cm} p{4cm} p{4cm}}
+  \hline
+  \textbf{Name} & \textbf{Input} & \textbf{Output} & \textbf{Exceptions} \\
+  \hline
+  plot-stats & \{fitnessValues: int, generationTime: int, programCount: int, teamCount: int\} & \{PDF file\} & Returns a PDF file of plot statistics for an experiment \\
+  \hline
+  run-mpi & \{fitnessValues: int, generationTime: int, programCount: int, teamCount: int\} & \{OpenGL animation\} & An OpenGL animation starts to run \\
+  \hline
+  
+  \end{tabular}
+  
+  \end{center}
 
 \subsection{Semantics}
 
 \subsubsection{State Variables}
 
-\wss{Not all modules will have state variables.  State variables give the module
-  a memory.}
+N/A
 
 \subsubsection{Environment Variables}
 
-\wss{This section is not necessary for all modules.  Its purpose is to capture
-  when the module has external interaction with the environment, such as for a
-  device driver, screen interface, keyboard, file, etc.}
+
+  \begin{center}
+    \begin{tabular}{p{4cm} p{4cm} p{4cm}}
+    \hline
+    \textbf{Name} & \textbf{Type} & \textbf{Description} \\
+    \hline
+    tpg.[experimentId].std & File(s) & output log files generated for each experiment \\
+    \hline
+    \end{tabular}
+    \end{center}
 
 \subsubsection{Assumptions}
 
-\wss{Try to minimize assumptions and anticipate programmer errors via
-  exceptions, but for practical purposes assumptions are sometimes appropriate.}
+Format of the log files is known and will not change.
 
 \subsubsection{Access Routine Semantics}
 
-\noindent \wss{accessProg}():
-\begin{itemize}
-\item transition: \wss{if appropriate} 
-\item output: \wss{if appropriate} 
-\item exception: \wss{if appropriate} 
-\end{itemize}
-
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
-
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
+N/A
 
 \subsubsection{Local Functions}
 
-\wss{As appropriate} \wss{These functions are for the purpose of specification.
-  They are not necessarily something that is going to be implemented
-  explicitly.  Even if they are implemented, they are not exported; they only
-  have local scope.}
+\begin{center}
+  \begin{tabular}{p{3cm} p{3cm} p{3cm} p{4cm}}
+  \hline
+  \textbf{Name} & \textbf{Input} & \textbf{Output} & \textbf{Description} \\
+  \hline
+  extractMetrics & \{logFile: file\} & \{dataFile: file\} & Saves extracted data into .rslt files \\
+  \hline
+  transformData & \{logFile: file\} & \{dataFile: file\} & Reverse processes the log files, pattern matches, reformatting, and aggregating the data and saving to a .rslt file \\
+  \hline
+  plotData & \{logFile: file\} & \{plotFile: file\} & Plots the data from the .rslt file and saves the plot to a .pdf file \\
+  \end{tabular}
+\end{center}
 
 \newpage
 
