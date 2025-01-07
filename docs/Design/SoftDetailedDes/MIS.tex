@@ -53,8 +53,7 @@ urlcolor=cyan          % color of external links
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+01/15/2025 & 0.0 & Revision 0\\
 \bottomrule
 \end{tabularx}
 
@@ -62,9 +61,33 @@ Date 2 & 1.1 & Notes\\
 
 \section{Symbols, Abbreviations and Acronyms}
 
-See SRS Documentation at \wss{give url}
+See SRS Documentation at \href{https://github.com/TPGEngine/tpg/blob/main/docs/SRS/SRS.pdf}{this link}. This section records information for easy reference. \\
 
-\wss{Also add any additional symbols, abbreviations or acronyms}
+% \wss{Also add any additional symbols, abbreviations or acronyms}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{l l} 
+  \toprule		
+  \textbf{symbol} & \textbf{description}\\
+  \midrule 
+  AC & Anticipated Change\\
+  DAG & Directed Acyclic Graph \\
+  DNN & Deep Neural Network \\
+  FR & Functional Requirement \\
+  M & Module \\
+  MG & Module Guide \\
+  MIS & Module Interface Specification \\
+  Multi-Task RL & Multi-Task Reinforcement Learning \\
+  NFR & Non-Functional Requirement \\
+  OS & Operating System \\
+  R & Requirement\\
+  RL & Reinforcment Learning \\
+  SC & Scientific Computing \\
+  SRS & Software Requirements Specification \\
+  TPG & Tangled Program Graphs\\
+  UC & Unlikely Change \\
+  % \wss{etc.} & \wss{...}\\
+  \bottomrule
+\end{tabular}\\
 
 \newpage
 
@@ -160,7 +183,6 @@ The visualization module implements visualization functionality of a TPG experim
 \subsection{Uses}
 The visualization module is used to visualize the results of a TPG experiment while it is running or after the experiemnt has completed. This information contains data pertaining to what is going on in an experiment, and performance metrics.
 
-
 \subsection{Syntax}
 
 \subsubsection{Exported Constants}
@@ -184,11 +206,9 @@ N/A
 \subsection{Semantics}
 
 \subsubsection{State Variables}
-
 N/A
 
 \subsubsection{Environment Variables}
-
 
   \begin{center}
     \begin{tabular}{p{4cm} p{4cm} p{4cm}}
