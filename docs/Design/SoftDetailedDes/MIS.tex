@@ -187,14 +187,25 @@ None
 \subsubsection{Exported Access Programs}
 \begin{center}
   \begin{tabular}{p{4cm} p{4cm} p{3cm} p{2cm}}
+    \hline
+    \textbf{Name} & \textbf{Input} & \textbf{Output} & \textbf{Exceptions} \\
+    \hline
     mujocoEnv & - & - & - \\
+    \hline
     \texttildelow mujocoEnv & - & - & - \\
-    reset & rng : mt19937\& & - & - \\
+    \hline
+    reset & \{rng : mt19937\&\} & - & - \\
+    \hline
     terminal & - & bool & - \\
-    sim\_step & action : std::vector\textless double\textgreater & Results & - \\
+    \hline
+    sim\_step & \{action : std::vector\textless double\textgreater \}& Results & - \\
+    \hline
     initialize\_simulation & - & - & Unable to load binary model \\
-    set\_state & qpos : std::vector\textless double\textgreater,  qvel : std::vector\textless double\textgreater & - & - \\
-    do\_simulation & ctrl : std::vector\textless double\textgreater, n\_frames: int & - & - \\
+    \hline
+    set\_state & \{qpos : std::vector\textless double\textgreater,  qvel : std::vector\textless double\textgreater\} & - & - \\
+    \hline
+    do\_simulation & \{ctrl : std::vector\textless double\textgreater, n\_frames: int\} & - & - \\
+    \hline
     GetObsSize & - & int & - \\
     \hline
     \end{tabular}
@@ -202,19 +213,35 @@ None
 
 \subsubsection{State Variables}
 
-\begin{itemize}
-  \item \textit{m\_}: pointer to the MuJoCo model (mjModel*).
-  \item \textit{d\_}: pointer to the MuJoCo data (mjData*).
-  \item \textit{cam\_}: camera used for visualization (mjvCamera).
-  \item \textit{opt\_}: visualization options (mjvOption).
-  \item \textit{scn\_}: visualization scene (mjvScene).
-  \item \textit{con\_}: custom GPU rendering context (mjrContext).  
-  \item \textit{init\_qpos\_}: initial positions (std::vector\textless double\textgreater). 
-  \item \textit{init\_qvel\_}: initial velocities (std::vector\textless double\textgreater).
-  \item \textit{model\_path\_}: absolute path to model xml file (String).
-  \item \textit{frame\_skip\_}: number of frames per simulation step (int).  
-  \item \textit{obs\_size\_}: size of the observation space (int).  
-\end{itemize}
+\begin{center}
+  \begin{tabular}{p{4cm} p{4cm} p{4cm}}
+    \hline
+    \textbf{Name} & \textbf{Type} & \textbf{Description} \\
+    \hline
+    m\_ & mjModel* & Pointer to the MuJoCo model\\
+    \hline
+    d\_ & mjData* & Pointer to the MuJoCo data\\
+    \hline
+    cam\_ & mjvCamera & Camera used for visualization\\
+    \hline
+    opt\_ & mjvOption & Visualization options\\
+    \hline
+    scn\_ & mjvScene & Visualization scene\\
+    \hline
+    con\_ & mjrContext & Custom GPU rendering context\\
+    \hline
+    init\_qpos\_ & std::vector<double> & Initial positions\\
+    \hline
+    init\_qvel\_ & std::vector<double> & Initial velocities\\
+    \hline
+    model\_path\_ & String & Absolute path to model xml file\\
+    \hline
+    frame\_skip\_ & Integer & Number of frames per simulation step\\
+    \hline
+    obs\_size\_ & Integer & Size of the observation space\\
+    \hline
+  \end{tabular}
+\end{center}
 
 \subsubsection{Environment Variables}
 None
