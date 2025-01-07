@@ -175,6 +175,106 @@ The following table is taken directly from the Module Guide document for this pr
 \newpage
 ~\newpage
 
+\section{MIS of MuJoCo Module} \label{MuJoCo Module}
+
+\subsection{Module}
+MujocoEnv
+
+\subsection{Uses}
+MuJoCo Framework (mujoco/mujoco.h), Task Environment (TaskEnv.h)
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+None
+
+\subsubsection{Exported Access Programs}
+\begin{center}
+  \begin{tabular}{p{4cm} p{4cm} p{3cm} p{2cm}}
+    mujocoEnv & - & - & - \\
+    \texttildelow mujocoEnv & - & - & - \\
+    reset & rng : mt19937\& & - & - \\
+    terminal & - & bool & - \\
+    sim\_step & action : std::vector\textless double\textgreater & Results & - \\
+    initialize\_simulation & - & - & Unable to load binary model \\
+    set\_state & qpos : std::vector\textless double\textgreater,  qvel : std::vector\textless double\textgreater & - & - \\
+    do\_simulation & ctrl : std::vector\textless double\textgreater, n\_frames: int & - & - \\
+    GetObsSize & - & int & - \\
+    \hline
+    \end{tabular}
+\end{center}
+
+\subsubsection{State Variables}
+
+\begin{itemize}
+  \item \textit{m\_}: pointer to the MuJoCo model (mjModel*).
+  \item \textit{d\_}: pointer to the MuJoCo data (mjData*).
+  \item \textit{cam\_}: camera used for visualization (mjvCamera).
+  \item \textit{opt\_}: visualization options (mjvOption).
+  \item \textit{scn\_}: visualization scene (mjvScene).
+  \item \textit{con\_}: custom GPU rendering context (mjrContext).  
+  \item \textit{init\_qpos\_}: initial positions (std::vector\textless double\textgreater). 
+  \item \textit{init\_qvel\_}: initial velocities (std::vector\textless double\textgreater).
+  \item \textit{model\_path\_}: absolute path to model xml file (String).
+  \item \textit{frame\_skip\_}: number of frames per simulation step (int).  
+  \item \textit{obs\_size\_}: size of the observation space (int).  
+\end{itemize}
+
+\subsubsection{Environment Variables}
+None
+
+\subsubsection{Assumptions}
+\begin{itemize}
+  \item The MuJoCo environment is properly installed on the user's device.
+\end{itemize}
+
+\subsubsection{Access Routine Semantics}
+\noindent mujocoEnv():
+\begin{itemize}
+\item output: $out :=$ self
+\item exception: none
+\end{itemize}
+\noindent \texttildelow mujocoEnv():
+\begin{itemize}
+\item transition: self $\rightarrow$ destroyed
+\item exception: none 
+\end{itemize}
+\noindent reset(\textit{rng}):
+\begin{itemize}
+\item transition: resets the environment to initial state using a random number generator, \textit{rng}.
+\item exception: none
+\end{itemize}
+\noindent terminal():
+\begin{itemize}
+\item transition: environment in terminal state ? terminal $:=$ true : terminal $:=$ false
+\item output: $out :=$ terminal
+\item exception: none
+\end{itemize}
+\noindent sim\_step(\textit{action}):
+\begin{itemize}
+\item transition: advances the simulation by one step using the given \textit{action}.
+\item output: $out :=$ Results object containing simulation outcomes.
+\item exception: none
+\end{itemize}
+\noindent initialize\_simulation():
+\begin{itemize}
+\item transition: initializes the simulation by loading the MuJoCo model and creating its data structure.
+\item exception: unable to load binary model error.
+\end{itemize}
+\noindent set\_state(\textit{qpos}, \textit{qvel}):
+\begin{itemize}
+\item transition: sets the positions and velocities, \textit{qpos} and \textit{qvel}, in the simulation state.
+\item exception: none
+\end{itemize}
+\noindent do\_simulation(\textit{ctrl}, \textit{n\_frames}):
+\begin{itemize}
+\item transition: executes \textit{n\_frames} of simulation steps with the given control inputs, \textit{ctrl}.
+\item exception: none 
+\end{itemize}
+
+\subsubsection{Local Functions}
+None
+
 \section{MIS of Visualization Module} \label{Visualization Module}
 
 \subsection{Module}
