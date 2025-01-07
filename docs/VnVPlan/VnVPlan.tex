@@ -3,6 +3,8 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{float}
+
 \hypersetup{
     colorlinks,
     citecolor=blue,
@@ -11,6 +13,7 @@
     urlcolor=blue
 }
 \usepackage[round]{natbib}
+\usepackage{longtable}
 
 \input{../Comments}
 \input{../Common}
@@ -30,457 +33,856 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+11/04/2024 & 0.0 & Initial draft of VnV plan.\\
 \bottomrule
 \end{tabularx}
 
 ~\\
-\wss{The intention of the VnV plan is to increase confidence in the software.
-However, this does not mean listing every verification and validation technique
-that has ever been devised.  The VnV plan should also be a \textbf{feasible}
-plan. Execution of the plan should be possible with the time and team available.
-If the full plan cannot be completed during the time available, it can either be
-modified to ``fake it'', or a better solution is to add a section describing
-what work has been completed and what work is still planned for the future.}
+% \wss{The intention of the VnV plan is to increase confidence in the software.
+% However, this does not mean listing every verification and validation technique
+% that has ever been devised.  The VnV plan should also be a \textbf{feasible}
+% plan. Execution of the plan should be possible with the time and team available.
+% If the full plan cannot be completed during the time available, it can either be
+% modified to ``fake it'', or a better solution is to add a section describing
+% what work has been completed and what work is still planned for the future.}
 
-\wss{The VnV plan is typically started after the requirements stage, but before
-the design stage.  This means that the sections related to unit testing cannot
-initially be completed.  The sections will be filled in after the design stage
-is complete.  the final version of the VnV plan should have all sections filled
-in.}
+% \wss{The VnV plan is typically started after the requirements stage, but before
+% the design stage.  This means that the sections related to unit testing cannot
+% initially be completed.  The sections will be filled in after the design stage
+% is complete.  the final version of the VnV plan should have all sections filled
+% in.}
 
 \newpage
 
 \tableofcontents
 
 \listoftables
-\wss{Remove this section if it isn't needed}
+% \wss{Remove this section if it isn't needed}
 
-\listoffigures
-\wss{Remove this section if it isn't needed}
+
+% \listoffigures
+% \wss{Remove this section if it isn't needed}
 
 \newpage
 
 \section{Symbols, Abbreviations, and Acronyms}
 
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{l l} 
-  \toprule		
-  \textbf{symbol} & \textbf{description}\\
-  \midrule 
-  T & Test\\
-  \bottomrule
-\end{tabular}\\
+\begin{table}[h]
+  \begin{tabular}{l l} 
+    \toprule		
+    \textbf{symbol} & \textbf{description}\\
+    \midrule 
+    TPG & Tangled Program Graphs\\
+    DNNs & Deep Neural Networks\\
+    RL & Reinforcement Learning\\
+    Multi-Task RL & Multi-Task Reinforcement Learning\\
+    SRS & Software Requirement Specification\\
+    FR & Functional Requirement\\
+    NFR & Non-Functional Requirement\\
+    MIS & Module Interface Specification\\
+    \bottomrule
+  \end{tabular}
+  \caption{Symbols, Abbreviations, and Acronyms}
+  \label{symbols}
+\end{table}
 
-\wss{symbols, abbreviations, or acronyms --- you can simply reference the SRS
-  \citep{SRS} tables, if appropriate}
 
-\wss{Remove this section if it isn't needed}
+% \wss{symbols, abbreviations, or acronyms --- you can simply reference the SRS
+%   \citep{SRS} tables, if appropriate}
+
+% \wss{Remove this section if it isn't needed}
 
 \newpage
 
 \pagenumbering{arabic}
 
-This document ... \wss{provide an introductory blurb and roadmap of the
-  Verification and Validation plan}
+This document provides the Software Validation and verification plan of the TPG Capstone Project. It consists of general information such as objectives and relevant documentation, plans for the system's verification and validation, as well as test descriptions for both system and unit tests. This information is subject to change at any point throughout the project and will be updated accordingly with changes mentioned in the revision history table.
 
 \section{General Information}
 
 \subsection{Summary}
 
-\wss{Say what software is being tested.  Give its name and a brief overview of
-  its general functions.}
+% \wss{Say what software is being tested.  Give its name and a brief overview of
+%   its general functions.}
+
+The software being tested is the TPG framework. More specifically, the overall workflow of the open-source repository as well as the interface between the TPG framework and the physics engine environment, MuJoCo. TPG is a research framework currently being developed by a team led by Dr. Stephen Kelly. The software’s general functions include training agents within the OpenAI Gymnasium environment using reinforcement learning techniques to achieve a certain task. With TPG, the data is outputted through a variety of methods. You may choose to visualize the data within multiple plots or view an OpenGL simulation of the agent with the best performance at the time of running. The software to be implemented within this repository is an interface that allows for experiments to be run with MuJoCo, a physics-engine simulator. This is in addition to creating a software development pipeline within the repository that allows for an easier development experience as changes are implemented. 
 
 \subsection{Objectives}
 
-\wss{State what is intended to be accomplished.  The objective will be around
-  the qualities that are most important for your project.  You might have
-  something like: ``build confidence in the software correctness,''
-  ``demonstrate adequate usability.'' etc.  You won't list all of the qualities,
-  just those that are most important.}
+% \wss{State what is intended to be accomplished.  The objective will be around
+%   the qualities that are most important for your project.  You might have
+%   something like: ``build confidence in the software correctness,''
+%   ``demonstrate adequate usability.'' etc.  You won't list all of the qualities,
+%   just those that are most important.}
 
-\wss{You should also list the objectives that are out of scope.  You don't have 
-the resources to do everything, so what will you be leaving out.  For instance, 
-if you are not going to verify the quality of usability, state this.  It is also 
-worthwhile to justify why the objectives are left out.}
+% \wss{You should also list the objectives that are out of scope.  You don't have 
+% the resources to do everything, so what will you be leaving out.  For instance, 
+% if you are not going to verify the quality of usability, state this.  It is also 
+% worthwhile to justify why the objectives are left out.}
 
-\wss{The objectives are important because they highlight that you are aware of 
-limitations in your resources for verification and validation.  You can't do everything, 
-so what are you going to prioritize?  As an example, if your system depends on an 
-external library, you can explicitly state that you will assume that external library 
-has already been verified by its implementation team.}
+% \wss{The objectives are important because they highlight that you are aware of 
+% limitations in your resources for verification and validation.  You can't do everything, 
+% so what are you going to prioritize?  As an example, if your system depends on an 
+% external library, you can explicitly state that you will assume that external library 
+% has already been verified by its implementation team.}
+
+Within the duration of the Capstone project, it is intended for this software to become fully integrated within the MuJoCo environment to allow for reinforcement learning to be performed. This is a crucial objective, as TPG is currently being used for research purposes. Allowing MuJoCo will assist in the research of Tangled Program Graphs and assist with solving potential research questions within this space of research. 
+\\\\
+Another objective for the software is to adhere to software engineering standards and practices. As this code is constantly being developed, good practices are required for the sustainability of the repository code. Building CI/CD pipelines that will automatically perform test cases, lint code that ensures code syntax follows Google C++ guidelines and the compilation of code will ensure a smooth development and prevent unnecessary development halts due to major code structure difficulties. 
+\\\\\
+Furthermore, another objective is to ensure that the TPG framework is an easy-to-install and seamless experience for developers who are on the major operating systems (MacOS, Linux, and Windows). This is important, as new researchers who aim to utilize TPG should be able to install and start reinforcement learning without hassle. As of right now, it is very difficult for users within MacOS to install the program without having to use any virtual machines. Additionally, if they do manage to start the environment, users are unable to view the OpenGL simulation. While installation and execution within Windows is much easier than MacOS, workarounds are required, which severely impact the usability of the software.
+\\\\\
+A future objective that won’t be covered within the scope of the capstone project is the ability to easily implement new environments other than MuJoCo further to enhance the usefulness of research projects for reinforcement learning. This will not be covered due to the time constraints within the capstone project and the overall complexity. However, if the opportunity to continue this project arises, this will be an objective that will be considered.
+\\\\\
+The above objectives describe the main ones for the duration of the capstone project. Any complex and complicated aspects that may be required to complete an objective will be assisted by utilizing open-source external libraries. 
+
 
 \subsection{Challenge Level and Extras}
 
-\wss{State the challenge level (advanced, general, basic) for your project.
-Your challenge level should exactly match what is included in your problem
-statement.  This should be the challenge level agreed on between you and the
-course instructor.  You can use a pull request to update your challenge level
-(in TeamComposition.csv or Repos.csv) if your plan changes as a result of the
-VnV planning exercise.}
+% \wss{State the challenge level (advanced, general, basic) for your project.
+% Your challenge level should exactly match what is included in your problem
+% statement.  This should be the challenge level agreed on between you and the
+% course instructor.  You can use a pull request to update your challenge level
+% (in TeamComposition.csv or Repos.csv) if your plan changes as a result of the
+% VnV planning exercise.}
 
-\wss{Summarize the extras (if any) that were tackled by this project.  Extras
-can include usability testing, code walkthroughs, user documentation, formal
-proof, GenderMag personas, Design Thinking, etc.  Extras should have already
-been approved by the course instructor as included in your problem statement.
-You can use a pull request to update your extras (in TeamComposition.csv or
-Repos.csv) if your plan changes as a result of the VnV planning exercise.}
+% \wss{Summarize the extras (if any) that were tackled by this project.  Extras
+% can include usability testing, code walkthroughs, user documentation, formal
+% proof, GenderMag personas, Design Thinking, etc.  Extras should have already
+% been approved by the course instructor as included in your problem statement.
+% You can use a pull request to update your extras (in TeamComposition.csv or
+% Repos.csv) if your plan changes as a result of the VnV planning exercise.}
+
+The challenge level of the project is \textbf{general} as agreed upon by the course instructor since this project is an extension of the current Tangled Program Graphs repository created by Dr. Stephen Kelly. The extras that will be tackled by this project include user documentation. This extra will allow new users to be guided through the installation and execution, as well as assist with any troubleshooting issues that may occur. Code documentation will also be completed to assist new research developers in navigating the new functionalities and integrations within the system. In addition, a DevOps pipeline integration will be integrated for developers and a research paper aims to be completed. 
 
 \subsection{Relevant Documentation}
 
-\wss{Reference relevant documentation.  This will definitely include your SRS
-  and your other project documents (design documents, like MG, MIS, etc).  You
-  can include these even before they are written, since by the time the project
-  is done, they will be written.  You can create BibTeX entries for your
-  documents and within those entries include a hyperlink to the documents.}
+% \wss{Reference relevant documentation.  This will definitely include your SRS
+%   and your other project documents (design documents, like MG, MIS, etc).  You
+%   can include these even before they are written, since by the time the project
+%   is done, they will be written.  You can create BibTeX entries for your
+%   documents and within those entries include a hyperlink to the documents.}
 
-\citet{SRS}
+The following documentation is considered to be relevant and may provide more context about the project outside of this document:
+\begin{itemize}
+  \item \textbf{Problem Statement and Goals} \citep{ProblemStatementGoals}\textbf{:} This document specifies a more detailed outline of the project's goals and purpose. This involves important stakeholder information, inputs and outputs of the project as well as information in regards to the project's environment.
+  \item \textbf{Development Plan:} \citep{DevelopmentPlan}\textbf{:} This document provides a guideline regarding all of the tools and technologies that will be utilized throughout this plan for verification and validation.
+  \item \textbf{Hazard Analysis:} \citep{HazardAnalysis}\textbf{:} This document describes detailed hazards that may occur throughout the development of the project. It specifies the system boundaries and components, as well as mitigation strategies in the form of safety and security requirements that may need verification and validation.
+  \item \textbf{Software Requirements Specification} \citep{SRS}\textbf{:} This document specifies all the non-functional and functional requirements that the project should satisfy by the end of the capstone period. This is useful for creating test cases that will verify and validate that the requirements have been met.
+  \item \textbf{Module Interface Specification:} This document describes how different components within the system will interact with each other. This is beneficial to determine the modules that will be present within the system, and help determine the scope of testing.
 
-\wss{Don't just list the other documents.  You should explain why they are relevant and 
-how they relate to your VnV efforts.}
+\end{itemize}
 
+% \wss{Don't just list the other documents.  You should explain why they are relevant and 
+% how they relate to your VnV efforts.}
 \section{Plan}
 
-\wss{Introduce this section.  You can provide a roadmap of the sections to
-  come.}
+% \wss{Introduce this section.  You can provide a roadmap of the sections to
+%   come.}
 
 \subsection{Verification and Validation Team}
 
-\wss{Your teammates.  Maybe your supervisor.
-  You should do more than list names.  You should say what each person's role is
-  for the project's verification.  A table is a good way to summarize this information.}
+\begin{longtable}{|p{0.5\linewidth}|p{0.5\linewidth}|}
+  \toprule {\bf Name and Roles} & {\bf Responsibilites}\\
+  \hline
+  {\bf Calvyn Siong}: CI/CD verification & Responsible for ensuring the continuous integration and continuous deployment (CI/CD) pipeline functions as intended, supporting automated testing, smooth deployments, and efficient integration of code changes. Verifies that the CI/CD pipeline adheres to project standards, minimizes deployment risks, and enables consistent checks for potential errors in the TPG framework.\\
+  \hline
+  {\bf Mark Cruz}: Code verification & Ensures that the codebase adheres to established software standards and project guidelines, including readability, maintainability, and overall code quality. Additionally, responsible for reviewing unit tests created to improve code reliability.\\
+  \hline
+
+  {\bf Richard Li}: Performance verification &Ensures that the framework’s performance metrics, including response times, computational efficiency, and resource usage, meet the standards necessary for the TPG framework. \\
+  \hline
+
+  {\bf Cyruss Allen Amante}: SRS verification &Validates that the TPG framework and its integrations fulfill both functional and non-functional requirements as outlined in the Software Requirements Specification (SRS). Ensures that each requirement is accurately implemented.\\
+  \hline
+  {\bf Edward Gao}: Data verification & Responsible for validating and verifying all data utilized by the TPG framework, including inputs and outputs. This includes ensuring data integrity and accuracy for agent-environment interactions and simulator-generated data.\\
+  \bottomrule
+  \caption{Verification and Validation Team}
+  \label{team}
+\end{longtable}
+
 
 \subsection{SRS Verification Plan}
 
-\wss{List any approaches you intend to use for SRS verification.  This may
-  include ad hoc feedback from reviewers, like your classmates (like your
-  primary reviewer), or you may plan for something more rigorous/systematic.}
+To verify the SRS, routine inspections will be conducted to ensure that the TPG framework meets both functional and non-functional requirements as outlined in the SRS. These inspections will involve regular reviews by the development team and collaborators such as Professor Stephen Kelly’s team with the TPG framework, who can provide ongoing insights and feedback as the project progresses. 
 
-\wss{If you have a supervisor for the project, you shouldn't just say they will
-read over the SRS.  You should explain your structured approach to the review.
-Will you have a meeting?  What will you present?  What questions will you ask?
-Will you give them instructions for a task-based inspection?  Will you use your
-issue tracker?}
+Through these routine reviews, task based inspection will be leveraged to audit the most up to date progress made towards the project. This would involve walking through key tasks or scenarios (ie: new Mujoco environments, CI/CD integrations) that the system must support, and inspecting how each task complies to the SRS’s standards. Each review will employ a structured, scenario-based checklist that focuses on the specific tasks that the TPG framework needs to support, such as configuring simulations, setting up interactions with MuJoCo, and evaluating reinforcement learning performance metrics. By inspecting the SRS against these real-world tasks, the verification team will ensure that each requirement is clearly defined and actionable, supporting the development team in implementing functionality that aligns with user and system needs. In addition, the tasks/features implemented will be cross checked with the list of issues during the review section to display how each task satisfies the issue to ensure traceability.
 
-\wss{Maybe create an SRS checklist?}
 
 \subsection{Design Verification Plan}
 
-\wss{Plans for design verification}
+The plan is to verify that the design of the modifications made to the TPG framework meets the intended specifications and supports functionality aligned with project objectives set by Dr. Stephen Kelly. Thus as the primary stakeholders, Dr.Kelly's team will actively participate in hands-on reviews to verify the framework's design.
 
-\wss{The review will include reviews by your classmates}
+This verification will include design review meetings and usability assessments. Design review meetings will be held monthly during regular project meetings, providing an opportunity for stakeholders to give informal feedback on the design. These reviews will address specific design elements, such as compatibility with the MuJoCo integration, degree of fitness changes to the new integrations, and robustness of the results.
 
-\wss{Create a checklists?}
+In addition to the regular reviews, usability assessments will be conducted with additional members from Dr. Kelly's team, focusing on the testing infrastructure being added to the TPG framework. Feedback gathered from these sessions will guide iterative design improvements, ensuring the framework's usability.
+
 
 \subsection{Verification and Validation Plan Verification Plan}
 
-\wss{The verification and validation plan is an artifact that should also be
-verified.  Techniques for this include review and mutation testing.}
-
-\wss{The review will include reviews by your classmates}
-
-\wss{Create a checklists?}
+To verify the Verification and Validation Plan itself, peer review will be necessary to ensure that the listed test plans are properly conducted. The team will also conduct a review session with Dr Kelly when the project is completed. Dr. Kelly will review the Verification and Validation (V\&V) document with the team to ensure that all tests outlined in the V\&V plan were executed successfully. This collaborative review will confirm that the system meets the required specifications and that all verification and validation criteria have been addressed satisfactorily.
 
 \subsection{Implementation Verification Plan}
 
-\wss{You should at least point to the tests listed in this document and the unit
-  testing plan.}
+The implementation verification process will focus on ensuring that our modifications to TPG and the MuJoCo integration meet the project's core requirements. This will be accomplished through several complementary approaches. \\
 
-\wss{In this section you would also give any details of any plans for static
-  verification of the implementation.  Potential techniques include code
-  walkthroughs, code inspection, static analyzers, etc.}
+Code review will serve as the primary verification mechanism. All pull requests will require review by at least one other team member before merging. During these reviews, we will verify adherence to the Google C++ Style Guide, completeness of documentation, potential impacts on existing TPG functionality, and the correctness of MuJoCo integration points. \\
 
-\wss{The final class presentation in CAS 741 could be used as a code
-walkthrough.  There is also a possibility of using the final presentation (in
-CAS741) for a partial usability survey.}
+Version control validation will be maintained through strict repository management practices. Branch protection rules will prevent direct pushes to the main branch, ensuring all changes go through the required review process. We will maintain regular synchronization between the GitHub and GitLab repositories to ensure consistency across development platforms. \\
+
+Manual testing and inspection will verify that core TPG functionality remains intact. This includes verifying program generation and mutation, team/graph evolution, and action selection mechanisms. For the MuJoCo integration specifically, we will verify basic environment setup, proper handling of state and action spaces, and compare performance against the existing implementations such as CartPole as a baseline.
 
 \subsection{Automated Testing and Verification Tools}
 
-\wss{What tools are you using for automated testing.  Likely a unit testing
-  framework and maybe a profiling tool, like ValGrind.  Other possible tools
-  include a static analyzer, make, continuous integration tools, test coverage
-  tools, etc.  Explain your plans for summarizing code coverage metrics.
-  Linters are another important class of tools.  For the programming language
-  you select, you should look at the available linters.  There may also be tools
-  that verify that coding standards have been respected, like flake9 for
-  Python.}
+Our primary automated verification will be implemented through a GitHub Actions CI/CD pipeline. This pipeline will perform automated build verification across multiple platforms including Linux, Mac, and Windows to ensure cross-platform compatibility. It will also run basic integration tests and enforce code style requirements. \\
 
-\wss{If you have already done this in the development plan, you can point to
-that document.}
-
-\wss{The details of this section will likely evolve as you get closer to the
-  implementation.}
+For manual verification, we will leverage TPG's existing suite of plotting and statistics tools to analyze performance and behavior. The OpenGL visualization capabilities built into TPG will allow us to inspect agent behaviors directly. Similarly, MuJoCo's built-in visualization tools will provide another avenue for verifying correct environment integration and agent behavior.
 
 \subsection{Software Validation Plan}
 
-\wss{If there is any external data that can be used for validation, you should
-  point to it here.  If there are no plans for validation, you should state that
-  here.}
+The software validation plan begins with establishing CartPole as a baseline for comparison. We will compare TPG's performance between the existing environment implementation and the new MuJoCo implementation. This comparison will include validating expected agent behaviors through visual inspection using both OpenGL and MuJoCo visualizations, as well as verifying that fitness scores achieve similar thresholds in both implementations. \\
 
-\wss{You might want to use review sessions with the stakeholder to check that
-the requirements document captures the right requirements.  Maybe task based
-inspection?}
+Core integration validation will focus on verifying TPG's ability to properly interact with MuJoCo environments. We will verify that TPG can successfully initialize MuJoCo environments, receive valid state information, send valid actions, and receive appropriate rewards. Throughout the training process, we will monitor the environment's response to agent actions and verify training progression through both fitness scores and visual behavior inspection. \\
 
-\wss{For those capstone teams with an external supervisor, the Rev 0 demo should 
-be used as an opportunity to validate the requirements.  You should plan on 
-demonstrating your project to your supervisor shortly after the scheduled Rev 0 demo.  
-The feedback from your supervisor will be very useful for improving your project.}
+Documentation validation will ensure that all necessary information is available to users and future developers. This includes verifying the completeness and accuracy of installation guides, with particular attention to environment setup steps and dependency management. Usage documentation will cover running experiments, visualizing results, and common troubleshooting procedures. \\
 
-\wss{For teams without an external supervisor, user testing can serve the same purpose 
-as a Rev 0 demo for the supervisor.}
+Research validation will be conducted through regular review meetings with Dr. Kelly to ensure the implementation supports the project's research goals. These reviews will validate that basic research capabilities are preserved and verify that new MuJoCo environments can be added as needed. We will assess TPG's behavior in baseline environments to ensure it provides a solid foundation for future research experiments. \\
 
-\wss{This section might reference back to the SRS verification section.}
+The entire validation process will be iterative, with feedback incorporated throughout development. Our focus is on ensuring the basic integration is sound and providing a foundation that will support future research experiments. Rather than attempting to validate against specific performance criteria, we will validate that the implementation provides the necessary capabilities for exploring research questions about TPG's behavior in MuJoCo environments.
 
 \section{System Tests}
 
-\wss{There should be text between all headings, even if it is just a roadmap of
-the contents of the subsections.}
+% \wss{There should be text between all headings, even if it is just a roadmap of
+% the contents of the subsections.}
 
 \subsection{Tests for Functional Requirements}
 
-\wss{Subsets of the tests may be in related, so this section is divided into
-  different areas.  If there are no identifiable subsets for the tests, this
-  level of document structure can be removed.}
+The following section covers the test cases for functional requirements discussed in the SRS document. Every test is defined with control, type, initial state, input and output values, test case derivation and how the testing will be performed. Using this approach of testing will maintain the high-quality experience that users may look for when interacting with a software.
 
-\wss{Include a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good here.}
+\subsubsection{Interface that is Compatible with \href{https://mujoco.org/}{MuJoCo}}
 
-\subsubsection{Area of Testing1}
-
-\wss{It would be nice to have a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good here.  If a section
-  covers tests for input constraints, you should reference the data constraints
-  table in the SRS.}
-		
-\paragraph{Title for Test}
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item FR-1
+  \item FR-8
+\end{itemize}
 
 \begin{enumerate}
 
-\item{test-id1\\}
+\item{FR-SLN1}
 
-Control: Manual versus Automatic
+Control: Manual
 					
-Initial State: 
+Initial State: User has the repository open on their code editor with a terminal open to the experiment directory
 					
-Input: 
+Input: This \href{https://github.com/TPGEngine/tpg/blob/main/src/scripts/run/tpg-run-mpi.sh}{tpg-run-mpi.sh -n 4} script executes a given experiment
 					
-Output: \wss{The expected result for the given inputs.  Output is not how you
-are going to return the results of the test.  The output is the expected
-result.}
+Output: The output of the script is \textbf{Starting run ...} printed on the terminal. Note the experiment is running in the background.
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+Test Case Derivation: The script successfully executes the experiment and the output is printed. A user could also run htop to see the processes of the experiment running to confirm. Also another script \href{https://github.com/TPGEngine/tpg/blob/main/src/scripts/run/tpg-run-mpi.sh}{tpg-run-mpi.sh -m 1} can be run to output an OpenGL visualization of the experiment. 
+How test will be performed: The test can be performed across different Operating Systems. The interaction with the system is through the command line.
 					
-How test will be performed: 
-					
-\item{test-id2\\}
+\item{FR-SLN2}
 
-Control: Manual versus Automatic
+Control: Manual
 					
-Initial State: 
+Initial State: User wants to run the experiment using the Digital Research Alliance of Canada computational clusters. They have the experiment directory of the experiment they want to run open on the terminal.
 					
-Input: 
+Input: The TPG framework code base and a specific shell script \href{https://github.com/TPGEngine/tpg/blob/main/src/scripts/run/tpg-run-slurm.sh}{tpg-run-slurm.sh}
 					
-Output: \wss{The expected result for the given inputs}
+Output: The experiment can be trained and run for long periods of time in the cloud environment. The .std log files can be downloaded from the cloud environment which provides details of the training process in the cloud.
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+Test Case Derivation: After the experiment is run in the cloud environment, the user can download the .std logs to analyze what happened during the training process.
 
-How test will be performed: 
+How test will be performed: The test can be performed across different operating systems (Linux, MacOS, Windows) depending on what OS the user is using. The interaction with this test is through the command line.
 
 \end{enumerate}
 
-\subsubsection{Area of Testing2}
+\subsubsection{Experiment Visualization}
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item FR-2
+\end{itemize}
 
-...
+\begin{enumerate}
+ \item{FR-SLN3}
+
+  Control: Manual
+          
+  Initial State: Experiment has already started running. \textbf{Starting run ...} is printed on the terminal.
+            
+  Input: This \href{https://github.com/TPGEngine/tpg/blob/main/src/scripts/run/tpg-run-mpi.sh}{tpg-run-mpi.sh -m 1} script visualizes the current experiment
+            
+  Output: OpenGL animation of the current experiment is displayed on the users screen.
+
+  Test Case Derivation: Upon the script the above being run, the current experiment needs to be running in the background and can be validated running htop to see if those processes are running. When the script is run, the user will be able to see the animation appear on their display. The pop up is very visible and the user can see the experiment running in real time.
+            
+  How test will be performed: The test can be performed across different operating systems. The interaction with the system is through the command line.
+
+\end{enumerate}
+
+\subsubsection{Github Actions CI/CD Pipeline}
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item FR-3
+  \item FR-4
+  \item FR-5
+  \item FR-7
+\end{itemize}
+
+\begin{enumerate}
+  \item{FR-SLN4}
+  Control: Automated + Manual
+            
+  Initial State: New PR has been made and the changes have been approved and ready to merge back into main (Automated). Or the user wants to manually trigger the pipeline to merge code changes into the main branch (manual). 
+            
+  Input: New changes to the code base have been made and a PR has been made to merge the changes back into the main branch.
+            
+  Output: New code changes are merged to the main branch, if the validation fails then the user is notified that the pipeline has failed.
+
+  Test Case Derivation: When new code changes are being merged to the main branch, the Github Actions CI/CD pipeline is triggered to run to build, test, and deploy the new code. The pipeline is designed to automatically perform all those tasks.
+            
+  How test will be performed: Whenever new code changes are made, pipeline will be triggered. The tests will run on any web browser that supports GitHub.
+
+\end{enumerate}
+
+\subsubsection{Software Engineering Practices}
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item FR-6
+\end{itemize}
+
+\begin{enumerate}
+  \item{FR-SLN5}
+  Control: Automated
+            
+  Initial State: User has just made code changes and pushed to a feature branch.
+            
+  Input: Code that has been modified by the user.
+            
+  Output: Within our CI/CD pipeline, a “pre-commit” pipeline is ran and if successful it lints the files that were modified.
+  
+  Test Case Derivation: The user is able to see formatting changes proposed by clang-tidy and clang-format (two C++ linters that abide by the Google C++ style guide). The user can then choose to accept or reject the changes.
+            
+  How test will be performed: Whenever new code is committed after a user makes modifications to a codebase, the files which they edited will be linted to ensure proper formatting and the user will have the opportunity to manually validate.
+\end{enumerate}
 
 \subsection{Tests for Nonfunctional Requirements}
 
-\wss{The nonfunctional requirements for accuracy will likely just reference the
-  appropriate functional tests from above.  The test cases should mention
-  reporting the relative error for these tests.  Not all projects will
-  necessarily have nonfunctional requirements related to accuracy.}
+The following section covers the test cases for non-functional requirements discussed in the SRS document. This focuses on the usability, performance, maintainability, operation and security of the system. Every test is defined with control, type, initial state, input and output values, test case derivation and how the testing will be performed. For control, various types of testing will be used, ranging from automated unit and integration testing to individuals manually interacting with the TPG framework to validate the system’s behavior. Using this approach of testing will maintain the high-quality experience that users may look for when interacting with a software.
 
-\wss{For some nonfunctional tests, you won't be setting a target threshold for
-passing the test, but rather describing the experiment you will do to measure
-the quality for different inputs.  For instance, you could measure speed versus
-the problem size.  The output of the test isn't pass/fail, but rather a summary
-table or graph.}
+\subsubsection{Clear and Comprehensive Documentation}
 
-\wss{Tests related to usability could include conducting a usability test and
-  survey.  The survey will be in the Appendix.}
-
-\wss{Static tests, review, inspections, and walkthroughs, will not follow the
-format for the tests given below.}
-
-\wss{If you introduce static tests in your plan, you need to provide details.
-How will they be done?  In cases like code (or document) walkthroughs, who will
-be involved? Be specific.}
-
-\subsubsection{Area of Testing1}
-		
-\paragraph{Title for Test}
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item 11.1.1, 11.3.1, 11.3.2, 11.4.1, 11.4.2, 11.5.1, 13.4, 14.1.2, 14.2.1
+\end{itemize}
 
 \begin{enumerate}
 
-\item{test-id1\\}
+\item{NFR-SLN1}
 
-Type: Functional, Dynamic, Manual, Static etc.
-					
-Initial State: 
-					
-Input/Condition: 
-					
-Output/Result: 
-					
-How test will be performed: 
-					
-\item{test-id2\\}
+Control: Manual
 
-Type: Functional, Dynamic, Manual, Static etc.
+Type: Usability, Operational and Environmental, Maintainability and Support
 					
-Initial State: 
+Initial State: System has documentation that covers all key sections is available on the repository, and is accessible to users
 					
-Input: 
+Input/Condition: Users open the documentation to get started using the framework
 					
-Output: 
-					
-How test will be performed: 
+Output/Result: Users are able to locate and follow along the instructions without any confusion or having to refer an outside source (ie. StackOverflow, Github Docs)
+
+Test Case Derivation: Concise and comprehensive documentation of the framework including helpful concepts, and step-by-step guide is provided within the README files inside the repository
+
+How test will be performed:
+  \begin{itemize}
+    \item Users will be granted access to perform tasks execution within the framework
+    \item Users will be instructed to follow along the published documentation, and locate specific information
+    \item At the end, a survey is available for users to provide a feedback on the documentation from a scale of 1 to 10
+  \end{itemize}
 
 \end{enumerate}
 
-\subsubsection{Area of Testing2}
+\subsubsection{Real-time, Accurate Message Logging}
 
-...
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item 11.1.2, 15.4.1
+\end{itemize}
+
+\begin{enumerate}
+
+\item NFR-SLN2
+
+Control: Automated + Manual
+
+Type: Usability, Security
+
+Initial State: System is in idle, and ready to log messages for tasks
+
+Input/Condition: User performs an action or an error during the action occurs
+
+Output/Result: Logging of messages in real-time with low latency
+
+Test Case Derivation: Each method, and command available to the user includes some sort of logging to provide users with step-by-step insights
+
+How test will be performed:
+\begin{itemize}
+  \item Manual
+  \begin{itemize}
+    \item Monitor message log in real-time, verify timestamp of each messages is accurate and confirm the action occurring at that time is aligned with the logs. Often, users will receive notification of a survey to provide a feedback on the system's logging from a scale of 1 to 10
+  \end{itemize}
+  \item Automated
+  \begin{itemize}
+    \item Create unit tests that checks message logs from certain functions and validate that the messages are sent with no later than 1 second delay through the timestamps
+  \end{itemize}
+\end{itemize}
+
+\end{enumerate}
+
+\subsubsection{Customizable MuJoCo Simulation Parameters}
+
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item 11.2.1
+\end{itemize}
+
+\begin{enumerate}
+\item NFR-SLN3
+
+Control: Manual
+
+Type: Usability
+
+Initial State: MuJoCo is integrated within TPG.
+
+Input/Condition: User modifies specified fields inside parameters.txt or overwrites default value of fields using command line flags.
+
+Output/Result: Simulations adhere to the desired parameters.
+
+Test Case Derivation: MuJoCo has default parameters that can be customized by the users if necessary, to adjust the behavior of every environment based on their specific needs.
+
+How test will be performed:
+\begin{itemize}
+  \item Modify MuJoCo parameters inside parameters.txt, run the simulations and verify that the behavior of the newly adjusted simulations complies with expected outcome from calculations
+  \item Within the parameters.txt, a survey is available for users to provide feedback regarding the experience of using custom parameters from a scale of 1 to 10
+\end{itemize}
+
+\end{enumerate}
+
+\subsubsection{High Numerical Precision in Computation}
+
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item 12.2
+\end{itemize}
+
+\begin{enumerate}
+\item NFR-SLN4
+
+Control: Automated + Manual
+
+Type: Performance
+
+Initial State: System is initialized with calculations in mind for computation.
+
+Input/Condition: Users perform calculations that require high numerical precision such as floating point with low computation errors.
+
+Output/Result: Calculation results are within acceptable tolerance limits such as computational errors below 0.0001.
+
+Test Case Derivation: Due to finite number of available bits for storing numbers, computers are bound to have an error on numerical computation if numbers are too small or too big.
+
+How test will be performed:
+\begin{itemize}
+  \item Manual:
+  \begin{itemize}
+    \item Perform tasks that are precision critical and inspect their results by comparing to expected numerical values and verify that the computational error is below 0.0001
+  \end{itemize}
+  \item Automated:
+  \begin{itemize}
+    \item Create and run automated testing for functions comprising of high precision results and assert that the computational error is below 0.0001 by comparing expected output to real output
+  \end{itemize}
+\end{itemize}
+
+\end{enumerate}
+
+\subsubsection{Handling Invalid Inputs and Unexpected Conditions}
+
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item 12.3, 12.6, 15.5.2
+\end{itemize}
+
+\begin{enumerate}
+\item NFR-SLN5
+
+Control: Automated
+
+Type: Performance, Security
+
+Initial State: System is idle and ready to process normal and unusual inputs.
+
+Input/Condition: Unusual inputs to simulate model failures.
+
+Output/Result: System shows meaningful error logs, and handles exceptions without terminating.
+
+Test Case Derivation: System will use try and catch blocks where possible to handle errors gracefully.
+
+How test will be performed:
+\begin{itemize}
+  \item Create and run automated unit and integration tests to check various types of invalid inputs such as infinity, and NaN
+  \item Verify that the system recovers gracefully and outputs a descriptive error message
+\end{itemize}
+
+\end{enumerate}
+
+\subsubsection{Cross Platform Compatibility}
+
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item 13.1, 14.2.2, 14.3.2
+\end{itemize}
+
+\begin{enumerate}
+\item NFR-SLN6
+
+Control: Manual
+
+Type: Operational and Environmental, Maintainability and Support
+
+Initial State: System is available to be downloaded across different OS environments.
+
+Input/Condition: Users perform core functionalities of the framework.
+
+Output/Result: System provides outputs that are similar across different OS environments.
+
+Test Case Derivation: TPG and the MuJoCo environment integration are used across different OS platforms (Windows, Linux, MacOS).
+
+How test will be performed:
+\begin{itemize}
+  \item Users will run the framework across different OS environments
+  \item Every user is tasked to run various core functionalities and verify that behaviors are similar across OS
+\end{itemize}
+
+\end{enumerate}
+
+\subsubsection{Secured and Robust Repository Management}
+
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item 14.2.1, 15.1.1, 15.1.2, 15.2.1, 15.5.1
+\end{itemize}
+
+\begin{enumerate}
+\item NFR-SLN7
+
+Control: Manual
+
+Type: Maintainability and Support, Security
+
+Initial State: System is available to be modified on a version control tool such as GitHub.
+
+Input/Condition: Repository is accessed by authorized and unauthorized users through various Git actions.
+
+Output/Result: Access attempts are blocked for unauthorized users, and granted for authorized users.
+
+Test Case Derivation: Repository must be protected to avoid unauthorized and defective code from getting integrated within the system.
+
+How test will be performed:
+\begin{itemize}
+  \item Simulate unauthorized and authorized access attempts on the repository
+  \item Validate that security protocols such as role-based access control, two-factor authentication, and protected branch are functional
+\end{itemize}
+
+\end{enumerate}
+
+\subsubsection{Data Privacy through Obfuscation}
+
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item 15.3.1
+\end{itemize}
+
+\begin{enumerate}
+\item NFR-SLN8
+
+Control: Automated + Manual
+
+Type: Security
+
+Initial State: System has the capability of storing and visualizing data in different shapes and formats.
+
+Input/Condition: Sensitive data is pushed into the public repository through Git.
+
+Output/Result: Obfuscation of sensitive data is implemented, protecting privacy of any entity.
+
+Test Case Derivation: Data, mostly stored in CSV or .txt files, are publicly stored across the framework.
+
+How test will be performed:
+\begin{itemize}
+  \item Automated: Create and run automated unit tests that verifies that ensures data shown in logs, files, and messages are obfuscated
+  \item Manual: Manually check stored data through each file within the framework
+\end{itemize}
+
+\end{enumerate}
+
+\subsubsection{Compliance with C++ Coding Best Practices}
+
+The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+  \item 13.3, 17.1, 17.2
+\end{itemize}
+
+\begin{enumerate}
+\item NFR-SLN9
+
+Control: Automated
+
+Type: Operational and Environmental, Compliance
+
+Initial State: Codebase implements an established Google C++ Style Guide with proper support and documentation.
+
+Input/Condition: Codebase is analyzed for its compliance with the style guide.
+
+Output/Result: Codebase follows the style guide, improving maintainability and readability.
+
+Test Case Derivation: Following a C++ style guide will ensure the cleanliness and efficient maintenance of the codebase.
+
+How test will be performed:
+\begin{itemize}
+  \item clang-tidy and clang-format, standard linters and formatters for C++, are ran within the CI/CD pipeline to check for new code’s compliance with the Google's style guide
+\end{itemize}
+
+\end{enumerate}
+
 
 \subsection{Traceability Between Test Cases and Requirements}
 
-\wss{Provide a table that shows which test cases are supporting which
-  requirements.}
+\begin{longtable}{|p{0.45\linewidth}|p{0.45\linewidth}|}
+  \hline
+  \textbf{Req. ID} & \textbf{System Test ID} \\
+  \hline
+  FR-1 & FR-SLN1, FR-SLN2 \\
+  \hline
+  FR-2 & FR-SLN3 \\
+  \hline
+  FR-3 & FR-SLN4 \\
+  \hline
+  FR-4 & FR-SLN4 \\
+  \hline
+  FR-5 & FR-SLN4 \\
+  \hline
+  FR-6 & FR-SLN5 \\
+  \hline
+  FR-7 & FR-SLN4 \\
+  \hline
+  FR-8 & FR-SLN1, FR-SLN2 \\
+  \hline
+  NFR-11.1.1 & NFR-SLN1 \\
+  \hline
+  NFR-11.1.2 & NFR-SLN2 \\
+  \hline
+  NFR-11.2.1 & NFR-SLN3 \\
+  \hline
+  NFR-11.3.1 & NFR-SLN1 \\
+  \hline
+  NFR-11.3.2 & NFR-SLN1 \\
+  \hline
+  NFR-11.4.1 & NFR-SLN1 \\
+  \hline
+  NFR-11.4.2 & NFR-SLN1 \\
+  \hline
+  NFR-11.5.1 & NFR-SLN1 \\
+  \hline
+  NFR-12.2 & NFR-SLN4 \\
+  \hline
+  NFR-12.3 & NFR-SLN5 \\
+  \hline
+  NFR-12.6 & NFR-SLN5 \\
+  \hline
+  NFR-13.1 & NFR-SLN6 \\
+  \hline
+  NFR-13.3 & NFR-SLN9 \\
+  \hline
+  NFR-13.4 & NFR-SLN1 \\
+  \hline
+  NFR-14.1.2 & NFR-SLN1 \\
+  \hline
+  NFR-14.2.1 & NFR-SLN1, NFR-SLN7 \\
+  \hline
+  NFR-14.2.2 & NFR-SLN6 \\
+  \hline
+  NFR-14.3.2 & NFR-SLN6 \\
+  \hline
+  NFR-15.1.1 & NFR-SLN7 \\
+  \hline
+  NFR-15.1.2 & NFR-SLN7 \\
+  \hline
+  NFR-15.2.1 & NFR-SLN7 \\
+  \hline
+  NFR-15.3.1 & NFR-SLN8 \\
+  \hline
+  NFR-15.4.1 & NFR-SLN2 \\
+  \hline
+  NFR-15.5.1 & NFR-SLN7 \\
+  \hline
+  NFR-15.5.2 & NFR-SLN5 \\
+  \hline
+  NFR-17.1 & NFR-SLN9 \\
+  \hline
+  NFR-17.2 & NFR-SLN9 \\
+  \hline
+  \caption{Traceability Between Test Cases and Requirements}
+  \label{traceability}
+\end{longtable}
+
 
 \section{Unit Test Description}
 
-\wss{This section should not be filled in until after the MIS (detailed design
-  document) has been completed.}
+This section will be completed after the detailed design document has been completed.
 
-\wss{Reference your MIS (detailed design document) and explain your overall
-philosophy for test case selection.}  
+% \wss{This section should not be filled in until after the MIS (detailed design
+%   document) has been completed.}
 
-\wss{To save space and time, it may be an option to provide less detail in this section.  
-For the unit tests you can potentially layout your testing strategy here.  That is, you 
-can explain how tests will be selected for each module.  For instance, your test building 
-approach could be test cases for each access program, including one test for normal behaviour 
-and as many tests as needed for edge cases.  Rather than create the details of the input 
-and output here, you could point to the unit testing code.  For this to work, you code 
-needs to be well-documented, with meaningful names for all of the tests.}
+% \wss{Reference your MIS (detailed design document) and explain your overall
+% philosophy for test case selection.}  
+
+% \wss{To save space and time, it may be an option to provide less detail in this section.  
+% For the unit tests you can potentially layout your testing strategy here.  That is, you 
+% can explain how tests will be selected for each module.  For instance, your test building 
+% approach could be test cases for each access program, including one test for normal behaviour 
+% and as many tests as needed for edge cases.  Rather than create the details of the input 
+% and output here, you could point to the unit testing code.  For this to work, you code 
+% needs to be well-documented, with meaningful names for all of the tests.}
 
 \subsection{Unit Testing Scope}
 
-\wss{What modules are outside of the scope.  If there are modules that are
-  developed by someone else, then you would say here if you aren't planning on
-  verifying them.  There may also be modules that are part of your software, but
-  have a lower priority for verification than others.  If this is the case,
-  explain your rationale for the ranking of module importance.}
+% To be added after detailed design document is completed.
+% \wss{What modules are outside of the scope.  If there are modules that are
+%   developed by someone else, then you would say here if you aren't planning on
+%   verifying them.  There may also be modules that are part of your software, but
+%   have a lower priority for verification than others.  If this is the case,
+%   explain your rationale for the ranking of module importance.}
+This subsection will be completed after the detailed design document has been completed.
 
 \subsection{Tests for Functional Requirements}
 
-\wss{Most of the verification will be through automated unit testing.  If
-  appropriate specific modules can be verified by a non-testing based
-  technique.  That can also be documented in this section.}
+This subsection will be completed after the detailed design document has been completed.
+
+% To be added after detailed design document is completed.
+
+% \wss{Most of the verification will be through automated unit testing.  If
+%   appropriate specific modules can be verified by a non-testing based
+%   technique.  That can also be documented in this section.}
 
 \subsubsection{Module 1}
 
-\wss{Include a blurb here to explain why the subsections below cover the module.
-  References to the MIS would be good.  You will want tests from a black box
-  perspective and from a white box perspective.  Explain to the reader how the
-  tests were selected.}
+This subsection will be completed after the detailed design document has been completed.
 
-\begin{enumerate}
 
-\item{test-id1\\}
+% % \wss{Include a blurb here to explain why the subsections below cover the module.
+% %   References to the MIS would be good.  You will want tests from a black box
+% %   perspective and from a white box perspective.  Explain to the reader how the
+% %   tests were selected.}
 
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
+% \begin{enumerate}
+
+% \item{test-id1\\}
+
+% Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
+%   be automatic}
 					
-Initial State: 
+% Initial State: 
 					
-Input: 
+% Input: 
 					
-Output: \wss{The expected result for the given inputs}
+% Output: \wss{The expected result for the given inputs}
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+% Test Case Derivation: \wss{Justify the expected value given in the Output field}
 
-How test will be performed: 
+% How test will be performed: 
 					
-\item{test-id2\\}
+% \item{test-id2\\}
 
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
+% Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
+%   be automatic}
 					
-Initial State: 
+% Initial State: 
 					
-Input: 
+% Input: 
 					
-Output: \wss{The expected result for the given inputs}
+% Output: \wss{The expected result for the given inputs}
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+% Test Case Derivation: \wss{Justify the expected value given in the Output field}
 
-How test will be performed: 
+% How test will be performed: 
 
-\item{...\\}
+% \item{...\\}
     
-\end{enumerate}
+% \end{enumerate}
+
 
 \subsubsection{Module 2}
+This subsection will be completed after the detailed design document has been completed.
 
-...
+% ...
 
 \subsection{Tests for Nonfunctional Requirements}
+This subsection will be completed after the detailed design document has been completed.
 
-\wss{If there is a module that needs to be independently assessed for
-  performance, those test cases can go here.  In some projects, planning for
-  nonfunctional tests of units will not be that relevant.}
 
-\wss{These tests may involve collecting performance data from previously
-  mentioned functional tests.}
+
+% \wss{If there is a module that needs to be independently assessed for
+%   performance, those test cases can go here.  In some projects, planning for
+%   nonfunctional tests of units will not be that relevant.}
+
+% \wss{These tests may involve collecting performance data from previously
+%   mentioned functional tests.}
 
 \subsubsection{Module ?}
+This subsection will be completed after the detailed design document has been completed.
+
+
 		
-\begin{enumerate}
+% \begin{enumerate}
 
-\item{test-id1\\}
+% \item{test-id1\\}
 
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
+% Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
+%   be automatic}
 					
-Initial State: 
+% Initial State: 
 					
-Input/Condition: 
+% Input/Condition: 
 					
-Output/Result: 
+% Output/Result: 
 					
-How test will be performed: 
+% How test will be performed: 
 					
-\item{test-id2\\}
+% \item{test-id2\\}
 
-Type: Functional, Dynamic, Manual, Static etc.
+% Type: Functional, Dynamic, Manual, Static etc.
 					
-Initial State: 
+% Initial State: 
 					
-Input: 
+% Input: 
 					
-Output: 
+% Output: 
 					
-How test will be performed: 
+% How test will be performed: 
 
-\end{enumerate}
+% \end{enumerate}
 
 \subsubsection{Module ?}
-
-...
+This subsection will be completed after the detailed design document has been completed.
+% ...
 
 \subsection{Traceability Between Test Cases and Modules}
+This subsection will be completed after the detailed design document has been completed.
 
-\wss{Provide evidence that all of the modules have been considered.}
+
+% \wss{Provide evidence that all of the modules have been considered.}
 				
 \bibliographystyle{plainnat}
 
@@ -490,40 +892,113 @@ How test will be performed:
 
 \section{Appendix}
 
-This is where you can place additional information.
+% This is where you can place additional information.
 
 \subsection{Symbolic Parameters}
 
-The definition of the test cases will call for SYMBOLIC\_CONSTANTS.
-Their values are defined in this section for easy maintenance.
+% The definition of the test cases will call for SYMBOLIC\_CONSTANTS.
+% Their values are defined in this section for easy maintenance.
+
+This section is not applicable as there are no symbolic parameters used within the project.
+
 
 \subsection{Usability Survey Questions?}
 
-\wss{This is a section that would be appropriate for some projects.}
+% \wss{This is a section that would be appropriate for some projects.}
+
+Here are some questions that may be asked regarding usability in the form of a survey:
+\begin{enumerate}
+  \item What operating system do you use?
+  \begin{enumerate}
+    \item Windows
+    \item Mac OS
+    \item Linux
+  \end{enumerate}
+  \item On a scale from 1-10 (higher means better), how would you rate your installation experience?
+  \item On a scale from 1-10 (higher means easier), how easy would you say it was to execute a simulation environment using MuJoCo?
+  \item On a scale from 1-10 (higher means better), how would you rate the readability of the documentation?
+  \item On a scale from 1-10 (higher means better), how would you rate the usability and usefulness of the system's logging?
+  \item On a scale from 1-10 (higher means better), how would you rate the overall experience of utilizing and modifying the system's custom parameters?
+  \item If applicable, on a scale from 1-10 (higher means easier), how easy was it to implement changes to the code?
+  \item If applicable, did you have any trouble integrating your changes to the remote repository?
+  \item Do you have any feedback or suggestions when it comes to the usability of the system? Please write them down below.
+\end{enumerate}
 
 \newpage{}
 \section*{Appendix --- Reflection}
 
-\wss{This section is not required for CAS 741}
 
-The information in this section will be used to evaluate the team members on the
-graduate attribute of Lifelong Learning.
+% The information in this section will be used to evaluate the team members on the
+% graduate attribute of Lifelong Learning.
 
-\input{../Reflection.tex}
+% \input{../Reflection.tex}
 
-\begin{enumerate}
-  \item What went well while writing this deliverable? 
-  \item What pain points did you experience during this deliverable, and how
-    did you resolve them?
-  \item What knowledge and skills will the team collectively need to acquire to
+\textbf{What went well while writing this deliverable?} 
+\\
+  
+Due to the previous effort put into previous resources and documentation, our team was able to create well defined objectives with clear rationales based on our initial work. This groundwork made it much easier to develop a consistent direction for the Verification and Validation Plan, ensuring that each part of the project is aligned with the overarching goals. By referencing our Problem Statement, SRS, and Development Plan, we could confidently outline the project’s needs and avoid a lot of back-and-forth on high-level decisions. 
+
+Developing an outline for a collaborative process with Dr. Kelly’s team was another important part of this documentation. Establishing a feedback loop is important for our project, especially with MuJoCo integration, which is a challenging area. Regular check-ins ensure that we are not overlooking research requirements or deviating from the project’s core objectives. It is reassuring to have a system for catching issues early, keeping us on track, and ultimately supporting a more robust integration.
+\\\\
+\textbf{What pain points did you experience during this deliverable, and how did you resolve them?}\\
+
+Some pain points include balancing clarity of our testing plan without a clear understanding of the effort or difficulty of it. Since certain aspects of MuJoCo integration and CI/CD setup were new to us, it was challenging to estimate how complex they would be to validate accurately. This lack of clarity makes it difficult to break down our validation plan into actionable steps, as we weren’t sure of the exact methods or tools we would need.
+
+To work through this, we decided to make certain high level goals for us to achieve in our testing plans, and also examined other open-source projects that implemented similar validation processes or functionality to what we are looking for to gain a better understanding.
+
+In addition, making sure our validation plans addressed both functional and non-functional requirements from the SRS felt particularly challenging. It required us to carefully think through how we would test each requirement practically. To tackle this, we created a checklist derived directly from the SRS document, ensuring every key requirement had an associated test or validation step. This checklist became a helpful guide in our regular review meetings, allowing us to confirm we weren’t overlooking critical areas.
+\\\\
+\textbf{What knowledge and skills will the team collectively need to acquire to
   successfully complete the verification and validation of your project?
   Examples of possible knowledge and skills include dynamic testing knowledge,
-  static testing knowledge, specific tool usage, Valgrind etc.  You should look to
-  identify at least one item for each team member.
-  \item For each of the knowledge areas and skills identified in the previous
+  static testing knowledge, specific tool usage, Valgrind etc.  You should look to identify at least one item for each team member.}
+\\\\
+    \textbf{Calvyn:}\\
+    
+    \noindent To complete the verification and validation process,  I’ll need to focus on gaining a stronger understanding of memory management and debugging tools specific to C++. C++ can be challenging to work with due to potential issues like memory leaks and undefined behavior, which are especially important to detect and resolve in our project due to its reinforcement learning and simulation components. With a better understanding of these tools, I’ll be better equipped to analyze our code for memory-related errors and optimize its performance, which will be crucial for ensuring stability and efficiency within our CI/CD pipeline.
+\\\\
+    \textbf{Edward:}\\
+  
+    \noindent One of the key knowledge areas I will need to develop is understanding the various indicators of correct agent behavior across different MuJoCo environments. This includes interpreting fitness scores, analyzing plot outputs, inspecting animations, and recognizing expected behavioral patterns. Since each environment has unique characteristics and learning dynamics, this will require developing a deeper familiarity with TPG's learning progression and how it manifests across different scenarios. Currently, the workflow involving running experiments, checking logs, interpreting plots, and debugging issues is still somewhat opaque, requiring significant guidance from Dr. Kelly to understand the nuances of what we're observing.
+\\\\
+    \textbf{Cyruss:}\\
+    
+    \noindent The knowledge and skills that the team will need to successfully acquire to complete the verification and validation of the project include a variety of testing knowledge such as unit testing, and automation testing. These verification and validation techniques will be beneficial to easily debug and determine any failures within the system. With the use of automation testing, it will be beneficial to automatically execute repetitive tests. This will ensure consistency and efficiency while reducing human error.
+\\\\
+     \textbf{Mark:}\\
+    
+     \noindent The team will collectively have to acquire knowledge in both dynamic and static testing, a few testing tools such as clang-tidy, clang-format, Google Test, and CI/CD integration using Github Actions. Dynamic and static testing will help the team to perform manual testing across the framework. Clang-tidy, clang-format, and Google Test will help automate the testing and verification process, saving plenty of man hours from the team. Lastly, the CI/CD integration through Github Actions will provide a comprehensive set of testing and verification prior to the team committing newly developed code into the codebase, saving less headaches in the future.
+\\\\
+    \textbf{Richard:}\\
+
+    \noindent The main knowledge areas for our project involves software engineering standards. An important thing for any open source framework is the ease of onboarding and utilizing the library. One way we can validate this is to be able to easily onboard and get an experiment running on any operating system that the user is using. The documentation also needs to be clear and concise to allow for the best developer experience. Specific knowledge related to cross platform C++ build tools, and containerizing the framework will be key for this. In addition, static code analysis will also be critical to evaluate the structure of our code. This is key because we want to ensure our code is robust, and also easy to use and build on top of since our supervisor Dr. Kelly wants this framework to be used as an open source tool.
+\\\\
+\textbf{For each of the knowledge areas and skills identified in the previous
   question, what are at least two approaches to acquiring the knowledge or
   mastering the skill?  Of the identified approaches, which will each team
-  member pursue, and why did they make this choice?
-\end{enumerate}
+  member pursue, and why did they make this choice?}
+\\\\
+
+\noindent \textbf{Calvyn:}\\
+
+\noindent I believe that the first method I should use to gain a better understanding of debugging errors is to utilize the regular feedback sessions with Dr. Kelly to discuss testing, debugging, and other technical issues. These sessions would allow team members to ask questions, review complex aspects of the project, and receive guidance on best practices for testing and validation, helping the team refine their approach and stay aligned with project goals. Another approach would be to browse existing threads that discuss testing issues and solutions related to C++ can offer valuable context and practical examples. Analyzing how other developers approach similar challenges can help the team apply these strategies to their own project, learning from both successes and mistakes of others.
+\\\\
+\textbf{Edward:}\\
+
+\noindent There are two main approaches I plan to pursue to develop this knowledge. The first would be to build understanding incrementally through guided exploration. This involves starting with environments where we have clear expectations (like CartPole), consulting with Dr. Kelly to understand what indicators to look for, and documenting these learnings to apply to new environments. Regular communication with the team about observations and issues is crucial since everyone brings different insights to interpreting TPG's behavior.
+Secondly, I would take a systematic experimentation approach. This means making controlled modifications to environment parameters or TPG settings on separate GitHub branches, carefully documenting the impacts, and building a mental model of cause-and-effect relationships. By having a safe space to experiment without fear of breaking the main codebase, I can learn through trial and error while maintaining rigorous version control.
+\\\\
+
+\noindent \textbf{Cyruss:}\\
+
+\noindent Two approaches to acquiring the knowledge of both skills include hands-on approach testing with different tools without any guidance, or using online self-learning techniques such as Linkedin Learning or Udemy. I will be pursuing the online self-learning approach as I work better with structured guidance and clear explanations. Additionally, these courses often include practical examples and quizzes, which will help reinforce my understanding.
+\\\\
+\textbf{Mark:}
+\\
+A few approaches that can be used to attain knowledge of these skills are reading documentations and watching visual tutorials. Documentations help users tremendously as most if not all are usually well made, especially if they are enterprise standard tools. Watching visual tutorials may be another way to master these areas and skills through the use of YouTube, or Coursera. Each person has a preferred way of learning. They can either go the non-visual part of reading documentations and articles or visual tutorials. It all comes down to what saves the contributor the most time, while having the most yield from the content.
+\\\\
+\textbf{Richard:}\\
+
+\noindent There are a few approaches I can take to attain knowledge. For one, there is a group in France that has built an open source framework on top of Dr. Kelly's TPG framework is called Gegelati. The Gegelati project is open source on Github and has implemented a lot of the CI/CD infrastructure and also enables cross platform development. Additionally, there are numerous C++ libraries that build with cross platform tools such as MuJoCo itself (developed by Google DeepMind) so seeing those examples will help guide me. Second, is to view YouTube videos on the topic to see how other developers tackle and approach this problem. Getting more opinions and seeing best practices in a visual format will be beneficial. 
 
 \end{document}

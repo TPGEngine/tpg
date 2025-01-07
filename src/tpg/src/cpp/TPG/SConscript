@@ -1,7 +1,0 @@
-Import('env')
-env.Library('TPG', ['TPG.cc', 'instruction.cc', 'RegisterMachine.h',
-                    'RegisterMachine.cc','point.cc','team.cc','misc.cc'],
-                    LIBS = ['boost_iostreams','eigen3'],
-                    LIBPATH = ['/lib/x86_64-linux-gnu/'],
-                    CPPPATH=['.','../environments','../experiments','/usr/include/eigen3'])
-
