@@ -107,10 +107,6 @@ and Module Guide.  The full documentation and implementation can be
 found at \url{...}.  \wss{provide the url for your repo}
 
 \section{Notation}
-
-\wss{You should describe your notation.  You can use what is below as
-  a starting point.}
-
 The structure of the MIS for modules comes from \citet{HoffmanAndStrooper1995},
 with the addition that template modules have been adapted from
 \cite{GhezziEtAl2003}.  The mathematical notation comes from Chapter 3 of
@@ -118,7 +114,7 @@ with the addition that template modules have been adapted from
 multiple assignment statement and conditional rules follow the form $(c_1
 \Rightarrow r_1 | c_2 \Rightarrow r_2 | ... | c_n \Rightarrow r_n )$.
 
-The following table summarizes the primitive data types used by \progname. 
+The following table summarizes the primitive data types used by TPG. 
 
 \begin{center}
 \renewcommand{\arraystretch}{1.2}
@@ -136,10 +132,10 @@ real & $\mathbb{R}$ & any number in (-$\infty$, $\infty$)\\
 \end{center}
 
 \noindent
-The specification of \progname \ uses some derived data types: sequences, strings, and
+The specification of TPG uses some derived data types: sequences, strings, and
 tuples. Sequences are lists filled with elements of the same data type. Strings
 are sequences of characters. Tuples contain a list of values, potentially of
-different types. In addition, \progname \ uses functions, which
+different types. In addition, TPG uses functions, which
 are defined by the data types of their inputs and outputs. Local functions are
 described by giving their type signature followed by their specification.
 
@@ -342,6 +338,68 @@ N/A
   plotData & \{logFile: file\} & \{plotFile: file\} & Plots the data from the .rslt file and saves the plot to a .pdf file \\
   \end{tabular}
 \end{center}
+
+\section{MIS of TPG Experiment Module} \label{TPGExperimentModule}
+
+\subsection{Module}
+TPGExperimentMPI
+
+\subsection{Uses}
+The TPG Experiment module is responsible for managing and evolving different policies, evaluating different tasks, and tracking experiments. It is used during the execution of experiments through the commands: \textbf{tpg-run-slurm} and \textbf{tpg-run-mpi}, which are used for executing tasks in virtual and local machines respectively.
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+None
+
+\subsubsection{Exported Access Programs}
+None
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+\begin{center}
+  \begin{tabular}{p{4cm} p{3cm} p{7cm}}
+  \hline
+  \textbf{Name} & \textbf{Type} & \textbf{Description} \\
+  \hline
+  world\_rank & Integer & The rank of the MPI process within the environment. It is used to distinguish between the master and evaluator processes. \\
+  \hline
+  n\_task & Integer & The current number of tasks (environments) running. \\
+  \hline
+  active\_task & Integer & The index of the current active task. \\
+  \hline
+  phase & Integer & The numerical representation of the current phase of the program. \\
+  \hline
+  t\_current & Integer & The current generation or iteration of the task. \\
+  \hline
+  t\_start & Integer & The starting generation or iteration of the task. \\
+  \hline
+  task\_to\_replay & Integer & The index of the task to replay. \\
+  \hline
+  \end{tabular}
+\end{center}
+
+\subsubsection{Environment Variables}
+\begin{center}
+  \begin{tabular}{p{4cm} p{4cm} p{6cm}}
+  \hline
+  \textbf{Name} & \textbf{Type} & \textbf{Description} \\
+  \hline
+  COMET\_API\_KEY & String & The API key used for Comet experiment tracking service \\
+  \hline
+  \end{tabular}
+  \end{center}
+
+\subsubsection{Assumptions}
+\begin{itemize}
+  \item Experimental parameters such as \textbf{mj\_model\_path} and \textbf{active\_tasks} are well-defined. 
+\end{itemize}
+
+\subsubsection{Access Routine Semantics}
+None
+
+\subsubsection{Local Functions}
+None
 
 \newpage
 
