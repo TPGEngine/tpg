@@ -157,16 +157,14 @@ adapted here is called design for
 change.
 
 \begin{description}
-\item[\refstepcounter{acnum} \actheacnum \label{acHardware}:] The specific
-  hardware on which the software is running.
-\item[\refstepcounter{acnum} \actheacnum \label{acInput}:] The format of the
-  initial input data.
-\item ...
+  \item[\refstepcounter{acnum} \actheacnum \label{acOutput}:] Support for additional MuJoCo environments.
+  \item[\refstepcounter{acnum} \actheacnum \label{acOutput}:] Simulation support for all types of operating systems.
+  \item[\refstepcounter{acnum} \actheacnum \label{acOutput}:] Comprehensive logging across all of TPG's components.
+  \item[\refstepcounter{acnum} \actheacnum \label{acVerify}:] Extensive testing and checks for newly published code.
+  \item[\refstepcounter{acnum} \actheacnum \label{acVerify}:] Refactoring old and unstructured components.
+  \item[\refstepcounter{acnum} \actheacnum \label{acInput}:] Format of inputting experimental parameters.
+  \item[\refstepcounter{acnum} \actheacnum \label{acControl}:] Shift to a different dependency management tool such as CMake.
 \end{description}
-
-\wss{Anticipated changes relate to changes that would be made in requirements,
-design or implementation choices.  They are not related to changes that are made
-at run-time, like the values of parameters.}
 
 \subsection{Unlikely Changes} \label{SecUchange}
 
@@ -178,9 +176,11 @@ will potentially need to be modified. Hence, it is not intended that these
 decisions will be changed.
 
 \begin{description}
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output devices
-  (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
-\item ...
+  \item[\refstepcounter{ucnum} \uctheucnum \label{ucControl}:] Migration of TPG's implementation to a different language.
+  \item[\refstepcounter{ucnum} \uctheucnum \label{ucControl}:] Refactoring the flow of task initialization and generation.
+  \item[\refstepcounter{ucnum} \uctheucnum \label{ucVerify}:] Transitioning away from Github Actions to other CI/CD platforms.
+  \item[\refstepcounter{ucnum} \uctheucnum \label{ucControl}:] The replacement of MPI as the distributed computing framework.
+  \item[\refstepcounter{ucnum} \uctheucnum \label{ucControl}:] Changing of communication protocol between different components such as gRPC.
 \end{description}
 
 \section{Module Hierarchy} \label{SecMH}
@@ -193,6 +193,7 @@ actually be implemented.
 \begin{description}
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Hardware-Hiding Module
 \item [\refstepcounter{mnum} \mthemnum \label{mMuJoCo}:] MuJoCo Module
+\item [\refstepcounter{mnum} \mthemnum \label{mExperiment}:] TPG Experiment Module
 \end{description}
 
 
@@ -303,7 +304,12 @@ to be implemented.
 \item[Implemented By:] --
 \end{description}
 
-\subsubsection{Etc.}
+\subsubsection{TPG Experiment Module (\mref{mExperiment})}
+\begin{description}
+  \item[Secrets:] Task parameters, team structures and decision making policies.
+  \item[Services:] Provides functionality to manage and evolve policies, evaluation of different tasks, and track on-going experiments
+  \item[Implemented By:] TPG Experiment MPI
+  \end{description}
 
 \section{Traceability Matrix} \label{SecTM}
 
@@ -336,28 +342,40 @@ R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
 \end{table}
 
 \begin{table}[H]
-\centering
-\begin{tabular}{p{0.2\textwidth} p{0.6\textwidth}}
-\toprule
-\textbf{AC} & \textbf{Modules}\\
-\midrule
-\acref{acHardware} & \mref{mHH}\\
-\acref{acInput} & \mref{mInput}\\
-\acref{acParams} & \mref{mParams}\\
-\acref{acVerify} & \mref{mVerify}\\
-\acref{acOutput} & \mref{mOutput}\\
-\acref{acVerifyOut} & \mref{mVerifyOut}\\
-\acref{acODEs} & \mref{mODEs}\\
-\acref{acEnergy} & \mref{mEnergy}\\
-\acref{acControl} & \mref{mControl}\\
-\acref{acSeqDS} & \mref{mSeqDS}\\
-\acref{acSolver} & \mref{mSolver}\\
-\acref{acPlot} & \mref{mPlot}\\
-\bottomrule
-\end{tabular}
-\caption{Trace Between Anticipated Changes and Modules}
-\label{TblACT}
-\end{table}
+  \centering
+  \begin{tabular}{|c|c|c|} \hline 
+  \toprule
+  Anticipated Change
+  & Modules & Module Numbers
+  \\
+  \midrule
+  
+  AC1
+  & MuJoCo & 7.2.2
+  \\
+  AC2
+  & Visualization & 7.2.3
+  \\
+  AC3
+  & Logging & 7.2.4
+  \\
+  AC4
+  & Framework & 7.3.2
+  \\
+  AC5
+  & Classic Control, TPG Experiment, Framework  & 7.2.1, 7.3.1, 7.3.2
+  \\
+  AC6
+  & TPG Experiment, Framework & 7.3.1, 7.3.2
+  \\
+  AC7
+  & Framework & 7.3.2
+  \\
+  \bottomrule
+  \end{tabular}
+  \caption{Trace Between Anticipated Changes and Modules}
+  \label{TblACT}
+  \end{table}
 
 \section{Use Hierarchy Between Modules} \label{SecUse}
 
