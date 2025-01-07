@@ -29,7 +29,7 @@ jobs:
       - name: Set up LaTeX environment
         run: |
           sudo apt-get update
-          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended
+          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-science
 
       - name: Find modified .tex files
         id: find_tex_files
@@ -60,7 +60,7 @@ jobs:
           add: --force docs/**/*.pdf
           message: Compiled Latex PDF
           push: false
-      
+
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
