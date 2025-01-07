@@ -339,27 +339,40 @@ None
 \subsection{Semantics}
 
 \subsubsection{State Variables}
-\begin{itemize}
-  \item \textit{world\_rank}: the rank of the MPI process within the environment. It is used to distinguish between the master and evaluator processes.
-  \item \textit{n\_task}: the current number of tasks (environments) running.
-  \item \textit{active\_task}: the index of the current active task.
-  \item \textit{phase}: the numerical representation of the current phase of the program.
-  \item \textit{t\_current}: the current generation or iteration of the task.
-  \item \textit{t\_start}: the starting generation or iteration of the task.
-  \item \textit{task\_to\_replay}: the index of the task to replay.
-\end{itemize}
-
-Note: All state variables listed above are of type Integer.
+\begin{center}
+  \begin{tabular}{p{4cm} p{3cm} p{7cm}}
+  \hline
+  \textbf{Name} & \textbf{Type} & \textbf{Description} \\
+  \hline
+  world\_rank & Integer & The rank of the MPI process within the environment. It is used to distinguish between the master and evaluator processes. \\
+  \hline
+  n\_task & Integer & The current number of tasks (environments) running. \\
+  \hline
+  active\_task & Integer & The index of the current active task. \\
+  \hline
+  phase & Integer & The numerical representation of the current phase of the program. \\
+  \hline
+  t\_current & Integer & The current generation or iteration of the task. \\
+  \hline
+  t\_start & Integer & The starting generation or iteration of the task. \\
+  \hline
+  task\_to\_replay & Integer & The index of the task to replay. \\
+  \hline
+  \end{tabular}
+\end{center}
 
 \subsubsection{Environment Variables}
-\begin{itemize}
-  \item \textit{COMET\_API\_KEY} (String): the API key used for Comet experiment tracking service.
-\end{itemize}
+\begin{center}
+  \begin{tabular}{p{4cm} p{4cm} p{6cm}}
+  \hline
+  \textbf{Name} & \textbf{Type} & \textbf{Description} \\
+  \hline
+  COMET\_API\_KEY & String & The API key used for Comet experiment tracking service \\
+  \hline
+  \end{tabular}
+  \end{center}
 
 \subsubsection{Assumptions}
-
-% \wss{Try to minimize assumptions and anticipate programmer errors via
-%   exceptions, but for practical purposes assumptions are sometimes appropriate.}
 \begin{itemize}
   \item Experimental parameters such as \textbf{mj\_model\_path} and \textbf{active\_tasks} are well-defined. 
 \end{itemize}
