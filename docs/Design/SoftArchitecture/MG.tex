@@ -191,8 +191,8 @@ below, which are leaves in the hierarchy tree, are the modules that will
 actually be implemented.
 
 \begin{description}
-\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Hardware-Hiding Module
 \item [\refstepcounter{mnum} \mthemnum \label{mMuJoCo}:] MuJoCo Module
+\item [\refstepcounter{mnum} \mthemnum \label{mVisualization}:] Visualization Module
 \end{description}
 
 
@@ -203,22 +203,17 @@ actually be implemented.
 \textbf{Level 1} & \textbf{Level 2}\\
 \midrule
 
-{Hardware-Hiding Module} & ~ \\
+{Hardware-Hiding Module} & N/A \\
 \midrule
 
-\multirow{7}{0.3\textwidth}{Behaviour-Hiding Module} & ?\\
-& ?\\
-& ?\\
-& ?\\
-& ?\\
-& ?\\
-& ?\\ 
-& ?\\
+\multirow{4}{0.3\textwidth}{Behaviour-Hiding Module} & Classic Control Module \\
+& MuJoCo Module\\
+& Visualization Module\\
+& Logging Module\\
 \midrule
 
-\multirow{3}{0.3\textwidth}{Software Decision Module} & {?}\\
-& ?\\
-& ?\\
+\multirow{2}{0.3\textwidth}{Software Decision Module} & {TPG Experiment Module}\\
+& Framework Module\\
 \bottomrule
 
 \end{tabular}
@@ -284,6 +279,15 @@ to be implemented.
 \item[Secrets:]MuJoCo's data structures (such as mjModel, mjData, etc…).
 \item[Services:]Provides an interface between TPG and MuJoCo to allow for simulation within MuJoCo-based experiments.
 \item[Implemented By:] TPG
+\item[Type of Module:] Abstract Object
+\end{description}
+
+\subsubsection{Visualization Module (\mref{mVisualization})}
+
+\begin{description}
+\item[Secrets:]Output logs from tpg*.std files.
+\item[Services:]Provides the visualization of the experiment being run. Extract metrics from logs, aggregate the metrics, plot, and combine them into a singular PDF.
+\item[Implemented By:] \progname{}
 \item[Type of Module:] Abstract Object
 \end{description}
 
