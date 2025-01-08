@@ -63,6 +63,8 @@ jobs:
         with:
           add: --force docs/**/*.pdf
           message: Compiled Latex PDF
+          author_name: github-actions
+          author_email: github-actions@github.com
           push: false
 
       - name: Push changes
