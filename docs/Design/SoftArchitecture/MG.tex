@@ -191,7 +191,8 @@ below, which are leaves in the hierarchy tree, are the modules that will
 actually be implemented.
 
 \begin{description}
-  \item [\refstepcounter{mnum} \mthemnum \label{mClassicControl}:] Classic Control Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Hardware Hiding Module
+\item [\refstepcounter{mnum} \mthemnum \label{mClassicControl}:] Classic Control Module
 \item [\refstepcounter{mnum} \mthemnum \label{mMuJoCo}:] MuJoCo Module
 \item [\refstepcounter{mnum} \mthemnum \label{mVisualization}:] Visualization Module
 \item [\refstepcounter{mnum} \mthemnum \label{mLogging}:] Logging Module
@@ -230,12 +231,12 @@ The design of the system is intended to satisfy the requirements developed in
 the SRS. In this stage, the system is decomposed into modules. The connection
 between requirements and modules is listed in Table~\ref{TblRT}.
 
-\wss{The intention of this section is to document decisions that are made
-  ``between'' the requirements and the design.  To satisfy some requirements,
-  design decisions need to be made.  Rather than make these decisions implicit,
-  they are explicitly recorded here.  For instance, if a program has security
-  requirements, a specific design decision may be made to satisfy those
-  requirements with a password.}
+% \wss{The intention of this section is to document decisions that are made
+%   ``between'' the requirements and the design.  To satisfy some requirements,
+%   design decisions need to be made.  Rather than make these decisions implicit,
+%   they are explicitly recorded here.  For instance, if a program has security
+%   requirements, a specific design decision may be made to satisfy those
+%   requirements with a password.}
 
 \section{Module Decomposition} \label{SecMD}
 
@@ -333,7 +334,7 @@ to be implemented.
 \begin{description}
   \item[Secrets:] Task parameters, team structures and decision making policies.
   \item[Services:] Provides functionality to manage and evolve policies, evaluation of different tasks, and track on-going experiments
-  \item[Implemented By:] TPG Experiment MPI
+  \item[Implemented By:] \progname{}
   \end{description}
 
 \section{Traceability Matrix} \label{SecTM}
@@ -349,17 +350,14 @@ requirements and between the modules and the anticipated changes.
 \toprule
 \textbf{Req.} & \textbf{Modules}\\
 \midrule
-R1 & \mref{mHH}, \mref{mInput}, \mref{mParams}, \mref{mControl}\\
-R2 & \mref{mInput}, \mref{mParams}\\
-R3 & \mref{mVerify}\\
-R4 & \mref{mOutput}, \mref{mControl}\\
-R5 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
-R6 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
-R7 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
-R8 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
-R9 & \mref{mVerifyOut}\\
-R10 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}\\
-R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
+FR-1 & \mref{mMuJoCo}, \mref{mFramework}\\
+FR-2 & \mref{mVisualization},\\
+FR-3 & \mref{mLogging}, \mref{mFramework}\\
+FR-4 & \mref{mLogging}, \mref{mFramework}\\
+FR-5 & \mref{mLogging}, \mref{mFramework}, \mref{mControl}\\
+FR-6 & \mref{mClassicControl}, \mref{mMuJoCo}, \mref{mVisualization}, \mref{mLogging}, \mref{mExperiment}, \mref{mFramework}\\
+FR-7 & \mref{mLogging}, \mref{mFramework}\\
+FR-8 & \mref{mClassicControl}, \mref{mMuJoCo}, \mref{mVisualization}\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Requirements and Modules}
@@ -375,25 +373,25 @@ R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
   \\
   \midrule
   AC1
-  & MuJoCo & 7.2.2
+  & MuJoCo & \mref{mMuJoCo}
   \\
   AC2
-  & Visualization & 7.2.3
+  & Visualization & \mref{mVisualization}
   \\
   AC3
-  & Logging & 7.2.4
+  & Logging & \mref{mLogging}
   \\
   AC4
-  & Framework & 7.3.2
+  & Framework & \mref{mFramework} 
   \\
   AC5
-  & Classic Control, TPG Experiment, Framework  & 7.2.1, 7.3.1, 7.3.2
+  & Classic Control, TPG Experiment, Framework  & \mref{mClassicControl}, \mref{mExperiment}, \mref{mFramework} 
   \\
   AC6
-  & TPG Experiment, Framework & 7.3.1, 7.3.2
+  & TPG Experiment, Framework & \mref{mExperiment}, \mref{mFramework} 
   \\
   AC7
-  & Framework & 7.3.2
+  & Framework & \mref{mFramework} 
   \\
   \bottomrule
   \end{tabular}
@@ -432,21 +430,19 @@ because they use modules from the lower levels.
 
 %\section*{References}
 
-\section{User Interfaces}
+% \section{User Interfaces}
 
-\wss{Design of user interface for software and hardware.  Attach an appendix if
-needed. Drawings, Sketches, Figma}
+% \wss{Design of user interface for software and hardware.  Attach an appendix if
+% needed. Drawings, Sketches, Figma}
 
-\section{Design of Communication Protocols}
+% \section{Design of Communication Protocols}
 
-\wss{If appropriate}
+% \wss{If appropriate}
 
 \section{Timeline}
 
 The capstone project's timeline will correspond to the main goals that have been outlined. The work has been split between the different modules with respective deadlines so that the team can work on separate modules concurrently. The deadlines have been set to help track progress and establish expectations. 
 
-
-\\
 \begin{center}
     \begin{table}
     \centering
