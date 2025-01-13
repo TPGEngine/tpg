@@ -100,11 +100,13 @@ See SRS Documentation at \href{https://github.com/TPGEngine/tpg/blob/main/docs/S
 \section{Introduction}
 
 The following document details the Module Interface Specifications for
-\wss{Fill in your project name and description}
+\progname{}. The Tangled Program Graphs (TPG) framework is developing an interface to test the evolutionary machine learning framework Tangle Programming Graphs (TPG) in a robotic simulation engine called MuJoCo created by Google Deepmind.
+
+
 
 Complementary documents include the System Requirement Specifications
 and Module Guide.  The full documentation and implementation can be
-found at \url{...}.  \wss{provide the url for your repo}
+found at \url{https://github.com/TPGEngine/tpg} 
 
 \section{Notation}
 The structure of the MIS for modules comes from \citet{HoffmanAndStrooper1995},
@@ -237,10 +239,6 @@ OpenGL frame buffer
   \item The noise distribution is initialized with range \[-\pi, \pi\]
 
 \end{itemize}
-\begin{itemize}
-
-\end{itemize}
-
 
 \subsubsection{Access Routine Semantics}
 
@@ -450,7 +448,7 @@ The visualization module is used to visualize the results of a TPG experiment wh
 \subsection{Syntax}
 
 \subsubsection{Exported Constants}
-N/A
+None
 
 \subsubsection{Exported Access Programs}
 \begin{center}
@@ -470,7 +468,7 @@ N/A
 \subsection{Semantics}
 
 \subsubsection{State Variables}
-N/A
+None
 
 \subsubsection{Environment Variables}
 
@@ -490,13 +488,12 @@ N/A
   \item Format of the log files is known and will not change.
 \end{itemize}
 \subsubsection{Access Routine Semantics}
-
-N/A
+None
 
 \subsubsection{Local Functions}
 
 \begin{center}
-  \begin{tabular}{p{3cm} p{3cm} p{3cm} p{4cm}}
+  \begin{tabular}{p{3cm} p{3cm} p{4cm} p{5cm}}
   \hline
   \textbf{Name} & \textbf{Input} & \textbf{Output} & \textbf{Description} \\
   \hline
@@ -524,18 +521,17 @@ The log module is used to view information regarding the commands transmitted to
 \subsection{ Syntax}
 
 \subsubsection{ Exported Constants}
-
-N/A
+None
 
 \subsubsection{Exported Access Programs}
 \begin{center}
-  \begin{tabular}{p{4cm} p{4cm} p{3cm} p{2cm}}
+  \begin{tabular}{p{3cm} p{5cm} p{2.5cm} p{2.5cm}}
     \hline
     \textbf{Name} & \textbf{Input} & \textbf{Output} & \textbf{Exceptions} \\
     \hline
-    LogMetrics & \{experimentId: string, metrics: map\<string, double\>\} & void & File write error \\
+    LogMetrics & \{experimentId: string, metrics: map$\langle$string, double$\rangle$\} & void & File write error \\
     \hline
-    LogGeneration & \{experimentId: string, generation: int, stats: map\<string, double\>} & void & File write error \\
+    LogGeneration & \{experimentId: string, generation: int, stats: map$\langle$string, double$\rangle$\} & void & File write error \\
     \hline
     LogError & \{experimentId: string, error: string\} & void & File write error \\
     \hline
@@ -546,18 +542,18 @@ N/A
 
 \subsubsection{State Variables}
 \begin{center}
-  \begin{tabular}{p{4cm} p{3cm} p{7cm}}
+  \begin{tabular}{p{3cm} p{4cm} p{7cm}}
     \hline
     \textbf{Name} & \textbf{Type} & \textbf{Description} \\
     \hline
-    logFiles & map\<string, File*\> & Map of experiment IDs to their log file handles \\
+    logFiles & map$\langle$string, File*$\rangle$\> & Map of experiment IDs to their log file handles \\
     \hline
   \end{tabular}
 \end{center}
 
 \subsubsection{Environment Variables}
 \begin{center}
-  \begin{tabular}{p{4cm} p{4cm} p{4cm}}
+  \begin{tabular}{p{4cm} p{4cm} p{5cm}}
     \hline
     \textbf{Name} & \textbf{Type} & \textbf{Description} \\
     \hline
