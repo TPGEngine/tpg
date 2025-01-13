@@ -19,3 +19,4 @@ jq
 libglfw3
 libglfw3-dev
 libglew-dev
+catch2
