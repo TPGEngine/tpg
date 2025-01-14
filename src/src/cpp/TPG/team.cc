@@ -38,12 +38,11 @@ void team::InitMemory(map<long, team *> &teamMap,
    set<RegisterMachine *, RegisterMachineIdComp> RegisterMachines;
    GetAllNodes(teamMap, teams, RegisterMachines);
    for (auto prog : RegisterMachines) {
-      if (!isEqual(std::any_cast<double>(params["p_instructions_mu_const"]),
+      if (!isEqual(std::any_cast<double>(params["p_memory_mu_const"]),
                    0.0)) {
          prog->use_evolved_const_ = true;
          // Initialize working memory with evolved constants
          prog->CopyPrivateConstToWorkingMemory();
-         // prog->ClearWorking();
       } else {
          // Initialize working memory with zeros
          prog->use_evolved_const_ = false;
@@ -289,15 +288,6 @@ void team::policyInstructions(
 double team::getMeanOutcome(int phase, int task, int auxDouble, bool allPhase,
                             bool allTask) {
    vector<double> outcomes;
-
-   // for(auto ouiter = outcomes_[task][phase].begin(); ouiter !=
-   // outcomes_[task][phase].end(); ouiter++){
-   //    if (((allPhase || (ouiter->second)->phase() == phase) &&
-   //             (allTask || (ouiter->second)->task() == task)))
-   //       outcomes.push_back((ouiter->second)->auxDouble(auxDouble));
-
-   //}
-
    for (auto ouiter1 = outcomes_.begin(); ouiter1 != outcomes_.end();
         ouiter1++) {  // task
       if (ouiter1->first != task && !allTask) continue;
@@ -321,14 +311,6 @@ double team::getMeanOutcome(int phase, int task, int auxDouble, int auxInt,
                             long auxIntMatch, bool allPhase, bool allTask) {
    vector<double> outcomes;
 
-   // for(auto ouiter = outcomes_[task][phase].begin(); ouiter !=
-   // outcomes_[task][phase].end(); ouiter++){
-   //    if ((allPhase || (ouiter->second)->phase() == phase) && (allTask
-   //    || (ouiter->second)->task() == task) &&
-   //    (ouiter->second)->auxInt(auxInt) == auxIntMatch)
-   //       outcomes.push_back((ouiter->second)->auxDouble(auxDouble));
-   // }
-
    for (auto ouiter1 = outcomes_.begin(); ouiter1 != outcomes_.end();
         ouiter1++) {  // task
       if (ouiter1->first != task && !allTask) continue;
@@ -348,6 +330,25 @@ double team::getMeanOutcome(int phase, int task, int auxDouble, int auxInt,
    return accumulate(outcomes.begin(), outcomes.end(), 0.0) /
           outcomes
               .size();  //+(int)(topPortion*outcomes.size()),0.0)/(int)(topPortion*outcomes.size());
+}
+
+/******************************************************************************/
+// TODO(skelly): fix outcomes_ data structure
+double team::GetMedianOutcome(int phase, int task, int auxDouble) {
+   vector<double> outcomes;
+   for (auto o1 : outcomes_) {  //task
+      if (o1.first != task) continue;
+      for (auto o2 : o1.second) {  //phase
+         if (o2.first != phase) continue;
+         for (auto o3 : o2.second) {  //points
+            outcomes.push_back(o3.second->auxDouble(auxDouble));
+         }
+      }
+   }
+   if (outcomes.size() == 0) {
+      die(__FILE__, __FUNCTION__, __LINE__, "no outcomes");
+   }
+   return VectorMedian<double>(outcomes);
 }
 
 ///****************************************************************************/
