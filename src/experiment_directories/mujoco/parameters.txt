@@ -78,7 +78,7 @@ seed_tpg 42
 seed_aux 42
 
 # Max number of generations
-n_generations 100
+n_generations 1000000
 
 # Number of root teams (agents) to keep each generation
 n_root 1000
@@ -150,9 +150,14 @@ p_instructions_delete 0.1
 # program variation: probability of adding an instruction
 p_instructions_add 0.075
 
-# Program variation: probability of mutating constants
-# If set to 0.0, evolved constants are not used & memory is initialized to zero
-p_memory_mu_const 0.5
+# Program variation: probability of linear crossover with another team
+p_instructions_xover 0.0
+
+# Program variation: probability of adding noise to constants
+p_instructions_mu_const 1.0
+
+# Program variation: stddev of normal noise added to each const
+instructions_mu_const_stddev 0.05
 
 # Program variation: probability of changing observation_buff_size
 p_observation_buff_size 0.0
@@ -186,14 +191,14 @@ n_input 0
 max_initial_prog_size 10
 
 # Max program size
-max_prog_size 1000000
+max_prog_size 100
 
 # Number of memory indices
 # Each memory index points to a data structure (scalar, vector, or matrix)
 n_memories 8
 
 # Dimensionality for vector & matrix memory
-memory_size 4
+memory_size 10
 min_memory_size 2
 max_memory_size 32
 
@@ -208,7 +213,7 @@ max_observation_buff_size 1
 
 # Which tasks are active
 # Right-hand-side should be a single task name or a comma-separated list
-active_tasks Mujoco_Inverted_Pendulum_v4
+active_tasks Mujoco_Reacher_v4
 
 # Use the partially-observable version of a task, if available
 # Currently only available for calssic control and Mujoco tasks
@@ -245,12 +250,15 @@ forecast_n_eval_val 10
 ## Parameters Specific to Mujoco ###############################################
 ################################################################################
 
-# Model path
-mj_model_path $TPG/datasets/mujoco_models/inverted_pendulum.xml
+# Uncomment one model path
+#mj_model_path $TPG/datasets/mujoco_models/ant.xml
+#mj_model_path $TPG/datasets/mujoco_models/half_cheetah.xml
+#mj_model_path $TPG/datasets/mujoco_models/inverted_pendulum.xml
+mj_model_path $TPG/datasets/mujoco_models/reacher.xml
 
-mj_max_timestep 1000
+mj_max_timestep 50
 
-mj_n_eval_train 5
+mj_n_eval_train 50
 mj_n_eval_validation 0
 mj_n_eval_test 0
 

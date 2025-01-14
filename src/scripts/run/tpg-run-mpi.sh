@@ -88,20 +88,19 @@ fi
 if [ $mode -eq 2 ]; then
    mpirun --oversubscribe -np $num_mpi_proc xterm -hold -e gdb -ex run \
      --args $TPG/build/release/cpp/experiments/TPGExperimentMPI \
-     seed_tpg=${seed_tpg} n_root=10 n_root_gen=10 \
+     seed_tpg=${seed_tpg} \
      1> tpg.$seed_tpg.$$.std \
      2> tpg.$seed_tpg.$$.err &
 fi
 
 # Valgrind #####################################################################
 if [ $mode -eq 3 ]; then
-  mpirun --oversubscribe -np $num_mpi_proc \
-  valgrind --leak-check=yes --show-reachable=yes \
-  --log-file=vg.%p --suppressions=/usr/share/openmpi/openmpi-valgrind.supp \
-  $TPG/build/release/cpp/experiments/TPGExperimentMPI \
-  seed_tpg=${seed_tpg} n_root=10 n_root_gen=10 n_generations=3 \
-  mj_max_timestep=1 mj_n_eval_train=1
-
+  mpirun --oversubscribe -np $num_mpi_proc valgrind --leak-check=yes \ 
+    --show-reachable=yes --log-file=vg.%p \ 
+    --suppressions=/usr/share/openmpi/openmpi-valgrind.supp \ 
+    $TPG/build/release/cpp/experiments/TPGExperimentMPI seed_tpg=${seed_tpg} \ 
+    1> tpg.$seed_tpg.$$.std \ 
+    2> tpg.$seed_tpg.$$.err &
 fi
 
 # below this line is just sketches to be cleaned ###############################

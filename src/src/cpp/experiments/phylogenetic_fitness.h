@@ -15,13 +15,13 @@ double estimate_fitness(TPG &tpg, team *tm, int task) {
     queue.pop_front();
 
     // If the team has been evaluated on the task, return its fitness
-    vector<double> taskFitnesses = tpg.phylo_graph_[currId].taskFitnesses;
+    vector<double> taskFitnesses = tpg._phyloGraph[currId].taskFitnesses;
     int sizeInt = static_cast<int>(taskFitnesses.size());
     if (task < sizeInt) {
       return taskFitnesses[task];
     }
 
-    for (long ancId : tpg.phylo_graph_[currId].ancestorIds) {
+    for (long ancId : tpg._phyloGraph[currId].ancestorIds) {
       if (std::find(visited.begin(), visited.end(), ancId) == visited.end()) {
         visited.push_back(ancId);
         queue.push_back(ancId);

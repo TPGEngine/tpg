@@ -166,7 +166,7 @@ p_instructions_add 0.4
 p_instructions_xover 0.0
 
 # program variation: probability of adding noise to constants
-#p_memory_mu_const 1.0
+#p_instructions_mu_const 1.0
 
 # program variation: stddev of normal noise added to each const
 instructions_mu_const_stddev 0.05

@@ -15,7 +15,7 @@ class Mujoco_Ant_v4 : public MujocoEnv {
     std::vector<double> healthy_z_range_;
     std::vector<double> contact_force_range_;
     double reset_noise_scale_ = 0.1;
-    bool exclude_current_positions_from_observation_ = true;
+    bool exclude_current_positions_from_observation_ = false;
 
     Mujoco_Ant_v4(std::unordered_map<std::string, std::any>& params) {
         eval_type_ = "Mujoco";

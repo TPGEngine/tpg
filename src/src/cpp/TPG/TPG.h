@@ -25,8 +25,9 @@ class TPG {
     ~TPG();
 
     void AddProgram(RegisterMachine *p);
+    void removeProgram(RegisterMachine *p, bool updateLids);
     void AddTeam(team *tm);
-    void RemoveTeam(team *tm);
+    void RemoveTeam(team *tm, deque<RegisterMachine *> &RegisterMachinesWithNoRefs);
     void AddMemory(long prog_id, MemoryEigen *m);
     team *getTeamByID(long id);
     bool haveEliteTeam(string taskset, int fitMode, int phase);
@@ -37,7 +38,7 @@ class TPG {
      * Methods to implement the TPG algorithm.
      **************************************************************************/
     void checkRefCounts(const char *);
-    void CleanupProgramsWithNoRefs();
+    void CleanupProgramsWithNoRefs(deque<RegisterMachine *> &, bool);
     void clearMemory();
     void countRefs();
     void finalize();
@@ -76,18 +77,18 @@ class TPG {
     // void GetAllNodes(team *tm, set<team *, teamIdComp> &teams,
     //                  set<RegisterMachine *, RegisterMachineIdComp> &RegisterMachines,
     //                  set<MemoryEigen *, MemoryEigenIdComp> &memories);
-
-
-    team *GetBestTeam();
-    set<team*, teamFitnessLexicalCompare> GetRootTeamsInSet();
-    vector<team *> GetRootTeamsInVec() const;
-    map<long, team *> GetRootTeamsInMap() const;
+    team *getBestTeam();
+    // map<long, team *> GetTeams(bool) const;
+    vector<team *> GetTeamsInVec(bool) const;
+    map<long, team *> GetTeamsInMap(bool) const;
+    void getTeams(vector<team *> &t, bool roots) const;     // weed out
+    void getTeams(map<long, team *> &t, bool roots) const;  // weed out
     void InitTeams();
     void internalReplacementPareto(int, int, int, team *, map<long, team *> &,
                                    set<team *, teamIdComp> &, mt19937 &);
     bool isElitePS(team *tm, int phase);
     void MarkEffectiveCode();
-    void GetPolicyFeatures(int, set<long> &, bool);
+    void policyFeatures(int, set<long> &, bool);
     // void printGraphDot(
     //     team *, size_t frame, int episode, int step, size_t depth,
     //     vector<RegisterMachine *> allPrograms, vector<RegisterMachine *> winningPrograms,
@@ -118,11 +119,8 @@ class TPG {
     void printOss(ostringstream &o);
     void printTeamInfo(long, int, bool, long teamId = -1);
     void trackTeamInfo(long, int, bool, long teamId = -1);
-    
     void RegisterMachineCrossover(RegisterMachine *p1, RegisterMachine *p2,
                           RegisterMachine **c1, RegisterMachine **c2);
-
-
     void ReadCheckpoint(long, int, int, bool, const string &);
 
     void ReadParameters(string file_name,
@@ -132,7 +130,7 @@ class TPG {
     void TeamSizesMatchProgRefs();  // Sanity check.
     inline void resetOutcomes(int phase, bool roots);
     void SelectTeams();
-    team *TeamCrossover(team* parent1, team* parent2);
+    team *TeamXover(vector<team *> &parents);
     void UpdateTeamPhyloData(team *tm);
     void FindSingleTaskFitnessRange(vector<TaskEnv *> &tasks,
                                     vector<vector<double>> &mins,
@@ -146,11 +144,11 @@ class TPG {
     void SetEliteTeams(vector<TaskEnv *> &tasks);
     void setOutcome(team *tm, string behav, vector<double> &rewards,
                     vector<int> &ints, long gtime);
-    std::string PhylogenyToString();
+    std::string SerializePhylogeny();
     inline void teamMap(map<long, team *> &team_map) const {
         team_map = _teamMap;
     }
-    // void teamTaskRank(int, const vector<int> &);
+    void teamTaskRank(int, const vector<int> &);
     void updateMODESFilters(bool);
     void WriteCheckpoint(long, bool);
     void WriteMPICheckpoint(string &, vector<team *> &);
@@ -159,18 +157,20 @@ class TPG {
      *  TPG member variables and data structures.
      ****************************************************************************/
     //  Populations
-    set<team *, teamIdComp> team_pop_;      // Teams
+    set<team *, teamIdComp> _M;      // Teams
+    set<team *, teamIdComp> _Mroot;  // Root teams for fast lookup
     // Map team id -> team* for RegisterMachine graph traversal
     map<long, team *> _teamMap;
     // keep track of which teams are elites wrt each taskSet
     map<string, vector<team *>> task_set_map_;
-    map<long, RegisterMachine *> program_pop_;
+    map<long, RegisterMachine *> _L;
+    vector<long> _Lids;
     vector<vector<long>> _Memids;
     // one map for each memory type: id->memory*
     vector<map<long, MemoryEigen *>> _Memory;
 
     // Phylogeny data
-    map<long, phyloRecord> phylo_graph_;
+    map<long, phyloRecord> _phyloGraph;
     map<long, modesRecord> _allComponentsA;
     map<long, modesRecord> _allComponentsAt;
     map<long, modesRecord> _persistenceFilterA;
