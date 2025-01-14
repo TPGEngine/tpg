@@ -30,11 +30,14 @@ typedef void (*EvaluatorFunction)(TPG &, EvalData &);
   current phase (train, test, validate) and current task
 */
 vector<team *> GetTeamsToEval(TPG &tpg, TaskEnv *task) {
-  auto root_teams = tpg.GetTeamsInVec(true);
+  auto root_teams = tpg.GetRootTeamsInVec();
   vector<team *> teams_to_eval;
   // Train and validate all teams.
   if (tpg.GetState("phase") != _TEST_PHASE) {
     for (auto tm : root_teams) {
+      if (!tpg.GetParam<int>("keep_old_outcomes")) {
+        tm->resetOutcomes(tpg.GetState("phase"));
+      }
       tm->_n_eval =
           task->GetNumEval(tpg.GetState("phase")) -
           tm->numOutcomes(tpg.GetState("phase"), tpg.GetState("active_task"));
@@ -142,7 +145,7 @@ void evaluate_main(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks,
   }
 
   // Collect evaluation result from each evaluator
-  auto root_teams_map = tpg.GetTeamsInMap(true);
+  auto root_teams_map = tpg.GetRootTeamsInMap();
   all_strings.clear();
   gather(world, my_string, all_strings, 0);
 
@@ -168,14 +171,17 @@ void evaluator(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks) {
     world.recv(0, 0, eval.checkpointString);
     if (NotDoneAndActive(eval)) {
       tpg.ReadCheckpoint(-1, _TRAIN_PHASE, -1, true, eval.checkpointString);
-      tpg.getTeams(eval.teams, true);
+      eval.teams = tpg.GetRootTeamsInVec();
       eval.task = tasks[tpg.GetState("active_task")];
       eval.eval_result = "";
       for (auto tm : eval.teams) {
         eval.tm = tm;
         for (eval.episode = 0; eval.episode < eval.tm->_n_eval;
              eval.episode++) {
-          tpg.rngs_[AUX_SEED].seed(eval.episode);
+           if (tpg.GetParam<int>("keep_old_outcomes") ||
+               tpg.GetParam<int>("replay")) {
+              tpg.rngs_[AUX_SEED].seed(eval.episode);
+           }
           eval.tm->InitMemory(tpg._teamMap, tpg.params_);
           evaluator_map[eval.task->eval_type_](tpg, eval);
           eval.FinalizeStepData(tpg);
@@ -184,7 +190,6 @@ void evaluator(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks) {
       gather(world, eval.eval_result, 0);
     }
   }
-  // tpg.finalize();
 }
 
 /******************************************************************************/
@@ -196,7 +201,7 @@ void replayer_viz(TPG &tpg, vector<TaskEnv *> &tasks) {
   teamUseMapPerTask.resize(tpg.GetState("n_task"));
   std::set<team *, teamIdComp> teams_visitedAllTasks;
 
-  tpg.getTeams(eval.teams, true);
+  eval.teams = tpg.GetRootTeamsInVec();
   eval.eval_result = "";
   for (auto tm : eval.teams) {
     if (tm->id_ != tpg.GetParam<int>("id_to_replay")) continue;
@@ -204,6 +209,7 @@ void replayer_viz(TPG &tpg, vector<TaskEnv *> &tasks) {
 
     vector<int> steps_per_task(tpg.GetState("n_task"), 0);
     // TODO(skelly): clean up
+    tpg.rngs_[AUX_SEED].seed(tpg.GetParam<int>("seed_aux"));
     for (int task = 0; task < tpg.GetState("n_task"); task++) {
         tpg.state_["active_task"] = task;
         eval.task = tasks[tpg.GetState("active_task")];
@@ -215,7 +221,6 @@ void replayer_viz(TPG &tpg, vector<TaskEnv *> &tasks) {
         }
         for (eval.episode = 0; eval.episode < eval.tm->_n_eval;
              eval.episode++) {
-            tpg.rngs_[AUX_SEED].seed(eval.episode);
             eval.tm->InitMemory(tpg._teamMap, tpg.params_);
 
             if (eval.task->eval_type_ == "RecursiveForecast") {
