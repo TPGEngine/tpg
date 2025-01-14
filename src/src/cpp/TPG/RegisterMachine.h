@@ -40,6 +40,12 @@ class RegisterMachine {
                    std::unordered_map<std::string, int> &state, mt19937 &rng,
                    std::vector<bool> &legalOps);
 
+   // Create RegisterMachine and copy instructions
+   RegisterMachine(long action, std::vector<instruction*> &instructions,
+                   std::unordered_map<std::string, std::any>& params,
+                   std::unordered_map<std::string, int>& state, mt19937& rng,
+                   std::vector<bool>& legal_ops);
+
    // Copy contructor
    RegisterMachine(RegisterMachine &rm);
 

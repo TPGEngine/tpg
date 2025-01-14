@@ -5,7 +5,7 @@
 //     pm2->size() == 1 &&
 //     real_dist_(_rngs[TPG_SEED]) <
 //         GetParam<double>("p_instructions_xover")) {
-//   _phyloGraph[(*cm)->id_].ancestorIds.insert(pm2->id_);
+//   phylo_graph_[(*cm)->id_].ancestorIds.insert(pm2->id_);
 //   (*cm)->addAncestorId(pm2->id_);
 
 //   linearCrossover = true;
@@ -22,9 +22,9 @@
 //   cm2 = new team(GetState("t_current"), state_["team_count"]++);
 //   numNewTeams++;
 
-//   _phyloGraph[(cm2)->id_].ancestorIds.insert(pm1->id_);
+//   phylo_graph_[(cm2)->id_].ancestorIds.insert(pm1->id_);
 //   (cm2)->addAncestorId(pm1->id_);
-//   _phyloGraph[(cm2)->id_].ancestorIds.insert(pm2->id_);
+//   phylo_graph_[(cm2)->id_].ancestorIds.insert(pm2->id_);
 //   (cm2)->addAncestorId(pm2->id_);
 
 //   if (real_dist_(_rngs[TPG_SEED]) < 0.5) {
@@ -37,16 +37,16 @@
 
 //   addTeam(cm2);
 //   _Mroot.insert(cm2);
-//   _phyloGraph.insert(pair<long, phyloRecord>(cm2->id_, phyloRecord()));
-//   _phyloGraph[cm2->id_].gtime = GetState("t_current");
-//   _phyloGraph[cm2->id_].root = true;
+//   phylo_graph_.insert(pair<long, phyloRecord>(cm2->id_, phyloRecord()));
+//   phylo_graph_[cm2->id_].gtime = GetState("t_current");
+//   phylo_graph_[cm2->id_].root = true;
 // }
 /****************************************************************************/
 
 /****************************************************************************/
 // // team crossover
 // if (crossover && (pm1->size() > 1 || pm2->size() > 1)) {
-//   _phyloGraph[(*cm)->id_].ancestorIds.insert(pm2->id_);
+//   phylo_graph_[(*cm)->id_].ancestorIds.insert(pm2->id_);
 //   (*cm)->addAncestorId(pm2->id_);
 
 //   pm2->getMembersRef(p2programs);
