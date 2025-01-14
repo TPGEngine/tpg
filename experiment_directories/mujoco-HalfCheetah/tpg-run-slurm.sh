@@ -1,15 +1,9 @@
 #!/bin/bash 
 #SBATCH --account=def-skelly
 
-# # single node
-# #SBATCH --nodes=1
-# #SBATCH --ntasks-per-node=5
-# #SBATCH --mem=0
-# #SBATCH --time=0-0:30  # time (DD-HH:MM)
-
 # cpus anywhere
 #SBATCH --ntasks=21               
-#SBATCH --mem-per-cpu=4G      
+#SBATCH --mem-per-cpu=6G      
 #SBATCH --time=0-12:00  # time (DD-HH:MM)
 
 #defaults

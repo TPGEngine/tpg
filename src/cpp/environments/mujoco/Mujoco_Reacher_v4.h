@@ -5,6 +5,10 @@
 #include <misc.h>
 
 class Mujoco_Reacher_v4 : public MujocoEnv {
+  private:
+   int id_fingertip_;
+   int id_target_;
+
   public:
    // Parameters
    double reward_distance_weight = 1.0;
@@ -19,6 +23,9 @@ class Mujoco_Reacher_v4 : public MujocoEnv {
           ExpandEnvVars(std::any_cast<string>(params["mj_model_path"]));
 
       initialize_simulation();
+
+      id_fingertip_ = mj_name2id(m_, mjOBJ_XBODY, "fingertip");
+      id_target_ = mj_name2id(m_, mjOBJ_XBODY, "target");
 
       obs_size_ = 10;
       state_.resize(obs_size_);
@@ -46,24 +53,21 @@ class Mujoco_Reacher_v4 : public MujocoEnv {
       return reward_control_weight * cost;
    }
 
-   bool terminal() {
-      terminalState = step_ >= max_step_ ? true : false;
-      return terminalState;
+   std::vector<double> get_dist() {
+      return {d_->xpos[id_fingertip_ * 3 + 0] - d_->xpos[id_target_ * 3 + 0],
+              d_->xpos[id_fingertip_ * 3 + 1] - d_->xpos[id_target_ * 3 + 1]};
    }
 
+   bool terminal() { return step_ >= max_step_; }
+
    Results sim_step(std::vector<double>& action) {
-      //auto vec = d_->xipos;
-      // xipos id : fingertip = 3 , target = 4
-      std::vector<double> dist_diff = {
-          *(d_->xpos + 3 * 3) - *(d_->xpos + 3 * 4),
-          *(d_->xpos + 3 * 3 + 1) - *(d_->xpos + 3 * 4 + 1)};
-      //std::cout << dist_di
+      auto dist_diff = get_dist();
       double reward_dist =
           -reward_distance_weight *
           std::sqrt(std::pow(dist_diff[0], 2) + std::pow(dist_diff[1], 2));
-      //	std::cout << "reward_dist "<< reward_dist << std::endl;
+
       double reward_ctrl = -control_cost(action);
-      //	std::cout << "reward ctrl" << reward_ctrl << std::endl;
+
       reward = reward_dist + reward_ctrl;
       do_simulation(action, frame_skip_);
       get_obs(state_);
@@ -81,34 +85,17 @@ class Mujoco_Reacher_v4 : public MujocoEnv {
                      [](double x) { return cos(x); });
       std::transform(theta.begin(), theta.end(), sin_theta.begin(),
                      [](double x) { return sin(x); });
-
-      // sin(theta)
+      // cos(theta)
       std::copy_n(cos_theta.begin(), 2, obs.begin());
+      // sin(theta)
       std::copy_n(sin_theta.begin(), 2, obs.begin() + 2);
       // qpos[2:]
       std::copy_n(d_->qpos + 2, m_->nq - 2, obs.begin() + 4);
       // qvel[0:2]
       std::copy_n(d_->qvel, 2, obs.begin() + 4 + m_->nq - 2);
       // xpos[0:2]
-      //int fingertip_id = mj_name2id(m_ , mjOBJ_BODY, "fingertip");
-      //	std::vector<double> dist_diff = {d_->xpos + 3 * 3 - d_->xpos + 3 * 4 ,
-      //		d_->xpos + 3 * 3 + 1 - d_->xpos + 3 * 4 + 1 };
-      std::vector<double> dist_diff = {
-          *(d_->xpos + 3 * 3) - *(d_->xpos + 3 * 4),
-          *(d_->xpos + 3 * 3 + 1) - *(d_->xpos + 3 * 4 + 1)};
+      auto dist_diff = get_dist();
       std::copy_n(dist_diff.begin(), 2, obs.begin() + 6 + m_->nq - 2);
-      //std::cout << "fingertip is " << fingertip_id << std::endl;
-      //int target_id = mj_name2id(m_, mjOBJ_BODY,"target");
-      //std::cout << "target is " << target_id << std::endl;
-      /* for (int i = 0 ; i < 4 ; i++)
-	{
-		for (int j = 0 ; j < 3 ; j++)
-		{	 std::cout << *(d_->xipos + i*j) << " " ;
-		}
-		std::cout << "\n";
-	}
-*/
-      //std::cout << "\n" << std::endl;
    }
 
    void reset(mt19937& rng) {
@@ -121,15 +108,11 @@ class Mujoco_Reacher_v4 : public MujocoEnv {
 
       std::vector<double> goal(2);
       std::normal_distribution<double> dis_goal(-0.2, 0.2);
-      //int count = 0;
-      //std::cout << "reset" << std::endl;
       while (true) {
 
          goal[0] = dis_goal(rng);
          goal[1] = dis_goal(rng);
-         //std::cout << goal[0]<< std::endl;
-         //if ( count == 10 ) break;
-         //count += 1 ;
+
          if (goal[0] * goal[0] + goal[1] * goal[1] < 0.04)
             break;
       }
@@ -141,13 +124,10 @@ class Mujoco_Reacher_v4 : public MujocoEnv {
       for (size_t i = 0; i < qvel.size(); i++) {
          qvel[i] = init_qvel_[i] + dis_vel(rng);
       }
-      std::fill_n(std::back_inserter(qvel), 2, 0.0);
-      //std::fill(qvel.end()-2 , qvel.end() , 0.0);
-
+      std::fill_n(qvel.begin() + 2, 2, 0.0);
       mj_resetData(m_, d_);
       set_state(qpos, qvel);
       step_ = 0;
-      terminalState = false;
    }
 };
 

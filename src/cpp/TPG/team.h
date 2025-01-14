@@ -67,6 +67,7 @@ class team {
   void getBehaviourSequence(vector<int> &, int);
   double getMeanOutcome(int, int, int, bool, bool);
   double getMeanOutcome(int, int, int, int, long, bool, bool);
+  double GetMedianOutcome(int, int, int);
   inline bool hasOutcome(int task, int phase, int seed) {
     return outcomes_[task][phase].find(seed) != outcomes_[task][phase].end();
   }

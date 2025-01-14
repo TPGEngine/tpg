@@ -82,19 +82,19 @@ class MemoryEigen {
       n_memories_ = std::atoi(outcome_fields[i++].c_str());
       memory_size_ = std::atoi(outcome_fields[i++].c_str());
 
-      size_t expected_size;
-      if (type_ == 0)
-         expected_size = 5 + 8;
-      else if (type_ == 1)
-         expected_size = 5 + (8 * memory_size_);
-      else
-         expected_size = 5 + (8 * (memory_size_ * memory_size_));
-      if (outcome_fields.size() != expected_size) {
-         cerr << "dbg memory_size_ " << memory_size_ << " sz "
-              << outcome_fields.size() << " ex " << expected_size << endl;
-         cerr << "str " << vecToStr(outcome_fields) << endl;
-         die(__FILE__, __FUNCTION__, __LINE__, "Bad memory size.");
-      }
+      // size_t expected_size;
+      // if (type_ == 0)
+      //    expected_size = 5 + 8;
+      // else if (type_ == 1)
+      //    expected_size = 5 + (8 * memory_size_);
+      // else
+      //    expected_size = 5 + (8 * (memory_size_ * memory_size_));
+      // if (outcome_fields.size() != expected_size) {
+      //    cerr << "dbg memory_size_ " << memory_size_ << " sz "
+      //         << outcome_fields.size() << " ex " << expected_size << endl;
+      //    cerr << "str " << vecToStr(outcome_fields) << endl;
+      //    die(__FILE__, __FUNCTION__, __LINE__, "Bad memory size.");
+      // }
       ResizeMemory();
       // Read in evolved constants
       for (size_t idx = 0; idx < n_memories_; idx++) {
@@ -116,11 +116,19 @@ class MemoryEigen {
 
    ~MemoryEigen() {}
 
-   inline void AddNoiseToConst(std::mt19937 &rng, double stddev) {
-      auto dis = std::normal_distribution<double>(0, stddev);
+   // From AutoML-Zero https://doi.org/10.48550/arXiv.2003.03384
+   // When modifying a real-valued constant, we multiply it by a
+   // uniform random number in [0.5, 2.0] and flip its sign with
+   // 10% probability
+   inline void MutateConstants(std::mt19937 &rng) {
+      auto dis1 = std::uniform_real_distribution<double>(0.5, 2.0);
+      auto dis2 = std::uniform_real_distribution<double>(0.0, 1.0);
       for (size_t i = 0; i < const_memory_.size(); i++) {
          for (auto &x : const_memory_[i].reshaped()) {
-            x += dis(rng);
+            x *= dis1(rng);
+            if (dis2(rng) <= 0.1) {
+               x *= -1;
+            }
          }
       }
    }
