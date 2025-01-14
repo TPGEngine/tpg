@@ -224,6 +224,7 @@ int main(int argc, char** argv) {
       } else {
          while (tpg.GetState("t_current") <=
                 tpg.GetParam<int>("n_generations")) {
+            tpg.phylo_graph_.clear();  // TODO(skelly): add switch for phylo     
             // Replacement /////////////////////////////////////////////////
             if (tpg.GetState("t_current") > tpg.GetState("t_start")) {
                startGenTeams = chrono::system_clock::now();
@@ -298,7 +299,7 @@ int main(int argc, char** argv) {
                tpg.WriteCheckpoint(tpg.GetState("t_current"), false);
             }
             if (tpg.GetParam<int>("write_phylogeny")) {
-               tpg.printPhyloGraphDot(tpg.getBestTeam());
+               tpg.printPhyloGraphDot(tpg.GetBestTeam());
             }
             endChkp = chrono::system_clock::now() - startChkp;
             endGen = chrono::system_clock::now() - startGen;
@@ -339,7 +340,6 @@ int main(int argc, char** argv) {
             os << " gTms " << endGenTeams.count();
             os << " elTms " << endSetEliteTeams.count();
             os << " sTms " << endSelTeams.count();
-            os << " chkp " << endChkp.count();
             os << " rprt " << endReport.count();
             os << " MDS " << endMODES.count();
             os << " lost " << lost;

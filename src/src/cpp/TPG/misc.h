@@ -166,10 +166,44 @@ string vecToStrNoSpace(std::vector<vtype> &v) {
     return oss.str();
 }
 
-double vecMedian(std::vector<double>);
-int vecMedian(std::vector<int>);
-double vecMean(std::vector<double>);
-double vecMean(std::vector<int>);
+/******************************************************************************/
+template <class vtype>
+double VectorMedian(std::vector<vtype> vec) {
+   auto n = vec.size();
+
+   if (n == 0) {
+      die(__FILE__, __FUNCTION__, __LINE__,
+          "trying to get median of empty vector");
+   }
+   size_t median_idx = n / 2;
+
+   double m = 0;
+   if (n % 2 == 1) {
+      std::nth_element(vec.begin(), vec.begin() + median_idx, vec.end());
+      m = vec[median_idx];
+   } else {
+      std::nth_element(vec.begin(), vec.begin() + median_idx - 1, vec.end());
+      double mid1 = vec[median_idx - 1];
+      std::nth_element(vec.begin(), vec.begin() + median_idx, vec.end());
+      double mid2 = vec[median_idx];
+      m = (mid1 + mid2) / 2.0;
+   }
+//    std::sort(vec.begin(), vec.end());
+//    cerr << "dbg " << vecToStr(vec)  << ":" << m << endl;
+   return m;
+}
+
+/******************************************************************************/
+template <class vtype>
+double VectorMean(std::vector<vtype> vec) {
+   auto n = vec.size();
+
+   if (n == 0) {
+      die(__FILE__, __FUNCTION__, __LINE__,
+          "trying to get mean of empty vector");
+   }
+   return accumulate(vec.begin(), vec.end(), 0.0) / n;
+}
 
 // Function to generate power set PS of given set S
 inline void FindPowerSet(std::vector<int> const &S, std::vector<int> &set,
