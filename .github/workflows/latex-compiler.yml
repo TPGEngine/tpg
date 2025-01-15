@@ -55,6 +55,7 @@ jobs:
             dir=$(dirname "$tex_file")
             cd "$dir"
             pdflatex $file
+            pdflatex $file
             cd -
           done
 
