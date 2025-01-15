@@ -1,0 +1,5 @@
+Import('env')
+env.Append(CPPPATH = ['../../TPG', './','/usr/include/eigen3'])
+env.Append(LIBS = ['glut', 'GLU', 'GL'])
+env.Append(LIBPATH = ['../../TPG', '/usr/lib/x86_64-linux-gnu','/usr/include/eigen3'])
+
