@@ -1,0 +1,308 @@
+################################################################################
+## Experiment Tracking Parameters ##############################################
+################################################################################
+
+# whether to track experiments in comet
+track_experiments 0
+
+# comet experiment key
+experiment_key 7ac170bcf3e64f6fb3a29646c316ba7e
+
+# how frequently to track experiment metrics (in generations)
+track_mod 20
+
+################################################################################
+## Experiment Type Parameters ##################################################
+################################################################################
+
+# re-evaluate an individual from a checkpoint file
+replay 0
+
+# re-evaluate an individual from a checkpoint file and animate behaviour, 
+# if available
+animate 0
+
+################################################################################
+## GA Parameters ###############################################################
+################################################################################
+
+# start from a checkpoint file
+checkpoint 0
+
+# save checkpoints during evolution
+write_train_checkpoints 0
+write_test_checkpoints 1
+
+# save phylogenetic data
+write_phylogeny 0
+
+# how frequently to run test procedure
+test_mod 1
+
+# Number of tasks used each selection for evaluation. 
+# The rest are estimated with phylogeny.
+#n_sampled_tasks_for_eval 1
+
+# number of fitness functions available
+n_fit_mode 1
+
+# which fitness function to use, if multiple available
+fit_mode 0
+
+# which behaviour characterization function to use, if multiple available
+dist_mode 0
+
+# auxilliary seed, e.g. for simulators
+seed_aux 42
+
+# max number of generations
+n_generations 1000000
+
+# allow mutation of internal teams (i.e. non-root teams (in-progress))
+mu_internal 0
+
+# number of elite teams
+n_elite 500
+
+# n_elite * n_elite_mul new teams are created each generation
+n_elite_mul 2
+
+# fitness proportional selection
+fit_prop_select 0
+
+# which diversity mode to use, if available
+diversity_mode 0
+
+parent_select_roots_only 0
+
+################################################################################
+## Team  parameters ############################################################
+################################################################################
+
+# initial team size
+max_initial_team_size 10
+
+# max team size
+max_team_size 1000000
+
+# max teams per graph
+max_teams_per_graph 1000000
+
+# when changing action pointer, probability of selecting atomic action
+p_atomic 0.99
+
+# team mutation: probability of deleting program from team
+pmd 0.5
+
+# team mtation: probability of adding program to team
+pma 0.4
+
+# team mutation: probability of mutating a program
+pmm 1.0
+
+# team mutation: probability of mutating a program's action pointer
+pmn 0.2
+
+# team mutation: probability of mutating program execution order
+pmw 0.2
+
+# team variation: probability of team crossover
+pmx 0.5
+
+# team variation: probability of team crossover adding each parent prog to child
+pmx_p 0.5
+
+################################################################################
+## Program  parameters #########################################################
+################################################################################
+
+# use stateful programs
+# if set to 0, memories are set to 0 prior to each program execution
+# if set to 1, memories are only set to 0 prior to each evaluation
+stateful 1
+
+# skip introns during evaluation
+skip_introns 0
+
+# enable continuous outputs
+# 0: disabled
+# 1: output is scalar s1
+# 2: output is vector v1
+# 3: output is matrix m1
+continuous_output 2
+
+# number of inputs (aka "features" or "state variables")
+n_input 3
+
+# max initial program size
+max_initial_prog_size 10
+
+# max program size
+max_prog_size 1000000
+
+# number of memory indices
+# each memory index points to a data structure (scalar, vector, or matrix)
+n_memories 8
+
+# Dimensionality for vector & matrix memory
+memory_size 3
+min_memory_size 3
+max_memory_size 3 
+
+# Observations are stored in a buffer with this time window.
+observation_buff_size 1
+min_observation_buff_size 1
+max_observation_buff_size 32
+
+# program variation: probability of changing a random instruction
+p_instructions_mutate 1.0
+
+# program variation: probability of swaping the position of two instructions
+p_instructions_swap 0.5
+
+# program variation: probability of deleting an instruction
+p_instructions_delete 0.5
+
+# program variation: probability of adding an instruction
+p_instructions_add 0.4
+
+# program variation: probability of linear crossover with another team
+p_instructions_xover 0.0
+
+# program variation: probability of adding noise to constants
+#p_memory_mu_const 1.0
+
+# program variation: stddev of normal noise added to each const
+instructions_mu_const_stddev 0.05
+
+# program variation: probability of changing observation_buff_size
+p_observation_buff_size 0.0
+
+# program variation: probability of changing observation_index
+p_observation_index 0.2
+
+# program variation: probability of changing memory_size
+p_memory_size 0.0
+
+################################################################################
+## General Task Parameters #####################################################
+################################################################################
+
+# which tasks are active
+# rhs should be a single task name or a comma-separated list
+active_tasks Bach
+
+# use the partially-observable version of a task, if available
+# currently only available for calssic control tasks
+partially_observable 1
+
+# number of discrete actions
+n_discrete_action 3
+
+################################################################################
+## Parameters Specific to Recursive Forecasting ################################
+################################################################################
+
+# fitness function
+# supported options: "mse", "correlation", "theils", "pearson"
+forecast_fitness mse
+
+# whether to use discrete actions for forecasting
+# must also set n_discrete_action
+forecast_discrete 0
+
+# whether to normalize forecasting dataset in [0,1]
+forecast_normalize_data 1
+
+forecast_prime_steps 50
+
+forecast_horizon_train 50
+forecast_horizon_val 100
+forecast_horizon_test 100
+
+forecast_n_eval_train 20
+forecast_n_eval_val 10
+
+################################################################################
+## Operations, uncomment to activate ###########################################
+################################################################################
+
+# scalar ######################
+SCALAR_SUM_OP
+SCALAR_DIFF_OP
+SCALAR_PRODUCT_OP
+SCALAR_DIVISION_OP
+SCALAR_ABS_OP
+SCALAR_RECIPROCAL_OP
+#SCALAR_SIN_OP
+SCALAR_COS_OP
+#SCALAR_TAN_OP
+#SCALAR_ARCSIN_OP
+#SCALAR_ARCCOS_OP
+#SCALAR_ARCTAN_OP
+SCALAR_EXP_OP
+SCALAR_LOG_OP
+SCALAR_HEAVYSIDE_OP
+SCALAR_CONDITIONAL_OP
+#SCALAR_POW_OP
+#SCALAR_SQR_OP
+#SCALAR_CUBE_OP
+#SCALAR_TANH_OP
+#SCALAR_SQRT_OP
+#SCALAR_CONST_SET_OP
+SCALAR_MIN_OP
+SCALAR_MAX_OP
+
+# vector #########################
+VECTOR_HEAVYSIDE_OP
+MATRIX_HEAVYSIDE_OP
+SCALAR_VECTOR_PRODUCT_OP
+SCALAR_BROADCAST_OP
+VECTOR_RECIPROCAL_OP
+VECTOR_NORM_OP
+VECTOR_ABS_OP
+VECTOR_SUM_OP
+VECTOR_DIFF_OP
+VECTOR_PRODUCT_OP
+VECTOR_DIVISION_OP
+VECTOR_INNER_PRODUCT_OP
+VECTOR_MIN_OP
+VECTOR_MAX_OP
+VECTOR_MEAN_OP
+VECTOR_ST_DEV_OP
+#VECTOR_CONST_SET_OP
+#SCALAR_VECTOR_ASSIGN_OP
+ 
+# matrix #########################
+VECTOR_OUTER_PRODUCT_OP
+SCALAR_MATRIX_PRODUCT_OP
+MATRIX_RECIPROCAL_OP
+MATRIX_VECTOR_PRODUCT_OP
+VECTOR_COLUMN_BROADCAST_OP
+VECTOR_ROW_BROADCAST_OP
+MATRIX_NORM_OP
+MATRIX_COLUMN_NORM_OP
+MATRIX_ROW_NORM_OP
+MATRIX_TRANSPOSE_OP
+MATRIX_ABS_OP
+MATRIX_SUM_OP
+MATRIX_DIFF_OP
+MATRIX_PRODUCT_OP
+MATRIX_DIVISION_OP
+MATRIX_MATRIX_PRODUCT_OP
+MATRIX_MIN_OP
+MATRIX_MAX_OP
+MATRIX_MEAN_OP
+MATRIX_ROW_MEAN_OP
+MATRIX_ROW_ST_DEV_OP
+MATRIX_ST_DEV_OP
+#MATRIX_CONST_SET_OP
+#SCALAR_MATRIX_ASSIGN_OP
+
+## noise ##########################
+##SCALAR_UNIFORM_SET_OP
+#SCALAR_GAUSSIAN_SET_OP
+##VECTOR_UNIFORM_SET_OP
+#VECTOR_GAUSSIAN_SET_OP
+##MATRIX_UNIFORM_SET_OP
+#MATRIX_GAUSSIAN_SET_OP
