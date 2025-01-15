@@ -1,32 +1,20 @@
+// TODO(skelly): move visualization code the MujocoEnv.h
 #ifndef evaluators_mujoco_h
 #define evaluators_mujoco_h
 
 #include <GLFW/glfw3.h>
 #include <mujoco/mujoco.h>
-#include <GL/osmesa.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <cstring>
-#include <cstdio>
 
-// Global variables
-mjModel* m = NULL;   // MuJoCo model
-mjData* d = NULL;    // MuJoCo data
-mjvCamera cam;       // abstract camera
-mjvOption opt;       // visualization options
-mjvScene scn;        // abstract scene
-mjrContext con;      // custom GPU context
+/******************************************************************************/
+// MuJoCo data structures
+mjModel* m = NULL;  // MuJoCo model
+mjData* d = NULL;   // MuJoCo data
+mjvCamera cam;      // abstract camera
+mjvOption opt;      // visualization options
+mjvScene scn;       // abstract scene
+mjrContext con;     // custom GPU context
 
-// OSMesa variables
-OSMesaContext osmesa_ctx = NULL;
-unsigned char* osmesa_buffer = NULL;
-
-// Headless mode flag
-bool headless = false;
-int frame_idx = 0;
-
-// Mouse interaction variables (for GLFW)
+// mouse interaction
 bool button_left = false;
 bool button_middle = false;
 bool button_right = false;
@@ -35,7 +23,7 @@ double lasty = 0;
 
 GLFWwindow* window = 0;
 
-// Keyboard callback (for GLFW)
+// keyboard callback
 void keyboard(GLFWwindow* window, int key, int scancode, int act, int mods) {
     // backspace: reset simulation
     if (act == GLFW_PRESS && key == GLFW_KEY_BACKSPACE) {
@@ -44,7 +32,7 @@ void keyboard(GLFWwindow* window, int key, int scancode, int act, int mods) {
     }
 }
 
-// Mouse button callback (for GLFW)
+// mouse button callback
 void mouse_button(GLFWwindow* window, int button, int act, int mods) {
     // update button state
     button_left =
@@ -58,7 +46,7 @@ void mouse_button(GLFWwindow* window, int button, int act, int mods) {
     glfwGetCursorPos(window, &lastx, &lasty);
 }
 
-// Mouse move callback (for GLFW)
+// mouse move callback
 void mouse_move(GLFWwindow* window, double xpos, double ypos) {
     // no buttons down: nothing to do
     if (!button_left && !button_middle && !button_right) {
@@ -93,7 +81,7 @@ void mouse_move(GLFWwindow* window, double xpos, double ypos) {
     mjv_moveCamera(m, action, dx / height, dy / height, &scn, &cam);
 }
 
-// Scroll callback (for GLFW)
+// scroll callback
 void scroll(GLFWwindow* window, double xoffset, double yoffset) {
     // emulate vertical mouse motion = 5% of window height
     mjv_moveCamera(m, mjMOUSE_ZOOM, 0, -0.05 * yoffset, &scn, &cam);
@@ -103,158 +91,68 @@ void InitVisualization(mjModel* task_m, mjData* task_d) {
     m = task_m;
     d = task_d;
 
-    // Check if we are in a headless environment
-    const char* display = getenv("DISPLAY");
-    headless = (display == NULL || strlen(display) == 0);
-
-    if (!headless) {
-        // Initialize GLFW
-        if (!glfwInit()) {
-            mju_error("Could not initialize GLFW");
-        }
-
-        // Create window, make OpenGL context current, request v-sync
-        window = glfwCreateWindow(1200, 900, "Demo", NULL, NULL);
-        if (!window) {
-            mju_error("Could not create GLFW window");
-        }
-        glfwMakeContextCurrent(window);
-        glfwSwapInterval(1);
-
-        // Initialize visualization data structures
-        mjv_defaultCamera(&cam);
-        mjv_defaultOption(&opt);
-        mjv_defaultScene(&scn);
-        mjr_defaultContext(&con);
-
-        // Create scene and context
-        mjv_makeScene(m, &scn, 2000);
-        mjr_makeContext(m, &con, mjFONTSCALE_150);
-
-        // Install GLFW mouse and keyboard callbacks
-        glfwSetKeyCallback(window, keyboard);
-        glfwSetCursorPosCallback(window, mouse_move);
-        glfwSetMouseButtonCallback(window, mouse_button);
-        glfwSetScrollCallback(window, scroll);
-    } else {
-        // Headless mode using OSMesa
-        // Create OSMesa context
-        osmesa_ctx = OSMesaCreateContextExt(OSMESA_RGBA, 24, 8, 8, NULL);
-        if (!osmesa_ctx) {
-            mju_error("OSMesa context creation failed");
-        }
-
-        // Allocate buffer for OSMesa
-        int width = 1200;
-        int height = 900;
-        osmesa_buffer = (unsigned char*)malloc(width * height * 4 * sizeof(GLubyte));
-        if (!osmesa_buffer) {
-            mju_error("OSMesa buffer allocation failed");
-        }
-
-        // Bind the buffer to the context and make it current
-        if (!OSMesaMakeCurrent(osmesa_ctx, osmesa_buffer, GL_UNSIGNED_BYTE, width, height)) {
-            mju_error("OSMesa make current failed");
-        }
-
-        // Initialize visualization data structures
-        mjv_defaultCamera(&cam);
-        mjv_defaultOption(&opt);
-        mjv_defaultScene(&scn);
-        mjr_defaultContext(&con);
-
-        // Create scene and context
-        mjv_makeScene(m, &scn, 2000);
-        mjr_makeContext(m, &con, mjFONTSCALE_150);
-
-        // Initialize camera for headless rendering
-        mjv_defaultFreeCamera(m, &cam);
+    // init GLFW
+    if (!glfwInit()) {
+        mju_error("Could not initialize GLFW");
     }
+
+    // create window, make OpenGL context current, request v-sync
+    // GLFWwindow* window = glfwCreateWindow(1200, 900, "Demo", NULL, NULL);
+    window = glfwCreateWindow(1200, 900, "Demo", NULL, NULL);
+    cout << "WINDOW1:";
+    cout << glfwWindowShouldClose(window) << endl;
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(1);
+
+    // initialize visualization data structures
+    mjv_defaultCamera(&cam);
+    mjv_defaultOption(&opt);
+    mjv_defaultScene(&scn);
+    mjr_defaultContext(&con);
+
+    // create scene and context
+    mjv_makeScene(m, &scn, 2000);
+    mjr_makeContext(m, &con, mjFONTSCALE_150);
+
+    // install GLFW mouse and keyboard callbacks
+    glfwSetKeyCallback(window, keyboard);
+    glfwSetCursorPosCallback(window, mouse_move);
+    glfwSetMouseButtonCallback(window, mouse_button);
+    glfwSetScrollCallback(window, scroll);
+
+    cout << "WINDOW2:" << glfwWindowShouldClose(window) << endl;
 }
 
-void StepVisualization(TPG& tpg) {
-    if (!headless) {
-        // Get framebuffer viewport
-        mjrRect viewport = {0, 0, 0, 0};
-        glfwGetFramebufferSize(window, &viewport.width, &viewport.height);
+void StepVisualization() {
+    // get framebuffer viewport
+    mjrRect viewport = {0, 0, 0, 0};
+    glfwGetFramebufferSize(window, &viewport.width, &viewport.height);
 
-        // Update scene and render
-        mjv_updateScene(m, d, &opt, NULL, &cam, mjCAT_ALL, &scn);
-        mjr_render(viewport, &scn, &con);
+    // update scene and render
+    mjv_updateScene(m, d, &opt, NULL, &cam, mjCAT_ALL, &scn);
+    mjr_render(viewport, &scn, &con);
 
-        // Swap OpenGL buffers (blocking call due to v-sync)
-        glfwSwapBuffers(window);
+    // swap OpenGL buffers (blocking call due to v-sync)
+    glfwSwapBuffers(window);
 
-        // Process pending GUI events, call GLFW callbacks
-        glfwPollEvents();
-    } else {
-        // Headless mode
-        // Set offscreen rendering
-        mjr_setBuffer(mjFB_OFFSCREEN, &con);
-        if (con.currentBuffer != mjFB_OFFSCREEN) {
-            printf("Warning: offscreen rendering not supported, using default/window framebuffer\n");
-        }
-
-        // Get size of active renderbuffer
-        mjrRect viewport = mjr_maxViewport(&con);
-
-        // Update scene and render
-        mjv_updateScene(m, d, &opt, NULL, &cam, mjCAT_ALL, &scn);
-        mjr_render(viewport, &scn, &con);
-
-        // Read pixels from the offscreen buffer
-        unsigned char* rgb = (unsigned char*)malloc(3 * viewport.width * viewport.height);
-        if (!rgb) {
-            mju_error("Could not allocate buffer for rgb");
-        }
-        mjr_readPixels(rgb, NULL, viewport, &con);
-
-        // Save the image to disk
-        char filename[100];
-        snprintf(filename, sizeof(filename), "frames/frame_%05d.ppm", frame_idx);
-        FILE* fp = fopen(filename, "wb");
-        if (!fp) {
-            mju_error("Could not open file for writing");
-        }
-        fprintf(fp, "P6\n%d %d\n255\n", viewport.width, viewport.height);
-        // PPM format expects top-to-bottom, left-to-right
-        // MuJoCo's mjr_readPixels reads from bottom-left, so we need to flip vertically
-        for (int row = viewport.height - 1; row >= 0; --row) {
-            fwrite(&rgb[3 * row * viewport.width], 1, 3 * viewport.width, fp);
-        }
-        fclose(fp);
-
-        free(rgb);
-
-        frame_idx++;
-    }
+    // process pending GUI events, call GLFW callbacks
+    glfwPollEvents();
 }
 
 void MaybeStartAnimation(TPG& tpg, TaskEnv* task) {
     if (tpg.GetParam<int>("animate")) {
         MujocoEnv* t = dynamic_cast<MujocoEnv*>(task);
         InitVisualization(t->m_, t->d_);
-        // If in headless mode, create frames directory
-        if (headless) {
-            // Create frames directory if it doesn't exist
-            struct stat st{};  // Properly initialize all members
-            if (stat("frames", &st) == -1) {
-                if (mkdir("frames", 0700) != 0) {
-                    mju_error("Failed to create frames directory");
-                }
-            }
-            // Reset frame index
-            frame_idx = 0;
-        }
     }
 }
 
 void MaybeAnimateStep(TPG& tpg) {
     if (tpg.GetParam<int>("animate")) {
-        StepVisualization(tpg);
+        StepVisualization();
     }
 }
 
+/******************************************************************************/
 void EvalMujoco(TPG& tpg, EvalData& eval) {
     MujocoEnv* task = dynamic_cast<MujocoEnv*>(eval.task);
     task->reset(tpg.rngs_[AUX_SEED]);
