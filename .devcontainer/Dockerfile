@@ -10,9 +10,13 @@ RUN if [ "${REINSTALL_CMAKE_VERSION_FROM_SOURCE}" != "none" ]; then \
     fi \
     && rm -f /tmp/reinstall-cmake.sh
 
-# [Optional] Uncomment this section to install additional vcpkg ports.
-# RUN su vscode -c "${VCPKG_ROOT}/vcpkg install <your-port-name-here>"
+# Install packages for X11 forwarding
+RUN apt-get update && apt-get install -y x11-apps mesa-utils
 
-# [Optional] Uncomment this section to install additional packages.
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <your-package-list-here>
+# Setting XDG_RUNTIME_DIR env variable to store runtime files
+ENV XDG_RUNTIME_DIR=/tmp/runtime-dir
+RUN mkdir -p /tmp/runtime-dir && chmod 700 /tmp/runtime-dir
+
+# Make sure OpenGL uses indirect rendering
+ENV LIBGL_ALWAYS_INDIRECT=1
+

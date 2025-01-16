@@ -8,12 +8,8 @@
 	"runArgs": [
 		// Forward your DISPLAY to XQuartz via TCP
 		"-e", "DISPLAY=host.docker.internal:0",
-		
-		// (Optional) Some apps need this to avoid MIT-SHM errors
-		"-e", "QT_X11_NO_MITSHM=1"
-	  ],
+		"-v", "/tmp/.X11-unix:/tmp/.X11-unix"
+	  ]
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "sudo apt-get update && sudo apt-get install -y x11-apps libx11-6 mesa-utils libglu-dev libgl1-mesa-dev"
-
 }
