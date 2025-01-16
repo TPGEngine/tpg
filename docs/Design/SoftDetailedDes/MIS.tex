@@ -127,9 +127,13 @@ The following table summarizes the primitive data types used by TPG.
 \textbf{Data Type} & \textbf{Notation} & \textbf{Description}\\ 
 \midrule
 character & char & a single symbol or digit\\
-integer & $\mathbb{Z}$ & a number without a fractional component in (-$\infty$, $\infty$) \\
+string & $string$ & a sequence of characters \\
+integer & $int$, $\mathbb{Z}$ & a number without a fractional component in (-$\infty$, $\infty$) \\
+double & $double$ & used to store high-precision floating-point numbers [1.7E-308, 1.7E+308] \\
 natural number & $\mathbb{N}$ & a number without a fractional component in [1, $\infty$) \\
 real & $\mathbb{R}$ & any number in (-$\infty$, $\infty$)\\
+pi & $\pi$ & a mathematical constant, approximately equal to 3.14159 \\
+file & $file$ & a collection of data that is stored on a computer\\
 \bottomrule
 \end{tabular} 
 \end{center}
@@ -374,11 +378,11 @@ None
     \hline
     init\_qvel\_ & std::vector<double> & Initial velocities\\
     \hline
-    model\_path\_ & String & Absolute path to model xml file\\
+    model\_path\_ & string & Absolute path to model xml file\\
     \hline
-    frame\_skip\_ & Integer & Number of frames per simulation step\\
+    frame\_skip\_ & int & Number of frames per simulation step\\
     \hline
-    obs\_size\_ & Integer & Size of the observation space\\
+    obs\_size\_ & int & Size of the observation space\\
     \hline
   \end{tabular}
 \end{center}
@@ -625,19 +629,19 @@ None
   \hline
   \textbf{Name} & \textbf{Type} & \textbf{Description} \\
   \hline
-  world\_rank & Integer & The rank of the MPI process within the environment. It is used to distinguish between the master and evaluator processes. \\
+  world\_rank & int & The rank of the MPI process within the environment. It is used to distinguish between the master and evaluator processes. \\
   \hline
-  n\_task & Integer & The current number of tasks (environments) running. \\
+  n\_task & int & The current number of tasks (environments) running. \\
   \hline
-  active\_task & Integer & The index of the current active task. \\
+  active\_task & int & The index of the current active task. \\
   \hline
-  phase & Integer & The numerical representation of the current phase of the program. \\
+  phase & int & The numerical representation of the current phase of the program. \\
   \hline
-  t\_current & Integer & The current generation or iteration of the task. \\
+  t\_current & int & The current generation or iteration of the task. \\
   \hline
-  t\_start & Integer & The starting generation or iteration of the task. \\
+  t\_start & int & The starting generation or iteration of the task. \\
   \hline
-  task\_to\_replay & Integer & The index of the task to replay. \\
+  task\_to\_replay & int & The index of the task to replay. \\
   \hline
   \end{tabular}
 \end{center}
@@ -648,7 +652,7 @@ None
   \hline
   \textbf{Name} & \textbf{Type} & \textbf{Description} \\
   \hline
-  COMET\_API\_KEY & String & The API key used for Comet experiment tracking service \\
+  COMET\_API\_KEY & string & The API key used for Comet experiment tracking service \\
   \hline
   \end{tabular}
   \end{center}
@@ -690,7 +694,7 @@ None
   \item What went well while writing this deliverable?\\
   
 
-  \textbf{Mark Cruz} - Everyone on the team was able to accomplish their part of the deliverable without any critical blockers. The team was able to work cohesively, leveraging their diverse knowledge on certain topics which reflects the outcome of the deliverable. Constant communication and updates on every member’s progress allowed the team to keep track and stay informed with convenience and ease.
+  \textbf{Mark} - Everyone on the team was able to accomplish their part of the deliverable without any critical blockers. The team was able to work cohesively, leveraging their diverse knowledge on certain topics which reflects the outcome of the deliverable. Constant communication and updates on every member’s progress allowed the team to keep track and stay informed with convenience and ease.
 
   \textbf{Cyruss} -  An aspect that went well while writing this deliverable was the easy division of parts, specifically deciding who would be doing which sections of the deliverable. Each member leaned towards specific parts, which minimized any conflict between members. The discussion amongst the team during the winter break allowed each team member to focus on specific areas throughout the few couple of weeks, making the process more efficient. Another aspect that went well was our ability to set deadlines for ourselves. Even though we faced some minor delays, the deliverable was able to be completed.
   
@@ -703,7 +707,7 @@ None
   \item What pain points did you experience during this deliverable, and how
     did you resolve them?\\
 
-    \textbf{Mark Cruz} - A few pain points during this deliverable include deciding what and what not to cover within the design document and the process of keeping everything consistent to what is declared as notations. Since TPG was already implemented prior to Capstone, it has a complex codebase with a great amount of components. With this, the team dissected and looked through every module that we can cover that are relevant to our Capstone project and must be included in the document. For consistency, the codebase mainly uses abstract classes, which may cause confusion for readers who are not familiar with the syntax. To reduce confusion, the team had to expand the notation section with relevant symbols and mathematical terms that were used for our MIS.
+    \textbf{Mark} - A few pain points during this deliverable include deciding what and what not to cover within the design document and the process of keeping everything consistent to what is declared as notations. Since TPG was already implemented prior to Capstone, it has a complex codebase with a great amount of components. With this, the team dissected and looked through every module that we can cover that are relevant to our Capstone project and must be included in the document. For consistency, the codebase mainly uses abstract classes, which may cause confusion for readers who are not familiar with the syntax. To reduce confusion, the team had to expand the notation section with relevant symbols and mathematical terms that were used for our MIS.
 
     \textbf{Cyruss} - A major pain point experienced during this deliverable was the difficulties in determining how to structure the design of the capstone project. It was difficult to decide due to working on an existing codebase, and figuring out how to abstract all this data from a higher level than from a C++ point of view. However, the team worked together to resolve this issue by having a detailed meeting, focusing on understanding our goals for the project and ensuring that the design of the existing codebase is minimally obstructed. With detailed conversations with everyone on the team, a consensus was determined on how to format the contents of the project’s code within the deliverable with a high degree of satisfaction from each of the members. There was somewhat of another pain point when it came to the communication between some members, with us not being on track with everything; however, the team resolved this through consistent follow-ups and discussion amongst everyone.
     
