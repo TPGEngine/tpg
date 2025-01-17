@@ -5,11 +5,15 @@
 	"build": {
 		"dockerfile": "Dockerfile"
 	},
-	"runArgs": [
-		// Forward your DISPLAY to XQuartz via TCP
-		"-e", "DISPLAY=host.docker.internal:0",
-		"-v", "/tmp/.X11-unix:/tmp/.X11-unix"
-	  ]
+	// TODO: MacOS specific settings for X11 forwarding
+	// Find a way to run conditionally if the user is on Mac only
+	
+	// "runArgs": [
+	// 	// Forward your DISPLAY to XQuartz via TCP
+	// 	"-e", "DISPLAY=docker.for.mac.host.internal:0",
+	// 	"-v", "/tmp/.X11-unix:/tmp/.X11-unix"
+	// ],
 
-	// Use 'postCreateCommand' to run commands after the container is created.
+	// install packages and set environment variables 
+	"postCreateCommand": "cd src && bash ./setup.sh"
 }
