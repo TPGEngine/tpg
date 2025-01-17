@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Update apt-get repository
+sudo apt-get update
+
 # Install Packages
 sudo xargs --arg-file requirements.txt apt install -y
 
@@ -21,21 +24,6 @@ fi
 sudo wget "$MUJOCO_URL"
 MUJOCO_TAR=$(basename "$MUJOCO_URL")
 sudo tar -xzf "$MUJOCO_TAR"
-
-# Set environment variables
-export TPG=/workspaces/tpg/src
-export PATH=$PATH:$TPG/scripts/plot
-export PATH=$PATH:$TPG/scripts/run
-export MUJOCO=/usr/local/lib/mujoco-3.2.2
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MUJOCO/lib/
-
-# Persist environment variables
-echo "export TPG=$TPG" >> ~/.profile
-echo "export PATH=$PATH" >> ~/.profile
-echo "export MUJOCO=$MUJOCO" >> ~/.profile
-echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> ~/.profile
-
-source ~/.profile
 
 # Change directory to TPG source
 cd /workspaces/tpg/src
