@@ -15,5 +15,5 @@
 	// ],
 
 	// install packages and set environment variables 
-	"postCreateCommand": "cd src && bash ./setup.sh"
+	"postCreateCommand": "cd src && sed -i 's/\\r$//' setup.sh && bash ./setup.sh"
 }
