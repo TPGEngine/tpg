@@ -22,7 +22,9 @@ include_directories(src/cpp/TPG/)
 
  # src/cpp/TPG/TPG.h src/cpp/TPG/TPG.cc src/cpp/environments/TaskEnv.h src/cpp/TPG/RegisterMachine.h src/cpp/TPG/RegisterMachine.cc  src/cpp/TPG/Instruction.h src/cpp/TPG/Instruction.cc
 
-add_executable(tests tests/TPG_test.cc)
+add_executable(tests 
+    src/cpp/TPG/tests/TPG_test.cc
+)
 # Add this line to find the Eigen package
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 

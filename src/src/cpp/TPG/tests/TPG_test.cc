@@ -1,8 +1,8 @@
 #define CATCH_CONFIG_MAIN
 
-#include "TPG.h"
-#include "Instruction.h"
-#include "RegisterMachine.h"
+#include <Instruction.h>
+#include <RegisterMachine.h>
+#include <TPG.h>
 #include <any>
 #include <catch2/catch_test_macros.hpp>
 #include <random>
@@ -10,7 +10,7 @@
 #include <vector>
 
 class TestRegisterMachine : public RegisterMachine {
-public:
+  public:
    static RegisterMachine* createMockRegisterMachine(int size) {
       std::unordered_map<std::string, std::any> params;
       std::unordered_map<std::string, int> state;
