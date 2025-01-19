@@ -20,9 +20,6 @@
 #include <thread>
 #include <GL/gl.h>
 #include <GL/glut.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
 namespace mpi = boost::mpi;
 
@@ -33,7 +30,7 @@ typedef void (*EvaluatorFunction)(TPG &, EvalData &);
   current phase (train, test, validate) and current task
 */
 vector<team *> GetTeamsToEval(TPG &tpg, TaskEnv *task) {
-  auto root_teams = tpg.GetTeamsInVec(true);
+  auto root_teams = tpg.GetRootTeamsInVec();
   vector<team *> teams_to_eval;
   // Train and validate all teams.
   if (tpg.GetState("phase") != _TEST_PHASE) {
@@ -148,7 +145,7 @@ void evaluate_main(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks,
   }
 
   // Collect evaluation result from each evaluator
-  auto root_teams_map = tpg.GetTeamsInMap(true);
+  auto root_teams_map = tpg.GetRootTeamsInMap();
   all_strings.clear();
   gather(world, my_string, all_strings, 0);
 
@@ -174,7 +171,7 @@ void evaluator(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks) {
     world.recv(0, 0, eval.checkpointString);
     if (NotDoneAndActive(eval)) {
       tpg.ReadCheckpoint(-1, _TRAIN_PHASE, -1, true, eval.checkpointString);
-      tpg.getTeams(eval.teams, true);
+      eval.teams = tpg.GetRootTeamsInVec();
       eval.task = tasks[tpg.GetState("active_task")];
       eval.eval_result = "";
       for (auto tm : eval.teams) {
@@ -197,17 +194,18 @@ void evaluator(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks) {
 
 /******************************************************************************/
 void replayer_viz(TPG &tpg, vector<TaskEnv *> &tasks) {
-    EvalData eval(tpg);
+  // MaybeStartAnimation(tpg);
+  EvalData eval(tpg);
 
-    vector<map<long, double>> teamUseMapPerTask;
-    teamUseMapPerTask.resize(tpg.GetState("n_task"));
-    std::set<team *, teamIdComp> teams_visitedAllTasks;
+  vector<map<long, double>> teamUseMapPerTask;
+  teamUseMapPerTask.resize(tpg.GetState("n_task"));
+  std::set<team *, teamIdComp> teams_visitedAllTasks;
 
-    tpg.getTeams(eval.teams, true);
-    eval.eval_result = "";
-    for (auto tm : eval.teams) {
-        if (tm->id_ != tpg.GetParam<int>("id_to_replay")) continue;
-        eval.tm = tm;
+  eval.teams = tpg.GetRootTeamsInVec();
+  eval.eval_result = "";
+  for (auto tm : eval.teams) {
+    if (tm->id_ != tpg.GetParam<int>("id_to_replay")) continue;
+    eval.tm = tm;
 
     vector<int> steps_per_task(tpg.GetState("n_task"), 0);
     // TODO(skelly): clean up
@@ -225,30 +223,7 @@ void replayer_viz(TPG &tpg, vector<TaskEnv *> &tasks) {
              eval.episode++) {
             eval.tm->InitMemory(tpg._teamMap, tpg.params_);
 
-                if (eval.task->eval_type_ == "RecursiveForecast") {
-                    EvalRecursiveForecastViz(
-                        tpg, eval, teamUseMapPerTask, teams_visitedAllTasks,
-                        steps_per_task[tpg.GetState("active_task")]);
-                } else if (eval.task->eval_type_ == "Control") {
-                    EvalControlViz(tpg, eval, teamUseMapPerTask,
-                                   teams_visitedAllTasks,
-                                   steps_per_task[tpg.GetState("active_task")]);
-                } else if (eval.task->eval_type_ == "Mujoco") {
-                    EvalMujoco(tpg, eval);
-                } else {
-                    std::cerr << "Unknown eval_type_: " << eval.task->eval_type_ << std::endl;
-                }
-                eval.FinalizeStepData(tpg);
-            }
-        }
-        for (eval.episode = 0; eval.episode < eval.tm->_n_eval;
-             eval.episode++) {
-            tpg.rngs_[AUX_SEED].seed(eval.episode);
-            eval.tm->InitMemory(tpg._teamMap, tpg.params_);
-
-            if (eval.task->eval_type_ == "Mujoco") {
-                EvalMujoco(tpg, eval);
-            } else if (eval.task->eval_type_ == "RecursiveForecast") {
+            if (eval.task->eval_type_ == "RecursiveForecast") {
                 EvalRecursiveForecastViz(
                     tpg, eval, teamUseMapPerTask, teams_visitedAllTasks,
                     steps_per_task[tpg.GetState("active_task")]);
@@ -256,28 +231,18 @@ void replayer_viz(TPG &tpg, vector<TaskEnv *> &tasks) {
                 EvalControlViz(tpg, eval, teamUseMapPerTask,
                                teams_visitedAllTasks,
                                steps_per_task[tpg.GetState("active_task")]);
+            } else {
+                EvalMujoco(tpg, eval);
             }
             eval.FinalizeStepData(tpg);
         }
-
-        tpg.printGraphDotGPTPXXI(eval.tm->id_, teams_visitedAllTasks,
-                                 teamUseMapPerTask, steps_per_task);
-        cout << " Evaluation result team:" << eval.tm->id_
-             << " score:" << eval.stats_double[REWARD1_IDX] << endl;
     }
+    tpg.printGraphDotGPTPXXI(eval.tm->id_, teams_visitedAllTasks,
+                             teamUseMapPerTask, steps_per_task);
+    cout << " Evaluation result team:" << eval.tm->id_ << 
+      " score:" << eval.stats_double[REWARD1_IDX] << endl;
 
-    // If headless mode and frames were saved, create video
-    if (headless && frame_idx > 0) {
-        int ret = system("ffmpeg -y -framerate 30 -i frames/frame_%05d.ppm -c:v libx264 -pix_fmt yuv420p replay/videos/output.mp4");
-        if (ret != 0) {
-            cerr << "Error creating video file" << endl;
-        }
-        // Remove frames if desired
-        ret = system("rm frames/frame_*.ppm");
-        if (ret != 0) {
-            cerr << "Error removing frame files" << endl;
-        }
-    }
+  }
 }
 
 #endif

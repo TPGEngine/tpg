@@ -53,7 +53,7 @@ urlcolor=cyan          % color of external links
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-01/15/2025 & 0.0 & Revision 0\\
+01/16/2025 & 0.0 & Revision 0\\
 \bottomrule
 \end{tabularx}
 
@@ -100,11 +100,14 @@ See SRS Documentation at \href{https://github.com/TPGEngine/tpg/blob/main/docs/S
 \section{Introduction}
 
 The following document details the Module Interface Specifications for
-\wss{Fill in your project name and description}
+\progname{}. The Tangled Program Graphs (TPG) framework is developing an interface to test the evolutionary machine learning framework Tangle Programming Graphs (TPG) in a robotic simulation engine called MuJoCo created by Google Deepmind.
+The TPG project is written in C++, and C++ notation will be utilized within this document as such.
+
+
 
 Complementary documents include the System Requirement Specifications
 and Module Guide.  The full documentation and implementation can be
-found at \url{...}.  \wss{provide the url for your repo}
+found at \url{https://github.com/TPGEngine/tpg} 
 
 \section{Notation}
 The structure of the MIS for modules comes from \citet{HoffmanAndStrooper1995},
@@ -124,9 +127,13 @@ The following table summarizes the primitive data types used by TPG.
 \textbf{Data Type} & \textbf{Notation} & \textbf{Description}\\ 
 \midrule
 character & char & a single symbol or digit\\
-integer & $\mathbb{Z}$ & a number without a fractional component in (-$\infty$, $\infty$) \\
+string & $string$ & a sequence of characters \\
+integer & $int$, $\mathbb{Z}$ & a number without a fractional component in (-$\infty$, $\infty$) \\
+double & $double$ & used to store high-precision floating-point numbers [1.7E-308, 1.7E+308] \\
 natural number & $\mathbb{N}$ & a number without a fractional component in [1, $\infty$) \\
 real & $\mathbb{R}$ & any number in (-$\infty$, $\infty$)\\
+pi & $\pi$ & a mathematical constant, approximately equal to 3.14159 \\
+file & $file$ & a collection of data that is stored on a computer\\
 \bottomrule
 \end{tabular} 
 \end{center}
@@ -168,8 +175,143 @@ The following table is taken directly from the Module Guide document for this pr
   \label{TblMH}
   \end{table}
 
+\section{MIS of Classic Control Module} \label{ClassicControl Module}
+
+\subsection{Module}
+ClassicControlEnv
+
+\subsection{Uses}
+OpenGL (GL/gl.h), GLUT (GL/glut.h), Task Environment (TaskEnv.h)
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+None
+
+\subsubsection{Exported Access Programs}
+\begin{center}
+  \begin{tabular}{p{5cm} p{6cm} p{3cm} p{1.5cm}}
+    \hline
+    \textbf{Name} & \textbf{Input} & \textbf{Output} & \textbf{Exceptions} \\
+    \hline
+    ClassicControlEnv & - & - & - \\
+    \hline
+    \texttildelow ClassicControlEnv & - & - & - \\
+    \hline
+    Bound & \{x: double, m: double, M: double\} & double & - \\
+    \hline
+    DisplayFunction & \{window\_width: int, window\_height: int, zoom: double\} & void & - \\
+    \hline
+    SaveScreenshotToFile & \{filename: string, window\_width: int, window\_height: int\} & void & File write error \\
+    \hline
+    DrawBitmapText & \{string: char*, x: float, y: float, z: float\} & void & - \\
+    \hline
+    DrawStrokeText & \{string: char*, x: float, y: float, z: float\} & void & - \\
+    \hline
+    DrawTrace & \{idx: int, label: string, action\_processed: double, y\_action\_trace: double\} & void & - \\
+    \hline
+    DrawEpisodeStepCounter & \{episode: int, step: int, x: float, y: float\} & void & - \\
+    \hline
+    Linspace & \{a: double, b: double, N: size\_t\} & std::vector\textless double \textgreater & - \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\subsubsection{State Variables}
+\begin{center}
+  \begin{tabular}{p{4cm} p{6cm} p{4cm}}
+    \hline
+    \textbf{Name} & \textbf{Type} & \textbf{Description} \\
+    \hline
+    dis\_reset & std::uniform\_real\_distribution\textless \textgreater & Distribution for reset values \\
+    \hline
+    dis\_noise & std::uniform\_real\_distribution\textless \textgreater & Distribution for noise values \\
+    \hline
+    action\_trace & std::vector\textless std::deque\textless double\textgreater\textgreater & History of actions taken \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\subsubsection{Environment Variables}
+OpenGL frame buffer
+
+\subsubsection{Assumptions}
+\begin{itemize}
+  \item OpenGL and GLUT are properly initialized before any drawing functions are called  
+  \item The action\_trace vector is initialized with 3 deques of size 200
+  \item The noise distribution is initialized with range \[-\pi, \pi\]
+
+\end{itemize}
+
+\subsubsection{Access Routine Semantics}
+
+\noindent ClassicControlEnv():
+\begin{itemize}
+  \item transition: initializes action\_trace with 3 deques of 200 zeros, sets dis\_noise range to\[-\pi, \pi\]
+  
+  \item exception: none
+
+\end{itemize}
+
+
+\noindent \texttildelow ClassicControlEnv():
+\begin{itemize}
+  \item transition: self $\rightarrow$ destroyed
+  \item exception: none
+\end{itemize}
+
+\noindent Bound(\textit{x}, \textit{m}, \textit{M}):
+\begin{itemize}
+  \item output: $out := min(max(x, m), M)$
+  \item exception: none
+\end{itemize}
+
+\noindent DisplayFunction(\textit{window\_width}, \textit{window\_height}, \textit{zoom}):
+\begin{itemize}
+\item transition: virtual function to be implemented by derived classes
+\item exception: none
+\end{itemize}
+
+\noindent SaveScreenshotToFile(\textit{filename}, \textit{window\_width}, \textit{window\_height}):
+\begin{itemize}
+\item transition: saves current OpenGL frame buffer to file
+\item exception: file write error
+\end{itemize}
+
+\noindent DrawBitmapText(\textit{string}, \textit{x}, \textit{y}, \textit{z}):
+\begin{itemize}
+\item transition: renders bitmap text at specified 3D coordinates
+\item exception: none
+\end{itemize}
+
+\noindent DrawStrokeText(\textit{string}, \textit{x}, \textit{y}, \textit{z}):
+\begin{itemize}
+\item transition: renders stroke text at specified 3D coordinates with scaling
+\item exception: none
+\end{itemize}
+
+\noindent DrawTrace(\textit{idx}, \textit{label}, \textit{action\_processed}, \textit{y\_action\_trace}):
+\begin{itemize}
+\item transition: updates and renders action trace history
+\item exception: none
+\end{itemize}
+
+\noindent DrawEpisodeStepCounter(\textit{episode}, \textit{step}, \textit{x}, \textit{y}):
+\begin{itemize}
+\item transition: renders episode and step counter at specified coordinates
+\item exception: none
+\end{itemize}
+
+\noindent Linspace(\textit{a}, \textit{b}, \textit{N}):
+\begin{itemize}
+\item output: $out := $ vector of N evenly spaced values between a and b
+\item exception: none
+\end{itemize}
+
+\subsubsection{Local Functions}
+None
+
 \newpage
-~\newpage
 
 \section{MIS of MuJoCo Module} \label{MuJoCo Module}
 
@@ -230,15 +372,15 @@ None
     \hline
     con\_ & mjrContext & Custom GPU rendering context\\
     \hline
-    init\_qpos\_ & std::vector<double> & Initial positions\\
+    init\_qpos\_ & std::vector\textless double\textgreater & Initial positions\\
     \hline
-    init\_qvel\_ & std::vector<double> & Initial velocities\\
+    init\_qvel\_ & std::vector\textless double\textgreater & Initial velocities\\
     \hline
-    model\_path\_ & String & Absolute path to model xml file\\
+    model\_path\_ & string & Absolute path to model xml file\\
     \hline
-    frame\_skip\_ & Integer & Number of frames per simulation step\\
+    frame\_skip\_ & int & Number of frames per simulation step\\
     \hline
-    obs\_size\_ & Integer & Size of the observation space\\
+    obs\_size\_ & int & Size of the observation space\\
     \hline
   \end{tabular}
 \end{center}
@@ -309,7 +451,7 @@ The visualization module is used to visualize the results of a TPG experiment wh
 \subsection{Syntax}
 
 \subsubsection{Exported Constants}
-N/A
+None
 
 \subsubsection{Exported Access Programs}
 \begin{center}
@@ -329,7 +471,7 @@ N/A
 \subsection{Semantics}
 
 \subsubsection{State Variables}
-N/A
+None
 
 \subsubsection{Environment Variables}
 
@@ -349,13 +491,12 @@ N/A
   \item Format of the log files is known and will not change.
 \end{itemize}
 \subsubsection{Access Routine Semantics}
-
-N/A
+None
 
 \subsubsection{Local Functions}
 
 \begin{center}
-  \begin{tabular}{p{3cm} p{3cm} p{3cm} p{4cm}}
+  \begin{tabular}{p{3cm} p{3cm} p{4cm} p{5cm}}
   \hline
   \textbf{Name} & \textbf{Input} & \textbf{Output} & \textbf{Description} \\
   \hline
@@ -364,6 +505,102 @@ N/A
   transformData & \{logFile: file\} & \{dataFile: file\} & Reverse processes the log files, pattern matches, reformatting, and aggregating the data and saving to a .rslt file \\
   \hline
   plotData & \{logFile: file\} & \{plotFile: file\} & Plots the data from the .rslt file and saves the plot to a .pdf file \\
+  \end{tabular}
+\end{center}
+
+
+
+
+
+\section{MIS of Logging Module} \label{Module}
+
+\subsection{ Overview}
+
+The Logging module implements logs key information and debugging related information
+\subsection{ Uses}
+
+The log module is used to view information regarding the commands transmitted to a satellite. This information contains data pertaining to the commands sent during a particular schedule, their run time and the response received. 
+
+\subsection{ Syntax}
+
+\subsubsection{ Exported Constants}
+None
+
+\subsubsection{Exported Access Programs}
+\begin{center}
+  \begin{tabular}{p{3cm} p{5cm} p{2.5cm} p{2.5cm}}
+    \hline
+    \textbf{Name} & \textbf{Input} & \textbf{Output} & \textbf{Exceptions} \\
+    \hline
+    LogMetrics & \{experimentId: string, metrics: map$\langle$string, double$\rangle$\} & void & File write error \\
+    \hline
+    LogGeneration & \{experimentId: string, generation: int, stats: map$\langle$string, double$\rangle$\} & void & File write error \\
+    \hline
+    LogError & \{experimentId: string, error: string\} & void & File write error \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+\begin{center}
+  \begin{tabular}{p{3cm} p{4cm} p{7cm}}
+    \hline
+    \textbf{Name} & \textbf{Type} & \textbf{Description} \\
+    \hline
+    logFiles & map$\langle$string, File*$\rangle$\> & Map of experiment IDs to their log file handles \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\subsubsection{Environment Variables}
+\begin{center}
+  \begin{tabular}{p{4cm} p{4cm} p{5cm}}
+    \hline
+    \textbf{Name} & \textbf{Type} & \textbf{Description} \\
+    \hline
+    tpg.[experimentId].std & File & Output log files for each experiment \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\subsubsection{Assumptions}
+\begin{itemize}
+  \item The logging module must be initialized before any logging operations
+  \item The file system has write permissions for creating log files
+  \item Each experiment has a unique experimentId
+  \item Log file format follows the pattern "tpg.[experimentId].std"
+\end{itemize}
+
+\subsubsection{Access Routine Semantics}
+
+\noindent LogMetrics(\textit{experimentId}, \textit{metrics}):
+\begin{itemize}
+\item transition: writes metrics data to the corresponding experiment log file
+\item exception: FILE\_WRITE\_ERROR if file cannot be written
+\end{itemize}
+
+\noindent LogGeneration(\textit{experimentId}, \textit{generation}, \textit{stats}):
+\begin{itemize}
+\item transition: writes generation statistics to the corresponding experiment log file
+\item exception: FILE\_WRITE\_ERROR if file cannot be written
+\end{itemize}
+
+\noindent LogError(\textit{experimentId}, \textit{error}):
+\begin{itemize}
+\item transition: writes error message to the corresponding experiment log file
+\item exception: FILE\_WRITE\_ERROR if file cannot be written
+\end{itemize}
+
+\subsubsection{Local Functions}
+\begin{center}
+  \begin{tabular}{p{3cm} p{3cm} p{3cm} p{4cm}}
+    \hline
+    \textbf{Name} & \textbf{Input} & \textbf{Output} & \textbf{Description} \\
+    \hline
+    getLogFile & \{experimentId: string\} & File* & Gets or creates log file handle for given experiment \\
+    \hline
   \end{tabular}
 \end{center}
 
@@ -390,19 +627,19 @@ None
   \hline
   \textbf{Name} & \textbf{Type} & \textbf{Description} \\
   \hline
-  world\_rank & Integer & The rank of the MPI process within the environment. It is used to distinguish between the master and evaluator processes. \\
+  world\_rank & int & The rank of the MPI process within the environment. It is used to distinguish between the master and evaluator processes. \\
   \hline
-  n\_task & Integer & The current number of tasks (environments) running. \\
+  n\_task & int & The current number of tasks (environments) running. \\
   \hline
-  active\_task & Integer & The index of the current active task. \\
+  active\_task & int & The index of the current active task. \\
   \hline
-  phase & Integer & The numerical representation of the current phase of the program. \\
+  phase & int & The numerical representation of the current phase of the program. \\
   \hline
-  t\_current & Integer & The current generation or iteration of the task. \\
+  t\_current & int & The current generation or iteration of the task. \\
   \hline
-  t\_start & Integer & The starting generation or iteration of the task. \\
+  t\_start & int & The starting generation or iteration of the task. \\
   \hline
-  task\_to\_replay & Integer & The index of the task to replay. \\
+  task\_to\_replay & int & The index of the task to replay. \\
   \hline
   \end{tabular}
 \end{center}
@@ -413,7 +650,7 @@ None
   \hline
   \textbf{Name} & \textbf{Type} & \textbf{Description} \\
   \hline
-  COMET\_API\_KEY & String & The API key used for Comet experiment tracking service \\
+  COMET\_API\_KEY & string & The API key used for Comet experiment tracking service \\
   \hline
   \end{tabular}
   \end{center}
@@ -438,34 +675,71 @@ None
 
 \section{Appendix} \label{Appendix}
 
-\wss{Extra information if required}
+% \wss{Extra information if required}
 
-\newpage{}
+% \newpage{}
 
 \section*{Appendix --- Reflection}
 
-\wss{Not required for CAS 741 projects}
+% \wss{Not required for CAS 741 projects}
 
-The information in this section will be used to evaluate the team members on the
-graduate attribute of Problem Analysis and Design.
+% The information in this section will be used to evaluate the team members on the
+% graduate attribute of Problem Analysis and Design.
 
-\input{../../Reflection.tex}
+% \input{../../Reflection.tex}
 
 \begin{enumerate}
-  \item What went well while writing this deliverable? 
+  \item What went well while writing this deliverable?\\
+  
+
+  \textbf{Mark} - Everyone on the team was able to accomplish their part of the deliverable without any critical blockers. The team was able to work cohesively, leveraging their diverse knowledge on certain topics which reflects the outcome of the deliverable. Constant communication and updates on every member’s progress allowed the team to keep track and stay informed with convenience and ease.
+
+  \textbf{Cyruss} -  An aspect that went well while writing this deliverable was the easy division of parts, specifically deciding who would be doing which sections of the deliverable. Each member leaned towards specific parts, which minimized any conflict between members. The discussion amongst the team during the winter break allowed each team member to focus on specific areas throughout the few couple of weeks, making the process more efficient. Another aspect that went well was our ability to set deadlines for ourselves. Even though we faced some minor delays, the deliverable was able to be completed.
+  
+  \textbf{Richard} - When writing this deliverable, the team was very transparent, cohesive, and organized. We were all able to divide our tasks in a quick manner, thus allowing each group member to work asynchronously. When there were errors regarding merge conflicts, all the members involved answered the group chat quickly, and the merge conflicts were able to get resolved.
+  
+  
+  \textbf{Calvyn} - I believe that the team was able to coordinate effectively, ensuring each member understood which modules we would be including and why we needed these modules. The team maintained a consistent line of communication, which allowed us to address any issues that came up.
+  
+
   \item What pain points did you experience during this deliverable, and how
-    did you resolve them?
+    did you resolve them?\\
+
+    \textbf{Mark} - A few pain points during this deliverable include deciding what and what not to cover within the design document and the process of keeping everything consistent to what is declared as notations. Since TPG was already implemented prior to Capstone, it has a complex codebase with a great amount of components. With this, the team dissected and looked through every module that we can cover that are relevant to our Capstone project and must be included in the document. For consistency, the codebase mainly uses abstract classes, which may cause confusion for readers who are not familiar with the syntax. To reduce confusion, the team had to expand the notation section with relevant symbols and mathematical terms that were used for our MIS.
+
+    \textbf{Cyruss} - A major pain point experienced during this deliverable was the difficulties in determining how to structure the design of the capstone project. It was difficult to decide due to working on an existing codebase, and figuring out how to abstract all this data from a higher level than from a C++ point of view. However, the team worked together to resolve this issue by having a detailed meeting, focusing on understanding our goals for the project and ensuring that the design of the existing codebase is minimally obstructed. With detailed conversations with everyone on the team, a consensus was determined on how to format the contents of the project’s code within the deliverable with a high degree of satisfaction from each of the members. There was somewhat of another pain point when it came to the communication between some members, with us not being on track with everything; however, the team resolved this through consistent follow-ups and discussion amongst everyone.
+    
+    \textbf{Richard} -  A pain point our team dealt with was consistency. Since we all have different styles towards notation, standardizing this process took some communication and adjustment. For instance, a small example was a debate using “None” vs “N/A”. When doing a code review, we found that there was an inconsistency in this notation. This sparked a conversation between some of us that we needed to standardize this notation because in previous deliverables we got warning about these inconsistencies. 
+    
+    
+    \textbf{Calvyn} -  A pain point during this deliverable was dealing with modules that have not yet been created/fully fleshed out. This brought a level of uncertainty in planning out functions and their interactions, as they might be subject to change as the project evolves. To address this, the team had to make informed assumptions based on our understanding of the project's goals and the existing codebase. In addition, our team held discussions to ensure our MIS would align as best as it could with our project’s purpose.
+    
   \item Which of your design decisions stemmed from speaking to your client(s)
   or a proxy (e.g. your peers, stakeholders, potential users)? For those that
-  were not, why, and where did they come from?
+  were not, why, and where did they come from?\\
+  
+  Pretty much all of the design decisions for the deliverable and the project stemmed from the team supervisor, Dr. Stephen Kelly (and indirectly his graduate students). This was due to the fact that TPG already had an existing codebase and is concurrently being worked on by graduate students of Dr. Kelly throughout the capstone project. This required the team to have consistent (weekly) meetings with the supervisor, ensuring that no delays or blockers would arise due to the number of people being worked on. For all documentation and code changes, the team would consistently check in with Dr. Kelly to ensure that it aligned with his team’s goals in addition to the capstone project goals.
+
+
   \item While creating the design doc, what parts of your other documents (e.g.
-  requirements, hazard analysis, etc), it any, needed to be changed, and why?
+  requirements, hazard analysis, etc), it any, needed to be changed, and why?\\
+  
+  For this deliverable, there were no parts of other documents that needed to be changed.
+
   \item What are the limitations of your solution?  Put another way, given
-  unlimited resources, what could you do to make the project better? (LO\_ProbSolutions)
+  unlimited resources, what could you do to make the project better? (LO\_ProbSolutions)\\
+  
+  Some of the limitations of our project come from the constraints of using free and open-source resources. They are easy to use and setup for development, it might limit the robustness and scalability of our CI/CD pipeline. Furthermore, since the the CI/CD integrations we are building are from scratch with limited experience, it might lack the rigor and standards seen in professional solutions. With unlimited resources, we could leverage enterprise-grade tools and services to build a more robust and scalable pipeline, reducing manual intervention and improving reliability.
+
+
+Another limitation is our computational capacity. If we have access to higher end performance servers. With extensive computations for the TPG algorithm being ran across various environments, we would be able to test and iterate more frequently if we wanted to. With more powerful servers, we could run larger-scale experiments, explore more diverse scenarios, and optimize the algorithm to a greater extent.
+
   \item Give a brief overview of other design solutions you considered.  What
   are the benefits and tradeoffs of those other designs compared with the chosen
   design?  From all the potential options, why did you select the documented design?
-  (LO\_Explores)
+  (LO\_Explores)\\
+  
+  With our project, a lot of the design choices were influenced by our supervisor Dr. Kelly. This is mainly due to the fact that he is a domain expert and he is also constantly working on the same codebase as us (he is also pushing changes and building alongside us). Our team has weekly meetings with him as we discuss future plans and give him updates on what we work on. A design that we had been contemplating for a while is related to the logging mechanism, and we decided to include this as a module because we all noticed while running experiments that the scripts Dr. Kelly used to generate logs were inefficient. We selected this option of refactoring the logging system because it is a crucial part of the workflow. Automating and making this easier by converting the scripts from bash to Python would make development and analysis easier. Now, on our roadmap we will be focusing on the logging module and integrating/refactoring this system to fit within the broader ecosystem of Dr. Kelly’s vision for his TPG project. 
 \end{enumerate}
 
 

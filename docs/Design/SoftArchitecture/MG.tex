@@ -46,7 +46,7 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-01/15/2025 & 0.0 & Revision 0\\
+01/16/2025 & 0.0 & Revision 0\\
 \bottomrule
 \end{tabularx}
 
@@ -157,11 +157,11 @@ adapted here is called design for
 change.
 
 \begin{description}
-  \item[\refstepcounter{acnum} \actheacnum \label{acOutput}:] Support for additional MuJoCo environments.
-  \item[\refstepcounter{acnum} \actheacnum \label{acOutput}:] Simulation support for all types of operating systems.
-  \item[\refstepcounter{acnum} \actheacnum \label{acOutput}:] Comprehensive logging across all of TPG's components.
-  \item[\refstepcounter{acnum} \actheacnum \label{acVerify}:] Extensive testing and checks for newly published code.
-  \item[\refstepcounter{acnum} \actheacnum \label{acVerify}:] Refactoring old and unstructured components.
+  \item[\refstepcounter{acnum} \actheacnum \label{acOutput1}:] Support for additional MuJoCo environments.
+  \item[\refstepcounter{acnum} \actheacnum \label{acOutput2}:] Simulation support for all types of operating systems.
+  \item[\refstepcounter{acnum} \actheacnum \label{acOutput3}:] Comprehensive logging across all of TPG's components.
+  \item[\refstepcounter{acnum} \actheacnum \label{acVerif1}:] Extensive testing and checks for newly published code.
+  \item[\refstepcounter{acnum} \actheacnum \label{acVerify2}:] Refactoring old and unstructured components.
   \item[\refstepcounter{acnum} \actheacnum \label{acInput}:] Format of inputting experimental parameters.
   \item[\refstepcounter{acnum} \actheacnum \label{acControl}:] Shift to a different dependency management tool such as CMake.
 \end{description}
@@ -176,11 +176,11 @@ will potentially need to be modified. Hence, it is not intended that these
 decisions will be changed.
 
 \begin{description}
-  \item[\refstepcounter{ucnum} \uctheucnum \label{ucControl}:] Migration of TPG's implementation to a different language.
-  \item[\refstepcounter{ucnum} \uctheucnum \label{ucControl}:] Refactoring the flow of task initialization and generation.
-  \item[\refstepcounter{ucnum} \uctheucnum \label{ucVerify}:] Transitioning away from Github Actions to other CI/CD platforms.
-  \item[\refstepcounter{ucnum} \uctheucnum \label{ucControl}:] Replacement of MPI as the distributed computing framework.
-  \item[\refstepcounter{ucnum} \uctheucnum \label{ucControl}:] Changing of communication protocol between different components such as gRPC.
+  \item[\refstepcounter{ucnum} \uctheucnum \label{ucControl1}:] Migration of TPG's implementation to a different language.
+  \item[\refstepcounter{ucnum} \uctheucnum \label{ucControl2}:] Refactoring the flow of task initialization and generation.
+  \item[\refstepcounter{ucnum} \uctheucnum \label{ucVerify1}:] Transitioning away from Github Actions to other CI/CD platforms.
+  \item[\refstepcounter{ucnum} \uctheucnum \label{ucControl3}:] Replacement of MPI as the distributed computing framework.
+  \item[\refstepcounter{ucnum} \uctheucnum \label{ucControl4}:] Changing of communication protocol between different components such as gRPC.
 \end{description}
 
 \section{Module Hierarchy} \label{SecMH}
@@ -191,8 +191,11 @@ below, which are leaves in the hierarchy tree, are the modules that will
 actually be implemented.
 
 \begin{description}
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Hardware Hiding Module
+\item [\refstepcounter{mnum} \mthemnum \label{mClassicControl}:] Classic Control Module
 \item [\refstepcounter{mnum} \mthemnum \label{mMuJoCo}:] MuJoCo Module
 \item [\refstepcounter{mnum} \mthemnum \label{mVisualization}:] Visualization Module
+\item [\refstepcounter{mnum} \mthemnum \label{mLogging}:] Logging Module
 \item [\refstepcounter{mnum} \mthemnum \label{mExperiment}:] TPG Experiment Module
 \end{description}
 
@@ -227,13 +230,6 @@ actually be implemented.
 The design of the system is intended to satisfy the requirements developed in
 the SRS. In this stage, the system is decomposed into modules. The connection
 between requirements and modules is listed in Table~\ref{TblRT}.
-
-\wss{The intention of this section is to document decisions that are made
-  ``between'' the requirements and the design.  To satisfy some requirements,
-  design decisions need to be made.  Rather than make these decisions implicit,
-  they are explicitly recorded here.  For instance, if a program has security
-  requirements, a specific design decision may be made to satisfy those
-  requirements with a password.}
 
 \section{Module Decomposition} \label{SecMD}
 
@@ -274,6 +270,15 @@ to be implemented.
 \item[Implemented By:] --
 \end{description}
 
+\subsubsection{Classic Control Module (\mref{mClassicControl})}
+
+\begin{description}
+\item[Secrets:]Classic Control's data structures (such as disReset, actionTrace, etc…).
+\item[Services:]Provides an interface between TPG and established for the classic control environments to allow for simulation and comparisons.
+\item[Implemented By:] Existing TPG framework
+\item[Type of Module:] Abstract Object
+\end{description}
+
 \subsubsection{MuJoCo Module (\mref{mMuJoCo})}
 
 \begin{description}
@@ -288,6 +293,16 @@ to be implemented.
 \begin{description}
 \item[Secrets:]Output logs from tpg*.std files.
 \item[Services:]Provides the visualization of the experiment being run. Extract metrics from logs, aggregate the metrics, plot, and combine them into a singular PDF.
+\item[Implemented By:] \progname{}
+\item[Type of Module:] Abstract Object
+\end{description}
+
+
+\subsubsection{Logging Module  (\mref{mLogging})}
+
+\begin{description}
+\item[Secrets:] Generate logs containing experiment execution data, performance metrics, and debug information.
+\item[Services:] Provides comprehensive logging functionality across all TPG components to be utilized by the visualization module
 \item[Implemented By:] \progname{}
 \item[Type of Module:] Abstract Object
 \end{description}
@@ -312,7 +327,7 @@ to be implemented.
 \begin{description}
   \item[Secrets:] Task parameters, team structures and decision making policies.
   \item[Services:] Provides functionality to manage and evolve policies, evaluation of different tasks, and track on-going experiments
-  \item[Implemented By:] TPG Experiment MPI
+  \item[Implemented By:] \progname{}
   \end{description}
 
 \section{Traceability Matrix} \label{SecTM}
@@ -328,17 +343,14 @@ requirements and between the modules and the anticipated changes.
 \toprule
 \textbf{Req.} & \textbf{Modules}\\
 \midrule
-R1 & \mref{mHH}, \mref{mInput}, \mref{mParams}, \mref{mControl}\\
-R2 & \mref{mInput}, \mref{mParams}\\
-R3 & \mref{mVerify}\\
-R4 & \mref{mOutput}, \mref{mControl}\\
-R5 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
-R6 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
-R7 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
-R8 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
-R9 & \mref{mVerifyOut}\\
-R10 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}\\
-R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
+FR-1 & \mref{mMuJoCo}\\
+FR-2 & \mref{mVisualization}\\
+FR-3 & \mref{mLogging}\\
+FR-4 & \mref{mHH}, \mref{mLogging}, \mref{mExperiment}\\
+FR-5 & \mref{mClassicControl}, \mref{mMuJoCo}, \mref{mLogging}, \mref{mExperiment}\\
+FR-6 & \mref{mClassicControl}, \mref{mMuJoCo}, \mref{mVisualization}, \mref{mLogging}, \mref{mExperiment}\\
+FR-7 & \mref{mLogging}, \mref{mExperiment}\\
+FR-8 & \mref{mClassicControl}, \mref{mMuJoCo}, \mref{mVisualization}\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Requirements and Modules}
@@ -354,25 +366,25 @@ R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
   \\
   \midrule
   AC1
-  & MuJoCo & 7.2.2
+  & MuJoCo & \mref{mMuJoCo}
   \\
   AC2
-  & Visualization & 7.2.3
+  & Hardware, Visualization & \mref{mHH}, \mref{mVisualization}
   \\
   AC3
-  & Logging & 7.2.4
+  & Hardware, Logging & \mref{mHH}, \mref{mLogging}
   \\
   AC4
-  & Framework & 7.3.2
+  & Classic Control, MuJoCo, TPG Experiment  & \mref{mClassicControl}, \mref{mMuJoCo}, \mref{mExperiment}
   \\
   AC5
-  & Classic Control, TPG Experiment, Framework  & 7.2.1, 7.3.1, 7.3.2
+  & Classic Control, TPG Experiment  & \mref{mClassicControl}, \mref{mExperiment}
   \\
   AC6
-  & TPG Experiment, Framework & 7.3.1, 7.3.2
+  & Hardware, Classic Control, MuJoCo & \mref{mHH}, \mref{mClassicControl}, \mref{mMuJoCo}
   \\
   AC7
-  & Framework & 7.3.2
+  & Visualization, Logging, TPG Experiment & \mref{mVisualization}, \mref{mLogging}, \mref{mExperiment}
   \\
   \bottomrule
   \end{tabular}
@@ -411,20 +423,40 @@ because they use modules from the lower levels.
 
 %\section*{References}
 
-\section{User Interfaces}
+% \section{User Interfaces}
 
-\wss{Design of user interface for software and hardware.  Attach an appendix if
-needed. Drawings, Sketches, Figma}
+% \wss{Design of user interface for software and hardware.  Attach an appendix if
+% needed. Drawings, Sketches, Figma}
 
-\section{Design of Communication Protocols}
+% \section{Design of Communication Protocols}
 
-\wss{If appropriate}
+% \wss{If appropriate}
 
 \section{Timeline}
 
-\wss{Schedule of tasks and who is responsible}
+The capstone project's timeline will correspond to the main goals that have been outlined. The work has been split between the different modules with respective deadlines so that the team can work on separate modules concurrently. The deadlines have been set to help track progress and establish expectations. 
 
-\wss{You can point to GitHub if this information is included there}
+\begin{center}
+    \begin{table}
+    \centering
+    \begin{tabular}{p{0.6\textwidth} p{0.2\textwidth} p{0.2\textwidth}}
+
+
+         \textbf{Module}&  \textbf{Related members}& \textbf{Deadline}\\ \hline 
+         Classic Control (7.2.1) - Develop the core control functionalities&  Whole Team & Jan 15, 2024\\ \hline 
+         MuJoCo (7.2.2) - Integrate the TPG framework with MuJoCo environments, ensuring compatibility and validation.&  Whole Team & Jan 31, 2024\\ \hline 
+         Visualization (7.2.3) - Implement visualization functionality with tangible data such as 
+        graphs, charts, video playback,realtime simulation to view results.
+         &  Edward & Jan 25, 2024\\ \hline 
+         Logging (7.2.4) - Implement functionality to capture key info and debug information throughout framework &   Whole Team & Jan 31, 2024\\ \hline 
+         TPG Experiment (7.2.5) - Design and execute experiments to test the TPG framework performance across various scenarios& Edward, Cyruss & Jan 20, 2024\\ \hline 
+         Framework (7.2.6) - should create functionality to authenticate a user using auth0&  Cyruss, Mark & Jan 25, 2024\\ \hline 
+         Continuous Integration  (7.2.7) - Establish a CI pipeline for automatic linting, project building, and unit testing to ensure code quality and integration stability &  Calvyn, Richard& Jan 31, 2024\\ \hline 
+    \end{tabular}
+    \caption{Timeline for each module}
+    \label{tab:my_label}
+\end{table}
+\end{center}
 
 \bibliographystyle {plainnat}
 \bibliography{../../../refs/References}
