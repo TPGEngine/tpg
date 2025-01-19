@@ -21,8 +21,7 @@ RUN mkdir -p /tmp/runtime-dir && chmod 700 /tmp/runtime-dir
 ENV LIBGL_ALWAYS_INDIRECT=1
 
 # set ENV variables to access TPG scripts
-ENV TPG=/workspaces/tpg/src
+ENV TPG=/workspaces/tpg
 ENV MUJOCO=/usr/local/lib/mujoco-3.2.2
 ENV PATH="${PATH}:${TPG}/scripts/plot:${TPG}/scripts/run"
 ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${MUJOCO}/lib"
-
