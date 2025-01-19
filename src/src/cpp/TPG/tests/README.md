@@ -1,5 +1,12 @@
 #Steps to run test
 
+
+Download cmake
+
+```
+sudo apt install cmake
+```
+
 Start at base directory
 
 ```
