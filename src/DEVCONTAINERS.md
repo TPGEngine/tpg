@@ -39,6 +39,13 @@ minutes the first time.
 4. Once the Dev Container is ready, you'll see the VS Code window reload, and 
 you'll be working inside the container environment.
 
+5. (For Windows users only) Windows uses CRLF `(\r\n)` for line endings. Unix, Linux, and MacOS, on the other hand, use LF `(\n)` for line endings. To ensure the TPG codebase adheres to the Dev Container, it is necessary to convert the line endings from CRLF to LF. To do so, enter the following command in the container's terminal:
+
+   ```bash
+   git config core.autocrlf false
+   git rm --cached -r .
+   git reset --hard
+
 ## Benefits of Using Dev Containers
 
 Our Dev Container provides a consistent, pre-configured development environment 

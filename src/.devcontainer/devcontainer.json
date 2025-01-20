@@ -14,5 +14,5 @@
   // 	"-v", "/tmp/.X11-unix:/tmp/.X11-unix"
   // ],
   // install packages and set environment variables
-  "postCreateCommand": "cd src && sed -i 's/\\r$//' setup.sh && sed -i 's/\\r$//' requirements.txt && bash ./setup.sh"
+  "postCreateCommand": "sed -i 's/\\r$//' setup.sh && sed -i 's/\\r$//' requirements.txt && bash ./setup.sh"
 }
