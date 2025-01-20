@@ -3,7 +3,6 @@
 #include <Instruction.h>
 #include <RegisterMachine.h>
 #include <TPG.h>
-#include <any>
 #include <catch2/catch_test_macros.hpp>
 #include <random>
 #include <unordered_map>
@@ -12,7 +11,7 @@
 class TestRegisterMachine : public RegisterMachine {
   public:
    static RegisterMachine* createMockRegisterMachine(int size) {
-      std::unordered_map<std::string, std::any> params;
+      std::unordered_map<std::string, double> params;
       std::unordered_map<std::string, int> state;
       std::mt19937 rng;
       std::vector<bool> ops;
@@ -40,6 +39,7 @@ TEST_CASE("RegisterMachineCrossover Basic Properties", "[crossover]") {
    TPG tpg;
 
    SECTION("Crossover preserves minimum program length") {
+  
       RegisterMachine* p1 = TestRegisterMachine::createMockRegisterMachine(5);
       RegisterMachine* p2 = TestRegisterMachine::createMockRegisterMachine(7);
       RegisterMachine *c1, *c2;

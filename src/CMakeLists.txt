@@ -20,14 +20,63 @@ include_directories(src/cpp/environments/)
 include_directories(src/cpp/TPG/)
 
 
+
+# add_library(tpg 
+#  src/cpp/TPG/TPG.h
+#  src/cpp/TPG/TPG.cc
+#  src/cpp/TPG/RegisterMachine.h
+#  src/cpp/TPG/RegisterMachine.cc
+#  src/cpp/TPG/Instruction.h 
+#  src/cpp/TPG/Instruction.cc
+#  src/cpp/TPG/misc.cc
+#  src/cpp/TPG/misc.h
+#  src/cpp/TPG/team.cc
+#  src/cpp/TPG/team.h
+#)
+
+
+file(GLOB TPG_SOURCES 
+  "src/cpp/TPG/*.h"
+  "src/cpp/TPG/*.cc"
+  "src/cpp/experiments/api_client.cc"
+  "src/cpp/experiments/api_client.h"
+
+  
+)
+
+list(REMOVE_ITEM TPG_SOURCES "src/cpp/experiments/TPGExperimentMPI.cc")
+
+
+add_library(tpg ${TPG_SOURCES})
+
+
+
+
+target_include_directories(tpg
+  PUBLIC 
+    src
+)
+
  # src/cpp/TPG/TPG.h src/cpp/TPG/TPG.cc src/cpp/environments/TaskEnv.h src/cpp/TPG/RegisterMachine.h src/cpp/TPG/RegisterMachine.cc  src/cpp/TPG/Instruction.h src/cpp/TPG/Instruction.cc
 
 add_executable(tests 
-    src/cpp/TPG/tests/TPG_test.cc
+    tests/TPG_test.cc
 )
 # Add this line to find the Eigen package
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+find_package(CURL REQUIRED)
 
+include_directories(${EIGEN3_INCLUDE_DIR})
+target_include_directories(tpg PUBLIC ${EIGEN3_INCLUDE_DIR})
+target_link_libraries(tpg PRIVATE CURL::libcurl)
+# Link libraries to testing files
+
+target_link_libraries(tests 
+  PRIVATE
+      tpg
+      Eigen3::Eigen
+      Catch2::Catch2WithMain
+)
 target_link_libraries(tests PRIVATE Eigen3::Eigen)
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain) 
 
@@ -35,4 +84,5 @@ target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
 
 include(CTest)
 include(Catch)
+enable_testing()
 catch_discover_tests(tests)
