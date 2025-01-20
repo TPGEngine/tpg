@@ -1,0 +1,6 @@
+Tue Jan 14 08:29:26 2025
+ERROR: Load model error: ParseXML: Error opening file '/home/cyrussamante/4G06/kelly_tpg/tpg/datasets/mujoco_models/inverted_pendulum.xml,/home/cyrussamante/4G06/kelly_tpg/tpg/datasets/mujoco_models/inverted_double_pendulum.xml': No such file or directory
+
+Tue Jan 14 08:29:26 2025
+ERROR: Load model error: ParseXML: Error opening file '/home/cyrussamante/4G06/kelly_tpg/tpg/datasets/mujoco_models/inverted_pendulum.xml,/home/cyrussamante/4G06/kelly_tpg/tpg/datasets/mujoco_models/inverted_double_pendulum.xml': No such file or directory
+
