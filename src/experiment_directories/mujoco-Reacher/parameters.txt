@@ -186,7 +186,7 @@ n_input 0
 max_initial_prog_size 10
 
 # Max program size
-max_prog_size 100
+max_prog_size 1000000
 
 # Number of memory indices
 # Each memory index points to a data structure (scalar, vector, or matrix)

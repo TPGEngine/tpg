@@ -4,20 +4,15 @@
 	"name": "C++",
 	"build": {
 		"dockerfile": "Dockerfile"
-	}
-
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
-
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
-
-	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "gcc -v",
-
-	// Configure tool-specific properties.
-	// "customizations": {},
-
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
+	},
+	// TODO: MacOS specific settings for X11 forwarding
+	// Find a way to run conditionally if the user is on Mac only
+	
+	// "runArgs": [
+	// 	// Forward your DISPLAY to XQuartz via TCP
+	// 	"-e", "DISPLAY=docker.for.mac.host.internal:0",
+	// 	"-v", "/tmp/.X11-unix:/tmp/.X11-unix"
+	// ],
+	// install packages and set environment variables 
+	"postCreateCommand": "cd src && sed -i 's/\\r$//' setup.sh && sed -i 's/\\r$//' requirements.txt && bash ./setup.sh"
 }
