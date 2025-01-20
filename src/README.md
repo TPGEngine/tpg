@@ -6,6 +6,8 @@ Stephen Kelly, Tatiana Voegerl, Wolfgang Banzhaf, and Cedric Gondro. Evolving Hi
 ## Quick Start
 This code is designed to be used in Linux. If you use Windows, you can use Windows Subsystem for Linux (WSL). You can work with WSL in Visual Studio Code by following [this tutorial](https://code.visualstudio.com/docs/remote/wsl-tutorial).
 
+For MacOS or Windows users, you can follow this [guide](./DEVCONTAINERS.md) to setup Dev Containers which spins up a Linux based environment right within VS Code.
+
 ### 1. Install required software
 From the tpg directory run:
 ```
