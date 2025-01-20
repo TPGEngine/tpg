@@ -19,3 +19,5 @@ jq
 libglfw3
 libglfw3-dev
 libglew-dev
+ffmpeg
+libosmesa6-dev
