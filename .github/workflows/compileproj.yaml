@@ -19,15 +19,16 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
 
-      - name: Set up GCC 12 or newer
+      - name: Set up GCC 13
         shell: bash
         run: |
-          sudo apt-get update
-          sudo apt-get install -y gcc-12 g++-12
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 12
-          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 12
-          gcc --version
-          g++ --version
+        sudo apt update
+        sudo apt install -y software-properties-common
+        sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+        sudo apt update
+        sudo apt install -y gcc-13 g++-13
+        gcc --version
+        g++ --version
 
       - name: Set up environment
         shell: bash
