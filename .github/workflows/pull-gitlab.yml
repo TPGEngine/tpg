@@ -1,10 +1,8 @@
 name: Pull Changes from TPG GitLab
 on:
   schedule:
-    - cron: "0 5 * * *"
-  push:
-    branches:
-      - '*'
+    - cron: '0 5 * * *'  # This runs at 12 AM EST (5 AM UTC) every day
+  workflow_dispatch:
   
 jobs:
   pull-gitlab-changes:
