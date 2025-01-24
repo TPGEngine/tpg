@@ -25,6 +25,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: Add GitLab Remote
+        run: |
+          git remote add gitlab https://gitlab.cas.mcmaster.ca/kellys32/tpg.git
+          git fetch gitlab main
+
       - name: Pull subtree
         run: |
           git subtree pull --prefix src https://gitlab.cas.mcmaster.ca/kellys32/tpg.git main --squash
