@@ -4,7 +4,7 @@ on:
     - cron: "0 5 * * *"
   push:
     branches:
-      - 'pull-gitlab-workflow'
+      - 'VnVPlan/cyruss'
   
 jobs:
   pull-gitlab-changes:
@@ -40,7 +40,7 @@ jobs:
         uses: EndBug/add-and-commit@v9
         with:
           add: --all
-          message: Compiled Latex PDF
+          message: Pulled changes from TPG GitLab
           author_name: github-actions
           author_email: github-actions@github.com
           push: false
