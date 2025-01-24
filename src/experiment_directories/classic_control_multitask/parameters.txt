@@ -84,7 +84,7 @@ n_generations 1000000
 n_root 1000
 
 # Number of new root teams to create each generation
-n_root_gen 200
+n_root_gen 500
 
 # Whether to constrain parent selection to root teams
 parent_select_roots_only 0

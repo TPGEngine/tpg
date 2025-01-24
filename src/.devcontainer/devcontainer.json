@@ -5,14 +5,8 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
-  // TODO: MacOS specific settings for X11 forwarding
-  // Find a way to run conditionally if the user is on Mac only
-
-  // "runArgs": [
-  // 	// Forward your DISPLAY to XQuartz via TCP
-  // 	"-e", "DISPLAY=docker.for.mac.host.internal:0",
-  // 	"-v", "/tmp/.X11-unix:/tmp/.X11-unix"
-  // ],
-  // install packages and set environment variables
-  "postCreateCommand": "cd src && sed -i 's/\\r$//' setup.sh && sed -i 's/\\r$//' requirements.txt && bash ./setup.sh"
+  "remoteEnv": {
+    "DISPLAY": ""
+  },
+  "postCreateCommand": "sed -i 's/\\r$//' setup.sh && sed -i 's/\\r$//' requirements.txt && bash ./setup.sh"
 }
