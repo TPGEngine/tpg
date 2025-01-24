@@ -3,10 +3,10 @@ name: Build TPG Project
 on:
   push:
     branches:
-      - 'fix/automatic-building'
+      - 'main'
   pull_request:
     branches:
-      - 'fix/automatic-building'
+      - 'main'
   workflow_dispatch:
 
 jobs:
