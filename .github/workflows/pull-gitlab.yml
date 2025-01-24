@@ -3,6 +3,9 @@ on:
   schedule:
     - cron: '0 5 * * *'  # This runs at 12 AM EST (5 AM UTC) every day
   workflow_dispatch:
+  push:
+    branches:
+      - 'pull-gitlab-workflow'
   
 jobs:
   pull-gitlab-changes:
