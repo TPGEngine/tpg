@@ -23,7 +23,7 @@ env.Append(CPPPATH = ['../TPG', '../environments', '../genomic',
 env.Append(LIBS = ['TPG','bz2','boost_thread','boost_system','boost_mpi',
                    'boost_serialization','pthread','boost_iostreams',
                    'opencv_core','opencv_highgui','opencv_imgcodecs', 'libcurl',
-                   'mujoco', 'GLEW', 'GL', 'glfw','tbb'])
+                   'mujoco', 'GLEW', 'GL', 'glfw','tbb', 'OSMesa'])
 
 env.Append(LIBPATH = ['../TPG', '../environments', '/usr/lib/x86_64-linux-gnu',
                       '/usr/lib/x86_64-linux-gnu/hdf5/serial/',

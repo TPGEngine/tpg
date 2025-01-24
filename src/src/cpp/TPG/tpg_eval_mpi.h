@@ -20,6 +20,9 @@
 #include <thread>
 #include <GL/gl.h>
 #include <GL/glut.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 namespace mpi = boost::mpi;
 
@@ -242,6 +245,28 @@ void replayer_viz(TPG &tpg, vector<TaskEnv *> &tasks) {
     cout << " Evaluation result team:" << eval.tm->id_ << 
       " score:" << eval.stats_double[REWARD1_IDX] << endl;
 
+          // Add video creation for headless mode
+    if (headless && frame_idx > 0) {
+        // Create videos directory if it doesn't exist
+        struct stat st{};
+        if (stat("replay/videos", &st) == -1) {
+            if (mkdir("replay/videos", 0700) != 0) {
+                cerr << "Failed to create videos directory" << endl;
+                return;
+            }
+        }
+        
+        // Create video from frames using ffmpeg
+        int ret = system("ffmpeg -y -framerate 30 -i frames/frame_%05d.ppm -c:v libx264 -pix_fmt yuv420p replay/videos/output.mp4");
+        if (ret != 0) {
+            cerr << "Error creating video file" << endl;
+        }
+        // Clean up frame files
+        ret = system("rm frames/frame_*.ppm");
+        if (ret != 0) {
+            cerr << "Error removing frame files" << endl;
+        }
+    }
   }
 }
 
