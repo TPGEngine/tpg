@@ -1,0 +1,45 @@
+name: Pull Changes from TPG GitLab
+on:
+  schedule:
+    - cron: "0 5 * * *"
+  push:
+    branches:
+      - 'pull-gitlab-workflow'
+  
+jobs:
+  pull-gitlab-changes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup GitHub App
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+   
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Pull subtree
+        run: |
+          git subtree pull --prefix src https://gitlab.cas.mcmaster.ca/kellys32/tpg.git main --squash
+
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: --all
+          message: Compiled Latex PDF
+          author_name: github-actions
+          author_email: github-actions@github.com
+          push: false
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ steps.app-token.outputs.token }}
+          branch: ${{ github.ref }}
