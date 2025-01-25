@@ -9,5 +9,5 @@ if int(acenet) or int(ccanada) or int(hpcc):
  for subdir in ['cpp/TPG','cpp/experiments/']:
   env.SConscript('%s/SConscript' % subdir, {'env': env})
 else:
- for subdir in ['cpp/TPG', 'cpp/experiments', 'cpp/environments/classic_control']:
+ for subdir in ['cpp/TPG', 'cpp/experiments', 'cpp/environments/classic_control', 'cpp/logging']:
    env.SConscript('%s/SConscript' % subdir, {'env': env})

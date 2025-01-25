@@ -1,0 +1,15 @@
+# Inherit the same environment as the root SConstruct 
+
+Import('env')
+
+env.Library(
+    target = 'logging',
+    source = [
+        'csv_storage.cc',
+        'event_dispatcher.cc',
+        'selection_logger.cc'
+    ],
+    CPPPATH = ['.']
+)
+
+env.Append(CPPPATH = [env.Dir('.')])
