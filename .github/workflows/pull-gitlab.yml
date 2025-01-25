@@ -1,7 +1,7 @@
 name: Pull Changes from TPG GitLab
 on:
   schedule:
-    - cron: '0 5 * * *'  # This runs at 12 AM EST (5 AM UTC) every day.
+    - cron: '0 5 * * *'  # This runs at 12 AM EST (5 AM UTC) every day
   workflow_dispatch:
   
 jobs:
