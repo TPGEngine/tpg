@@ -29,7 +29,7 @@ MUJOCO_TAR=$(basename "$MUJOCO_URL")
 sudo tar -xzf "$MUJOCO_TAR"
 
 # Change directory to TPG source
-cd /workspaces/tpg/src
+cd /workspaces/tpg
 
 # Build TPG
 scons --opt

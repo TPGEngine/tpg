@@ -37,8 +37,8 @@ if [ $mode -eq 1 ]; then
    # Training phase
    phase=0
    if ls replay/frames/* 1> /dev/null 2>&1; then rm replay/frames/*; fi
-   if ls rplay/graphs/* 1> /dev/null 2>&1; then rm replay/graphs/*; fi
-   if ls rplay/graphs/* 1> /dev/null 2>&1; then rm replay/graphs/*; fi
+   if ls replay/graphs/* 1> /dev/null 2>&1; then rm replay/graphs/*; fi
+   if ls replay/graphs/* 1> /dev/null 2>&1; then rm replay/graphs/*; fi
   
   
    # Get fitness of best team
