@@ -1,0 +1,5 @@
+# Inherit the same environment as the root SConstruct 
+
+Import('env')
+
+env.append(LIBS = ['boost_mpi'])
