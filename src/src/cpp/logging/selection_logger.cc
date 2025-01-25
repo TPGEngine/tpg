@@ -5,7 +5,7 @@
 SelectionLogger::SelectionLogger() {
     EventDispatcher::instance().subscribe(
         EventType::SELECTION,
-        [this](const auto& data) { handleEvent(data); }
+        [this](const std::map<std::string, std::string>& data) { handleEvent(data); }
     );
 }
 
