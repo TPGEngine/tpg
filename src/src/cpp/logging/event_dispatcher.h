@@ -4,7 +4,6 @@
 #include <functional>
 #include <map>
 #include <vector>
-#include <mutex>
 
 class EventDispatcher {
 public:
@@ -17,5 +16,4 @@ public:
 
 private:
     std::map<EventType, std::vector<Callback>> listeners_;
-    std::mutex mutex_;
 };

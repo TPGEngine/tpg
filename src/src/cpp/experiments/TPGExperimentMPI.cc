@@ -25,6 +25,8 @@
 #include <cstdlib>
 
 #include "evaluators_mujoco.h"
+#include <csv_storage.h>
+#include <selection_logger.h>
 
 #define CHECKPOINT_MOD 1000000
 #define PRINT_MOD 1
@@ -185,6 +187,10 @@ int main(int argc, char** argv) {
 
    if (world.rank() == 0) {  // Master Process
       string my_string = "MAIN";
+
+      // initialize logger
+      CSVStorage::instance().init("experiment_log.csv"); 
+      SelectionLogger selectionLogger;
 
       // time logging
       auto startGen = chrono::system_clock::now();

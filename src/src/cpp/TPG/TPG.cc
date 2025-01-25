@@ -1,4 +1,5 @@
 #include "TPG.h"
+#include <event_dispatcher.h>
 
 /******************************************************************************/
 TPG::TPG() {
@@ -1854,6 +1855,7 @@ void TPG::printTeamInfo(long t, int phase, bool singleBest, long teamId) {
    // map < point *, double > :: iterator myoiter;
    vector<int> behaviourSequence;
    set<team *, teamIdComp> visitedTeams;
+
    for (auto teiter = team_pop_.begin(); teiter != team_pop_.end(); teiter++) {
       if ((!singleBest && (*teiter)->root() &&
            teamId == -1) ||                             // all root teams
@@ -1861,6 +1863,14 @@ void TPG::printTeamInfo(long t, int phase, bool singleBest, long teamId) {
           (singleBest &&
            (*teiter)->id_ == bestTeam->id_))  // singleBest root team
       {
+         // dispatching that the best fitness score has been triggered
+         EventDispatcher::instance().notify(
+            EventType::SELECTION, {
+               {"generation", std::to_string(t)},
+               {"best_fitness", std::to_string((*teiter)->GetMedianOutcome(0, 0, 0))}, // best fitness score occurs on p0t0a0 
+               {"team_id", std::to_string((*teiter)->id_)}
+            }
+         );          
          oss << "tminfo t " << t << " id " << (*teiter)->id_ << " gtm "
              << (*teiter)->gtime_ << " phs " << phase;
          oss << " root " << ((*teiter)->root() ? 1 : 0);
@@ -1876,7 +1886,8 @@ void TPG::printTeamInfo(long t, int phase, bool singleBest, long teamId) {
 
          oss << setprecision(5) << fixed;
 
-         oss << " mnOut";
+         oss << " mnOut";            
+
          for (int phs : {0, 1, 2}) {
             // bool allPhase = false;
             // bool allTask = false;  // for genomic, set to true
@@ -1887,7 +1898,7 @@ void TPG::printTeamInfo(long t, int phase, bool singleBest, long teamId) {
                for (int i = 0; i < GetParam<int>("n_point_aux_double"); i++) {
                   if ((*teiter)->numOutcomes(phs, task) > 0) {
                      oss << " p" << phs << "t" << task << "a" << i << " ";
-                     oss << (*teiter)->GetMedianOutcome(phs, task, i);
+                     oss << (*teiter)->GetMedianOutcome(phs, task, i);                    
                   } else
                      oss << " p" << phs << "t" << task << "a" << i << " x";
                }
