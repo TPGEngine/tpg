@@ -1030,6 +1030,8 @@ void TPG::ProcessParams() {
 void TPG::SetParams(int argc, char **argv) {
    // First read parameters file
    ReadParameters("parameters.txt", params_);
+   
+   params_["pid"] = 0; // Set default param value for PID
    // Parse command line parameters
    if (argc > 1) {
       for (int i = 1; i < argc; ++i) {
