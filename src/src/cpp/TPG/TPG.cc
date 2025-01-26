@@ -921,7 +921,7 @@ void TPG::SetEliteTeams(vector<TaskEnv *> &tasks) {
                                 ->fit_
              << " ";
          printTeamInfo(GetState("t_current"), GetState("phase"), false,
-                       elite_id);
+                       false, elite_id);
 
          if (GetParam<int>("track_experiments") &&
              GetState("t_current") % GetParam<int>("track_mod") == 0) {
@@ -940,7 +940,7 @@ void TPG::SetEliteTeams(vector<TaskEnv *> &tasks) {
                                 ->fit_
              << " ";
          printTeamInfo(GetState("t_current"), GetState("phase"), false,
-                       elite_id);
+                       true, elite_id);
 
          if (GetParam<int>("track_experiments") &&
              GetState("t_current") % GetParam<int>("track_mod") == 0) {
@@ -1849,7 +1849,7 @@ void TPG::printPhyloGraphDot(team *tm) {
 }
 
 /******************************************************************************/
-void TPG::printTeamInfo(long t, int phase, bool singleBest, long teamId) {
+void TPG::printTeamInfo(long t, int phase, bool singleBest, bool multitask, long teamId) {
    team *bestTeam = *(team_pop_.begin());
    if (singleBest && teamId == -1) bestTeam = GetBestTeam();
    ostringstream tmposs;
@@ -1868,6 +1868,7 @@ void TPG::printTeamInfo(long t, int phase, bool singleBest, long teamId) {
          // dispatching that the best fitness score has been triggered
          EventDispatcher::instance().notify(
             EventType::SELECTION, {
+               {"type", (multitask ? "MTA" : "ST")},
                {"generation", std::to_string(t)},
                {"best_fitness", std::to_string((*teiter)->GetMedianOutcome(0, 0, 0))}, // best fitness score occurs on p0t0a0 
                {"team_id", std::to_string((*teiter)->id_)}
