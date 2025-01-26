@@ -185,14 +185,17 @@ int main(int argc, char** argv) {
    teamUseMapPerTask.reserve(tasks.size());
    teamUseMapPerTask.resize(tasks.size());
 
-   if (world.rank() == 0) {  // Master Process
-      string my_string = "MAIN";
-      int seed_tpg = tpg.GetParam<int>("seed_tpg");
-      int pid = tpg.GetParam<int>("pid");
-      
-      // initialize logger
+   int seed_tpg = tpg.GetParam<int>("seed_tpg");
+   int pid = tpg.GetParam<int>("pid");
+
+   if (tpg.GetParam<int>("replay") == 0) {
+      // Initialize CSV logger Singleton instance
       CSVStorage::instance().init(seed_tpg, pid);
       SelectionLogger selectionLogger;
+   };
+
+   if (world.rank() == 0) {  // Master Process
+      string my_string = "MAIN";
 
       // time logging
       auto startGen = chrono::system_clock::now();
