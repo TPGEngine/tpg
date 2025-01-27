@@ -31,7 +31,7 @@ class TPG {
     team *getTeamByID(long id);
     bool haveEliteTeam(string taskset, int fitMode, int phase);
     void Seed(size_t i, uint_fast32_t s);
-    void InitExperimentTracking(APIClient *apiClient);
+    void InitExperimentTracking(APIClient *apiClient); // comment
 
     /***************************************************************************
      * Methods to implement the TPG algorithm.

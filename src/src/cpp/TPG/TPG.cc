@@ -10,7 +10,7 @@ TPG::TPG() {
    _ops.resize(instruction::NUM_OP);
    fill(_ops.begin(), _ops.end(), false);
    rngs_.resize(NUM_RNG);
-   seeds_.resize(NUM_RNG);
+   seeds_.resize(NUM_RNG); // comment
 }
 
 /******************************************************************************/

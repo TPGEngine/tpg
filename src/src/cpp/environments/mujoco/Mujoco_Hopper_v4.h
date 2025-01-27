@@ -31,7 +31,7 @@ class Mujoco_Hopper_v4 : public MujocoEnv {
       healthy_angle_range_ = {-0.2, 0.2};
       initialize_simulation();
 
-      obs_size_ = 12; // observation space
+      obs_size_ = 12;
       if (exclude_current_positions_from_observation_)
          obs_size_ = 11;
 
