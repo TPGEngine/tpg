@@ -10,13 +10,6 @@ RUN if [ "${REINSTALL_CMAKE_VERSION_FROM_SOURCE}" != "none" ]; then \
     fi \
     && rm -f /tmp/reinstall-cmake.sh
 
-# Install packages for X11 forwarding
-RUN apt-get update && apt-get install -y x11-apps mesa-utils
-
-# Setting XDG_RUNTIME_DIR env variable to store runtime files
-ENV XDG_RUNTIME_DIR=/tmp/runtime-dir
-RUN mkdir -p /tmp/runtime-dir && chmod 700 /tmp/runtime-dir
-
 # Make sure OpenGL uses indirect rendering
 ENV LIBGL_ALWAYS_INDIRECT=1
 
@@ -25,4 +18,3 @@ ENV TPG=/workspaces/tpg/src
 ENV MUJOCO=/usr/local/lib/mujoco-3.2.2
 ENV PATH="${PATH}:${TPG}/scripts/plot:${TPG}/scripts/run"
 ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${MUJOCO}/lib"
-

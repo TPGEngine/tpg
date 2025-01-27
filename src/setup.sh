@@ -1,4 +1,4 @@
-#!/bin/bash
+r#!/bin/bash
 
 # Update apt-get repository
 sudo apt-get update
@@ -14,6 +14,9 @@ ARCH=$(uname -m)
 
 if [[ "$ARCH" == "x86_64" ]]; then
     MUJOCO_URL="https://github.com/deepmind/mujoco/releases/download/3.2.2/mujoco-3.2.2-linux-x86_64.tar.gz"
+    git config core.autocrlf false
+    git rm --cached -r .
+    git reset --hard 
 elif [[ "$ARCH" == "aarch64" ]]; then
     MUJOCO_URL="https://github.com/deepmind/mujoco/releases/download/3.2.2/mujoco-3.2.2-linux-aarch64.tar.gz"
 else
@@ -26,7 +29,7 @@ MUJOCO_TAR=$(basename "$MUJOCO_URL")
 sudo tar -xzf "$MUJOCO_TAR"
 
 # Change directory to TPG source
-cd /workspaces/tpg/src
+cd /workspaces/tpg
 
 # Build TPG
 scons --opt
