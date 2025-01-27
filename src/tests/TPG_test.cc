@@ -41,13 +41,15 @@ TEST_CASE("RegisterMachine Crossover Test", "[TPG]") {
       
       // tpg.params_["id"] = -1;  // remove later
       // tpg.state_["world_rank"] = 1;
-      
+
       std::unordered_map<string, std::any> params = createDefaultParams();
       std::unordered_map<string, int> state = createDefaultState();
       tpg.params_ = params;
       tpg.state_ = state;
 
       std::vector<bool> legal_ops(instruction::NUM_OP, true);
+      tpg._ops = legal_ops;
+
       std::mt19937 rng(40);
       INFO("Creating Register machines");
       // Create parent machines with known sizes
