@@ -13,5 +13,6 @@ Start at base directory
 mkdir build
 cd build
 cmake .. && make
-ctest
-```
+ctest --rerun-failed --output-on-failure
+``` 
+
