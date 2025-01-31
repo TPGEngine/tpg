@@ -2,17 +2,16 @@
 #include <fstream>
 #include <map>
 #include <mutex>
+#include <sstream>
 
 class CSVStorage {
 public:
-    static CSVStorage& instance();
-    
-    void init(const int& seed_tpg, const int& pid);
-    void append(const std::map<std::string, std::string>& data);
-    CSVStorage(const CSVStorage&) = delete;
-    CSVStorage& operator=(const CSVStorage&) = delete;
+    virtual ~CSVStorage() = default;
 
-private:
+    virtual void init(const int& seed_tpg, const int& pid) = 0;
+    virtual void append(const std::map<std::string, std::string>& data) = 0;
+
+protected:
     CSVStorage() = default;
     std::ofstream file_;
 };

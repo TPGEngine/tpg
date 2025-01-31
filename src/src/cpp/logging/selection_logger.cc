@@ -1,6 +1,7 @@
 #include <selection_logger.h>
 #include <event_dispatcher.h>
 #include <event_types.h>
+#include <mta_storage.h>
 
 SelectionLogger::SelectionLogger() {
     EventDispatcher::instance().subscribe(
@@ -10,7 +11,7 @@ SelectionLogger::SelectionLogger() {
 }
 
 void SelectionLogger::handleEvent(const std::map<std::string, std::string>& data) {
-    CSVStorage::instance().append({
+    MTAStorage::instance().append({
         {"type", data.at("type")},
         {"generation", data.at("generation")},
         {"best_fitness", data.at("best_fitness")},

@@ -5,7 +5,8 @@ Import('env')
 env.Library(
     target = 'logging',
     source = [
-        'csv_storage.cc',
+        'mta_storage.cc',
+        'timing_storage.cc',
         'event_dispatcher.cc',
         'selection_logger.cc'
     ],

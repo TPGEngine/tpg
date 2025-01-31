@@ -25,7 +25,7 @@
 #include <cstdlib>
 
 #include "evaluators_mujoco.h"
-#include <csv_storage.h>
+#include <mta_storage.h>
 #include <selection_logger.h>
 
 #define CHECKPOINT_MOD 1000000
@@ -190,7 +190,7 @@ int main(int argc, char** argv) {
 
    if (tpg.GetParam<int>("replay") == 0) {
       // Initialize CSV logger Singleton instance
-      CSVStorage::instance().init(seed_tpg, pid);
+      MTAStorage::instance().init(seed_tpg, pid);
       SelectionLogger selectionLogger;
    };
 
