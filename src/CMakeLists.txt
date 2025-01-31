@@ -77,6 +77,11 @@ include_directories(${MUJOCO_INCLUDE})
 
 add_executable(mujoco_env_test tests/mujoco_env_test.cc)
 add_executable(mujoco_inverted_pendulum_test tests/mujoco_inverted_pendulum_test.cc)
+add_executable(mujoco_inverted_double_pendulum_test tests/mujoco_inverted_double_pendulum_test.cc)
+add_executable(mujoco_hopper_test tests/mujoco_hopper_test.cc)
+add_executable(mujoco_half_cheetah_test tests/mujoco_half_cheetah_test.cc)
+add_executable(mujoco_humanoid_standup_test tests/mujoco_humanoid_standup_test.cc)
+
 
 # Add this line to find the Eigen package
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
@@ -100,7 +105,7 @@ target_link_libraries(tests
 
 target_link_libraries(tests PRIVATE Eigen3::Eigen)
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain) 
-target_include_directories(mujoco_inverted_pendulum_test PRIVATE src/cpp/environments/mujoco)
+include_directories(src/cpp/environments/mujoco)
 
 # Link MuJoCo with mujoco_tests
 target_link_libraries(mujoco_env_test 
@@ -117,6 +122,34 @@ target_link_libraries(mujoco_inverted_pendulum_test
       ${MUJOCO_LIB}
 )
 
+target_link_libraries(mujoco_inverted_double_pendulum_test 
+  PRIVATE
+      Catch2::Catch2WithMain
+      tpg
+      ${MUJOCO_LIB}
+)
+
+target_link_libraries(mujoco_hopper_test 
+  PRIVATE
+      Catch2::Catch2WithMain
+      tpg
+      ${MUJOCO_LIB}
+)
+
+target_link_libraries(mujoco_half_cheetah_test 
+  PRIVATE
+      Catch2::Catch2WithMain
+      tpg
+      ${MUJOCO_LIB}
+)
+
+target_link_libraries(mujoco_humanoid_standup_test 
+  PRIVATE
+      Catch2::Catch2WithMain
+      tpg
+      ${MUJOCO_LIB}
+)
+
 include(CTest)
 include(Catch)
 enable_testing()
@@ -126,3 +159,7 @@ enable_testing()
 catch_discover_tests(tests)
 catch_discover_tests(mujoco_env_test)
 catch_discover_tests(mujoco_inverted_pendulum_test)
+catch_discover_tests(mujoco_inverted_double_pendulum_test)
+catch_discover_tests(mujoco_hopper_test)
+catch_discover_tests(mujoco_half_cheetah_test)
+catch_discover_tests(mujoco_humanoid_standup_test)

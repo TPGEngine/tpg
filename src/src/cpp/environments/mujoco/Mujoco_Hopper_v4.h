@@ -129,7 +129,7 @@ class Mujoco_Hopper_v4 : public MujocoEnv {
       for (size_t i = 0; i < qpos.size(); i++) {
          qpos[i] = init_qpos_[i] + dis_pos(rng);
       }
-      std::uniform_real_distribution<> dis_vel(0.0, reset_noise_scale_);
+      std::uniform_real_distribution<> dis_vel(-reset_noise_scale_, reset_noise_scale_);
       std::vector<double> qvel(m_->nv);
       for (size_t i = 0; i < qvel.size(); i++) {
          qvel[i] = init_qvel_[i] + dis_vel(rng);
