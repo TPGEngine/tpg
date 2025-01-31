@@ -38,7 +38,8 @@ jobs:
         shell: bash
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3-pip
+          sudo apt-get install -y python3-pip cmake ninja-build
+          sudo apt-get install -y libglfw3 libglfw3-dev libglew-dev
           cd src
           mkdir  ./mujoco
           wget https://github.com/google-deepmind/mujoco/releases/download/3.2.2/mujoco-3.2.2-linux-x86_64.tar.gz  -O ./mujoco/mujoco.tar.gz 
@@ -54,47 +55,46 @@ jobs:
           fi
           cd ../
          
-
-
-             
-
       - name: Set environment variables
         shell: bash
         run: |
           ls
-          
           ls src/
           echo $GITHUB_WORKSPACE
-          
           echo "export TPG=$GITHUB_WORKSPACE/src" >> "$HOME/.bash_profile"
           echo "export PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/plot" >>  "$HOME/.bash_profile"
           echo "export PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/run" >>  "$HOME/.bash_profile"
           echo "export MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >>  "$HOME/.bash_profile"
           echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2/lib" >>  "$HOME/.bash_profile"
           echo "MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >> "$GITHUB_ENV"
-
-
           source "$HOME/.bash_profile"
           
-          
-
       - name: Print GitHub environment variables
         run: |
           echo  "$HOME/.bash_profile"
           cat "$HOME/.bash_profile"
-
           echo "Checking Mujoco path"
           echo $MUJOCO
           cd $MUJOCO
+
+      - name: Configure CMake
+        run: |
+          echo "Configuring CMake"
+          mkdir -p build
+          cd build
+          cmake .. -G Ninja -DCMAKE_C_COMPILER=gcc-13 -DCMAKE_CXX_COMPILER=g++-13
+          cd ..
           
       - name: Compile the project
         shell: bash
         run: |
-          cd src
-          scons --opt
+          echo "Compiling Project"
+          cd build
+          cmake --build
+          cd ..
 
       - name: Run tests
         run: |
-          # Add commands to run your tests here
-          # Unit testing commands will be run here
           echo "Running tests..."
+          cd build
+          ctest --output-on-failure
