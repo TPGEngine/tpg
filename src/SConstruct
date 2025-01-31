@@ -2,6 +2,7 @@ AddOption('--dbg', action='append_const', dest='cflags', const='-g')
 AddOption('--opt', action='append_const', dest='cflags', const='-O3 -fno-math-errno -DNDEBUG')
 
 import os
+
 common_env=Environment(ENV=os.environ)
 ccanada = ARGUMENTS.get('ccanada', 0)
 common_env.Replace(CXX='mpic++')
@@ -15,6 +16,11 @@ common_env.Append(CCFLAGS = ['-std=c++23', '-Wno-deprecated', '-Wall',
 common_env.MergeFlags(GetOption('cflags'))
 common_env.Append(CPPDEFINES={'VERSION': 1})
 
+# Add Catch2 include path
+common_env.Append(CPPPATH=['/usr/include/catch2'])
+
+
+
 # Our release build is derived from the common build environment...
 release_env = common_env.Clone()
 # ... and adds a RELEASE preprocessor symbol ...
@@ -26,6 +32,7 @@ release_env.VariantDir('build/release', 'src')
 # debug_env = common_env.Clone()
 # debug_env.Append(CPPDEFINES=['DEBUG'])
 # debug_env.VariantDir('build/debug', 'src')
+
 
 # # Now that all build environment have been defined, let's iterate over
 # # them and invoke the lower level SConscript files.
