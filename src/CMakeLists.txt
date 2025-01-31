@@ -81,6 +81,8 @@ add_executable(mujoco_inverted_double_pendulum_test tests/mujoco_inverted_double
 add_executable(mujoco_hopper_test tests/mujoco_hopper_test.cc)
 add_executable(mujoco_half_cheetah_test tests/mujoco_half_cheetah_test.cc)
 add_executable(mujoco_humanoid_standup_test tests/mujoco_humanoid_standup_test.cc)
+add_executable(mujoco_ant_test tests/mujoco_ant_test.cc)
+add_executable(mujoco_reacher_test tests/mujoco_reacher_test.cc)
 
 
 # Add this line to find the Eigen package
@@ -150,6 +152,20 @@ target_link_libraries(mujoco_humanoid_standup_test
       ${MUJOCO_LIB}
 )
 
+target_link_libraries(mujoco_ant_test 
+  PRIVATE
+      Catch2::Catch2WithMain
+      tpg
+      ${MUJOCO_LIB}
+)
+
+target_link_libraries(mujoco_reacher_test 
+  PRIVATE
+      Catch2::Catch2WithMain
+      tpg
+      ${MUJOCO_LIB}
+)
+
 include(CTest)
 include(Catch)
 enable_testing()
@@ -163,3 +179,5 @@ catch_discover_tests(mujoco_inverted_double_pendulum_test)
 catch_discover_tests(mujoco_hopper_test)
 catch_discover_tests(mujoco_half_cheetah_test)
 catch_discover_tests(mujoco_humanoid_standup_test)
+catch_discover_tests(mujoco_ant_test)
+catch_discover_tests(mujoco_reacher_test)
