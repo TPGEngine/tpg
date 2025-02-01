@@ -1,8 +1,9 @@
 #pragma once
 #include "csv_storage.h"
+#include "mta_metrics.h"
 
 
-class MTAStorage : public CSVStorage {
+class MTAStorage : public CSVStorage<MTAMetrics> {
 public:
     static MTAStorage& instance() {
         static MTAStorage instance;

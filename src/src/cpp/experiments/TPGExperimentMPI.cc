@@ -27,6 +27,8 @@
 #include "evaluators_mujoco.h"
 #include <mta_storage.h>
 #include <mta_logger.h>
+#include "timing_storage.h"
+#include "timing_logger.h"
 
 #define CHECKPOINT_MOD 1000000
 #define PRINT_MOD 1
@@ -189,9 +191,11 @@ int main(int argc, char** argv) {
    int pid = tpg.GetParam<int>("pid");
 
    if (tpg.GetParam<int>("replay") == 0) {
-      // Initialize MTA logger Singleton instance
+      // Initialize MTA and TMS loggers
       MTAStorage::instance().init(seed_tpg, pid);
       MTALogger mtaLogger;
+      TimingStorage::instance().init(seed_tpg, pid);
+      TimingLogger timingLogger;
    };
 
    if (world.rank() == 0) {  // Master Process
@@ -344,6 +348,20 @@ int main(int argc, char** argv) {
                                     gen);
                apiClient->LogMetric("lost", std::to_string(lost), "", gen);
             }
+            TimingMetricsBuilder builder;
+            builder.with_generation(tpg.GetState("t_current"))
+                .with_total_generation_time(endGen.count())
+                .with_evaluation_time(endEval.count())
+                .with_generate_teams_time(endGenTeams.count())
+                .with_set_elite_teams_time(endSetEliteTeams.count())
+                .with_select_teams_time(endSelTeams.count())
+                .with_report_time(endReport.count())
+                .with_modes_time(endMODES.count())
+                .with_lost_time(lost);
+            
+            TimingMetrics metrics = builder.build();
+            EventDispatcher::instance().notify(EventType::TMS, metrics);
+
             os << setprecision(5) << fixed;
             os << "gTime t " << tpg.GetState("t_current");
             os << " sec " << endGen.count();

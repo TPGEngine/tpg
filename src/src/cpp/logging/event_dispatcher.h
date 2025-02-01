@@ -6,13 +6,14 @@
 #include <vector>
 #include <mta_metrics.h>
 
+template<typename T>
 class EventDispatcher {
 public:
-    using Callback = std::function<void(const MTAMetrics&)>;
+    using Callback = std::function<void(const T&)>;
     
     static EventDispatcher& instance();
     void subscribe(EventType type, Callback cb);
-    void notify(EventType type, const MTAMetrics& data);
+    void notify(EventType type, const T& data);
     EventDispatcher(const EventDispatcher&) = delete;
     EventDispatcher& operator=(const EventDispatcher&) = delete;
 
