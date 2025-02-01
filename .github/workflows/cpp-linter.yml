@@ -23,9 +23,10 @@ jobs:
             /usr/local/include
           key: ${{ runner.os }}-dependencies-${{ hashFiles('**/SConscript') }}
 
-      # Install dependencies (same as build.yml)
+      # Install dependencies
       - name: Install dependencies
         run: |
+          cd src
           sudo apt-get update
           sudo apt-get install -y python3-pip
           sudo apt-get install -y gcc-13 g++-13
@@ -33,10 +34,9 @@ jobs:
           sudo apt-get install -y bear
           sudo xargs --arg-file requirements.txt apt install
 
-      # Set up Mujoco (same as build.yml)
+      # Set up Mujoco
       - name: Setup Mujoco
         run: |
-          cd src
           mkdir ./mujoco
           wget https://github.com/google-deepmind/mujoco/releases/download/3.2.2/mujoco-3.2.2-linux-x86_64.tar.gz -O ./mujoco/mujoco.tar.gz
           tar -xzvf ./mujoco/mujoco.tar.gz -C ./mujoco
