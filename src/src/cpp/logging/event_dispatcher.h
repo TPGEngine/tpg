@@ -4,14 +4,15 @@
 #include <functional>
 #include <map>
 #include <vector>
+#include <mta_metrics.h>
 
 class EventDispatcher {
 public:
-    using Callback = std::function<void(const std::map<std::string, std::string>&)>;
+    using Callback = std::function<void(const MTAMetrics&)>;
     
     static EventDispatcher& instance();
     void subscribe(EventType type, Callback cb);
-    void notify(EventType type, const std::map<std::string, std::string>& data);
+    void notify(EventType type, const MTAMetrics& data);
     EventDispatcher(const EventDispatcher&) = delete;
     EventDispatcher& operator=(const EventDispatcher&) = delete;
 

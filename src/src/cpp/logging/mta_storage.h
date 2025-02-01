@@ -10,7 +10,7 @@ public:
     }
 
     void init(const int& seed_tpg, const int& pid) override;
-    void append(const std::map<std::string, std::string>& data) override;
+    void append(const MTAMetrics& metrics) override;
 
     MTAStorage(const MTAStorage&) = delete;
     MTAStorage& operator=(const MTAStorage&) = delete;

@@ -6,9 +6,10 @@ env.Library(
     target = 'logging',
     source = [
         'mta_storage.cc',
-        'timing_storage.cc',
         'event_dispatcher.cc',
-        'selection_logger.cc'
+        'mta_logger.cc',
+        'mta_metrics_builder.cc',
+        'mta_metrics.cc',
     ],
     CPPPATH = ['.']
 )

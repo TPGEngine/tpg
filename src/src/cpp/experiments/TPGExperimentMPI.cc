@@ -26,7 +26,7 @@
 
 #include "evaluators_mujoco.h"
 #include <mta_storage.h>
-#include <selection_logger.h>
+#include <mta_logger.h>
 
 #define CHECKPOINT_MOD 1000000
 #define PRINT_MOD 1
@@ -189,9 +189,9 @@ int main(int argc, char** argv) {
    int pid = tpg.GetParam<int>("pid");
 
    if (tpg.GetParam<int>("replay") == 0) {
-      // Initialize CSV logger Singleton instance
+      // Initialize MTA logger Singleton instance
       MTAStorage::instance().init(seed_tpg, pid);
-      SelectionLogger selectionLogger;
+      MTALogger mtaLogger;
    };
 
    if (world.rank() == 0) {  // Master Process

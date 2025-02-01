@@ -1864,16 +1864,7 @@ void TPG::printTeamInfo(long t, int phase, bool singleBest, bool multitask, long
           (!singleBest && (*teiter)->id_ == teamId) ||  // specific team
           (singleBest &&
            (*teiter)->id_ == bestTeam->id_))  // singleBest root team
-      {
-         // dispatching that the best fitness score has been triggered
-         EventDispatcher::instance().notify(
-            EventType::SELECTION, {
-               {"type", (multitask ? "MTA" : "ST")},
-               {"generation", std::to_string(t)},
-               {"best_fitness", std::to_string((*teiter)->GetMedianOutcome(0, 0, 0))}, // best fitness score occurs on p0t0a0 
-               {"team_id", std::to_string((*teiter)->id_)}
-            }
-         );          
+      {      
          oss << "tminfo t " << t << " id " << (*teiter)->id_ << " gtm "
              << (*teiter)->gtime_ << " phs " << phase;
          oss << " root " << ((*teiter)->root() ? 1 : 0);
@@ -1935,6 +1926,24 @@ void TPG::printTeamInfo(long t, int phase, bool singleBest, bool multitask, long
          oss << " nP " << programs.size();
          oss << " nT " << visitedTeams2.size();
          // oss << " nM " << memories.size();
+
+         // dispatching MTA team information for only multitask events
+         if (multitask) {
+            MTAMetricsBuilder builder;
+            builder.with_generation(t)
+               .with_best_fitness((*teiter)->GetMedianOutcome(0, 0, 0))
+               .with_team_id((*teiter)->id_)
+               .with_team_size((*teiter)->size())
+               .with_age(t - (*teiter)->gtime_)
+               .with_fitness_value_for_selection((*teiter)->fit_)
+               .with_total_program_instructions(accumulate(programInstructionCounts.begin(),
+                           programInstructionCounts.end(), 0))
+               .with_total_effective_program_instructions(accumulate(effectiveProgramInstructionCounts.begin(),
+                           effectiveProgramInstructionCounts.end(), 0));
+            
+            MTAMetrics metrics = builder.build();
+            EventDispatcher::instance().notify(EventType::MTA, metrics);
+         }           
 
          // visitedTeams.clear();
          // set<long> pF;
