@@ -3,8 +3,8 @@
 
 #include <vector>
 #include <optional>
-#include "timing_metrics_builder.h"
 
+class TimingMetricsBuilder;
 
 struct TimingMetrics {
     const int generation;
@@ -20,5 +20,7 @@ struct TimingMetrics {
     TimingMetrics(const TimingMetricsBuilder& builder);
 
 };
+
+#include "timing_metrics_builder.h"
 
 #endif

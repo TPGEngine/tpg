@@ -1,5 +1,7 @@
 #include "TPG.h"
 #include <event_dispatcher.h>
+#include "mta_metrics.h"
+#include "mta_metrics_builder.h"
 
 /******************************************************************************/
 TPG::TPG() {
@@ -1942,7 +1944,7 @@ void TPG::printTeamInfo(long t, int phase, bool singleBest, bool multitask, long
                            effectiveProgramInstructionCounts.end(), 0));
             
             MTAMetrics metrics = builder.build();
-            EventDispatcher::instance().notify(EventType::MTA, metrics);
+            EventDispatcher<MTAMetrics>::instance().notify(EventType::MTA, metrics);
          }           
 
          // visitedTeams.clear();

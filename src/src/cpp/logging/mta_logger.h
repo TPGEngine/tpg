@@ -1,5 +1,6 @@
 #include <csv_storage.h>
 #include <event_dispatcher.h>
+#include <mta_metrics.h>
 
 
 class MTALogger {

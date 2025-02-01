@@ -27,8 +27,10 @@
 #include "evaluators_mujoco.h"
 #include <mta_storage.h>
 #include <mta_logger.h>
-#include "timing_storage.h"
-#include "timing_logger.h"
+#include <timing_storage.h>
+#include <timing_logger.h>
+#include <event_dispatcher.h>
+#include <timing_metrics.h>
 
 #define CHECKPOINT_MOD 1000000
 #define PRINT_MOD 1
@@ -360,7 +362,7 @@ int main(int argc, char** argv) {
                 .with_lost_time(lost);
             
             TimingMetrics metrics = builder.build();
-            EventDispatcher::instance().notify(EventType::TMS, metrics);
+            EventDispatcher<TimingMetrics>::instance().notify(EventType::TMS, metrics);
 
             os << setprecision(5) << fixed;
             os << "gTime t " << tpg.GetState("t_current");

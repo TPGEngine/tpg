@@ -5,7 +5,7 @@
 
 
 TimingLogger::TimingLogger() {
-    EventDispatcher::instance().subscribe(
+    EventDispatcher<TimingMetrics>::instance().subscribe(
         EventType::TMS,
         [this](const TimingMetrics& data) { handleEvent(data); }
     );
