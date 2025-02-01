@@ -18,6 +18,7 @@ public:
     MTAStorage& operator=(const MTAStorage&) = delete;
     MTAStorage(MTAStorage&&) = delete;
     MTAStorage& operator=(MTAStorage&&) = delete;
+    ~MTAStorage() override = default;
 
 private:
     MTAStorage() = default;

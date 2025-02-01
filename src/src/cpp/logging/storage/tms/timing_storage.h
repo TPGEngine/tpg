@@ -18,6 +18,7 @@ public:
     TimingStorage& operator=(const TimingStorage&) = delete;
     TimingStorage(TimingStorage&&) = delete;
     TimingStorage& operator=(TimingStorage&&) = delete;
+    ~TimingStorage() override = default;
 
 private:
     TimingStorage() = default;
