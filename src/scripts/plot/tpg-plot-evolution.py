@@ -12,12 +12,13 @@ from matplotlib.cm import get_cmap
 The script is included within the environmental variables for TPG.
 
 A comprehensive guide can be found in the link below.
+
 https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/TPG-Generation-Plot-for-CSV-Logging-Files.
 
 To use, simply call the script inside any experiments within `experiment_directories/*`.
     
-    :param csv_files [Optional]: The name of csv file(s) to plot
-    :param column_name [Required]: The name of the column to plot against generations 
+    :param csv_files (Optional): The name of csv file(s) to plot
+    :param column_name (Required): The name of the column to plot against generations 
     :return: Returns nothing but saves a .png file for the plot
 
 For the optional parameter `csv_files`, possible values can be:
@@ -35,9 +36,33 @@ Example:
     tpg-plot-evolution.py tms.42.42,tms.42.43 best_fitness
     tpg-plot-evolution.py best_fitness
 '''
-def plot_generations(csv_files, column_name):
-    # the script may require fixing when `tms` CSVs are filled since it has multiple types 
 
+
+def get_unique_filename(base_filename):
+    """
+    Generates a unique filename by appending an increment if the file already exists.
+    
+    :param base_filename: The base filename (e.g., 'output.png')
+    :return: A unique filename (e.g., 'output_1.png', 'output_2.png', etc.)
+    """
+    filename, ext = os.path.splitext(base_filename)
+    counter = 1
+    new_filename = base_filename
+    
+    while os.path.exists(new_filename):
+        new_filename = f"{filename}_{counter}{ext}"
+        counter += 1
+    
+    return new_filename
+
+def plot_generations(csv_files, column_name):
+    """
+    Plots the given csv_files and column name against generations.
+    
+    :param csv_files: The name of csv file(s) to plot (e.g., 'tma.42.12345.csv')
+    :param column_name: The column to plot against 'generation' (e.g., 'best_fitness')
+    :return: None, but saves the output into a .png file
+    """
     plt.figure(figsize=(12, 7))
     cmap = plt.get_cmap('tab10') # a list of 10 color schemes
     line_styles = ['-', '--', '-.', ':']
@@ -79,8 +104,9 @@ def plot_generations(csv_files, column_name):
 
     # configure properties of the graph (x-axis, y-axis, title, grid)
     plt.xlabel('Generation', fontsize=12)
-    plt.ylabel(column_name.capitalize(), fontsize=12)
-    title = f'{column_name} vs Generations'
+    plt.ylabel(column_name, fontsize=12)
+    title = f'{column_name} vs. Generations'
+    
     if len(valid_files) > 1:
         title += f' ({len(valid_files)} files)'
     plt.title(title, fontsize=14)
@@ -94,11 +120,14 @@ def plot_generations(csv_files, column_name):
     plt.tight_layout()
 
     output_filename = f"{column_name}_vs_generations"
-    
+
     # multiple file plots will end with '_combined' 
     if len(valid_files) > 1:
         output_filename += "_combined"
     output_filename += ".png"
+
+    # if output file already exists, add a number in the end
+    output_filename = get_unique_filename(output_filename)
     
     plt.savefig(output_filename, bbox_inches='tight')
     print(f"Plot saved to '{output_filename}'")
