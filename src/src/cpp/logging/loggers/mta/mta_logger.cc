@@ -1,7 +1,7 @@
-#include <mta_logger.h>
-#include <event_dispatcher.h>
-#include <event_types.h>
-#include <mta_storage.h>
+#include "mta_logger.h"
+#include "core/event_dispatcher.h"
+#include "core/event_types.h"
+#include "storage/mta/mta_storage.h"
 
 MTALogger::MTALogger() {
     EventDispatcher<MTAMetrics>::instance().subscribe(

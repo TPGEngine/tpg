@@ -1,6 +1,6 @@
 #pragma once
-#include "csv_storage.h"
-#include "mta_metrics.h"
+#include "storage/csv_storage.h"
+#include "metrics/mta/mta_metrics.h"
 
 
 class MTAStorage : public CSVStorage<MTAMetrics> {

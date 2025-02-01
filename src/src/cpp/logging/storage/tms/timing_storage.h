@@ -1,6 +1,6 @@
 #pragma once
-#include "csv_storage.h"
-#include "timing_metrics.h"
+#include "storage/csv_storage.h"
+#include "metrics/tms/timing_metrics.h"
 
 
 class TimingStorage : public CSVStorage<TimingMetrics> {

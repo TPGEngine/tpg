@@ -1,5 +1,5 @@
-#include <timing_metrics.h>
-#include <timing_metrics_builder.h>
+#include "timing_metrics.h"
+#include "timing_metrics_builder.h"
 
 TimingMetrics::TimingMetrics(const TimingMetricsBuilder& builder)
     : generation(builder.get_generation()),

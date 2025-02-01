@@ -1,7 +1,7 @@
 #include "TPG.h"
-#include <event_dispatcher.h>
-#include "mta_metrics.h"
-#include "mta_metrics_builder.h"
+#include "core/event_dispatcher.h"
+#include "metrics/mta/mta_metrics.h"
+#include "metrics/mta/mta_metrics_builder.h"
 
 /******************************************************************************/
 TPG::TPG() {

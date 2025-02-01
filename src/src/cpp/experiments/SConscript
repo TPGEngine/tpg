@@ -18,7 +18,11 @@ env.Append(CPPPATH = ['../TPG', '../environments', '../genomic',
                       "$MUJOCO/include/",
                       "/usr/include/GLFW",
                       "/usr/include/GL/",
-                      "../logging"
+                      "../logging",
+                      "../logging/core",
+                      "../logging/loggers",
+                      "../logging/metrics",
+                      "../logging/storage"
                       ])
 
 env.Append(LIBS = ['TPG','bz2','boost_thread','boost_system','boost_mpi',

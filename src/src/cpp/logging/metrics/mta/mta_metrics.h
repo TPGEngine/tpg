@@ -19,6 +19,6 @@ struct MTAMetrics {
     MTAMetrics(const MTAMetricsBuilder& builder);
 };
 
-#include <mta_metrics_builder.h>
+#include "mta_metrics_builder.h"
 
 #endif

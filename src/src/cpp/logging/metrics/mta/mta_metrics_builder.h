@@ -1,7 +1,7 @@
 #ifndef MTA_METRICS_BUILDER_H
 #define MTA_METRICS_BUILDER_H
 
-#include <mta_metrics.h>
+#include "mta_metrics.h"
 
 class MTAMetricsBuilder {
 public:

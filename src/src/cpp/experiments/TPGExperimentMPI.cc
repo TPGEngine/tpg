@@ -25,12 +25,12 @@
 #include <cstdlib>
 
 #include "evaluators_mujoco.h"
-#include <mta_storage.h>
-#include <mta_logger.h>
-#include <timing_storage.h>
-#include <timing_logger.h>
-#include <event_dispatcher.h>
-#include <timing_metrics.h>
+#include <storage/mta/mta_storage.h>
+#include <loggers/mta/mta_logger.h>
+#include <storage/tms/timing_storage.h>
+#include <loggers/tms/timing_logger.h>
+#include <core/event_dispatcher.h>
+#include <metrics/tms/timing_metrics.h>
 
 #define CHECKPOINT_MOD 1000000
 #define PRINT_MOD 1

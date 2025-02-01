@@ -1,7 +1,7 @@
 #include "timing_logger.h"
-#include "event_dispatcher.h"
-#include "event_types.h"
-#include "timing_storage.h"
+#include "core/event_dispatcher.h"
+#include "core/event_types.h"
+#include "storage/tms/timing_storage.h"
 
 
 TimingLogger::TimingLogger() {

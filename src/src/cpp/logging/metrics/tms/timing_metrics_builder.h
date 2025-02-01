@@ -1,7 +1,7 @@
 #ifndef TIMING_METRICS_BUILDER_H
 #define TIMING_METRICS_BUILDER_H
 
-#include <timing_metrics.h>
+#include "timing_metrics.h"
 
 class TimingMetricsBuilder {
 public:

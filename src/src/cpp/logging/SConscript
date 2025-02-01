@@ -1,19 +1,34 @@
 # Inherit the same environment as the root SConstruct 
-
 Import('env')
+
+# Create paths relative to the current directory
+env.Append(CPPPATH = [
+    '.',
+    'core',
+    'loggers',
+    'metrics',
+    'storage',
+])
 
 env.Library(
     target = 'logging',
     source = [
-        'mta_storage.cc',
-        'event_dispatcher.tpp',
-        'mta_logger.cc',
-        'mta_metrics_builder.cc',
-        'mta_metrics.cc',
-        'timing_storage.cc',
-        'timing_logger.cc',
-        'timing_metrics_builder.cc',
-        'timing_metrics.cc',
+        # Storage
+        'storage/mta/mta_storage.cc',
+        'storage/tms/timing_storage.cc',
+        
+        # Core
+        'core/event_dispatcher.tpp',
+        
+        # Loggers
+        'loggers/mta/mta_logger.cc',
+        'loggers/tms/timing_logger.cc',
+        
+        # Metrics
+        'metrics/mta/mta_metrics.cc',
+        'metrics/mta/mta_metrics_builder.cc',
+        'metrics/tms/timing_metrics.cc',
+        'metrics/tms/timing_metrics_builder.cc' 
     ],
     CPPPATH = ['.']
 )
