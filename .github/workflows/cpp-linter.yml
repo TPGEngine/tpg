@@ -14,23 +14,38 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Install dependencies
-      - name: Install dependencies
+      # Cache dependencies
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            /usr/local/lib
+            /usr/local/include
+          key: ${{ runner.os }}-dependencies-${{ hashFiles('**/SConscript') }}
+
+      - name: Set up GCC 13
+        shell: bash
         run: |
-          cd src
+          sudo apt update
+          sudo apt install -y software-properties-common
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+          sudo apt update
+          sudo apt install -y gcc-13 g++-13
+          gcc --version
+          g++ --version
+
+      - name: Set up environment
+        shell: bash
+        run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip
-          sudo apt-get install -y gcc-13 g++-13
-          sudo apt-get install -y libglfw3 libglfw3-dev libglew-dev
-          sudo apt-get install -y bear
-          sudo xargs --arg-file requirements.txt apt install
-
-      # Set up Mujoco
-      - name: Setup Mujoco
-        run: |
-          mkdir ./mujoco
-          wget https://github.com/google-deepmind/mujoco/releases/download/3.2.2/mujoco-3.2.2-linux-x86_64.tar.gz -O ./mujoco/mujoco.tar.gz
+          cd src
+          mkdir  ./mujoco
+          wget https://github.com/google-deepmind/mujoco/releases/download/3.2.2/mujoco-3.2.2-linux-x86_64.tar.gz  -O ./mujoco/mujoco.tar.gz 
           tar -xzvf ./mujoco/mujoco.tar.gz -C ./mujoco
+          sudo xargs --arg-file requirements.txt apt install
+          sudo apt-get install -y bear
+          sudo apt-get install -y libglfw3 libglfw3-dev libglew-dev
           if [ -d "./mujoco" ]; then
             echo "Mujoco folder created"
             echo "Files and directories in ./mujoco:"
@@ -39,11 +54,10 @@ jobs:
               echo "Mujoco folder not created"
           fi
           cd ../
-
-      # Setup build environment
-      - name: Setup build environment
+         
+      - name: Set environment variables
+        shell: bash
         run: |
-          echo "Setting up build environment..."
           ls
           ls src/
           echo $GITHUB_WORKSPACE
