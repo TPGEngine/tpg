@@ -116,7 +116,7 @@ class TPG {
     void printProgramInfo();
     void printOss();
     void printOss(ostringstream &o);
-    void printTeamInfo(long, int, bool, long teamId = -1);
+    void printTeamInfo(long, int, bool, bool, long teamId = -1);
     void trackTeamInfo(long, int, bool, long teamId = -1);
     
     void RegisterMachineCrossover(RegisterMachine *p1, RegisterMachine *p2,

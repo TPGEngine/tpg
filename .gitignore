@@ -280,3 +280,6 @@ TSWLatexianTemp*
 
 # Temporary files
 temp/
+
+# vscode config files
+.vscode
