@@ -25,12 +25,12 @@
 #include <cstdlib>
 
 #include "evaluators_mujoco.h"
-#include <storage/mta/mta_storage.h>
-#include <loggers/mta/mta_logger.h>
-#include <storage/tms/timing_storage.h>
-#include <loggers/tms/timing_logger.h>
-#include <core/event_dispatcher.h>
-#include <metrics/tms/timing_metrics.h>
+#include "storage/mta/mta_storage.h"
+#include "loggers/mta/mta_logger.h"
+#include "storage/tms/timing_storage.h"
+#include "loggers/tms/timing_logger.h"
+#include "core/event_dispatcher.h"
+#include "metrics/tms/timing_metrics.h"
 
 #define CHECKPOINT_MOD 1000000
 #define PRINT_MOD 1
@@ -196,8 +196,10 @@ int main(int argc, char** argv) {
       // Initialize MTA and TMS loggers
       MTAStorage::instance().init(seed_tpg, pid);
       MTALogger mtaLogger;
+      mtaLogger.init();
       TimingStorage::instance().init(seed_tpg, pid);
       TimingLogger timingLogger;
+      timingLogger.init();
    };
 
    if (world.rank() == 0) {  // Master Process

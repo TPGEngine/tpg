@@ -83,6 +83,6 @@ double TimingMetricsBuilder::get_lost_time() const {
 }
 
 TimingMetrics TimingMetricsBuilder::build() const {
-    return TimingMetrics(*this);
+    return { *this };
 }
 

@@ -4,7 +4,7 @@
 #include "storage/tms/timing_storage.h"
 
 
-TimingLogger::TimingLogger() {
+void TimingLogger::init() {
     EventDispatcher<TimingMetrics>::instance().subscribe(
         EventType::TMS,
         [this](const TimingMetrics& data) { handleEvent(data); }

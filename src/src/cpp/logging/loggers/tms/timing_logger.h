@@ -5,7 +5,8 @@
 
 class TimingLogger {
     public:
-        TimingLogger();
+        TimingLogger() = default;
+        void init();
     
     private:
         void handleEvent(const TimingMetrics& metrics);

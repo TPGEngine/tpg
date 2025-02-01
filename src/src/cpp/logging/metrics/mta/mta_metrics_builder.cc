@@ -42,7 +42,7 @@ MTAMetricsBuilder& MTAMetricsBuilder::with_total_effective_program_instructions(
 }
 
 MTAMetrics MTAMetricsBuilder::build() const {
-    return MTAMetrics(*this);
+    return { *this };
 }
 
 long MTAMetricsBuilder::get_generation() const {

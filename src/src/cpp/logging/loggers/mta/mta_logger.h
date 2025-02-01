@@ -5,7 +5,8 @@
 
 class MTALogger {
     public:
-        MTALogger();
+        MTALogger() = default;
+        void init(); 
     
     private:
         void handleEvent(const MTAMetrics& metrics);

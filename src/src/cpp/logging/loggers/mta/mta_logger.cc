@@ -3,7 +3,7 @@
 #include "core/event_types.h"
 #include "storage/mta/mta_storage.h"
 
-MTALogger::MTALogger() {
+void MTALogger::init() {
     EventDispatcher<MTAMetrics>::instance().subscribe(
         EventType::MTA,
         [this](const MTAMetrics& data) { handleEvent(data); }
