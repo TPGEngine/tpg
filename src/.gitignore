@@ -41,6 +41,7 @@ build/
 # Log files
 *.err
 *.std
+*.*.*.csv
 
 # Video files
 *.mp4
