@@ -21,7 +21,7 @@ jobs:
           path: |
             /usr/local/lib
             /usr/local/include
-          key: ${{ runner.os }}-dependencies-${{ hashFiles('**/SConscript') }}
+          key: ${{ runner.os }}-dependencies-${{ hashFiles('**/CMakeLists.txt') }}
 
       - name: Set up GCC 13
         shell: bash
@@ -73,7 +73,9 @@ jobs:
       - name: Generate compilation database
         run: |
           cd src
-          bear -- scons
+          mkdir -p build && cd build
+          cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
+          ln -s build/compile_commands.json ../compile_commands.json
 
       # Run cpp-linter with "file not found" suppression
       - uses: cpp-linter/cpp-linter-action@v2
