@@ -1,3 +1,16 @@
+# Get the MUJOCO path from the environment
+if(DEFINED ENV{MUJOCO})
+    set(MUJOCOPATH $ENV{MUJOCO})
+else()
+    message(FATAL_ERROR "MUJOCO environment variable is not set!")
+endif()
+
+# Locate the Mujoco library file in ${MUJOCOPATH}/lib
+find_library(MUJOCOLIBRARY mujoco HINTS "${MUJOCOPATH}/lib")
+if(NOT MUJOCOLIBRARY)
+  message(FATAL_ERROR "Could not find the Mujoco library in ${MUJOCOPATH}/lib")
+endif()
+
 # Source files for experiments
 file(GLOB EXPERIMENTS_SOURCES
     *.cc
@@ -20,7 +33,7 @@ target_include_directories(TPGExperimentMPI
     ${Boost_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
     ${CURL_INCLUDE_DIRS}
-    ${MUJOCO}/include
+    ${MUJOCOPATH}/include
 )
 
 # Link libraries
@@ -36,8 +49,16 @@ target_link_libraries(TPGExperimentMPI
     ${OpenCV_LIBS}
     CURL::libcurl
     ${CMAKE_THREAD_LIBS_INIT}
+    glfw
+    GLEW::GLEW
+    OpenGL::GL
+    ${MUJOCOLIBRARY}
+    TBB::tbb
+    glut
+    GLU
+    OSMesa
 )
 
-# Set output directory for the executable
+# Set output directory for the executable to match the expected SCons path
 set_target_properties(TPGExperimentMPI PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin") 
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/release/cpp/experiments") 
