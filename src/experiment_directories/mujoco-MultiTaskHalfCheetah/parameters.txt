@@ -81,10 +81,10 @@ seed_aux 42
 n_generations 1000000
 
 # Number of root teams (agents) to keep each generation
-n_root 1000
+n_root 3000
 
 # Number of new root teams to create each generation
-n_root_gen 100
+n_root_gen 300
 
 # Whether to constrain parent selection to root teams
 parent_select_roots_only 0
@@ -99,10 +99,10 @@ keep_old_outcomes 1
 ################################################################################
 
 # Initial team size
-max_initial_team_size 1
+max_initial_team_size 10
 
 # Max team size
-max_team_size 1
+max_team_size 1000
 
 ### Independent team mutation ops #############################################
 ###############################################################################
@@ -139,16 +139,16 @@ pmn 0.1
 p_atomic 1.0
 
 # Program variation: probability of changing a random instruction
-p_instructions_mutate 0.1
+p_instructions_mutate 0.2
 
 # Program variation: probability of swaping the position of two instructions
-p_instructions_swap 0.1
+p_instructions_swap 0.2
 
 # Program variation: probability of deleting an instruction
-p_instructions_delete 0.1
+p_instructions_delete 0.2
 
 # program variation: probability of adding an instruction
-p_instructions_add 0.075
+p_instructions_add 0.2
 
 # Program variation: probability of mutating constants
 # If set to 0.0, evolved constants are not used & memory is initialized to zero
@@ -193,7 +193,7 @@ max_prog_size 1000000
 n_memories 8
 
 # Dimensionality for vector & matrix memory
-memory_size 9
+memory_size 17
 min_memory_size 2
 max_memory_size 32
 
@@ -208,7 +208,7 @@ max_observation_buff_size 1
 
 # Which tasks are active
 # Right-hand-side should be a single task name or a comma-separated list
-active_tasks Mujoco_Inverted_Double_Pendulum_v4
+active_tasks Mujoco_Inverted_Double_Pendulum_v4,Mujoco_Inverted_Pendulum_v4,Mujoco_Half_Cheetah_v4
 
 # Use the partially-observable version of a task, if available
 # Currently only available for calssic control and Mujoco tasks
