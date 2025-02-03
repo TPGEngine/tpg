@@ -32,6 +32,7 @@ start the Dev Container.
 Alternatively, you can:
 - Press `CMD + SHIFT + P` on Mac or `CTRL + SHIFT + P` on Windows to open the command palette
 - Type `Dev Containers: Reopen in Container` and select it
+- Note: If `Dockerfile` or `devcontainer.json` were modified, need to run `Dev Containers: Rebuild without Cache and Reopen in Container`
 
 3. VS Code will now build and start the Dev Container. This may take a few 
 minutes the first time.
