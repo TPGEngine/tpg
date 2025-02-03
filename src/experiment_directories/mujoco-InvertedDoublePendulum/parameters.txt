@@ -246,7 +246,7 @@ forecast_n_eval_val 10
 ################################################################################
 
 # Model path
-mj_model_path $TPG/datasets/mujoco_models/inverted_double_pendulum.xml
+mj_model_path $TPG/datasets/mujoco_models/
 
 mj_max_timestep 1000
 
