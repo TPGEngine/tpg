@@ -13,6 +13,11 @@ target_include_directories(TPG
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/../experiments
     ${CMAKE_CURRENT_SOURCE_DIR}/../environments
+    ${CMAKE_CURRENT_SOURCE_DIR}/../logging
+    ${CMAKE_CURRENT_SOURCE_DIR}/../logging/core
+    ${CMAKE_CURRENT_SOURCE_DIR}/../logging/loggers
+    ${CMAKE_CURRENT_SOURCE_DIR}/../logging/metrics
+    ${CMAKE_CURRENT_SOURCE_DIR}/../logging/storage
     /usr/include/eigen3
     ${Boost_INCLUDE_DIRS}
     /usr/include
@@ -25,6 +30,7 @@ target_link_libraries(TPG
     Boost::boost
     Boost::iostreams
     MPI::MPI_CXX
+    logging
 )
 
 # Set output directory for the library
