@@ -14,7 +14,8 @@ class Mujoco_Humanoid_Standup_v4 : public MujocoEnv {
       n_eval_test_ = std::any_cast<int>(params["mj_n_eval_test"]);
       max_step_ = std::any_cast<int>(params["mj_max_timestep"]);
       model_path_ =
-          ExpandEnvVars(std::any_cast<string>(params["mj_model_path"]));
+          ExpandEnvVars(std::any_cast<string>(params["mj_model_path"]) +
+                        "humanoid_standup.xml");
       initialize_simulation();
       obs_size_ = 376;
       state_.resize(obs_size_);
