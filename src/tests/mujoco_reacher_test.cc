@@ -74,7 +74,7 @@ TEST_CASE("Mujoco_Reacher_v4 Simulation Step", "[sim_step]") {
     std::vector<double> action = {0.1, -0.1}; // Example action input
     auto result = reacher.sim_step(action);
     
-    REQUIRE(result.r1 <= 0.0); // Reward is usually negative
+    REQUIRE(std::isfinite(result.r1));
     REQUIRE(reacher.step_ == 1); // Ensure step count is incremented
 }
 

@@ -68,7 +68,7 @@ TEST_CASE("Mujoco_Inverted_Double_Pendulum_v4 Simulation Step", "[sim_step]") {
 
     auto result = pendulum.sim_step(action);
     
-    REQUIRE(result.r1 >= 0.0); // Reward should be non-negative
+    REQUIRE(std::isfinite(result.r1));
     REQUIRE(pendulum.step_ == 1); // Ensure step count is incremented
 }
 

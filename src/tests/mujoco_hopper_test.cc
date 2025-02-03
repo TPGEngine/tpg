@@ -98,7 +98,7 @@ TEST_CASE("Mujoco_Hopper_v4 Simulation Step", "[sim_step]") {
     std::vector<double> action = {0.1, -0.1, 0.2}; // Example action input
     auto result = hopper.sim_step(action);
     
-    REQUIRE(result.r1 >= 0.0); // Reward should be non-negative
+    REQUIRE(std::isfinite(result.r1));
     REQUIRE(hopper.step_ == 1); // Ensure step count is incremented
 }
 

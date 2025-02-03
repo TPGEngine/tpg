@@ -12,7 +12,7 @@
 using Catch::Approx;
 
 // MuJoCo Initialize Simulation Test
-TEST_CASE("Mujoco Environment - Simulation Initialization", "[MujocoEnv]") {
+TEST_CASE("Mujoco Environment - Simulation Initialization", "[initialize_simulation]") {
     MockMujocoEnv env("../datasets/mujoco_models/inverted_pendulum.xml");
 
     REQUIRE_NOTHROW(env.initialize_simulation());
@@ -21,7 +21,7 @@ TEST_CASE("Mujoco Environment - Simulation Initialization", "[MujocoEnv]") {
 }
 
 // MuJoCo Set State Test
-TEST_CASE("Mujoco Environment - Set State", "[MujocoEnv]") {
+TEST_CASE("Mujoco Environment - Set State", "[set_state]") {
     MockMujocoEnv env("../datasets/mujoco_models/inverted_pendulum.xml");
     env.initialize_simulation();
 
@@ -39,7 +39,7 @@ TEST_CASE("Mujoco Environment - Set State", "[MujocoEnv]") {
 }
 
 // MuJoCo Do Simulation Test
-TEST_CASE("MujocoEnv Simulation Step", "[MujocoEnv]") {
+TEST_CASE("MujocoEnv Simulation Step", "[do_simulation]") {
     MockMujocoEnv env("../datasets/mujoco_models/inverted_pendulum.xml");
     env.initialize_simulation();
 

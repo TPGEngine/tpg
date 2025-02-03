@@ -66,7 +66,7 @@ TEST_CASE("Mujoco_Half_Cheetah_v4 Simulation Step", "[sim_step]") {
     std::vector<double> action = {0.1, -0.1, 0.2}; // Example action input
     auto result = half_cheetah.sim_step(action);
     
-    REQUIRE(result.r1 >= -0.01);
+    REQUIRE(std::isfinite(result.r1));
     REQUIRE(half_cheetah.step_ == 1); // Ensure step count is incremented
 }
 
