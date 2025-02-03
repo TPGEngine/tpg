@@ -41,6 +41,10 @@ build/
 # Log files
 *.err
 *.std
+MUJOCO_LOG.TXT
+
+# Video files
+*.mp4
 
 # Video files
 *.mp4
