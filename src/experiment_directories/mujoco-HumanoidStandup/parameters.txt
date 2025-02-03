@@ -193,7 +193,7 @@ max_prog_size 1000000
 n_memories 8
 
 # Dimensionality for vector & matrix memory
-memory_size 4
+memory_size 17
 min_memory_size 2
 max_memory_size 32
 
@@ -208,7 +208,7 @@ max_observation_buff_size 1
 
 # Which tasks are active
 # Right-hand-side should be a single task name or a comma-separated list
-active_tasks Mujoco_Inverted_Pendulum_v4
+active_tasks Mujoco_Humanoid_Standup_v4
 
 # Use the partially-observable version of a task, if available
 # Currently only available for calssic control and Mujoco tasks
