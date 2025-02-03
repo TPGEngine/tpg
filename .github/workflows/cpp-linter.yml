@@ -1,4 +1,5 @@
 name: cpp-linter
+
 on:
   pull_request:
     branches:
@@ -13,6 +14,68 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Cache dependencies
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            /usr/local/lib
+            /usr/local/include
+          key: ${{ runner.os }}-dependencies-${{ hashFiles('**/SConscript') }}
+
+      - name: Set up GCC 13
+        shell: bash
+        run: |
+          sudo apt update
+          sudo apt install -y software-properties-common
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+          sudo apt update
+          sudo apt install -y gcc-13 g++-13
+          gcc --version
+          g++ --version
+
+      - name: Set up environment
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          cd src
+          mkdir  ./mujoco
+          wget https://github.com/google-deepmind/mujoco/releases/download/3.2.2/mujoco-3.2.2-linux-x86_64.tar.gz  -O ./mujoco/mujoco.tar.gz 
+          tar -xzvf ./mujoco/mujoco.tar.gz -C ./mujoco
+          sudo xargs --arg-file requirements.txt apt install
+          sudo apt-get install -y bear
+          sudo apt-get install -y libglfw3 libglfw3-dev libglew-dev
+          if [ -d "./mujoco" ]; then
+            echo "Mujoco folder created"
+            echo "Files and directories in ./mujoco:"
+            ls -l "./mujoco"  # List files and directories with details
+          else 
+              echo "Mujoco folder not created"
+          fi
+          cd ../
+         
+      - name: Set environment variables
+        shell: bash
+        run: |
+          ls
+          ls src/
+          echo $GITHUB_WORKSPACE
+          echo "export TPG=$GITHUB_WORKSPACE/src" >> "$HOME/.bash_profile"
+          echo "export PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/plot" >>  "$HOME/.bash_profile"
+          echo "export PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/run" >>  "$HOME/.bash_profile"
+          echo "export MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >>  "$HOME/.bash_profile"
+          echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2/lib" >>  "$HOME/.bash_profile"
+          echo "MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >> "$GITHUB_ENV"
+          source "$HOME/.bash_profile"
+          
+      # Generate compile_commands.json
+      - name: Generate compilation database
+        run: |
+          cd src
+          bear -- scons
+
+      # Run cpp-linter with "file not found" suppression
       - uses: cpp-linter/cpp-linter-action@v2
         id: linter
         env:
@@ -20,7 +83,10 @@ jobs:
         with:
           style: "src/.clang-format"
           tidy-review: true
+          database: "src/compile_commands.json"
+          extra-args: "--warnings-as-errors=-clang-diagnostic-pp-file-not-found"
 
+      # Fail if formatting checks fail
       - name: Fail fast?!
         if: steps.linter.outputs.clang-format-checks-failed > 0
         run: exit 1
