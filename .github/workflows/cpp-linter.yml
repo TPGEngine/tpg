@@ -13,16 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      # Cache dependencies
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            /usr/local/lib
-            /usr/local/include
-          key: ${{ runner.os }}-dependencies-${{ hashFiles('**/SConscript') }}
-
+      
       - name: Set up GCC 13
         shell: bash
         run: |
