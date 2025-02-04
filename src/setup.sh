@@ -29,7 +29,7 @@ MUJOCO_TAR=$(basename "$MUJOCO_URL")
 sudo tar -xzf "$MUJOCO_TAR"
 
 # Change directory to TPG source
-cd /workspaces/tpg
+cd $TPG
 
 # Build TPG
-scons --opt
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release
