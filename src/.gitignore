@@ -41,7 +41,9 @@ build/
 # Log files
 *.err
 *.std
-*.*.*.csv
+MUJOCO_LOG.TXT
 
 # Video files
 *.mp4
+
+*.*.*.csv

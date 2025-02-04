@@ -37,11 +37,11 @@ scons --opt
 ```
 
 ### 4. Run an experiment
-The folder tpg/experiment_directories/classic_control contains scripts to evolve policies for classic control tasks. Parameters are set in parameters.txt. The default settings will evolve a policy for the [CartPole](https://gymnasium.farama.org/environments/classic_control/cart_pole/) task.
+The folder tpg/experiments/generic contains basic directory structure required. Parameters are set in parameters file found in tpg/experiments/hyper_parameters.
 
-To run an experiment using 4 parallel MPI processes, make tpg/experiment_directories/classic_control your working directory and run:
+To run an experiment for [Mujoco Inverted Pendulum](https://gymnasium.farama.org/environments/mujoco/inverted_pendulum/) using 4 parallel MPI processes, make tpg/experiments/generic your working directory and run:
 ```
-tpg-run-mpi.sh -n 4
+tpg-run-mpi.sh -n 4 -p ../hyper_parameters/2024-01-18_TPG_MuJoco_Inverted_Pendulum.txt
 ```
 
 Note that as of right now, the number of assigned processes must be greater than the number of active tasks.
@@ -51,14 +51,14 @@ Generate classic_control_p0.pdf with various statistics:
 ```
 tpg-plot-stats.sh
 ```
-The first page will be a training curve looking something like the plot below. A fitness of 500 indicates the agent balances the pole for 500 timesteps, thus solving the task.
+The first page will be a training curve looking something like the plot below. A fitness of ~1000 indicates the agent balances the pole for 1000 timesteps, thus solving the task.
 
 <img src="./experiment_directories/classic_control/images/cartpole-example.png" height="300" />
 
 ### 6. Visualize the best policy's behaviour
 Display an OpenGL animation of the single best policy interacting with the environment:
 ```
-tpg-run-mpi.sh -m 1
+tpg-run-mpi.sh -m 1 -p 2024-01-18_TPG_MuJoco_Inverted_Pendulum.txt
 ```
  
 ### 7. Cleanup
