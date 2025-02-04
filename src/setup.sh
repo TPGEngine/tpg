@@ -1,4 +1,7 @@
-r#!/bin/bash
+#!/bin/bash
+
+# Enable error handling
+set -ex
 
 # Update apt-get repository
 sudo apt-get update
@@ -14,9 +17,6 @@ ARCH=$(uname -m)
 
 if [[ "$ARCH" == "x86_64" ]]; then
     MUJOCO_URL="https://github.com/deepmind/mujoco/releases/download/3.2.2/mujoco-3.2.2-linux-x86_64.tar.gz"
-    git config core.autocrlf false
-    git rm --cached -r .
-    git reset --hard 
 elif [[ "$ARCH" == "aarch64" ]]; then
     MUJOCO_URL="https://github.com/deepmind/mujoco/releases/download/3.2.2/mujoco-3.2.2-linux-aarch64.tar.gz"
 else
@@ -29,7 +29,16 @@ MUJOCO_TAR=$(basename "$MUJOCO_URL")
 sudo tar -xzf "$MUJOCO_TAR"
 
 # Change directory to TPG source
-cd $TPG
+if [ -d "$TPG" ]; then
+    cd $TPG
+else
+    echo "TPG directory not found"
+    exit 1
+fi
+
+# Clean up any existing build
+rm -rf build
 
 # Build TPG
-cmake -B build -S . -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
