@@ -1871,7 +1871,7 @@ void TPG::printPhyloGraphDot(team* tm) {
 }
 
 /******************************************************************************/
-void TPG::printTeamInfo(long t, int phase, bool singleBest, long teamId) {
+void TPG::printTeamInfo(long t, int phase, bool singleBest, bool multitask, long teamId) {
    team* bestTeam = *(team_pop_.begin());
    if (singleBest && teamId == -1)
       bestTeam = GetBestTeam();
@@ -1954,7 +1954,7 @@ void TPG::printTeamInfo(long t, int phase, bool singleBest, long teamId) {
          if (multitask) {
             MTAMetricsBuilder builder;
             builder.with_generation(t)
-               .with_best_fitness((*teiter)->GetMedianOutcome(0, 0, 0))
+               .with_best_fitness((*teiter)->GetMeanOutcome(0, 0, 0))
                .with_team_id((*teiter)->id_)
                .with_team_size((*teiter)->size())
                .with_age(t - (*teiter)->gtime_)
