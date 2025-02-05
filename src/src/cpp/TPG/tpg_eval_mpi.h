@@ -53,7 +53,7 @@ vector<team *> GetTeamsToEval(TPG &tpg, TaskEnv *task) {
     auto PS = PowerSet(tpg.GetState("n_task"));
     for (auto &set : PS) {
       auto tm =
-          tpg._eliteTeamPS[vecToStrNoSpace(set)][tpg.GetParam<int>("fit_mode")]
+          tpg._eliteTeamPS[VectorToStringNoSpace(set)][tpg.GetParam<int>("fit_mode")]
                           [_VALIDATION_PHASE];
       tm->_n_eval =
           task->GetNumEval(tpg.GetState("phase")) -
@@ -173,19 +173,18 @@ void evaluator(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks) {
   while (NotDoneAndActive(eval)) {
     world.recv(0, 0, eval.checkpointString);
     if (NotDoneAndActive(eval)) {
-      tpg.ReadCheckpoint(-1, _TRAIN_PHASE, -1, true, eval.checkpointString);
+      tpg.ReadCheckpoint(-1, _TRAIN_PHASE, true, eval.checkpointString);
       eval.teams = tpg.GetRootTeamsInVec();
       eval.task = tasks[tpg.GetState("active_task")];
       eval.eval_result = "";
       for (auto tm : eval.teams) {
         eval.tm = tm;
         for (eval.episode = 0; eval.episode < eval.tm->_n_eval;
-             eval.episode++) {
-           if (tpg.GetParam<int>("keep_old_outcomes") ||
-               tpg.GetParam<int>("replay")) {
-              tpg.rngs_[AUX_SEED].seed(eval.episode);
+             eval.episode++) {   
+           if (tpg.GetParam<int>("seed_with_episode_number")) {
+              tpg.rngs_[AUX_SEED].seed(eval.episode * 42);
            }
-          eval.tm->InitMemory(tpg._teamMap, tpg.params_);
+          eval.tm->InitMemory(tpg.team_map_, tpg.params_);
           evaluator_map[eval.task->eval_type_](tpg, eval);
           eval.FinalizeStepData(tpg);
         }
@@ -196,7 +195,7 @@ void evaluator(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks) {
 }
 
 /******************************************************************************/
-void replayer_viz(TPG &tpg, vector<TaskEnv *> &tasks) {
+void replayer(TPG &tpg, vector<TaskEnv *> &tasks) {
   // MaybeStartAnimation(tpg);
   EvalData eval(tpg);
 
@@ -209,22 +208,22 @@ void replayer_viz(TPG &tpg, vector<TaskEnv *> &tasks) {
   for (auto tm : eval.teams) {
     if (tm->id_ != tpg.GetParam<int>("id_to_replay")) continue;
     eval.tm = tm;
-
+    
     vector<int> steps_per_task(tpg.GetState("n_task"), 0);
     // TODO(skelly): clean up
-    tpg.rngs_[AUX_SEED].seed(tpg.GetParam<int>("seed_aux"));
+    // tpg.rngs_[AUX_SEED].seed(tpg.GetParam<int>("seed_aux"));
+    std::vector<double> outcomes;
     for (int task = 0; task < tpg.GetState("n_task"); task++) {
         tpg.state_["active_task"] = task;
         eval.task = tasks[tpg.GetState("active_task")];
-        if (eval.animate) {
-            eval.tm->_n_eval = 1;
-        } else {
-            eval.tm->_n_eval =
-                eval.task->GetNumEval(tpg.GetParam<int>("checkpoint_in_phase"));
-        }
+        tm->_n_eval =
+          eval.task->GetNumEval(_TEST_PHASE);
         for (eval.episode = 0; eval.episode < eval.tm->_n_eval;
              eval.episode++) {
-            eval.tm->InitMemory(tpg._teamMap, tpg.params_);
+              if (!eval.animate) {
+                tpg.rngs_[AUX_SEED].seed(eval.episode * 42);
+              }
+            eval.tm->InitMemory(tpg.team_map_, tpg.params_);
 
             if (eval.task->eval_type_ == "RecursiveForecast") {
                 EvalRecursiveForecastViz(
@@ -238,12 +237,16 @@ void replayer_viz(TPG &tpg, vector<TaskEnv *> &tasks) {
                 EvalMujoco(tpg, eval);
             }
             eval.FinalizeStepData(tpg);
+            outcomes.push_back(eval.stats_double[REWARD1_IDX]);
         }
     }
     tpg.printGraphDotGPTPXXI(eval.tm->id_, teams_visitedAllTasks,
                              teamUseMapPerTask, steps_per_task);
-    cout << " Evaluation result team:" << eval.tm->id_ << 
-      " score:" << eval.stats_double[REWARD1_IDX] << endl;
+
+    cout << " Evaluation result team:" << eval.tm->id_ << " n_outcomes "
+         << outcomes.size() << " mean " << VectorMean(outcomes) << " median "
+         << VectorMedian(outcomes) << endl;
+    cout << VectorToString(outcomes) << endl;
 
           // Add video creation for headless mode
     if (headless && frame_idx > 0) {
@@ -268,6 +271,7 @@ void replayer_viz(TPG &tpg, vector<TaskEnv *> &tasks) {
         }
     }
   }
+  WriteStringToFile("op_use_" + to_string(tpg.seeds_[TPG_SEED]) + ".csv", tpg.AgentOpUseToString(eval.tm));
 }
 
 #endif

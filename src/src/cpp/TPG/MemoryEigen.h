@@ -92,7 +92,7 @@ class MemoryEigen {
       // if (outcome_fields.size() != expected_size) {
       //    cerr << "dbg memory_size_ " << memory_size_ << " sz "
       //         << outcome_fields.size() << " ex " << expected_size << endl;
-      //    cerr << "str " << vecToStr(outcome_fields) << endl;
+      //    cerr << "str " << VectorToString(outcome_fields) << endl;
       //    die(__FILE__, __FUNCTION__, __LINE__, "Bad memory size.");
       // }
       ResizeMemory();
