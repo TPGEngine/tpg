@@ -1,6 +1,26 @@
 project(TPG LANGUAGES CXX)
-set(CMAKE_CXX_STANDARD 17)
-cmake_minimum_required(VERSION 3.16)
+
+cmake_minimum_required(VERSION 3.15)
+project(TPGProject)
+
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated -Wall -Werror -Wextra -Wno-unused-parameter")
+
+# Find required packages
+find_package(MPI REQUIRED)
+find_package(Boost REQUIRED COMPONENTS system thread mpi serialization iostreams)
+find_package(Eigen3 REQUIRED)
+find_package(OpenCV REQUIRED)
+find_package(CURL REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(glfw3 REQUIRED)
+find_package(TBB REQUIRED)
+
+# Add subdirectory for the src directory
+add_subdirectory(src) 
 
 
 
@@ -21,18 +41,6 @@ include_directories(src/cpp/TPG/)
 
 
 
-# add_library(tpg 
-#  src/cpp/TPG/TPG.h
-#  src/cpp/TPG/TPG.cc
-#  src/cpp/TPG/RegisterMachine.h
-#  src/cpp/TPG/RegisterMachine.cc
-#  src/cpp/TPG/Instruction.h 
-#  src/cpp/TPG/Instruction.cc
-#  src/cpp/TPG/misc.cc
-#  src/cpp/TPG/misc.h
-#  src/cpp/TPG/team.cc
-#  src/cpp/TPG/team.h
-#)
 
 
 file(GLOB TPG_SOURCES 
@@ -86,3 +94,6 @@ include(CTest)
 include(Catch)
 enable_testing()
 catch_discover_tests(tests)
+
+
+

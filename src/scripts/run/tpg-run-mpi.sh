@@ -27,7 +27,7 @@ if [ $mode -eq 0 ]; then
    echo "Starting run $seed_tpg..."
    mpirun --oversubscribe -np $num_mpi_proc \
      $TPG/build/release/cpp/experiments/TPGExperimentMPI \
-     seed_tpg=${seed_tpg} \
+     seed_tpg=${seed_tpg} pid=$$ \
      1> tpg.$seed_tpg.$$.std \
      2> tpg.$seed_tpg.$$.err &
 fi
@@ -37,8 +37,8 @@ if [ $mode -eq 1 ]; then
    # Training phase
    phase=0
    if ls replay/frames/* 1> /dev/null 2>&1; then rm replay/frames/*; fi
-   if ls rplay/graphs/* 1> /dev/null 2>&1; then rm replay/graphs/*; fi
-   if ls rplay/graphs/* 1> /dev/null 2>&1; then rm replay/graphs/*; fi
+   if ls replay/graphs/* 1> /dev/null 2>&1; then rm replay/graphs/*; fi
+   if ls replay/graphs/* 1> /dev/null 2>&1; then rm replay/graphs/*; fi
   
   
    # Get fitness of best team
@@ -88,7 +88,7 @@ fi
 if [ $mode -eq 2 ]; then
    mpirun --oversubscribe -np $num_mpi_proc xterm -hold -e gdb -ex run \
      --args $TPG/build/release/cpp/experiments/TPGExperimentMPI \
-     seed_tpg=${seed_tpg} n_root=10 n_root_gen=10 \
+     seed_tpg=${seed_tpg} pid=$$ n_root=10 n_root_gen=10 \
      1> tpg.$seed_tpg.$$.std \
      2> tpg.$seed_tpg.$$.err &
 fi
@@ -100,7 +100,7 @@ if [ $mode -eq 3 ]; then
   valgrind --leak-check=yes --show-reachable=yes \
   --log-file=vg.%p --suppressions=/usr/share/openmpi/openmpi-valgrind.supp \
   $TPG/build/release/cpp/experiments/TPGExperimentMPI \
-  seed_tpg=${seed_tpg} n_root=10 n_root_gen=10 n_generations=3 \
+  seed_tpg=${seed_tpg} pid=$$ n_root=10 n_root_gen=10 n_generations=3 \
   mj_max_timestep=1 mj_n_eval_train=1 \
   1> tpg.$seed_tpg.$$.std \
   2> tpg.$seed_tpg.$$.err &

@@ -3,10 +3,14 @@ name: Build TPG Project
 on:
   push:
     branches:
-      - '*'
+      - 'main'
+    paths:
+      - 'src/**'
   pull_request:
     branches:
-      - main
+      - 'main'
+    paths:
+      - 'src/**'
   workflow_dispatch:
 
 jobs:
@@ -18,6 +22,17 @@ jobs:
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Set up GCC 13
+        shell: bash
+        run: |
+          sudo apt update
+          sudo apt install -y software-properties-common
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+          sudo apt update
+          sudo apt install -y gcc-13 g++-13
+          gcc --version
+          g++ --version
 
       - name: Set up environment
         shell: bash
@@ -76,7 +91,9 @@ jobs:
         shell: bash
         run: |
           cd src
-          scons --opt
+          mkdir -p build && cd build
+          cmake -DCMAKE_BUILD_TYPE=Release ..
+          cmake --build . -- -j $(nproc)
 
       - name: Run tests
         run: |
