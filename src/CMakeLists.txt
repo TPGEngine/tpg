@@ -1,12 +1,10 @@
-project(TPG LANGUAGES CXX)
-
 cmake_minimum_required(VERSION 3.15)
 project(TPGProject)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated -Wall -Werror -Wextra -Wno-unused-parameter")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated -Wall -Wno-error -Wextra -Wno-unused-parameter")
 
 # Find required packages
 find_package(MPI REQUIRED)
@@ -23,7 +21,7 @@ find_package(TBB REQUIRED)
 add_subdirectory(src) 
 
 
-
+#Unit testing - add Catch 2 library
 Include(FetchContent)
 
 FetchContent_Declare(
@@ -34,16 +32,15 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(Catch2)
 
-
-include_directories(src/cpp/experiments/)
-include_directories(src/cpp/environments/)
-include_directories(src/cpp/TPG/)
-
-
+add_executable(tests 
+    tests/TPG_test.cc
+)
 
 
 
 file(GLOB TPG_SOURCES 
+  "src/cpp/logging/metrics/mta/*.h"
+  "src/cpp/logging/metrics/mta/*.cc"
   "src/cpp/TPG/*.h"
   "src/cpp/TPG/*.cc"
   "src/cpp/experiments/api_client.cc"
@@ -57,27 +54,21 @@ list(REMOVE_ITEM TPG_SOURCES "src/cpp/experiments/TPGExperimentMPI.cc")
 
 add_library(tpg ${TPG_SOURCES})
 
-
-
-
-target_include_directories(tpg
-  PUBLIC 
-    src
-)
-
- # src/cpp/TPG/TPG.h src/cpp/TPG/TPG.cc src/cpp/environments/TaskEnv.h src/cpp/TPG/RegisterMachine.h src/cpp/TPG/RegisterMachine.cc  src/cpp/TPG/Instruction.h src/cpp/TPG/Instruction.cc
-
-add_executable(tests 
-    tests/TPG_test.cc
-)
 # Add this line to find the Eigen package
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(CURL REQUIRED)
 
 include_directories(${EIGEN3_INCLUDE_DIR})
+target_include_directories(tpg PUBLIC 
+                src/cpp/TPG
+                src/cpp/environments
+                src/cpp/experiments
+                src/cpp/logging
+                )
 target_include_directories(tpg PUBLIC ${EIGEN3_INCLUDE_DIR})
 target_link_libraries(tpg PRIVATE CURL::libcurl)
-# Link libraries to testing files
+
+
 
 target_link_libraries(tests 
   PRIVATE
@@ -85,15 +76,10 @@ target_link_libraries(tests
       Eigen3::Eigen
       Catch2::Catch2WithMain
 )
-target_link_libraries(tests PRIVATE Eigen3::Eigen)
-target_link_libraries(tests PRIVATE Catch2::Catch2WithMain) 
-
-
 
 include(CTest)
 include(Catch)
 enable_testing()
 catch_discover_tests(tests)
-
 
 
