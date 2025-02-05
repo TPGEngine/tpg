@@ -11,14 +11,17 @@ class Mujoco_Reacher_v4 : public MujocoEnv {
 
   public:
    // Parameters
-   double reward_distance_weight = 1.0;
-   double reward_control_weight = 0.1;
+   double reward_distance_weight_ = 1.0;
+   double reward_control_weight_ = 0.1;
    Mujoco_Reacher_v4(std::unordered_map<std::string, std::any>& params) {
       eval_type_ = "Mujoco";
       n_eval_train_ = std::any_cast<int>(params["mj_n_eval_train"]);
       n_eval_validation_ = std::any_cast<int>(params["mj_n_eval_validation"]);
       n_eval_test_ = std::any_cast<int>(params["mj_n_eval_test"]);
       max_step_ = std::any_cast<int>(params["mj_max_timestep"]);
+      reward_control_weight_ =
+          std::any_cast<double>(params["mj_reward_control_weight"]);
+
       model_path_ =
           ExpandEnvVars(std::any_cast<string>(params["mj_model_path"]));
 
@@ -50,7 +53,7 @@ class Mujoco_Reacher_v4 : public MujocoEnv {
       double cost = 0;
       for (auto& a : action)
          cost += a * a;
-      return reward_control_weight * cost;
+      return reward_control_weight_ * cost;
    }
 
    std::vector<double> get_dist() {
@@ -63,7 +66,7 @@ class Mujoco_Reacher_v4 : public MujocoEnv {
    Results sim_step(std::vector<double>& action) {
       auto dist_diff = get_dist();
       double reward_dist =
-          -reward_distance_weight *
+          -reward_distance_weight_ *
           std::sqrt(std::pow(dist_diff[0], 2) + std::pow(dist_diff[1], 2));
 
       double reward_ctrl = -control_cost(action);
@@ -107,7 +110,7 @@ class Mujoco_Reacher_v4 : public MujocoEnv {
       }
 
       std::vector<double> goal(2);
-      std::normal_distribution<double> dis_goal(-0.2, 0.2);
+      std::uniform_real_distribution<> dis_goal(-0.2, 0.2);
       while (true) {
 
          goal[0] = dis_goal(rng);
@@ -116,10 +119,10 @@ class Mujoco_Reacher_v4 : public MujocoEnv {
          if (goal[0] * goal[0] + goal[1] * goal[1] < 0.04)
             break;
       }
-
+      
       std::copy_n(goal.begin(), 2, qpos.end() - 2);
 
-      std::normal_distribution<double> dis_vel(-0.005, 0.005);
+      std::uniform_real_distribution<> dis_vel(-0.005, 0.005);
       std::vector<double> qvel(m_->nv);
       for (size_t i = 0; i < qvel.size(); i++) {
          qvel[i] = init_qvel_[i] + dis_vel(rng);

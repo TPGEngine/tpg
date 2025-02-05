@@ -46,6 +46,17 @@ vector<double> WrapVectorActionTanh(EvalData &eval) {
     vector<double> vec(mat.data(), mat.data() + mat.rows() * mat.cols());
     for (auto &v : vec) v = std::tanh(v);  // TODO(skelly): better/faster way?
     return vec;
+
+}vector<double> WrapVectorActionMuJoco(EvalData &eval) {
+    auto mat = eval.program_out->private_memory_[MemoryEigen::kVectorType_]
+                   ->working_memory_[1];
+    vector<double> vec(mat.data(), mat.data() + mat.rows() * mat.cols());
+    for (auto &v : vec) v = min(max(v, -1.0), 1.0);
+    return vec;
 }
+
+
+
+
 
 #endif

@@ -10,7 +10,7 @@ std::string RegisterMachine::ToString(bool effective_only) {
        << obs_index_;
    // for (auto &i : private_memory_ids_) oss << ":" << i;
    auto prog = effective_only ? instructions_effective_ : instructions_;
-   for (auto istr : prog) oss << ":" << istr->checkpoint();
+   for (auto istr : prog) oss << ":" << istr->ToString();
    oss << endl;
    for (auto *m : private_memory_) oss << m->ToString(id_);
    return oss.str();
@@ -306,6 +306,7 @@ void RegisterMachine::Mutate(std::unordered_map<std::string, std::any> &params,
          for (auto m : private_memory_) {
             m->MutateConstants(rng);
          }
+         changed = true;
       }
 
       // Swap positions of two instructions

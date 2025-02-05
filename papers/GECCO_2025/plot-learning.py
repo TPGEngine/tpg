@@ -2,6 +2,8 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
+dir = os.path.dirname(__file__)
 
 # %%
 def AddToPlot(reps, lab, col):
@@ -20,15 +22,14 @@ def AddToPlot(reps, lab, col):
 CB_color_cycle = ['#377eb8', '#ff7f00', '#4daf4a','#f781bf', '#a65628',
                   '#984ea3', '#999999', '#e41a1c', '#dede00']
 
-path_1="~/tpg/papers/GECCO_2025/data/TPGp/"
-path_2="~/tpg/papers/GECCO_2025/data/TPG/"
-
+path_1 = os.path.join(dir, 'data','TPGp')
+path_2 = os.path.join(dir, 'data','TPG')
 
 result_to_compare="training_rewards.csv"
 max_generations=3500
+
 df1 = pd.read_csv(path_1 + "/" + result_to_compare, sep='\s+', header=None, usecols=range(0,max_generations))
 df2 = pd.read_csv(path_2 + "/" + result_to_compare, sep='\s+', header=None, usecols=range(0,max_generations))
-
 
 fig = plt.figure(figsize=(6, 4))
 AddToPlot(df1.to_numpy(),"TPGp", CB_color_cycle[0])

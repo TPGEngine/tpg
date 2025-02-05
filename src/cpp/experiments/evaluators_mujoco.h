@@ -230,8 +230,8 @@ if (!headless) {
     }
 }
 
-void MaybeStartAnimation(TPG& tpg, TaskEnv* task) {
-    if (tpg.GetParam<int>("animate")) {
+void MaybeStartAnimation(TPG& tpg, TaskEnv* task, EvalData& eval) {
+    if (tpg.GetParam<int>("animate") && eval.episode == 0) {
         MujocoEnv* t = dynamic_cast<MujocoEnv*>(task);
         InitVisualization(t->m_, t->d_);
         // If in headless mode, create frames directory
@@ -252,6 +252,7 @@ void MaybeStartAnimation(TPG& tpg, TaskEnv* task) {
 void MaybeAnimateStep(TPG& tpg) {
     if (tpg.GetParam<int>("animate")) {
         StepVisualization(tpg);
+        this_thread::sleep_for(std::chrono::milliseconds(25));
     }
 }
 
@@ -259,7 +260,7 @@ void MaybeAnimateStep(TPG& tpg) {
 void EvalMujoco(TPG& tpg, EvalData& eval) {
     MujocoEnv* task = dynamic_cast<MujocoEnv*>(eval.task);
     task->reset(tpg.rngs_[AUX_SEED]);
-    MaybeStartAnimation(tpg, task);
+    MaybeStartAnimation(tpg, task, eval);
     MaybeAnimateStep(tpg);
     eval.n_prediction = 0;
     state* obs = new state(task->GetObsSize());
@@ -268,7 +269,7 @@ void EvalMujoco(TPG& tpg, EvalData& eval) {
         eval.program_out = tpg.getAction(
             eval.tm, obs, true, eval.teams_visited, eval.instruction_count,
             task->step_, eval.team_path, tpg.rngs_[AUX_SEED], false);
-        auto ctrl = WrapVectorActionTanh(eval);
+        auto ctrl = WrapVectorActionMuJoco(eval);
         TaskEnv::Results r = task->sim_step(ctrl);
         eval.stats_double[REWARD1_IDX] += r.r1;
         eval.AccumulateStepData();

@@ -38,7 +38,6 @@ int main(int argc, char** argv) {
    mpi::environment env(argc, argv);
    mpi::communicator world;
    TPG tpg;
-   tpg.params_["id"] = -1;  // remove later
    tpg.state_["world_rank"] = world.rank();
    tpg.SetParams(argc, argv);
 
@@ -208,8 +207,8 @@ int main(int argc, char** argv) {
       // Initialization //////////////////////////////////////////////////////
       if (tpg.GetParam<int>("start_from_checkpoint")) {
          tpg.ReadCheckpoint(tpg.GetParam<int>("checkpoint_in_t"),
-                            tpg.GetParam<int>("checkpoint_in_phase"), -1, false,
-                            "");
+                            tpg.GetParam<int>("checkpoint_in_phase"), false,
+                            "");                                   
       } else {
          tpg.InitTeams();
       }
@@ -220,10 +219,11 @@ int main(int argc, char** argv) {
          tpg.state_["phase"] = _TEST_PHASE;
          tpg.state_["active_task"] = tpg.state_["task_to_replay"];
          tpg.ProcessParams();
-         replayer_viz(tpg, tasks);
+         tpg.MarkEffectiveCode();
+         replayer(tpg, tasks);
       } else {
          while (tpg.GetState("t_current") <=
-                tpg.GetParam<int>("n_generations")) {
+                tpg.GetParam<int>("n_generations")) {  
             tpg.phylo_graph_.clear();  // TODO(skelly): add switch for phylo     
             // Replacement /////////////////////////////////////////////////
             if (tpg.GetState("t_current") > tpg.GetState("t_start")) {
@@ -293,10 +293,12 @@ int main(int argc, char** argv) {
             /* checkpoint
              * ********************************************************/
             startChkp = chrono::system_clock::now();
-            if (tpg.GetParam<int>("write_train_checkpoints") &&
-                tpg.GetState("t_current") % CHECKPOINT_MOD == 0) {
+            if (tpg.GetParam<int>("write_train_checkpoints") > 0 &&
+                tpg.GetState("t_current") %
+                        tpg.GetParam<int>("write_train_checkpoints") ==
+                    0) {
                // Checkpoint the entire population.
-               tpg.WriteCheckpoint(tpg.GetState("t_current"), false);
+               tpg.WriteCheckpoint(false);
             }
             if (tpg.GetParam<int>("write_phylogeny")) {
                tpg.printPhyloGraphDot(tpg.GetBestTeam());
@@ -348,7 +350,7 @@ int main(int argc, char** argv) {
 
             startGen = chrono::system_clock::now();
             if (tpg.GetState("t_current") % PRINT_MOD == 0)
-               tpg.printOss();
+               tpg.printOss();   
             tpg.SanityCheck();
             tpg.state_["t_current"]++;
          }

@@ -14,8 +14,8 @@ void SaveRecursiveForecast(TPG &tpg, EvalData &eval) {
                 eval.sequence_pred.push_back(pred[var]);    
             }
             // // TODO(skelly):remove debugging output
-            // cerr << "targ " << vecToStr(targ) << endl;
-            // cerr << "pred " << vecToStr(pred) << endl;
+            // cerr << "targ " << VectorToString(targ) << endl;
+            // cerr << "pred " << VectorToString(pred) << endl;
 }
 
 void InitRecusiveForecastObs(TPG &tpg, EvalData &eval) {

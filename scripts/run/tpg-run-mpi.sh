@@ -2,19 +2,26 @@
 
 # Default command line args
 mode=0 #Train:0, Replay:1, Debug:2
+animate=1
 num_mpi_proc=2
 seed_tpg=42
 seed_aux=42
 task_to_replay=0
 replay_gen=0
 tm_id=0
+checkpoint_in_phase=0
+min_fitness=-1000000
 
-while getopts g:m:n:r:s:T:t: flag
+# TODO(skelly): change to full name parameters
+while getopts a:c:g:m:n:p:r:s:T:t: flag
 do
    case "${flag}" in
+      a) animate=${OPTARG};;
+      c) checkpoint_in_phase=${OPTARG};;
       g) seed_aux=${OPTARG};;
       m) mode=${OPTARG};;
       n) num_mpi_proc=${OPTARG};;
+      p) parameters_file="${OPTARG}";;
       s) seed_tpg=${OPTARG};;
       T) tm_id=${OPTARG};;
       t) replay_gen=${OPTARG};;
@@ -27,6 +34,7 @@ if [ $mode -eq 0 ]; then
    echo "Starting run $seed_tpg..."
    mpirun --oversubscribe -np $num_mpi_proc \
      $TPG/build/release/cpp/experiments/TPGExperimentMPI \
+     parameters_file=${parameters_file} \
      seed_tpg=${seed_tpg} \
      1> tpg.$seed_tpg.$$.std \
      2> tpg.$seed_tpg.$$.err &
@@ -34,60 +42,110 @@ fi
 
 # Replay mode ##################################################################
 if [ $mode -eq 1 ]; then
+   min_fitness=-15
    # Training phase
    phase=0
    if ls replay/frames/* 1> /dev/null 2>&1; then rm replay/frames/*; fi
    if ls replay/graphs/* 1> /dev/null 2>&1; then rm replay/graphs/*; fi
    if ls replay/graphs/* 1> /dev/null 2>&1; then rm replay/graphs/*; fi
   
-  
-   # Get fitness of best team
+  #  # Get fitness of best team
+  #  best_fitness=$(grep setElTmsMTA  tpg.${seed_tpg}.*.std | \
+  #    grep " fm 0 " | \
+  #    grep " phs $phase " | \
+  #    awk -F"mnOut" '{print $2}' | \
+  #    awk -F "p${phase}t${task_to_replay}a0 " '{print $2}' | \
+  #    awk '{print $1}' | \
+  #    sort -n | \
+  #    uniq | \
+  #    tail -n 1)
+
+  # if (( $(echo "$best_fitness > $min_fitness" |bc -l) )); then 
+ 
+  # # Get generation of best team
+  #  best_fitness_t=$(grep setElTmsMTA tpg.${seed_tpg}.*.std | \
+  #    grep " fm 0 " | \
+  #    grep "p${phase}t${task_to_replay}a0 ${best_fitness} " | \
+  #    grep " phs $phase " | \
+  #    head -n 1 | \
+  #    awk -F" t " '{print $2}' | \
+  #    awk '{print $1}')  
+
+  #  # Get phase and generation of checkpoint file
+  #  checkpoint_in_phase=$(grep -iRl end \
+  #   checkpoints/cp.*.${seed_tpg}.*.rslt | \
+  #   cut -d '.' -f 4 | sort -n | tail -n 1)
+  #  checkpoint_in_t=$(grep -iRl end \
+  #   checkpoints/cp.*.${seed_tpg}.${checkpoint_in_phase}.rslt | \
+  #   cut -d '.' -f 2 | sort -n | tail -n 1) 
+
+  #  # Get id of best team
+  #  tm_id=$(grep "setElTmsMTA" tpg.${seed_tpg}.*.std | \
+  #    grep " fm 0 " | \
+  #    grep "p${phase}t${task_to_replay}a0 ${best_fitness} " | \
+  #    grep " phs $phase " | \
+  #    grep " t $best_fitness_t " | \
+  #    head -n 1 | \
+  #    awk -F"id" '{print $2}' | \
+  #    awk '{print $1}')  
+
+  # Get fitness of best team
    best_fitness=$(grep setElTmsMTA  tpg.${seed_tpg}.*.std | \
      grep " fm 0 " | \
      grep " phs $phase " | \
-     awk -F"mnOut" '{print $2}' | \
      awk -F "p${phase}t${task_to_replay}a0 " '{print $2}' | \
      awk '{print $1}' | \
-     sort -n | \
-     uniq | \
      tail -n 1)
-
-   # Get generation of best team
-   checkpoint_in_t=$(grep setElTmsMTA tpg.${seed_tpg}.*.std | \
+ 
+  # Get generation of best team
+   best_fitness_t=$(grep setElTmsMTA  tpg.${seed_tpg}.*.std | \
      grep " fm 0 " | \
-     grep "p${phase}t${task_to_replay}a0 ${best_fitness} " | \
      grep " phs $phase " | \
-     head -n 1 | \
-     awk -F" t " '{print $2}' | \
-     awk '{print $1}')
-   
+     awk -F " t " '{print $2}' | \
+     awk '{print $1}' | \
+     tail -n 1) 
+
+   # Get phase and generation of checkpoint file
+   checkpoint_in_phase=$(grep -iRl end \
+    checkpoints/cp.*.${seed_tpg}.*.rslt | \
+    cut -d '.' -f 4 | sort -n | tail -n 1)
+   checkpoint_in_t=$(grep -iRl end \
+    checkpoints/cp.*.${seed_tpg}.${checkpoint_in_phase}.rslt | \
+    cut -d '.' -f 2 | sort -n | tail -n 1) 
+
    # Get id of best team
    tm_id=$(grep "setElTmsMTA" tpg.${seed_tpg}.*.std | \
      grep " fm 0 " | \
      grep "p${phase}t${task_to_replay}a0 ${best_fitness} " | \
      grep " phs $phase " | \
-     grep " t $checkpoint_in_t " | \
+     grep " t $best_fitness_t " | \
      head -n 1 | \
      awk -F"id" '{print $2}' | \
      awk '{print $1}')
-
+   
    echo "Fitness:$best_fitness Generation:$checkpoint_in_t Team:$tm_id"
    
-   #  for dbg 
-  #  mpirun --oversubscribe -np 1 xterm -hold -e gdb -ex run \
-    mpirun --oversubscribe -np 1 \
-     $TPG/build/release/cpp/experiments/TPGExperimentMPI \
-     replay=1 animate=1 id_to_replay=$tm_id task_to_replay=$task_to_replay \
-     checkpoint_in_phase=$phase checkpoint_in_t=$checkpoint_in_t \
-     seed_tpg=$seed_tpg seed_aux=$seed_aux \
-     1> tpg.$seed_tpg.$seed_aux.replay.std \
-     2> tpg.$seed_tpg.$seed_aux.replay.err &
+  #  mpirun --oversubscribe -np 1 xterm -hold -e gdb -ex run --args \
+   mpirun --oversubscribe -np 1 \
+    $TPG/build/release/cpp/experiments/TPGExperimentMPI \
+    parameters_file=${parameters_file} \
+    seed_tpg=${seed_tpg} seed_aux=${seed_aux} \
+    start_from_checkpoint=1 \
+    checkpoint_in_phase=${checkpoint_in_phase} \
+    checkpoint_in_t=${checkpoint_in_t} \
+    replay=1 animate=${animate} id_to_replay=${tm_id} \
+    task_to_replay=${task_to_replay} \
+    1> tpg.${seed_tpg}.${seed_aux}.replay.std \
+    2> tpg.${seed_tpg}.${seed_aux}.replay.err &
+
 fi
+# fi
 
 # Debug mode ###################################################################
 if [ $mode -eq 2 ]; then
    mpirun --oversubscribe -np $num_mpi_proc xterm -hold -e gdb -ex run \
      --args $TPG/build/release/cpp/experiments/TPGExperimentMPI \
+     parameters_file=${parameters_file} \
      seed_tpg=${seed_tpg} n_root=10 n_root_gen=10 \
      1> tpg.$seed_tpg.$$.std \
      2> tpg.$seed_tpg.$$.err &
@@ -100,6 +158,7 @@ if [ $mode -eq 3 ]; then
   valgrind --leak-check=yes --show-reachable=yes \
   --log-file=vg.%p --suppressions=/usr/share/openmpi/openmpi-valgrind.supp \
   $TPG/build/release/cpp/experiments/TPGExperimentMPI \
+  parameters_file=${parameters_file} \
   seed_tpg=${seed_tpg} n_root=10 n_root_gen=10 n_generations=3 \
   mj_max_timestep=1 mj_n_eval_train=1 \
   1> tpg.$seed_tpg.$$.std \
@@ -107,7 +166,27 @@ if [ $mode -eq 3 ]; then
 
 fi
 
+# Pickup from checkpoint #######################################################
+if [ $mode -eq 4 ]; then
+  checkpoint_in_phase=0
+  checkpoint_in_t=$(grep -iRl end \
+  checkpoints/cp.*.${seed_tpg}.${checkpoint_in_phase}.rslt | \
+  cut -d '.' -f 2 | sort -n | tail -n 1)
+  pid=$(ls tpg.${seed_tpg}.*.std | cut -d '.' -f 3 | tail -n 1)
+  echo "Starting run ${seed_tpg} t ${checkpoint_in_t} pid $pid"
+  mpirun --oversubscribe -np $num_mpi_proc \
+    $TPG/build/release/cpp/experiments/TPGExperimentMPI \
+    parameters_file=${parameters_file} \
+    seed_tpg=${seed_tpg} \
+    start_from_checkpoint=1 \
+    checkpoint_in_phase=${checkpoint_in_phase} \
+    checkpoint_in_t=${checkpoint_in_t} \
+    1>> tpg.${seed_tpg}.${pid}.std \
+    2>> tpg.${seed_tpg}.${pid}.err &
+fi
+
 # below this line is just sketches to be cleaned ###############################
+################################################################################
 
 # # Check for memoy leaks
 # if [ $mode -eq 3 ]; then
