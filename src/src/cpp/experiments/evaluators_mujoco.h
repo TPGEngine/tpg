@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <cstring>
 #include <cstdio>
+#include <thread>
 
 /******************************************************************************/
 // MuJoCo data structures
