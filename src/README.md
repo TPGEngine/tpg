@@ -4,7 +4,12 @@ This code reproduces results from the paper:
 Stephen Kelly, Tatiana Voegerl, Wolfgang Banzhaf, and Cedric Gondro. Evolving Hierarchical Memory-Prediction Machines in Multi-Task Reinforcement Learning. Genetic Programming and Evolvable Machines, 2021. [pdf](https://rdcu.be/czd3s)
 
 ## Quick Start
-This code is designed to be used in Linux. If you use Windows, you can use Windows Subsystem for Linux (WSL). You can work with WSL in Visual Studio Code by following [this tutorial](https://code.visualstudio.com/docs/remote/wsl-tutorial).
+This code is designed to be used in Linux. If you use Windows, you can use Windows Subsystem for Linux (WSL). You can work with WSL in Visual Studio Code by following [this tutorial](https://code.visualstudio.com/docs/remote/wsl-tutorial). Run this to automatically install all dependencies and compile:
+```bash
+bash ./setup.sh
+```
+
+This performs the setup and compilation of the steps below. If you want to manually install, follow the instructions below.
 
 For MacOS or Windows users, you can follow this [guide](./DEVCONTAINERS.md) to setup Dev Containers which spins up a Linux based environment right within VS Code.
 
@@ -33,7 +38,8 @@ source ~/.profile
 ### 3. Compile
 From the tpg directory run:
 ```
-scons --opt
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
 ```
 
 ### 4. Run an experiment

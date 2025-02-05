@@ -1,4 +1,7 @@
-r#!/bin/bash
+#!/bin/bash
+
+# Enable error handling
+set -ex
 
 # Update apt-get repository
 sudo apt-get update
@@ -29,7 +32,16 @@ MUJOCO_TAR=$(basename "$MUJOCO_URL")
 sudo tar -xzf "$MUJOCO_TAR"
 
 # Change directory to TPG source
-cd /workspaces/tpg
+if [ -d "$TPG" ]; then
+    cd $TPG
+else
+    echo "TPG directory not found"
+    exit 1
+fi
+
+# Clean up any existing build
+rm -rf build
 
 # Build TPG
-scons --opt
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release

@@ -91,7 +91,9 @@ jobs:
         shell: bash
         run: |
           cd src
-          scons --opt
+          mkdir -p build && cd build
+          cmake -DCMAKE_BUILD_TYPE=Release ..
+          cmake --build . -- -j $(nproc)
 
       - name: Run tests
         run: |
