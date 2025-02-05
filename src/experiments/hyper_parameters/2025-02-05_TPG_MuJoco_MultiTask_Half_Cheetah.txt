@@ -94,6 +94,9 @@ tournament_size 3
 # Whether to keep evaluation outcome over time or re-evaluate each generation
 keep_old_outcomes 1
 
+# Whether to seed the environment with the episode number
+seed_with_episode_number 1
+
 ################################################################################
 ## Team  parameters ############################################################
 ################################################################################
@@ -186,7 +189,7 @@ n_input 0
 max_initial_prog_size 10
 
 # Max program size
-max_prog_size 1000000
+max_prog_size 10
 
 # Number of memory indices
 # Each memory index points to a data structure (scalar, vector, or matrix)
@@ -250,9 +253,11 @@ mj_model_path $TPG/datasets/mujoco_models/
 
 mj_max_timestep 1000
 
+mj_reward_control_weight 0.0
+
 mj_n_eval_train 5
 mj_n_eval_validation 0
-mj_n_eval_test 0
+mj_n_eval_test 1
 
 ################################################################################
 ## Operations, uncomment to activate ###########################################

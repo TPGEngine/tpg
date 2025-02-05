@@ -189,7 +189,7 @@ n_input 0
 max_initial_prog_size 10
 
 # Max program size
-max_prog_size 1000000
+max_prog_size 10
 
 # Number of memory indices
 # Each memory index points to a data structure (scalar, vector, or matrix)
@@ -257,7 +257,7 @@ mj_reward_control_weight 0.0
 
 mj_n_eval_train 5
 mj_n_eval_validation 0
-mj_n_eval_test 0
+mj_n_eval_test 1
 
 ################################################################################
 ## Operations, uncomment to activate ###########################################
@@ -306,8 +306,8 @@ VECTOR_MIN_OP
 VECTOR_MAX_OP
 VECTOR_MEAN_OP
 VECTOR_ST_DEV_OP
-VECTOR_CONST_SET_OP
-SCALAR_VECTOR_ASSIGN_OP
+#VECTOR_CONST_SET_OP
+#SCALAR_VECTOR_ASSIGN_OP
  
 # matrix #########################
 VECTOR_OUTER_PRODUCT_OP
@@ -332,13 +332,13 @@ MATRIX_MEAN_OP
 MATRIX_ROW_MEAN_OP
 MATRIX_ROW_ST_DEV_OP
 MATRIX_ST_DEV_OP
-MATRIX_CONST_SET_OP
-SCALAR_MATRIX_ASSIGN_OP
+#MATRIX_CONST_SET_OP
+#SCALAR_MATRIX_ASSIGN_OP
 
 ## noise ##########################
 ##SCALAR_UNIFORM_SET_OP
-SCALAR_GAUSSIAN_SET_OP
+#SCALAR_GAUSSIAN_SET_OP
 ##VECTOR_UNIFORM_SET_OP
-VECTOR_GAUSSIAN_SET_OP
+#VECTOR_GAUSSIAN_SET_OP
 ##MATRIX_UNIFORM_SET_OP
-MATRIX_GAUSSIAN_SET_OP
+#MATRIX_GAUSSIAN_SET_OP
