@@ -89,7 +89,6 @@ class instruction {
 
    static const int NUM_OP = 74;
 
-   static const vector<double> constants_;
    mt19937 rng_;
 
    // Mutable instruction parameters
@@ -147,7 +146,9 @@ class instruction {
    // example: op_signatures_[SCALAR_COS_OP_] = {kScalarType_, kScalarType_};
    static vector<vector<size_t> > op_signatures_;
 
-   string checkpoint();
+   static vector<std::string> op_names_;
+
+   string ToString();
 
    // Constructor
    instruction(std::unordered_map<string, std::any>&, mt19937&);
@@ -155,13 +156,13 @@ class instruction {
    // Copy Constructor
    instruction(instruction&);
 
-   // op_list_ maps each operation to a function pointer for its execution
+   // op_functions_ maps each operation to a function pointer for its execution
    typedef void (instruction::*operation)(bool);
-   static vector<operation> op_list_;
+   static vector<operation> op_functions_;
 
    // Execute this instruction
    inline void exec(bool dbg) {
-      (this->*op_list_[op_])(dbg);
+      (this->*op_functions_[op_])(dbg);
 
       // TODO(skelly): set to 1.0 instead of 0.0?
       // Change infinite values to 0.0 in output memory
@@ -939,4 +940,7 @@ class instruction {
       }
    }
 };
+
+
+
 #endif

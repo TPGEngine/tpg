@@ -82,10 +82,6 @@ struct EvalData {
             if (tpg.GetParam<string>("forecast_fitness") == "mse") {
                 auto err = MeanSquaredError(sequence_targ, sequence_pred);
                 stats_double[REWARD1_IDX] = -err;
-                // TODO(skelly): remove debug out
-                // cerr << "targ " << vecToStr(sequence_targ) << endl;
-                // cerr << " pred " << vecToStr(sequence_pred) << endl;
-                // cerr << "err " << err << endl;
             } else if (tpg.GetParam<string>("forecast_fitness") ==
                        "correlation") {
                 auto corr = Correlation(sequence_targ, sequence_pred);
@@ -130,7 +126,7 @@ struct EvalData {
     void EncodeEvalResultString(TPG &tpg) {
         // eval_result.erase(std::remove(eval_result.begin(), eval_result.end(), '\0'), eval_result.end());
         eval_result += to_string(static_cast<long>(tm->id_));
-        eval_result += ":4";// + vecToStrNoSpace(fingerprint);  // 4?
+        eval_result += ":4";// + VectorToStringNoSpace(fingerprint);  // 4?
         eval_result += ":0";// + to_string(tpg.GetState("active_task"));
         for (size_t r = 0; r < stats_double.size(); r++)
             eval_result += ":" + to_string(stats_double[r]);
