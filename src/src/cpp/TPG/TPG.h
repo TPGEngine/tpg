@@ -3,6 +3,7 @@
 #include <TaskEnv.h>
 
 #include <any>
+#include <filesystem>
 #include <iomanip>
 #include <random>
 
@@ -36,6 +37,7 @@ class TPG {
     /***************************************************************************
      * Methods to implement the TPG algorithm.
      **************************************************************************/
+    string AgentOpUseToString(team* agent);
     void checkRefCounts(const char *);
     void CleanupProgramsWithNoRefs();
     void clearMemory();
@@ -116,14 +118,14 @@ class TPG {
     void printProgramInfo();
     void printOss();
     void printOss(ostringstream &o);
-    void printTeamInfo(long, int, bool, long teamId = -1);
+    void printTeamInfo(long, int, bool, bool, long teamId = -1);
     void trackTeamInfo(long, int, bool, long teamId = -1);
     
     void RegisterMachineCrossover(RegisterMachine *p1, RegisterMachine *p2,
                           RegisterMachine **c1, RegisterMachine **c2);
 
 
-    void ReadCheckpoint(long, int, int, bool, const string &);
+    void ReadCheckpoint(long, int, bool, const string &);
 
     void ReadParameters(string file_name,
                         std::unordered_map<string, std::any> &params);
@@ -148,11 +150,11 @@ class TPG {
                     vector<int> &ints, long gtime);
     std::string PhylogenyToString();
     inline void teamMap(map<long, team *> &team_map) const {
-        team_map = _teamMap;
+        team_map = team_map_;
     }
     // void teamTaskRank(int, const vector<int> &);
     void updateMODESFilters(bool);
-    void WriteCheckpoint(long, bool);
+    void WriteCheckpoint(bool);
     void WriteMPICheckpoint(string &, vector<team *> &);
 
     /*****************************************************************************
@@ -161,7 +163,7 @@ class TPG {
     //  Populations
     set<team *, teamIdComp> team_pop_;      // Teams
     // Map team id -> team* for RegisterMachine graph traversal
-    map<long, team *> _teamMap;
+    map<long, team *> team_map_;
     // keep track of which teams are elites wrt each taskSet
     map<string, vector<team *>> task_set_map_;
     map<long, RegisterMachine *> program_pop_;
@@ -208,6 +210,7 @@ class TPG {
     void MutateActionToTerminal(RegisterMachine *prog_to_mu, team *new_team);
     void MutateActionToTeam(RegisterMachine *prog_to_mu, team *new_team,
                             int &n_new_teams);
+                            
 };
 
 #endif

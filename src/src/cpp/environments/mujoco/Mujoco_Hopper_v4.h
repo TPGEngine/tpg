@@ -24,8 +24,11 @@ class Mujoco_Hopper_v4 : public MujocoEnv {
       n_eval_validation_ = std::any_cast<int>(params["mj_n_eval_validation"]);
       n_eval_test_ = std::any_cast<int>(params["mj_n_eval_test"]);
       max_step_ = std::any_cast<int>(params["mj_max_timestep"]);
+      control_cost_weight_ =
+          std::any_cast<double>(params["mj_reward_control_weight"]);
       model_path_ =
-          ExpandEnvVars(std::any_cast<string>(params["mj_model_path"]));
+          ExpandEnvVars(std::any_cast<string>(params["mj_model_path"])+
+                        "hopper.xml");
       healthy_state_range_ = {-100.0, 100.0};
       healthy_z_range_ = {0.7, float(INFINITY)};
       healthy_angle_range_ = {-0.2, 0.2};

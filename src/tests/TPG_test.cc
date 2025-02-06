@@ -139,4 +139,94 @@ TEST_CASE("RegisterMachine Crossover Test", "[TPG]") {
       delete child1;
       delete child2;
    }
+
+
+   SECTION("REST"){
+      // Initialize TPG and RegisterMachines
+      RegisterMachine* p1 =
+          new RegisterMachine(-1, params, state, rng, legal_ops);
+      RegisterMachine* p2 =
+          new RegisterMachine(-1, params, state, rng, legal_ops);
+
+      // Add some instructions to p1 and p2
+      for (int i = 0; i < 10; ++i) {
+         p1->instructions_.push_back(new instruction(params, rng));
+         p2->instructions_.push_back(new instruction(params, rng));
+      }
+
+      RegisterMachine* c1 = nullptr;
+      RegisterMachine* c2 = nullptr;
+      tpg.RegisterMachineCrossover(p1, p2, &c1, &c2);
+      int p1Size = static_cast<int>(p1->instructions_.size());
+      int p2Size = static_cast<int>(p2->instructions_.size());
+
+      int c1Size = static_cast<int>(c1->instructions_.size());
+      int c2Size = static_cast<int>(c2->instructions_.size());
+
+
+      // Values subject to change
+      int dcmax = 25;
+      int lsmax = 30;
+      int dsmax = 20;  
+      int lmin = 5;   
+      int lmax = 30;  
+
+      SECTION(
+          "Step 1: Randomly select crossover points within distance dcmax") {
+
+         // Ensure crossover points are within the allowed distance, // Example: dcmax = 25
+
+         // distance | i1 − i2 |≤ min(l(gp1) − 1, dcmax) 
+
+
+         INFO(c1Size);
+         INFO(c2Size);
+         REQUIRE(std::abs(c1Size - c2Size) <= dcmax);
+      }
+
+      SECTION("Step 2: Select segment lengths within lsmax") {
+         
+
+         // Ensure segment lengths are within the allowed maximum
+         REQUIRE(c1Size <= lsmax);
+         REQUIRE(c2Size <= lsmax);
+      }
+
+      SECTION("Step 3: Reselect segment length if difference exceeds dsmax") {
+         
+
+         // Ensure the difference in segment lengths is within the allowed maximum
+         REQUIRE(std::abs(c1Size-c2Size) <= dsmax);
+      }
+
+      SECTION("Step 4: Ensure l(s1) <= l(s2)") {
+         
+
+         // Ensure the first segment is not longer than the second
+         REQUIRE(c1Size <= c2Size);
+      }
+
+      SECTION(
+          "Step 5: Adjust segment lengths if resulting programs are out of "
+          "bounds") {
+         
+
+         // Ensure the resulting programs are within the allowed length bounds
+
+         REQUIRE(c1Size >= lmin);
+         REQUIRE(c1Size <= lmax);
+         REQUIRE(c2Size >= lmin);
+         REQUIRE(c2Size <= lmax);
+      }
+
+  
+
+
+
+      // Clean up
+      delete p1;
+      delete p2;
+      delete c1;
+      delete c2;
+   }
 }

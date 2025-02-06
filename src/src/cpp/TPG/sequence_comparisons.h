@@ -290,13 +290,13 @@ double calculatePearson_Multi(const std::vector<double> &targets,
 //    if (v1 == v2)
 //       return 0;
 //    ostringstream o;
-//    o << vecToStrNoSpace(v1);
+//    o << VectorToStringNoSpace(v1);
 //    int Zx = compressedLength((char*) o.str().c_str());
 //    o.str("");
-//    o << vecToStrNoSpace(v2);
+//    o << VectorToStringNoSpace(v2);
 //    int Zy = compressedLength((char*) o.str().c_str());
 //    o.str("");
-//    o << vecToStrNoSpace(v1) << vecToStrNoSpace(v2);
+//    o << VectorToStringNoSpace(v1) << VectorToStringNoSpace(v2);
 //    int Zxy = compressedLength((char*) o.str().c_str());
 //    o.str("");
 //    int nom = Zxy-min(Zx,Zy);

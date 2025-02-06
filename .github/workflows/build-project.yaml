@@ -1,0 +1,105 @@
+name: Build TPG Project
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'src/**'
+  pull_request:
+    branches:
+      - 'main'
+    paths:
+      - 'src/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Set up GCC 13
+        shell: bash
+        run: |
+          sudo apt update
+          sudo apt install -y software-properties-common
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+          sudo apt update
+          sudo apt install -y gcc-13 g++-13
+          gcc --version
+          g++ --version
+
+      - name: Set up environment
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          cd src
+          mkdir  ./mujoco
+          wget https://github.com/google-deepmind/mujoco/releases/download/3.2.2/mujoco-3.2.2-linux-x86_64.tar.gz  -O ./mujoco/mujoco.tar.gz 
+          tar -xzvf ./mujoco/mujoco.tar.gz -C ./mujoco
+          sudo xargs --arg-file requirements.txt apt install
+          sudo apt-get install -y libglfw3 libglfw3-dev libglew-dev
+          if [ -d "./mujoco" ]; then
+            echo "Mujoco folder created"
+            echo "Files and directories in ./mujoco:"
+            ls -l "./mujoco"  # List files and directories with details
+          else 
+              echo "Mujoco folder not created"
+          fi
+          cd ../
+         
+
+
+             
+
+      - name: Set environment variables
+        shell: bash
+        run: |
+          ls
+          
+          ls src/
+          echo $GITHUB_WORKSPACE
+          
+          echo "export TPG=$GITHUB_WORKSPACE/src" >> "$HOME/.bash_profile"
+          echo "export PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/plot" >>  "$HOME/.bash_profile"
+          echo "export PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/run" >>  "$HOME/.bash_profile"
+          echo "export MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >>  "$HOME/.bash_profile"
+          echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2/lib" >>  "$HOME/.bash_profile"
+          echo "MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >> "$GITHUB_ENV"
+
+
+          source "$HOME/.bash_profile"
+          
+          
+
+      - name: Print GitHub environment variables
+        run: |
+          echo  "$HOME/.bash_profile"
+          cat "$HOME/.bash_profile"
+
+          echo "Checking Mujoco path"
+          echo $MUJOCO
+          cd $MUJOCO
+          
+      - name: Compile the project
+        shell: bash
+        run: |
+          cd src
+          mkdir -p build && cd build
+          cmake -DCMAKE_BUILD_TYPE=Release ..
+          cmake --build . -- -j $(nproc)
+
+      - name: Run tests
+        run: |
+          # Add commands to run your tests here
+          # Unit testing commands will be run here
+          echo "Running tests..."
+          cd src/build
+          make && ctest --rerun-failed --output-on-failure
+          echo "Finish running tests!"

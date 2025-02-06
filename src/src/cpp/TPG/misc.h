@@ -140,7 +140,7 @@ std::vector<string> &SplitString(const string &s, char delim,
 std::vector<string> SplitString(const string &s, char delim);
 
 template <class vtype>
-string vecToStr(std::vector<vtype> &v, string delim = " ") {
+string VectorToString(std::vector<vtype> &v, string delim = " ") {
     ostringstream oss;  // oss.precision(numeric_limits<double>::digits10+1);
     for (size_t i = 0; i < v.size(); i++) {
         oss << v[i];
@@ -158,7 +158,7 @@ string setToStr(set<vtype> &s) {
     return oss.str();
 }
 template <class vtype>
-string vecToStrNoSpace(std::vector<vtype> &v) {
+string VectorToStringNoSpace(std::vector<vtype> &v) {
     ostringstream oss;
     for (size_t i = 0; i < v.size(); i++) {
         oss << v[i];
@@ -189,7 +189,7 @@ double VectorMedian(std::vector<vtype> vec) {
       m = (mid1 + mid2) / 2.0;
    }
 //    std::sort(vec.begin(), vec.end());
-//    cerr << "dbg " << vecToStr(vec)  << ":" << m << endl;
+//    cerr << "dbg " << VectorToString(vec)  << ":" << m << endl;
    return m;
 }
 
@@ -249,5 +249,18 @@ inline double RoundTo(double value, double precision = 1.0) {
 }
 
 std::string ExpandEnvVars(const std::string &str);
+
+/******************************************************************************/
+inline void WriteStringToFile(const std::string& file_name,
+                               const std::string& str) {
+   std::ofstream ofs(file_name, std::ios::out);
+   if (!ofs.is_open()) {
+      die(__FILE__, __FUNCTION__, __LINE__, "Problem opening file.");
+   }
+   ofs << str;
+   if (!ofs) {
+      die(__FILE__, __FUNCTION__, __LINE__, "Problem writing to file.");
+   }
+}
 
 #endif

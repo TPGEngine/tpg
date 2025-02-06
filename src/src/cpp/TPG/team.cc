@@ -14,7 +14,7 @@ void team::AddProgram(RegisterMachine *prog, int position) {
 }
 
 /******************************************************************************/
-string team::checkpoint() const {
+string team::ToString() const {
    ostringstream oss;
    oss << "team:" << id_ << ":" << gtime_ << ":" << _n_eval;
    for (auto prog : members_) {
@@ -110,9 +110,9 @@ void team::updateComplexityRecord(map<long, team *> &teamMap, int rtcIndex) {
    //    _numActiveFeatures += (*leiter)->numFeatures();
    // }
    runTimeComplexityIns_ =
-       getMeanOutcome(_TRAIN_PHASE, 0, rtcIndex, false, true);
+       GetMeanOutcome(_TRAIN_PHASE, 0, rtcIndex);
    runTimeComplexityTms_ =
-       getMeanOutcome(_TRAIN_PHASE, 0, rtcIndex - 1, false, true);
+       GetMeanOutcome(_TRAIN_PHASE, 0, rtcIndex - 1);
 }
 
 /******************************************************************************/
@@ -131,9 +131,9 @@ void team::updateComplexityRecord(map<long, team *> &teamMap, int rtcIndex,
    //    _numActiveFeatures += (*leiter)->numFeatures();
    // }
    runTimeComplexityIns_ =
-       getMeanOutcome(phase, 0, rtcIndex, auxInt, auxIntMatch, false, true);
+       GetMeanOutcome(phase, 0, rtcIndex, auxInt, auxIntMatch);
    runTimeComplexityTms_ =
-       getMeanOutcome(phase, 0, rtcIndex - 1, auxInt, auxIntMatch, false, true);
+       GetMeanOutcome(phase, 0, rtcIndex - 1, auxInt, auxIntMatch);
 }
 
 // TODO(skelly): remove shared memory code
@@ -285,15 +285,14 @@ void team::policyInstructions(
 // }
 
 /******************************************************************************/
-double team::getMeanOutcome(int phase, int task, int auxDouble, bool allPhase,
-                            bool allTask) {
+double team::GetMeanOutcome(int phase, int task, int auxDouble) {
    vector<double> outcomes;
    for (auto ouiter1 = outcomes_.begin(); ouiter1 != outcomes_.end();
         ouiter1++) {  // task
-      if (ouiter1->first != task && !allTask) continue;
+      if (ouiter1->first != task) continue;
       for (auto ouiter2 = ouiter1->second.begin();
            ouiter2 != ouiter1->second.end(); ouiter2++) {  // phase
-         if (ouiter2->first != phase && !allPhase) continue;
+         if (ouiter2->first != phase) continue;
          for (auto ouiter3 = ouiter2->second.begin();
               ouiter3 != ouiter2->second.end(); ouiter3++)  // points
             outcomes.push_back(ouiter3->second->auxDouble(auxDouble));
@@ -307,16 +306,16 @@ double team::getMeanOutcome(int phase, int task, int auxDouble, bool allPhase,
 }
 
 /******************************************************************************/
-double team::getMeanOutcome(int phase, int task, int auxDouble, int auxInt,
-                            long auxIntMatch, bool allPhase, bool allTask) {
+double team::GetMeanOutcome(int phase, int task, int auxDouble, int auxInt,
+                            long auxIntMatch) {
    vector<double> outcomes;
 
    for (auto ouiter1 = outcomes_.begin(); ouiter1 != outcomes_.end();
         ouiter1++) {  // task
-      if (ouiter1->first != task && !allTask) continue;
+      if (ouiter1->first != task) continue;
       for (auto ouiter2 = ouiter1->second.begin();
            ouiter2 != ouiter1->second.end(); ouiter2++) {  // phase
-         if (ouiter2->first != phase && !allPhase) continue;
+         if (ouiter2->first != phase) continue;
          for (auto ouiter3 = ouiter2->second.begin();
               ouiter3 != ouiter2->second.end(); ouiter3++)  // points
             if (ouiter3->second->auxInt(auxInt) == auxIntMatch)
@@ -352,7 +351,7 @@ double team::GetMedianOutcome(int phase, int task, int auxDouble) {
 }
 
 ///****************************************************************************/
-// double team::getMeanOutcome(int phase, int task, int auxDouble, double
+// double team::GetMeanOutcome(int phase, int task, int auxDouble, double
 // &rValue1, double &rValue2, double minVal) {
 //    vector < double > outcomes;
 //    rValue2 = 0;

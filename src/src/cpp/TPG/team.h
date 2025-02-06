@@ -65,8 +65,8 @@ class team {
   void GetAllNodes(map<long, team *> &teamMap, set<team *, teamIdComp> &,
                    set<RegisterMachine *, RegisterMachineIdComp> &, set<MemoryEigen*> &) const;
   void getBehaviourSequence(vector<int> &, int);
-  double getMeanOutcome(int, int, int, bool, bool);
-  double getMeanOutcome(int, int, int, int, long, bool, bool);
+  double GetMeanOutcome(int, int, int);
+  double GetMeanOutcome(int, int, int, int, long);
   double GetMedianOutcome(int, int, int);
   inline bool hasOutcome(int task, int phase, int seed) {
     return outcomes_[task][phase].find(seed) != outcomes_[task][phase].end();
@@ -218,7 +218,7 @@ class team {
   }
   void AddProgram(RegisterMachine *, int position = -1);
   // bool AddProgramActive(RegisterMachine *);
-  string checkpoint() const;
+  string ToString() const;
   void clone(map<long, phyloRecord> &, team **);
   inline void clearDistances() {
     distances_0_.clear();

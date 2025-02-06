@@ -1,10 +1,27 @@
-project(TPG LANGUAGES CXX)
-set(CMAKE_CXX_STANDARD 17)
+cmake_minimum_required(VERSION 3.15)
+project(TPGProject)
+
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-cmake_minimum_required(VERSION 3.16)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated -Wall -Wno-error -Wextra -Wno-unused-parameter")
+
+# Find required packages
+find_package(MPI REQUIRED)
+find_package(Boost REQUIRED COMPONENTS system thread mpi serialization iostreams)
+find_package(Eigen3 REQUIRED)
+find_package(OpenCV REQUIRED)
+find_package(CURL REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(glfw3 REQUIRED)
+find_package(TBB REQUIRED)
+
+# Add subdirectory for the src directory
+add_subdirectory(src) 
 
 
-
+#Unit testing - add Catch 2 library
 Include(FetchContent)
 
 FetchContent_Declare(
@@ -15,28 +32,15 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(Catch2)
 
+add_executable(tests 
+    tests/TPG_test.cc
+)
 
-include_directories(src/cpp/experiments/)
-include_directories(src/cpp/environments/)
-include_directories(src/cpp/TPG/)
-
-
-
-# add_library(tpg 
-#  src/cpp/TPG/TPG.h
-#  src/cpp/TPG/TPG.cc
-#  src/cpp/TPG/RegisterMachine.h
-#  src/cpp/TPG/RegisterMachine.cc
-#  src/cpp/TPG/Instruction.h 
-#  src/cpp/TPG/Instruction.cc
-#  src/cpp/TPG/misc.cc
-#  src/cpp/TPG/misc.h
-#  src/cpp/TPG/team.cc
-#  src/cpp/TPG/team.h
-#)
 
 
 file(GLOB TPG_SOURCES 
+  "src/cpp/logging/metrics/mta/*.h"
+  "src/cpp/logging/metrics/mta/*.cc"
   "src/cpp/TPG/*.h"
   "src/cpp/TPG/*.cc"
   "src/cpp/experiments/api_client.cc"
@@ -50,53 +54,21 @@ list(REMOVE_ITEM TPG_SOURCES "src/cpp/experiments/TPGExperimentMPI.cc")
 
 add_library(tpg ${TPG_SOURCES})
 
-target_include_directories(tpg
-  PUBLIC 
-    src
-)
-
-
- # src/cpp/TPG/TPG.h src/cpp/TPG/TPG.cc src/cpp/environments/TaskEnv.h src/cpp/TPG/RegisterMachine.h src/cpp/TPG/RegisterMachine.cc  src/cpp/TPG/Instruction.h src/cpp/TPG/Instruction.cc
-
-add_executable(tests 
-    tests/TPG_test.cc
-)
-
-
-# Find MuJoCo Library
-set(MUJOCO_DIR "$ENV{MUJOCO}")  # Make sure MUJOCO is set
-set(MUJOCO_LIB "${MUJOCO_DIR}/lib/libmujoco.so")
-set(MUJOCO_INCLUDE "${MUJOCO_DIR}/include")
-
-# Ensure MuJoCo is found
-if(NOT EXISTS "${MUJOCO_LIB}")
-    message(FATAL_ERROR "MuJoCo library not found at ${MUJOCO_LIB}. Ensure MuJoCo is installed and MUJOCO_PATH is set.")
-endif()
-
-include_directories(${MUJOCO_INCLUDE})
-
-add_executable(mujoco_env_test tests/mujoco_env_test.cc)
-add_executable(mujoco_inverted_pendulum_test tests/mujoco_inverted_pendulum_test.cc)
-add_executable(mujoco_inverted_double_pendulum_test tests/mujoco_inverted_double_pendulum_test.cc)
-add_executable(mujoco_hopper_test tests/mujoco_hopper_test.cc)
-add_executable(mujoco_half_cheetah_test tests/mujoco_half_cheetah_test.cc)
-add_executable(mujoco_humanoid_standup_test tests/mujoco_humanoid_standup_test.cc)
-add_executable(mujoco_ant_test tests/mujoco_ant_test.cc)
-add_executable(mujoco_reacher_test tests/mujoco_reacher_test.cc)
-
-
 # Add this line to find the Eigen package
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(CURL REQUIRED)
 
-# Include Directories
-
 include_directories(${EIGEN3_INCLUDE_DIR})
+target_include_directories(tpg PUBLIC 
+                src/cpp/TPG
+                src/cpp/environments
+                src/cpp/experiments
+                src/cpp/logging
+                )
 target_include_directories(tpg PUBLIC ${EIGEN3_INCLUDE_DIR})
-
-
-# Link libraries to testing files
 target_link_libraries(tpg PRIVATE CURL::libcurl)
+
+
 
 target_link_libraries(tests 
   PRIVATE
@@ -105,79 +77,9 @@ target_link_libraries(tests
       Catch2::Catch2WithMain
 )
 
-target_link_libraries(tests PRIVATE Eigen3::Eigen)
-target_link_libraries(tests PRIVATE Catch2::Catch2WithMain) 
-include_directories(src/cpp/environments/mujoco)
-
-# Link MuJoCo with mujoco_tests
-target_link_libraries(mujoco_env_test 
-  PRIVATE
-      ${MUJOCO_LIB}
-      Catch2::Catch2WithMain
-      tpg
-)
-
-target_link_libraries(mujoco_inverted_pendulum_test 
-  PRIVATE
-      Catch2::Catch2WithMain
-      tpg
-      ${MUJOCO_LIB}
-)
-
-target_link_libraries(mujoco_inverted_double_pendulum_test 
-  PRIVATE
-      Catch2::Catch2WithMain
-      tpg
-      ${MUJOCO_LIB}
-)
-
-target_link_libraries(mujoco_hopper_test 
-  PRIVATE
-      Catch2::Catch2WithMain
-      tpg
-      ${MUJOCO_LIB}
-)
-
-target_link_libraries(mujoco_half_cheetah_test 
-  PRIVATE
-      Catch2::Catch2WithMain
-      tpg
-      ${MUJOCO_LIB}
-)
-
-target_link_libraries(mujoco_humanoid_standup_test 
-  PRIVATE
-      Catch2::Catch2WithMain
-      tpg
-      ${MUJOCO_LIB}
-)
-
-target_link_libraries(mujoco_ant_test 
-  PRIVATE
-      Catch2::Catch2WithMain
-      tpg
-      ${MUJOCO_LIB}
-)
-
-target_link_libraries(mujoco_reacher_test 
-  PRIVATE
-      Catch2::Catch2WithMain
-      tpg
-      ${MUJOCO_LIB}
-)
-
 include(CTest)
 include(Catch)
 enable_testing()
-
-# Discover tests
-
 catch_discover_tests(tests)
-catch_discover_tests(mujoco_env_test)
-catch_discover_tests(mujoco_inverted_pendulum_test)
-catch_discover_tests(mujoco_inverted_double_pendulum_test)
-catch_discover_tests(mujoco_hopper_test)
-catch_discover_tests(mujoco_half_cheetah_test)
-catch_discover_tests(mujoco_humanoid_standup_test)
-catch_discover_tests(mujoco_ant_test)
-catch_discover_tests(mujoco_reacher_test)
+
+

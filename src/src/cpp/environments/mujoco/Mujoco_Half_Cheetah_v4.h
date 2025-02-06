@@ -18,8 +18,11 @@ class Mujoco_Half_Cheetah_v4 : public MujocoEnv {
       n_eval_validation_ = std::any_cast<int>(params["mj_n_eval_validation"]);
       n_eval_test_ = std::any_cast<int>(params["mj_n_eval_test"]);
       max_step_ = std::any_cast<int>(params["mj_max_timestep"]);
+      control_cost_weight_ =
+          std::any_cast<double>(params["mj_reward_control_weight"]);
       model_path_ =
-          ExpandEnvVars(std::any_cast<string>(params["mj_model_path"]));
+          ExpandEnvVars(std::any_cast<string>(params["mj_model_path"]) + 
+                        "half_cheetah.xml");
       initialize_simulation();
       obs_size_ = 17;
       if (!exclude_current_positions_from_observation_)
