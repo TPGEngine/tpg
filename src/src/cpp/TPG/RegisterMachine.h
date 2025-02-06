@@ -17,7 +17,7 @@ class RegisterMachine {
 
    std::vector<instruction *> instructions_;
    std::vector<instruction *> instructions_effective_;
-   vector<int> op_counts_;  // Count op each op in instructions_effective_
+   vector<int> op_counts_;  // Count each op in instructions_effective_
 
    // Vector storing 1 MemoryEigen* of each type (SCALAR, VECTOR, MATRIX)
    vector<MemoryEigen *> private_memory_;
