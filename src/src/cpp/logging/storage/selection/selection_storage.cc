@@ -3,7 +3,7 @@
 
 void SelectionStorage::init(const int& seed_tpg, const int& pid) {
     std::stringstream filename;
-    filename << "mta." << seed_tpg << "." << pid << ".csv";
+    filename << "selection." << seed_tpg << "." << pid << ".csv";
 
     file_.open(filename.str());
     file_ << "generation,best_fitness,team_id,team_size,age,fitness_value_for_selection,program_instruction_count,effective_program_instruction_count\n";
