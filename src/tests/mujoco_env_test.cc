@@ -11,9 +11,18 @@
 
 using Catch::Approx;
 
+// Helper function to determine TPG mujoco path
+std::string determine_tpg_env() {
+    const char* tpg_env = std::getenv("TPG");
+    if (tpg_env == nullptr) {
+        throw std::runtime_error("TPG environment variable is not set.");
+    }
+    return std::string(tpg_env) + "datasets/mujoco_models/inverted_pendulum.xml";
+}
+
 // MuJoCo Initialize Simulation Test
 TEST_CASE("Mujoco Environment - Simulation Initialization", "[initialize_simulation]") {
-    MockMujocoEnv env("../datasets/mujoco_models/inverted_pendulum.xml");
+    MockMujocoEnv env(determine_tpg_env());
 
     REQUIRE_NOTHROW(env.initialize_simulation());
     REQUIRE(env.m_ != nullptr);
@@ -22,7 +31,7 @@ TEST_CASE("Mujoco Environment - Simulation Initialization", "[initialize_simulat
 
 // MuJoCo Set State Test
 TEST_CASE("Mujoco Environment - Set State", "[set_state]") {
-    MockMujocoEnv env("../datasets/mujoco_models/inverted_pendulum.xml");
+    MockMujocoEnv env(determine_tpg_env());
     env.initialize_simulation();
 
     std::vector<double> qpos(env.m_->nq, 0.5);
@@ -40,7 +49,7 @@ TEST_CASE("Mujoco Environment - Set State", "[set_state]") {
 
 // MuJoCo Do Simulation Test
 TEST_CASE("MujocoEnv Simulation Step", "[do_simulation]") {
-    MockMujocoEnv env("../datasets/mujoco_models/inverted_pendulum.xml");
+    MockMujocoEnv env(determine_tpg_env());
     env.initialize_simulation();
 
     std::vector<double> control(env.m_->nu, 0.2);

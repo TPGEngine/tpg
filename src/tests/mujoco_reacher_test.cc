@@ -20,12 +20,19 @@ extern "C" void mjr_freeContext(mjrContext* con) {
 
 // Helper function to create default parameters
 std::unordered_map<std::string, std::any> createDefaultParams() {
+
+    const char* tpg_env = std::getenv("TPG");
+    if (tpg_env == nullptr) {
+        throw std::runtime_error("TPG environment variable is not set.");
+    }
+    
     std::unordered_map<std::string, std::any> params;
     params["mj_n_eval_train"] = 10;
     params["mj_n_eval_validation"] = 5;
     params["mj_n_eval_test"] = 3;
     params["mj_max_timestep"] = 100;
-    params["mj_model_path"] = std::string("$TPG/datasets/mujoco_models/reacher.xml");
+    params["mj_model_path"] = std::string(tpg_env) + "datasets/mujoco_models/";
+    params["mj_reward_control_weight"] = 0.0;
     return params;
 }
 
@@ -55,7 +62,7 @@ TEST_CASE("Mujoco_Reacher_v4 Control Cost", "[control_cost]") {
     Mujoco_Reacher_v4 reacher(params);
 
     std::vector<double> action = {0.1, -0.1};
-    double expected_cost = reacher.reward_control_weight * (0.1 * 0.1 + (-0.1) * (-0.1));
+    double expected_cost = reacher.reward_control_weight_ * (0.1 * 0.1 + (-0.1) * (-0.1));
     REQUIRE(reacher.control_cost(action) == Approx(expected_cost));
 }
 
