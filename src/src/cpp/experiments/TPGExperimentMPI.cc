@@ -27,10 +27,10 @@
 #include "evaluators_mujoco.h"
 #include "storage/selection/selection_storage.h"
 #include "loggers/selection/selection_logger.h"
-#include "storage/tms/timing_storage.h"
-#include "loggers/tms/timing_logger.h"
+#include "storage/timing/timing_storage.h"
+#include "loggers/timing/timing_logger.h"
 #include "core/event_dispatcher.h"
-#include "metrics/tms/timing_metrics.h"
+#include "metrics/timing/timing_metrics.h"
 
 #define CHECKPOINT_MOD 1000000
 #define PRINT_MOD 1
