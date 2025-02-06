@@ -7,12 +7,10 @@ Download cmake
 sudo apt install cmake
 ```
 
-Start at base directory
+Start at base directory && run tests in build directory
 
 ```
-mkdir build
 cd build
-cmake .. && make
-ctest --rerun-failed --output-on-failure
+make && ctest --rerun-failed --output-on-failure
 ``` 
 

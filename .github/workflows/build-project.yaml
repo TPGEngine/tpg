@@ -100,3 +100,6 @@ jobs:
           # Add commands to run your tests here
           # Unit testing commands will be run here
           echo "Running tests..."
+          cd src/build
+          make && ctest --rerun-failed --output-on-failure
+          echo "Finish running tests!"
