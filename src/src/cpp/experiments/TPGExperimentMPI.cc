@@ -25,8 +25,8 @@
 #include <cstdlib>
 
 #include "evaluators_mujoco.h"
-#include "storage/mta/mta_storage.h"
-#include "loggers/mta/mta_logger.h"
+#include "storage/selection/selection_storage.h"
+#include "loggers/selection/selection_logger.h"
 #include "storage/tms/timing_storage.h"
 #include "loggers/tms/timing_logger.h"
 #include "core/event_dispatcher.h"
@@ -193,9 +193,9 @@ int main(int argc, char** argv) {
 
    if (tpg.GetParam<int>("replay") == 0) {
       // Initialize MTA and TMS loggers
-      MTAStorage::instance().init(seed_tpg, pid);
-      MTALogger mtaLogger;
-      mtaLogger.init();
+      SelectionStorage::instance().init(seed_tpg, pid);
+      SelectionLogger selectionLogger;
+      selectionLogger.init();
       TimingStorage::instance().init(seed_tpg, pid);
       TimingLogger timingLogger;
       timingLogger.init();

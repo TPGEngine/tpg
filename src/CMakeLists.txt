@@ -75,6 +75,7 @@ target_link_libraries(tests
       tpg
       Eigen3::Eigen
       Catch2::Catch2WithMain
+      logging
 )
 
 include(CTest)

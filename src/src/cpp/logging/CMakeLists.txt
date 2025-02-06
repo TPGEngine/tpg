@@ -8,12 +8,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # List the source files that comprise the logging library.
 # (Note that we include core/event_dispatcher.tpp as in the SCons script.)
 set(LOGGING_SOURCES
-    storage/mta/mta_storage.cc
+    storage/selection/selection_storage.cc
     storage/tms/timing_storage.cc
-    loggers/mta/mta_logger.cc
+    loggers/selection/selection_logger.cc
     loggers/tms/timing_logger.cc
-    metrics/mta/mta_metrics.cc
-    metrics/mta/mta_metrics_builder.cc
+    metrics/selection/selection_metrics.cc
+    metrics/selection/selection_metrics_builder.cc
     metrics/tms/timing_metrics.cc
     metrics/tms/timing_metrics_builder.cc
     core/event_dispatcher.tpp

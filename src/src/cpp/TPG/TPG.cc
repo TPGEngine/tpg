@@ -1,7 +1,7 @@
 #include "TPG.h"
 #include "core/event_dispatcher.h"
-#include "metrics/mta/mta_metrics.h"
-#include "metrics/mta/mta_metrics_builder.h"
+#include "metrics/selection/selection_metrics.h"
+#include "metrics/selection/selection_metrics_builder.h"
 
 /******************************************************************************/
 TPG::TPG() {
@@ -1953,7 +1953,7 @@ void TPG::printTeamInfo(long t, int phase, bool singleBest, bool multitask, long
 
          // dispatching MTA team information for only multitask events
          if (multitask) {
-            MTAMetricsBuilder builder;
+            SelectionMetricsBuilder builder;
             builder.with_generation(t)
                .with_best_fitness((*teiter)->GetMeanOutcome(0, 0, 0))
                .with_team_id((*teiter)->id_)
@@ -1965,8 +1965,8 @@ void TPG::printTeamInfo(long t, int phase, bool singleBest, bool multitask, long
                .with_total_effective_program_instructions(accumulate(effectiveProgramInstructionCounts.begin(),
                            effectiveProgramInstructionCounts.end(), 0));
             
-            MTAMetrics metrics = builder.build();
-            EventDispatcher<MTAMetrics>::instance().notify(EventType::MTA, metrics);
+            SelectionMetrics metrics = builder.build();
+            EventDispatcher<SelectionMetrics>::instance().notify(EventType::SELECTION, metrics);
          }           
 
          // visitedTeams.clear();

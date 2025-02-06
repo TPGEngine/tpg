@@ -1,7 +1,7 @@
-#include "mta_storage.h"
+#include "selection_storage.h"
 #include <iomanip>
 
-void MTAStorage::init(const int& seed_tpg, const int& pid) {
+void SelectionStorage::init(const int& seed_tpg, const int& pid) {
     std::stringstream filename;
     filename << "mta." << seed_tpg << "." << pid << ".csv";
 
@@ -10,7 +10,7 @@ void MTAStorage::init(const int& seed_tpg, const int& pid) {
     file_.flush();
 }
 
-void MTAStorage::append(const MTAMetrics& metrics) {
+void SelectionStorage::append(const SelectionMetrics& metrics) {
     file_ << metrics.generation << ","
           << std::fixed << std::setprecision(6) << metrics.best_fitness << ","
           << metrics.team_id << ","

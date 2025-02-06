@@ -4,6 +4,6 @@
 #include <string>
 
 enum class EventType {
-    MTA,
+    SELECTION,
     TMS
 };

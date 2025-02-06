@@ -14,19 +14,19 @@ env.Library(
     target = 'logging',
     source = [
         # Storage
-        'storage/mta/mta_storage.cc',
+        'storage/selection/selection_storage.cc',
         'storage/tms/timing_storage.cc',
         
         # Core
         'core/event_dispatcher.tpp',
         
         # Loggers
-        'loggers/mta/mta_logger.cc',
+        'loggers/selection/selection_logger.cc',
         'loggers/tms/timing_logger.cc',
         
         # Metrics
-        'metrics/mta/mta_metrics.cc',
-        'metrics/mta/mta_metrics_builder.cc',
+        'metrics/selection/selection_metrics.cc',
+        'metrics/selection/selection_metrics_builder.cc',
         'metrics/tms/timing_metrics.cc',
         'metrics/tms/timing_metrics_builder.cc' 
     ],
