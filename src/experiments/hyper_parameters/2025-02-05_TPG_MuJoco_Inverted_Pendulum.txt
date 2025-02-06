@@ -78,7 +78,7 @@ seed_tpg 42
 seed_aux 42
 
 # Max number of generations
-n_generations 40
+n_generations 150
 
 # Number of root teams (agents) to keep each generation
 n_root 1000
