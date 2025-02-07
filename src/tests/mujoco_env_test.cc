@@ -17,7 +17,7 @@ std::string determine_tpg_env() {
     if (tpg_env == nullptr) {
         throw std::runtime_error("TPG environment variable is not set.");
     }
-    return std::string(tpg_env) + "datasets/mujoco_models/inverted_pendulum.xml";
+    return std::string(tpg_env) + "/datasets/mujoco_models/inverted_pendulum.xml";
 }
 
 // MuJoCo Initialize Simulation Test

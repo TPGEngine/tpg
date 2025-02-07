@@ -31,7 +31,7 @@ std::unordered_map<std::string, std::any> createDefaultParams() {
     params["mj_n_eval_validation"] = 5;
     params["mj_n_eval_test"] = 3;
     params["mj_max_timestep"] = 100;
-    params["mj_model_path"] = std::string(tpg_env) + "datasets/mujoco_models/";
+    params["mj_model_path"] = std::string(tpg_env) + "/datasets/mujoco_models/";
     params["mj_reward_control_weight"] = 0.0;
     return params;
 }
