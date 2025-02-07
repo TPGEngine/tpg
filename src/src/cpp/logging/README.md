@@ -1,8 +1,8 @@
-# Event-Driven Logging Architecture for TPG
+# Event-Driven Logging Architecture for TPG RL Framework
 
 ## Overview
 
-This document describes the event-driven architecture implemented for logging data points to CSV files during the training process. This system captures metrics from various stages of the training generation, such as replacement, selection, and timing.
+This document describes the event-driven architecture implemented for logging data points to CSV files during the TPG RL training process. This system captures metrics from various stages of the training generation, such as replacement, selection, removal, and timing.
 
 ### Motivation for Event-Driven Architecture
 
@@ -12,17 +12,25 @@ The TPG RL framework does not inherently store many of the desired metrics as st
 *   **Decouple logging from core logic:** Avoid cluttering the core TPG code with logging concerns, promoting cleaner and more maintainable code.
 *   **Flexibility and Extensibility:** Easily add or modify logging for different stages without impacting other parts of the system.
 
+## Stage Naming Conventions and Locations
+
+The names of the logging stages are based on the corresponding stages that make up a generation.
+
+*   **`replacement`:** This is the first stage and occurs during the `Replacement` stage of the training pipeline. It's called within the `tpg.GenerateNewTeams()` function in `TPG.cc`. This stage is responsible for generating new teams to replace existing ones.
+*   **`selection`:** This is the second stage and occurs during the `Selection` stage of the training pipeline. It's called within the `tpg.SetEliteTeams()` function in `TPG.cc`. This stage is responsible for selecting the elite teams based on their performance.
+*   **`removal`:** This is the third stage and occurs during the `Selection` stage of the training pipeline. It's called within the `tpg.SelectTeams()` function in `TPG.cc`. This stage is responsible for removing non-elite teams from the population.
+*   **`timing`:** This stage tracks the time taken for each of the other stages to complete within a generation. It's called at the end of each generation in the main training loop within `TPGExperimentMPI.cc`.
+
 ## File Structure
 
 The logging library is organized into the following directories:
 
 *   **`core/`:** Contains core components that are fundamental to the logging architecture. This includes:
-    * `event_types.h`: Defines the `EventType` enum, which lists all possible events that can be logged.
-    * `event_dispatcher.h`:  Header file for the `EventDispatcher` class, a singleton responsible for managing event subscriptions and notifications.
-    * `event_dispatcher.tpp`: Implements the template `EventDispatcher` class
+    *   `event_types.h`: Defines the `EventType` enum, which lists all possible events that can be logged.
+    *   `event_dispatcher.h` (Not shown in the provided code, but assumed to exist):  Defines the `EventDispatcher` class, a singleton responsible for managing event subscriptions and notifications.
 *   **`loggers/`:** Contains logger classes, each responsible for subscribing to a specific event and handling the associated metrics.  Each stage has its own subdirectory within `loggers/`.
-    * `loggers/<stage>/<stage>_logger.h`:  Header file for the logger class for a specific stage (e.g., `loggers/replacement/replacement_logger.h`).
-    * `loggers/<stage>/<stage>_logger.cc`:  Source file for the logger class for a specific stage (e.g., `loggers/replacement/replacement_logger.cc`).
+    *   `loggers/<stage>/<stage>_logger.h`:  Header file for the logger class for a specific stage (e.g., `loggers/replacement/replacement_logger.h`).
+    *   `loggers/<stage>/<stage>_logger.cc`:  Source file for the logger class for a specific stage (e.g., `loggers/replacement/replacement_logger.cc`).
 *   **`metrics/`:** Contains the definitions for the metrics structures and builders. Each stage has its own subdirectory within `metrics/`.
     *   `metrics/<stage>/<stage>_metrics.h`:  Header file defining the metrics `struct` for a specific stage (e.g., `metrics/replacement/replacement_metrics.h`).
     *   `metrics/<stage>/<stage>_metrics_builder.h`:  Header file for the metrics builder class for a specific stage (e.g., `metrics/replacement/replacement_metrics_builder.h`).
@@ -30,7 +38,7 @@ The logging library is organized into the following directories:
 *   **`storage/`:** Contains storage classes responsible for writing the metrics data to CSV files. Each stage has its own subdirectory within `storage/`.
     *   `storage/<stage>/<stage>_storage.h`:  Header file for the storage class for a specific stage (e.g., `storage/replacement/replacement_storage.h`).
     *   `storage/<stage>/<stage>_storage.cc`:  Source file for the storage class for a specific stage (e.g., `storage/replacement/replacement_storage.cc`).
-    *   `storage/csv_storage.h`: Defines the base `CSVStorage` class, which provides common functionality for writing data to CSV files.
+    *   `storage/csv_storage.h` (Not shown in the provided code, but assumed to exist): Defines the base `CSVStorage` class, which provides common functionality for writing data to CSV files.
 
 ## Architecture Components
 
@@ -62,6 +70,7 @@ This section provides a step-by-step guide on how to add logging for a new stage
         REPLACEMENT,
         SELECTION,
         TMS,
+        REMOVAL,
         // Add your new event here:
         YOUR_NEW_STAGE
     };
@@ -274,6 +283,9 @@ This section provides a step-by-step guide on how to add logging for a new stage
           ReplacementStorage::instance().init(seed_tpg, pid);
           ReplacementLogger replacementLogger;
           replacementLogger.init();
+          RemovalStorage::instance().init(seed_tpg, pid);
+          RemovalLogger removalLogger;
+          removalLogger.init();
 
           // Initialize your new stage logger here:
           YourNewStageStorage::instance().init(seed_tpg, pid);
