@@ -33,6 +33,14 @@ foreach(test ${TEST_TARGETS})
     add_executable(${test} ${test}.cc)
 endforeach()
 
+# Set the runtime output directory for all the test executables so that
+# Catch2 can locate them.
+foreach(test ${TEST_TARGETS})
+  set_target_properties(${test} PROPERTIES 
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests
+  )
+endforeach()
+
 # --- Library Target (tpg) ---
 file(GLOB TPG_SOURCES 
   "../src/cpp/logging/metrics/mta/*.h"
