@@ -11,14 +11,17 @@ set(LOGGING_SOURCES
     storage/selection/selection_storage.cc
     storage/timing/timing_storage.cc
     storage/replacement/replacement_storage.cc
+    storage/removal/removal_storage.cc
     loggers/selection/selection_logger.cc
     loggers/timing/timing_logger.cc
     loggers/replacement/replacement_logger.cc
+    loggers/removal/removal_logger.cc
     metrics/selection/selection_metrics.cc
     metrics/selection/selection_metrics_builder.cc
     metrics/timing/timing_metrics.cc
     metrics/timing/timing_metrics_builder.cc
     metrics/replacement/replacement_metrics_builder.cc
+    metrics/removal/removal_metrics_builder.cc
     core/event_dispatcher.tpp
 )
 

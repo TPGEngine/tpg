@@ -33,6 +33,8 @@
 #include "metrics/timing/timing_metrics.h"
 #include "storage/replacement/replacement_storage.h"
 #include "loggers/replacement/replacement_logger.h"
+#include "storage/removal/removal_storage.h"
+#include "loggers/removal/removal_logger.h"
 
 #define CHECKPOINT_MOD 1000000
 #define PRINT_MOD 1
@@ -204,6 +206,9 @@ int main(int argc, char** argv) {
       ReplacementStorage::instance().init(seed_tpg, pid);
       ReplacementLogger replacementLogger;
       replacementLogger.init();
+      RemovalStorage::instance().init(seed_tpg, pid);
+      RemovalLogger removalLogger;
+      removalLogger.init();
 
    };
 

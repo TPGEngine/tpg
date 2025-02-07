@@ -4,6 +4,8 @@
 #include "metrics/selection/selection_metrics_builder.h"
 #include "metrics/replacement/replacement_metrics.h"
 #include "metrics/replacement/replacement_metrics_builder.h"
+#include "metrics/removal/removal_metrics_builder.h"
+#include "metrics/removal/removal_metrics.h"
 
 /******************************************************************************/
 TPG::TPG() {
@@ -2475,6 +2477,20 @@ void TPG::SelectTeams() {
        << n_deleted << " nOldDel " << n_old_deleted << " nOldDelPr "
        << (double)n_old_deleted / n_deleted;
    oss << endl;
+
+   RemovalMetricsBuilder builder;
+   builder.with_generation(GetState("t_current"))
+      .with_num_teams(team_pop_.size())
+      .with_num_programs(program_pop_.size())
+      .with_num_root_programs(n_root_remaining)
+      .with_num_elite_teams(_numEliteTeamsCurrent[GetState("phase")])
+      .with_num_deleted(n_deleted)
+      .with_num_old_deleted(n_old_deleted)
+      .with_percent_old_deleted((double) n_old_deleted / n_deleted);
+
+   RemovalMetrics metrics = builder.build();
+   EventDispatcher<RemovalMetrics>::instance().notify(EventType::REMOVAL, metrics);
+
 }
 
 /******************************************************************************/

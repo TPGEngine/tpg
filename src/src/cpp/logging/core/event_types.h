@@ -6,5 +6,6 @@
 enum class EventType {
     REPLACEMENT,
     SELECTION,
-    TMS
+    TMS,
+    REMOVAL
 };
