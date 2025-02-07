@@ -53,10 +53,6 @@ jobs:
               echo "Mujoco folder not created"
           fi
           cd ../
-         
-
-
-             
 
       - name: Set environment variables
         shell: bash
@@ -82,8 +78,6 @@ jobs:
           echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2/lib" >>  "$GITHUB_ENV"
           
           # source "$HOME/.bash_profile"
-          
-          
 
       - name: Print GitHub environment variables
         run: |
@@ -98,9 +92,9 @@ jobs:
         shell: bash
         run: |
           cd src
-          mkdir -p build && cd build
-          cmake -DCMAKE_BUILD_TYPE=Release ..
-          cmake --build . -- -j $(nproc)
+          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --config Release
+
 
       - name: Run tests
         run: |

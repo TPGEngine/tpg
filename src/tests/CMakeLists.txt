@@ -87,6 +87,7 @@ target_link_libraries(register_machine_crossover_test
     tpg
     Eigen3::Eigen
     Catch2::Catch2WithMain
+    logging
 )
 
 # Define common libraries for all MuJoCo tests
