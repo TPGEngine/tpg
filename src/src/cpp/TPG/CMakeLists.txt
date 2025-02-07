@@ -5,7 +5,7 @@ file(GLOB TPG_SOURCES
 )
 
 # Create the TPG library
-add_library(TPG SHARED ${TPG_SOURCES})
+add_library(TPG STATIC ${TPG_SOURCES})
 
 # Include directories
 target_include_directories(TPG

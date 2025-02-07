@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <optional>
+#include <string>
 
 class SelectionMetricsBuilder;
 
@@ -15,6 +16,7 @@ struct SelectionMetrics {
     const double fitness_value_for_selection;
     const int program_instruction_count;
     const int effective_program_instruction_count;
+    const std::string operations;
 
     SelectionMetrics(const SelectionMetricsBuilder& builder);
 };

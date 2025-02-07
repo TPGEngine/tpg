@@ -9,5 +9,6 @@ SelectionMetrics::SelectionMetrics(const SelectionMetricsBuilder& builder)
       age(builder.get_age()),
       fitness_value_for_selection(builder.get_fitness_value_for_selection()),
       program_instruction_count(builder.get_total_program_instructions()),
-      effective_program_instruction_count(builder.get_total_effective_program_instructions()) {
+      effective_program_instruction_count(builder.get_total_effective_program_instructions()),
+      operations(builder.get_operations()) {
 }
