@@ -32,35 +32,14 @@ class MujocoEnv : public TaskEnv {
 
     void initialize_simulation() {
         // Load and compile model
-        // Load and compile model
         char error[1000] = "Could not load binary model";
         m_ = mj_loadXML(model_path_.c_str(), 0, error, 1000);
-        std::cout << "Loaded MuJoCo model" << std::endl;
-
-        if (!m_) {
-            std::cerr << "Error loading model: " << error << std::endl;
-        } else {
-            std::cout << "Model loaded successfully" << std::endl;
-        }
-
-        std::cout << "Model loaded successfully" << std::endl;
-
         // Make data
         d_ = mj_makeData(m_);
-        std::cout << "Created MuJoCo data" << std::endl;
-
-        if (!d_) {
-            std::cerr << "Error creating data structure" << std::endl;
-        } else {
-            std::cout << "Data structure created successfully" << std::endl;
-        }
-
-        std::cout << "Data created successfully" << std::endl;
 
         // Proceed with the rest of the initialization
         std::copy_n(d_->qpos, m_->nq, back_inserter(init_qpos_));
         std::copy_n(d_->qvel, m_->nv, back_inserter(init_qvel_));
-        std::cout << "Sim Initialized" << std::endl;
     }
 
     void set_state(std::vector<double>& qpos, std::vector<double>& qvel) {
