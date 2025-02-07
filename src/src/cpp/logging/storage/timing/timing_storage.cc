@@ -3,7 +3,7 @@
 
 void TimingStorage::init(const int& seed_tpg, const int& pid) {
     std::stringstream filename;
-    filename << "tms." << seed_tpg << "." << pid << ".csv";
+    filename << "timing." << seed_tpg << "." << pid << ".csv";
 
     file_.open(filename.str());
     file_ << "generation,generation_time,evaluation_time,generate_teams_time,set_elite_teams_time,select_teams_time,report_time,modes_time,lost_time\n";
