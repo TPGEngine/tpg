@@ -2,6 +2,8 @@
 #include "core/event_dispatcher.h"
 #include "metrics/selection/selection_metrics.h"
 #include "metrics/selection/selection_metrics_builder.h"
+#include "metrics/replacement/replacement_metrics.h"
+#include "metrics/replacement/replacement_metrics_builder.h"
 
 /******************************************************************************/
 TPG::TPG() {
@@ -717,6 +719,17 @@ void TPG::GenerateNewTeams() {
    oss << _Memory.size() << " eLSz "
        << _numEliteTeamsCurrent[GetState("phase")];
    oss << " nNTms " << new_teams_count << endl;
+
+   ReplacementMetricsBuilder builder;
+   builder.with_generation(GetState("t_current"))
+      .with_num_teams(team_pop_.size())
+      .with_num_programs(program_pop_.size())
+      .with_memory_size(_Memory.size())
+      .with_num_elite_teams(_numEliteTeamsCurrent[GetState("phase")])
+      .with_num_new_teams(new_teams_count);
+
+   ReplacementMetrics metrics = builder.build();
+   EventDispatcher<ReplacementMetrics>::instance().notify(EventType::REPLACEMENT, metrics);
 }
 
 /******************************************************************************/

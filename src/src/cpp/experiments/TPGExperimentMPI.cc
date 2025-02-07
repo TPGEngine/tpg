@@ -31,6 +31,8 @@
 #include "loggers/timing/timing_logger.h"
 #include "core/event_dispatcher.h"
 #include "metrics/timing/timing_metrics.h"
+#include "storage/replacement/replacement_storage.h"
+#include "loggers/replacement/replacement_logger.h"
 
 #define CHECKPOINT_MOD 1000000
 #define PRINT_MOD 1
@@ -192,13 +194,17 @@ int main(int argc, char** argv) {
    int pid = tpg.GetParam<int>("pid");
 
    if (tpg.GetParam<int>("replay") == 0) {
-      // Initialize MTA and TMS loggers
+      // Initialize logger classes
       SelectionStorage::instance().init(seed_tpg, pid);
       SelectionLogger selectionLogger;
       selectionLogger.init();
       TimingStorage::instance().init(seed_tpg, pid);
       TimingLogger timingLogger;
       timingLogger.init();
+      ReplacementStorage::instance().init(seed_tpg, pid);
+      ReplacementLogger replacementLogger;
+      replacementLogger.init();
+
    };
 
    if (world.rank() == 0) {  // Master Process

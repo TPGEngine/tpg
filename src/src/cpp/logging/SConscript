@@ -16,6 +16,7 @@ env.Library(
         # Storage
         'storage/selection/selection_storage.cc',
         'storage/timing/timing_storage.cc',
+        'storage/replacement/replacement_storage.cc',
         
         # Core
         'core/event_dispatcher.tpp',
@@ -23,12 +24,14 @@ env.Library(
         # Loggers
         'loggers/selection/selection_logger.cc',
         'loggers/timing/timing_logger.cc',
+        'loggers/replacement/replacement_logger.cc',
         
         # Metrics
         'metrics/selection/selection_metrics.cc',
         'metrics/selection/selection_metrics_builder.cc',
         'metrics/timing/timing_metrics.cc',
-        'metrics/timing/timing_metrics_builder.cc' 
+        'metrics/timing/timing_metrics_builder.cc',
+        'metrics/replacement/replacement_metrics_builder.cc',
     ],
     CPPPATH = ['.']
 )

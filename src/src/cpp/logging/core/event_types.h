@@ -4,6 +4,7 @@
 #include <string>
 
 enum class EventType {
+    REPLACEMENT,
     SELECTION,
     TMS
 };
