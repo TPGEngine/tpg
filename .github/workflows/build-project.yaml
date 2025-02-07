@@ -66,15 +66,22 @@ jobs:
           ls src/
           echo $GITHUB_WORKSPACE
           
-          echo "export TPG=$GITHUB_WORKSPACE/src" >> "$HOME/.bash_profile"
-          echo "export PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/plot" >>  "$HOME/.bash_profile"
-          echo "export PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/run" >>  "$HOME/.bash_profile"
-          echo "export MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >>  "$HOME/.bash_profile"
-          echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2/lib" >>  "$HOME/.bash_profile"
-          echo "MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >> "$GITHUB_ENV"
+          # echo "export TPG=$GITHUB_WORKSPACE/src" >> "$HOME/.bash_profile"
+          # echo "export PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/plot" >>  "$HOME/.bash_profile"
+          # echo "export PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/run" >>  "$HOME/.bash_profile"
+          # echo "export MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >>  "$HOME/.bash_profile"
+          # echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2/lib" >>  "$HOME/.bash_profile"
+          # echo "MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >> "$GITHUB_ENV"
+          # echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2/lib" >>  "$GITHUB_ENV"
+          # echo "TPG=$GITHUB_WORKSPACE/src" >> $GITHUB_ENV
 
-
-          source "$HOME/.bash_profile"
+          echo "TPG=$GITHUB_WORKSPACE/src" >> "$GITHUB_ENV"
+          echo "PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/plot" >>  "$GITHUB_ENV"
+          echo "PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/run" >>  "$GITHUB_ENV"
+          echo "MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >>  "$GITHUB_ENV"
+          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2/lib" >>  "$GITHUB_ENV"
+          
+          # source "$HOME/.bash_profile"
           
           
 
