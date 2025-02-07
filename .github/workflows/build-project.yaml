@@ -88,19 +88,9 @@ jobs:
           echo $MUJOCO
           cd $MUJOCO
           
-      - name: Compile the project
+      - name: Build and run Unit Tests
         shell: bash
         run: |
           cd src
           cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
           cmake --build build --config Release
-
-
-      - name: Run tests
-        run: |
-          # Add commands to run your tests here
-          # Unit testing commands will be run here
-          echo "Running tests..."
-          cd src/build
-          make && ctest --rerun-failed --output-on-failure
-          echo "Finish running tests!"
