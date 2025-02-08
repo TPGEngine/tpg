@@ -14,7 +14,7 @@ public:
     SelectionMetricsBuilder& with_fitness_value_for_selection(double fitness_value_for_selection);
     SelectionMetricsBuilder& with_total_program_instructions(int total_program_instructions);
     SelectionMetricsBuilder& with_total_effective_program_instructions(int total_effective_program_instructions);
-    SelectionMetricsBuilder& with_operations(std::vector<int> operations);
+    SelectionMetricsBuilder& with_operations_use(std::vector<int> operations);
 
     long get_generation() const;
     double get_best_fitness() const;
@@ -24,7 +24,7 @@ public:
     double get_fitness_value_for_selection() const;
     int get_total_program_instructions() const;
     int get_total_effective_program_instructions() const;
-    std::string get_operations() const;
+    std::string get_operations_use() const;
 
     SelectionMetrics build() const;
 
@@ -37,7 +37,7 @@ private:
     double fitness_value_for_selection = 0.0;
     int program_instruction_count = 0;
     int effective_program_instruction_count = 0;
-    std::string operations = "";
+    std::string operations_use = "";
 };
 
 

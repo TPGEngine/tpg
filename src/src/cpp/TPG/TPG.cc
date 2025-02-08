@@ -1996,7 +1996,7 @@ void TPG::printTeamInfo(long t, int phase, bool singleBest, bool multitask, long
                            programInstructionCounts.end(), 0))
                .with_total_effective_program_instructions(accumulate(effectiveProgramInstructionCounts.begin(),
                            effectiveProgramInstructionCounts.end(), 0))
-               .with_operations(op_countsTally);
+               .with_operations_use(op_countsTally);
             
             SelectionMetrics metrics = builder.build();
             EventDispatcher<SelectionMetrics>::instance().notify(EventType::SELECTION, metrics);

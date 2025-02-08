@@ -43,11 +43,11 @@ SelectionMetricsBuilder& SelectionMetricsBuilder::with_total_effective_program_i
     return *this;
 }
 
-SelectionMetricsBuilder& SelectionMetricsBuilder::with_operations(std::vector<int> operations) {
+SelectionMetricsBuilder& SelectionMetricsBuilder::with_operations_use(std::vector<int> operations_use) {
     std::stringstream ss;
 
     bool first = true;
-    for (int op : operations) {
+    for (int op : operations_use) {
         if (!first) {
             ss << ",";
         }
@@ -55,7 +55,7 @@ SelectionMetricsBuilder& SelectionMetricsBuilder::with_operations(std::vector<in
         first = false;
     }
 
-    this->operations = ss.str();
+    this->operations_use = ss.str();
     return *this;
 }
 
@@ -95,6 +95,6 @@ int SelectionMetricsBuilder::get_total_effective_program_instructions() const {
     return effective_program_instruction_count;
 }
 
-std::string SelectionMetricsBuilder::get_operations() const {
-    return operations;
+std::string SelectionMetricsBuilder::get_operations_use() const {
+    return operations_use;
 }

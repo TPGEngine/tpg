@@ -21,5 +21,6 @@ public:
     ~SelectionStorage() override = default;
 
 private:
+    void appendOperationHeaders();
     SelectionStorage() = default;
 };
