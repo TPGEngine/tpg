@@ -23,17 +23,16 @@ To use, simply call the script inside any experiments within `experiment_directo
 
 For the optional parameter `csv_files`, possible values can be:
     
-    - 'all-mta' (retrieves all CSV files within the directory)
-    - 'all-tms' (retrieves all CSV files within the directory)
+    - 'all-selection' | 'all-removal' | 'all-timing' | 'all-replacement' (retrieves all CSV files within the directory)
     - 'csv_file1.csv,csv_file2.csv, ...' (can have one or more specific CSV files listed with same type, separated by comma `,`)
     - 'csv_file1,csv_file2, ...' (similar to above, but doesn't need the ".csv" extension in the file name)
-    - left blank (the program is setup to default to 'all-mta')
+    - left blank (the program is setup to default to 'all-selection')
 
 Example:
     
-    tpg-plot-evolution.py all-mta best_fitness
-    tpg-plot-evolution.py mta.42.42.csv,mta.42.43.csv best_fitness
-    tpg-plot-evolution.py tms.42.42,tms.42.43 best_fitness
+    tpg-plot-evolution.py all-selection best_fitness
+    tpg-plot-evolution.py selection.42.42.csv,selection.42.43.csv best_fitness
+    tpg-plot-evolution.py timing.42.42,timing.42.43 generation_time
     tpg-plot-evolution.py best_fitness
 '''
 
@@ -137,17 +136,21 @@ if __name__ == "__main__":
     # two arguments: CSV file(s) (optional) and column name (required)
     parser = argparse.ArgumentParser(description='Plot CSV column against generations')
 
-    # csv_files defaults to 'all' if left blank, plotting all CSV within the directory
-    parser.add_argument('csv_files', type=str, nargs="?", default='all-mta', help='Comma-separated list of CSV files (or use "all" for *.csv)')
+    # csv_files defaults to 'all-selection' if left blank, plotting all CSV within the directory
+    parser.add_argument('csv_files', type=str, nargs="?", default='all-selection', help='Comma-separated list of CSV files (or use "all" for *.csv)')
     parser.add_argument('column_name', type=str, help='Column name to plot against generations')
     
     args = parser.parse_args()
     
     # handle "all-*" keyword or comma-separated files
-    if args.csv_files.lower() == 'all-mta':
-        csv_files = glob.glob("mta.*.*.csv")
-    elif args.csv_files.lower() == 'all-tms':
-        csv_files = glob.glob("tms.*.*.csv")
+    if args.csv_files.lower() == 'all-selection':
+        csv_files = glob.glob("selection.*.*.csv")
+    elif args.csv_files.lower() == 'all-removal':
+        csv_files = glob.glob("removal.*.*.csv")
+    elif args.csv_files.lower() == 'all-timing':
+        csv_files = glob.glob("timing.*.*.csv")
+    elif args.csv_files.lower() == 'all-replacement':
+        csv_files = glob.glob("replacement.*.*.csv")
     else:
         # add ".csv" in the end of filename if it doesn't already have it
         csv_files = [f.strip() + ".csv" if not f.strip().lower().endswith(".csv") else f.strip() 
@@ -156,8 +159,8 @@ if __name__ == "__main__":
         # verify all files have same prefix
         prefixes = {f.split('.')[0].lower() for f in csv_files}
 
-        if len(prefixes) > 1 or not prefixes.issubset({"mta", "tms"}):
-            raise ValueError(f"All files must have the same prefix ('mta' or 'tms'), but found: {prefixes}")
+        if len(prefixes) > 1 or not prefixes.issubset({"selection", "removal", "timing", "replacement"}):
+            raise ValueError(f"All files must have the same prefix ('selection' or 'removal' or 'timing' or 'replacement'), but found: {prefixes}")
 
         # only plot unique CSV files
         csv_files = list(set(csv_files))
