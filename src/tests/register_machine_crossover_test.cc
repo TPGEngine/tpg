@@ -80,6 +80,8 @@ TEST_CASE("RegisterMachine Crossover Test", "[TPG]") {
          }
       }
 
+      CHECK(has_different_instructions);
+
       // Cleanup
       delete parent1;
       delete parent2;
@@ -177,7 +179,8 @@ TEST_CASE("RegisterMachine Crossover Test", "[TPG]") {
          // Ensure crossover points are within the allowed distance, // Example: dcmax = 25
 
          // distance | i1 − i2 |≤ min(l(gp1) − 1, dcmax) 
-
+         INFO(p1Size);
+         INFO(p2Size);
 
          INFO(c1Size);
          INFO(c2Size);
