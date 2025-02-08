@@ -1,5 +1,7 @@
 #include "selection_metrics_builder.h"
 #include "selection_metrics.h"
+#include <string>
+#include <sstream>
 
 SelectionMetricsBuilder& SelectionMetricsBuilder::with_generation(long generation) {
     this->generation = generation;
@@ -41,6 +43,22 @@ SelectionMetricsBuilder& SelectionMetricsBuilder::with_total_effective_program_i
     return *this;
 }
 
+SelectionMetricsBuilder& SelectionMetricsBuilder::with_operations_use(std::vector<int> operations_use) {
+    std::stringstream ss;
+
+    bool first = true;
+    for (int op : operations_use) {
+        if (!first) {
+            ss << ",";
+        }
+        ss << op;
+        first = false;
+    }
+
+    this->operations_use = ss.str();
+    return *this;
+}
+
 SelectionMetrics SelectionMetricsBuilder::build() const {
     return { *this };
 }
@@ -75,4 +93,8 @@ int SelectionMetricsBuilder::get_total_program_instructions() const {
 
 int SelectionMetricsBuilder::get_total_effective_program_instructions() const {
     return effective_program_instruction_count;
+}
+
+std::string SelectionMetricsBuilder::get_operations_use() const {
+    return operations_use;
 }

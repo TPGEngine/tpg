@@ -1965,25 +1965,6 @@ void TPG::printTeamInfo(long t, int phase, bool singleBest, bool multitask, long
          oss << " nP " << programs.size();
          oss << " nT " << visitedTeams2.size();
          // oss << " nM " << memories.size();
-
-         // dispatching MTA team information for only multitask events
-         if (multitask) {
-            SelectionMetricsBuilder builder;
-            builder.with_generation(t)
-               .with_best_fitness((*teiter)->GetMeanOutcome(0, 0, 0))
-               .with_team_id((*teiter)->id_)
-               .with_team_size((*teiter)->size())
-               .with_age(t - (*teiter)->gtime_)
-               .with_fitness_value_for_selection((*teiter)->fit_)
-               .with_total_program_instructions(accumulate(programInstructionCounts.begin(),
-                           programInstructionCounts.end(), 0))
-               .with_total_effective_program_instructions(accumulate(effectiveProgramInstructionCounts.begin(),
-                           effectiveProgramInstructionCounts.end(), 0));
-            
-            SelectionMetrics metrics = builder.build();
-            EventDispatcher<SelectionMetrics>::instance().notify(EventType::SELECTION, metrics);
-         }           
-
          // visitedTeams.clear();
          // set<long> pF;
          // (*teiter)->policyFeatures(team_map_, visitedTeams, pF, true);
@@ -2001,6 +1982,25 @@ void TPG::printTeamInfo(long t, int phase, bool singleBest, bool multitask, long
                op_countsTally[i] += op_countsSingle[i];
          }
          oss << " nOp " << VectorToString(op_countsTally);
+
+         // dispatching MTA team information for only multitask events
+         if (multitask) {
+            SelectionMetricsBuilder builder;
+            builder.with_generation(t)
+               .with_best_fitness((*teiter)->GetMeanOutcome(0, 0, 0))
+               .with_team_id((*teiter)->id_)
+               .with_team_size((*teiter)->size())
+               .with_age(t - (*teiter)->gtime_)
+               .with_fitness_value_for_selection((*teiter)->fit_)
+               .with_total_program_instructions(accumulate(programInstructionCounts.begin(),
+                           programInstructionCounts.end(), 0))
+               .with_total_effective_program_instructions(accumulate(effectiveProgramInstructionCounts.begin(),
+                           effectiveProgramInstructionCounts.end(), 0))
+               .with_operations_use(op_countsTally);
+            
+            SelectionMetrics metrics = builder.build();
+            EventDispatcher<SelectionMetrics>::instance().notify(EventType::SELECTION, metrics);
+         }
 
          vector<int> tmSizesRoot, tmSizesSub;
          tmSizesRoot.push_back((*teiter)->size());

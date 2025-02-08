@@ -85,9 +85,9 @@ class instruction {
    static const int SCALAR_SQRT_OP_ = 69;
    static const int SCALAR_VECTOR_ASSIGN_OP_ = 70;
    static const int SCALAR_MATRIX_ASSIGN_OP_ = 71;
-   static const int OBS_BUFF_SLICE_OP_ = 73;
+   static const int OBS_BUFF_SLICE_OP_ = 72;
 
-   static const int NUM_OP = 74;
+   static const int NUM_OP = 73;
 
    mt19937 rng_;
 

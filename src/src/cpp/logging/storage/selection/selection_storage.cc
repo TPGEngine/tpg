@@ -1,4 +1,5 @@
 #include "selection_storage.h"
+#include "instruction.h"
 #include <iomanip>
 
 void SelectionStorage::init(const int& seed_tpg, const int& pid) {
@@ -6,7 +7,11 @@ void SelectionStorage::init(const int& seed_tpg, const int& pid) {
     filename << "selection." << seed_tpg << "." << pid << ".csv";
 
     file_.open(filename.str());
-    file_ << "generation,best_fitness,team_id,team_size,age,fitness_value_for_selection,program_instruction_count,effective_program_instruction_count\n";
+    file_ << "generation,best_fitness,team_id,team_size,age,fitness_value_for_selection,program_instruction_count,effective_program_instruction_count";
+    
+    appendOperationHeaders();
+
+    file_ << "\n";
     file_.flush();
 }
 
@@ -18,6 +23,14 @@ void SelectionStorage::append(const SelectionMetrics& metrics) {
           << metrics.age << ","
           << metrics.fitness_value_for_selection << ","
           << metrics.program_instruction_count << ","
-          << metrics.effective_program_instruction_count << "\n";
+          << metrics.effective_program_instruction_count << ","
+          << metrics.operations_use << "\n";
     file_.flush();
+}
+
+void SelectionStorage::appendOperationHeaders() {
+    for (std::string op_name : instruction::op_names_) {
+        std::transform(op_name.begin(), op_name.end(), op_name.begin(), ::tolower);
+        file_ << "," << op_name;
+    }
 }
