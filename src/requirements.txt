@@ -26,3 +26,5 @@ valgrind
 bc
 poppler-utils
 cmake
+python3-pandas
+python3-matplotlib
