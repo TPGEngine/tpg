@@ -143,27 +143,25 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     # handle "all-*" keyword or comma-separated files
-    if args.csv_files.lower() == 'all-selection':
-        csv_files = glob.glob("selection.*.*.csv")
-    elif args.csv_files.lower() == 'all-removal':
-        csv_files = glob.glob("removal.*.*.csv")
-    elif args.csv_files.lower() == 'all-timing':
-        csv_files = glob.glob("timing.*.*.csv")
-    elif args.csv_files.lower() == 'all-replacement':
-        csv_files = glob.glob("replacement.*.*.csv")
+    prefixes = {"selection", "removal", "timing", "replacement"}
+    csv_key = args.csv_files.lower()
+
+    if csv_key.startswith("all-"):
+        prefix = csv_key[4:]  # extract part after "all-"
+        if prefix in prefixes:
+            csv_files = glob.glob(f"{prefix}.*.*.csv")
+        else:
+            raise ValueError(f"Invalid prefix '{prefix}'. Expected one of {prefixes}.")
     else:
-        # add ".csv" in the end of filename if it doesn't already have it
-        csv_files = [f.strip() + ".csv" if not f.strip().lower().endswith(".csv") else f.strip() 
+        csv_files = [f"{f.strip()}.csv" if not f.strip().lower().endswith(".csv") else f.strip()
                     for f in args.csv_files.split(',')]
-        
-        # verify all files have same prefix
-        prefixes = {f.split('.')[0].lower() for f in csv_files}
 
-        if len(prefixes) > 1 or not prefixes.issubset({"selection", "removal", "timing", "replacement"}):
-            raise ValueError(f"All files must have the same prefix ('selection' or 'removal' or 'timing' or 'replacement'), but found: {prefixes}")
+        # ensure all files have the same valid prefix
+        file_prefixes = {f.split('.')[0].lower() for f in csv_files}
+        if len(file_prefixes) > 1 or not file_prefixes.issubset(prefixes):
+            raise ValueError(f"All files must have the same prefix, but found: {file_prefixes}")
 
-        # only plot unique CSV files
-        csv_files = list(set(csv_files))
+        csv_files = list(set(csv_files))  # remove duplicates
 
     valid_files = []
     for f in csv_files:
