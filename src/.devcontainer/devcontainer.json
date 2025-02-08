@@ -5,6 +5,11 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-vscode.cpptools", "mechatroner.rainbow-csv"]
+    }
+  },
   "remoteEnv": {
     "DISPLAY": ""
   },
