@@ -3,6 +3,20 @@
 # Enable error handling
 set -ex
 
+# Parse arguments to check for -o flag
+ENABLE_OPTIMIZATION=0
+while getopts "o" opt; do
+  case $opt in
+    o)
+      ENABLE_OPTIMIZATION=1
+      ;;
+    *)
+      # Do nothing for other flags
+      ;;
+  esac
+done
+
+
 # Update apt-get repository
 sudo apt-get update
 
@@ -39,6 +53,10 @@ fi
 # Clean up any existing build
 rm -rf build
 
-# Build TPG
-cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+# Build TPG with or without optimization based on argument
+if [ $ENABLE_OPTIMIZATION -eq 1 ]; then
+    cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DENABLE_HIGH_OPTIMIZATION=ON
+else
+    cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+fi
 cmake --build build --config Release

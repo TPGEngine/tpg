@@ -6,6 +6,7 @@ enable_testing()
 # --- Executable Targets ---
 set(TEST_TARGETS
     register_machine_crossover_test
+    team_crossover_test
     mujoco_env_test
     mujoco_inverted_pendulum_test 
     mujoco_inverted_double_pendulum_test
@@ -81,7 +82,7 @@ include_directories(../src/cpp/environments/mujoco)
 
 # --- Link Libraries to Executables ---
 
-# For the register machine crossover test executable
+# For the register machine crossover and team crossover test executable
 target_link_libraries(register_machine_crossover_test 
   PRIVATE
     tpg
@@ -89,6 +90,15 @@ target_link_libraries(register_machine_crossover_test
     Catch2::Catch2WithMain
     logging
 )
+
+target_link_libraries(team_crossover_test 
+  PRIVATE
+    tpg
+    Eigen3::Eigen
+    Catch2::Catch2WithMain
+    logging
+)
+
 
 # Define common libraries for all MuJoCo tests
 set(COMMON_LIBS
