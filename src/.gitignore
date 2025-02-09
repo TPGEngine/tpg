@@ -46,3 +46,6 @@ MUJOCO_LOG.TXT
 # Video files
 *.mp4
 **.csv
+
+# Images
+*.png

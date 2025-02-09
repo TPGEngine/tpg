@@ -10,6 +10,9 @@
       "extensions": ["ms-vscode.cpptools", "mechatroner.rainbow-csv"]
     }
   },
+  "mounts": [
+    "source=tmp-data,target=/tmp,type=volume"
+  ],
   "remoteEnv": {
     "DISPLAY": ""
   },
