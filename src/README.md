@@ -12,13 +12,6 @@ bash ./setup.sh
 
 To run the build with compiler optimization flags. Run the cmake build command with enable high optimization flag on
 
-This can be by running the script with the the additional flag `-o`
-
-```bash
-bash ./setup.sh -o
-```
-
-It changes the cmake build command to use an optimization flag
 
 ```bash
 cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DENABLE_HIGH_OPTIMIZATION=ON
