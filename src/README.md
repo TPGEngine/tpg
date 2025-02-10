@@ -9,6 +9,20 @@ This code is designed to be used in Linux. If you use Windows, you can use Windo
 bash ./setup.sh
 ```
 
+
+To run the build with compiler optimization flags. Run the cmake build command with enable high optimization flag on
+
+
+```bash
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DENABLE_HIGH_OPTIMIZATION=ON
+```
+
+instead of 
+
+```bash
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Release 
+```
+
 This performs the setup and compilation of the steps below. If you want to manually install, follow the instructions below.
 
 For MacOS or Windows users, you can follow this [guide](https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/Dev-Container-Setup-Guide) to setup Dev Containers which spins up a Linux based environment right within VS Code.
