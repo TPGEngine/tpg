@@ -53,10 +53,6 @@ jobs:
               echo "Mujoco folder not created"
           fi
           cd ../
-         
-
-
-             
 
       - name: Set environment variables
         shell: bash
@@ -66,17 +62,22 @@ jobs:
           ls src/
           echo $GITHUB_WORKSPACE
           
-          echo "export TPG=$GITHUB_WORKSPACE/src" >> "$HOME/.bash_profile"
-          echo "export PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/plot" >>  "$HOME/.bash_profile"
-          echo "export PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/run" >>  "$HOME/.bash_profile"
-          echo "export MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >>  "$HOME/.bash_profile"
-          echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2/lib" >>  "$HOME/.bash_profile"
-          echo "MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >> "$GITHUB_ENV"
+          # echo "export TPG=$GITHUB_WORKSPACE/src" >> "$HOME/.bash_profile"
+          # echo "export PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/plot" >>  "$HOME/.bash_profile"
+          # echo "export PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/run" >>  "$HOME/.bash_profile"
+          # echo "export MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >>  "$HOME/.bash_profile"
+          # echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2/lib" >>  "$HOME/.bash_profile"
+          # echo "MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >> "$GITHUB_ENV"
+          # echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2/lib" >>  "$GITHUB_ENV"
+          # echo "TPG=$GITHUB_WORKSPACE/src" >> $GITHUB_ENV
 
-
-          source "$HOME/.bash_profile"
+          echo "TPG=$GITHUB_WORKSPACE/src" >> "$GITHUB_ENV"
+          echo "PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/plot" >>  "$GITHUB_ENV"
+          echo "PATH=$PATH:$GITHUB_WORKSPACE/src/scripts/run" >>  "$GITHUB_ENV"
+          echo "MUJOCO=$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2" >>  "$GITHUB_ENV"
+          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GITHUB_WORKSPACE/src/mujoco/mujoco-3.2.2/lib" >>  "$GITHUB_ENV"
           
-          
+          # source "$HOME/.bash_profile"
 
       - name: Print GitHub environment variables
         run: |
@@ -87,19 +88,9 @@ jobs:
           echo $MUJOCO
           cd $MUJOCO
           
-      - name: Compile the project
+      - name: Build and run Unit Tests
         shell: bash
         run: |
           cd src
-          mkdir -p build && cd build
-          cmake -DCMAKE_BUILD_TYPE=Release ..
-          cmake --build . -- -j $(nproc)
-
-      - name: Run tests
-        run: |
-          # Add commands to run your tests here
-          # Unit testing commands will be run here
-          echo "Running tests..."
-          cd src/build
-          make && ctest --rerun-failed --output-on-failure
-          echo "Finish running tests!"
+          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --config Release

@@ -11,7 +11,7 @@ bash ./setup.sh
 
 This performs the setup and compilation of the steps below. If you want to manually install, follow the instructions below.
 
-For MacOS or Windows users, you can follow this [guide](./DEVCONTAINERS.md) to setup Dev Containers which spins up a Linux based environment right within VS Code.
+For MacOS or Windows users, you can follow this [guide](https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/Dev-Container-Setup-Guide) to setup Dev Containers which spins up a Linux based environment right within VS Code.
 
 ### 1. Install required software
 From the tpg directory run:

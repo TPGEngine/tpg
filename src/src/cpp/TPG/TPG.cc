@@ -1,7 +1,11 @@
 #include "TPG.h"
 #include "core/event_dispatcher.h"
-#include "metrics/mta/mta_metrics.h"
-#include "metrics/mta/mta_metrics_builder.h"
+#include "metrics/selection/selection_metrics.h"
+#include "metrics/selection/selection_metrics_builder.h"
+#include "metrics/replacement/replacement_metrics.h"
+#include "metrics/replacement/replacement_metrics_builder.h"
+#include "metrics/removal/removal_metrics_builder.h"
+#include "metrics/removal/removal_metrics.h"
 
 /******************************************************************************/
 TPG::TPG() {
@@ -717,6 +721,17 @@ void TPG::GenerateNewTeams() {
    oss << _Memory.size() << " eLSz "
        << _numEliteTeamsCurrent[GetState("phase")];
    oss << " nNTms " << new_teams_count << endl;
+
+   ReplacementMetricsBuilder builder;
+   builder.with_generation(GetState("t_current"))
+      .with_num_teams(team_pop_.size())
+      .with_num_programs(program_pop_.size())
+      .with_memory_size(_Memory.size())
+      .with_num_elite_teams(_numEliteTeamsCurrent[GetState("phase")])
+      .with_num_new_teams(new_teams_count);
+
+   ReplacementMetrics metrics = builder.build();
+   EventDispatcher<ReplacementMetrics>::instance().notify(EventType::REPLACEMENT, metrics);
 }
 
 /******************************************************************************/
@@ -1950,25 +1965,6 @@ void TPG::printTeamInfo(long t, int phase, bool singleBest, bool multitask, long
          oss << " nP " << programs.size();
          oss << " nT " << visitedTeams2.size();
          // oss << " nM " << memories.size();
-
-         // dispatching MTA team information for only multitask events
-         if (multitask) {
-            MTAMetricsBuilder builder;
-            builder.with_generation(t)
-               .with_best_fitness((*teiter)->GetMeanOutcome(0, 0, 0))
-               .with_team_id((*teiter)->id_)
-               .with_team_size((*teiter)->size())
-               .with_age(t - (*teiter)->gtime_)
-               .with_fitness_value_for_selection((*teiter)->fit_)
-               .with_total_program_instructions(accumulate(programInstructionCounts.begin(),
-                           programInstructionCounts.end(), 0))
-               .with_total_effective_program_instructions(accumulate(effectiveProgramInstructionCounts.begin(),
-                           effectiveProgramInstructionCounts.end(), 0));
-            
-            MTAMetrics metrics = builder.build();
-            EventDispatcher<MTAMetrics>::instance().notify(EventType::MTA, metrics);
-         }           
-
          // visitedTeams.clear();
          // set<long> pF;
          // (*teiter)->policyFeatures(team_map_, visitedTeams, pF, true);
@@ -1986,6 +1982,25 @@ void TPG::printTeamInfo(long t, int phase, bool singleBest, bool multitask, long
                op_countsTally[i] += op_countsSingle[i];
          }
          oss << " nOp " << VectorToString(op_countsTally);
+
+         // dispatching MTA team information for only multitask events
+         if (multitask) {
+            SelectionMetricsBuilder builder;
+            builder.with_generation(t)
+               .with_best_fitness((*teiter)->GetMeanOutcome(0, 0, 0))
+               .with_team_id((*teiter)->id_)
+               .with_team_size((*teiter)->size())
+               .with_age(t - (*teiter)->gtime_)
+               .with_fitness_value_for_selection((*teiter)->fit_)
+               .with_total_program_instructions(accumulate(programInstructionCounts.begin(),
+                           programInstructionCounts.end(), 0))
+               .with_total_effective_program_instructions(accumulate(effectiveProgramInstructionCounts.begin(),
+                           effectiveProgramInstructionCounts.end(), 0))
+               .with_operations_use(op_countsTally);
+            
+            SelectionMetrics metrics = builder.build();
+            EventDispatcher<SelectionMetrics>::instance().notify(EventType::SELECTION, metrics);
+         }
 
          vector<int> tmSizesRoot, tmSizesSub;
          tmSizesRoot.push_back((*teiter)->size());
@@ -2462,6 +2477,20 @@ void TPG::SelectTeams() {
        << n_deleted << " nOldDel " << n_old_deleted << " nOldDelPr "
        << (double)n_old_deleted / n_deleted;
    oss << endl;
+
+   RemovalMetricsBuilder builder;
+   builder.with_generation(GetState("t_current"))
+      .with_num_teams(team_pop_.size())
+      .with_num_programs(program_pop_.size())
+      .with_num_root_programs(n_root_remaining)
+      .with_num_elite_teams(_numEliteTeamsCurrent[GetState("phase")])
+      .with_num_deleted(n_deleted)
+      .with_num_old_deleted(n_old_deleted)
+      .with_percent_old_deleted((double) n_old_deleted / n_deleted);
+
+   RemovalMetrics metrics = builder.build();
+   EventDispatcher<RemovalMetrics>::instance().notify(EventType::REMOVAL, metrics);
+
 }
 
 /******************************************************************************/
