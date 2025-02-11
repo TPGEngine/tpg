@@ -6,10 +6,7 @@ enable_testing()
 # --- Executable Targets ---
 set(TEST_TARGETS
     register_machine_crossover_test
-<<<<<<< HEAD
     team_crossover_test
-=======
->>>>>>> a5a2cbe5b3d1d34260a5fa7b527dce18f01caff1
     mujoco_env_test
     mujoco_inverted_pendulum_test 
     mujoco_inverted_double_pendulum_test
