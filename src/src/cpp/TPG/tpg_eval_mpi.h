@@ -90,13 +90,6 @@ void AssignTeamsToEvaluators(TPG &tpg, mpi::communicator &world,
       string s = "";
       tpg.WriteMPICheckpoint(s, teams);
 
-      // ofstream ofs;
-      // char filename[80];
-      // sprintf(filename, "eval_main.%d.rslt", tpg.GetState("t_current"));
-      // ofs.open(filename, ios::out);
-      // ofs << s;
-      // ofs.close();
-
       world.send(mpi_job, 0, s);
       mpi_job++;
       teams.clear();
