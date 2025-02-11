@@ -35,7 +35,7 @@ if [ $mode -eq 0 ]; then
    mpirun --oversubscribe -np $num_mpi_proc \
      $TPG/build/release/cpp/experiments/TPGExperimentMPI \
      parameters_file=${parameters_file} \
-     seed_tpg=${seed_tpg} \
+     seed_tpg=${seed_tpg} pid=$$ \
      1> tpg.$seed_tpg.$$.std \
      2> tpg.$seed_tpg.$$.err &
 fi

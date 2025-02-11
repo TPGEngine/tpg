@@ -1,12 +1,13 @@
-#ifndef MTA_METRICS_H
-#define MTA_METRICS_H
+#ifndef SELECTION_METRICS_H
+#define SELECTION_METRICS_H
 
 #include <vector>
 #include <optional>
+#include <string>
 
-class MTAMetricsBuilder;
+class SelectionMetricsBuilder;
 
-struct MTAMetrics {
+struct SelectionMetrics {
     const long team_id;
     const long generation;
     const double best_fitness;
@@ -15,10 +16,11 @@ struct MTAMetrics {
     const double fitness_value_for_selection;
     const int program_instruction_count;
     const int effective_program_instruction_count;
+    const std::string operations_use;
 
-    MTAMetrics(const MTAMetricsBuilder& builder);
+    SelectionMetrics(const SelectionMetricsBuilder& builder);
 };
 
-#include "mta_metrics_builder.h"
+#include "selection_metrics_builder.h"
 
 #endif
