@@ -51,9 +51,15 @@ source ~/.profile
 
 ### 3. Compile
 From the tpg directory run:
-```
+```bash
 cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
+```
+
+To run in debug mode:
+```bash
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug
+cmake --build build
 ```
 
 ### 4. Run an experiment
