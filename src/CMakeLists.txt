@@ -7,6 +7,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated -Wall -Wno-error -Wextra -Wno-unused-parameter")
 
+
+option(ENABLE_HIGH_OPTIMIZATION "Enable high optimization flags" OFF)
+if(ENABLE_HIGH_OPTIMIZATION)
+  message(STATUS "Building project with optimization flags...\n")
+  set( CMAKE_CXX_FLAGS_DEBUG  "")
+  set( CMAKE_CXX_FLAGS_RELEASE  "")
+  set(CMAKE_REQUIRED_FLAGS "-fno-math-errno")
+endif()
+
+
+
+
 # Find required packages
 find_package(MPI REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system thread mpi serialization iostreams)

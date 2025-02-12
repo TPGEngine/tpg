@@ -714,10 +714,7 @@ void TPG::GenerateNewTeams() {
       }
    }
    oss << "genTms t " << GetState("t_current") << " Msz " << team_pop_.size()
-       << " Lsz " << program_pop_.size() << " mSz";
-   for (size_t mem_t = 0; mem_t < MemoryEigen::kNumMemoryType_; mem_t++) {
-      oss << " " << _Memory[mem_t].size();
-   }
+       << " Lsz " << program_pop_.size();
    oss << _Memory.size() << " eLSz "
        << _numEliteTeamsCurrent[GetState("phase")];
    oss << " nNTms " << new_teams_count << endl;

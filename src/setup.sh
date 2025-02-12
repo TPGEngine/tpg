@@ -39,6 +39,6 @@ fi
 # Clean up any existing build
 rm -rf build
 
-# Build TPG
+# Build TPG     
 cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
