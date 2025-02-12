@@ -1,46 +1,94 @@
 # Tangled Program Graphs (TPG)
+This code reproduces results from the paper: 
 
-Developer Names: 
-- Cyruss Amante
-- Calvyn Siong
-- Mark Cruz
-- Edward Gao
-- Richard Li
+Stephen Kelly, Tatiana Voegerl, Wolfgang Banzhaf, and Cedric Gondro. Evolving Hierarchical Memory-Prediction Machines in Multi-Task Reinforcement Learning. Genetic Programming and Evolvable Machines, 2021. [pdf](https://rdcu.be/czd3s)
 
-Date of project start: September 12, 2024
-
-This project is developing an interface to test the evolutionary machine learning framework Tangle Programming Graphs (TPG) in a robotic simulation engine called MuJoCo created by Google Deepmind.
+## Quick Start
+This code is designed to be used in Linux. If you use Windows, you can use Windows Subsystem for Linux (WSL). You can work with WSL in Visual Studio Code by following [this tutorial](https://code.visualstudio.com/docs/remote/wsl-tutorial). Run this to automatically install all dependencies and compile:
+```bash
+bash ./setup.sh
+```
 
 
-### **Key Features**
-
-1. **Integration with new complex environments like Mujoco**  
-
-TPG framework will have numerous integrations between basic agents and several environments provide by Mujoco
-
-2. **CI/CD integration to improve development practises**
-
-The TPG framework will have an integrated CI/CD pipeline that will automatically run linting processes, build project to ensure it's compatible on different platforms with new changes and run automated unit tests
-
-3. **Experiments to measure reinforncement learning performance**
-
-Series of experiments to evaluate the behavior and performance of agents controlled by the TPG algorithm within the MuJoCo environment.
+To run the build with compiler optimization flags. Run the cmake build command with enable high optimization flag on
 
 
+```bash
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DENABLE_HIGH_OPTIMIZATION=ON
+```
 
-The folders and files for this project are as follows:
+instead of 
 
-`docs` - Documentation for the project
-`refs` - Reference material used for the project, including papers
-`src` - TPG source code cloned using Git Subtree
-`src/src/cpp` - Contains different experiments and models (Classic Control and MuJoCo)
-`src/scripts` - Contains environment commands containing useful scripts for running and plotting experiments 
-`test` - Test cases
+```bash
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Release 
+```
 
-## Background
+This performs the setup and compilation of the steps below. If you want to manually install, follow the instructions below.
 
-The code in `src` reproduces results from the paper:
+For MacOS or Windows users, you can follow this [guide](https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/Dev-Container-Setup-Guide) to setup Dev Containers which spins up a Linux based environment right within VS Code.
 
-Stephen Kelly, Tatiana Voegerl, Wolfgang Banzhaf, and Cedric Gondro. Evolving Hierarchical Memory-Prediction Machines in Multi-Task Reinforcement Learning. Genetic Programming and Evolvable Machines, 2021.
+### 1. Install required software
+From the tpg directory run:
+```
+sudo xargs --arg-file requirements.txt apt install
+```
+Note that [MuJoco](https://mujoco.org/) must be downloaded and unpacked separately.
 
-To learn more, read this [PDF](https://link.springer.com/epdf/10.1007/s10710-021-09418-4?sharing_token=JXpw69MCJpHudtVwbwbjzPe4RwlQNchNByi7wbcMAY6UliAwn5GntUdmTAY_mnFzVDzBjsFnj4emNyqwnsRvyvXV3pLgfSINPIbIY7CthuAHi9ud7gHQbNpqk5zSEhF9e).
+### 2. Set environment variables
+In order to easily access tpg scripts, we add appropriate folders to the $PATH environment variable.
+To do so, add the following to *~/.profile*
+```
+export TPG=<YOUR_PATH_HERE>/tpg
+export PATH=$PATH:$TPG/scripts/plot
+export PATH=$PATH:$TPG/scripts/run
+export MUJOCO=<YOUR_PATH_TO_MUJOCO>/mujoco-3.2.2
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MUJOCO/lib/
+```
+Then run:
+```
+source ~/.profile
+```
+
+### 3. Compile
+From the tpg directory run:
+```bash
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
+```
+
+To run in debug mode:
+```bash
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug
+cmake --build build
+```
+
+### 4. Run an experiment
+The folder tpg/experiments/generic contains basic directory structure required. Parameters are set in parameters file found in tpg/experiments/hyper_parameters.
+
+To run an experiment for [Mujoco Inverted Pendulum](https://gymnasium.farama.org/environments/mujoco/inverted_pendulum/) using 4 parallel MPI processes, make tpg/experiments/generic your working directory and run:
+```
+tpg-run-mpi.sh -n 4 -p ../hyper_parameters/2025-02-05_TPG_MuJoco_Inverted_Pendulum.txt
+```
+
+Note that as of right now, the number of assigned processes must be greater than the number of active tasks.
+
+### 5. Plot results
+Generate classic_control_p0.pdf with various statistics:
+```
+tpg-plot-stats.sh
+```
+The first page will be a training curve looking something like the plot below. A fitness of ~1000 indicates the agent balances the pole for 1000 timesteps, thus solving the task.
+
+<img src="./images/MuJoco_Inverted_Pendulum_Fitness.png" height="300" />
+
+### 6. Visualize the best policy's behaviour
+Display an OpenGL animation of the single best policy interacting with the environment:
+```
+tpg-run-mpi.sh -m 1 -p ../hyper_parameters/2025-02-05_TPG_MuJoco_Inverted_Pendulum.txt
+```
+ 
+### 7. Cleanup
+Delete all checkpoints and output files:
+```
+tpg-cleanup.sh
+```
