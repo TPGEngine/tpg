@@ -3,7 +3,7 @@ workflow:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
       changes:
         - src/cpp/**
-    - when: never
+    - when: manual
 
 stages:
   - prepare

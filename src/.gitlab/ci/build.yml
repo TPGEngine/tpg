@@ -2,7 +2,7 @@ workflow:
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
     - if: '$CI_COMMIT_BRANCH == "main"'
-    - when: never
+    - when: manual
 
 stages:
   - prepare
