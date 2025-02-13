@@ -23,14 +23,12 @@ prepare_environment:
   stage: prepare
   script:
     - echo "Setting up Mujoco environment..."
-    - cd src
     - mkdir -p mujoco
     - wget https://github.com/google-deepmind/mujoco/releases/download/3.2.2/mujoco-3.2.2-linux-x86_64.tar.gz -O mujoco/mujoco.tar.gz
     - tar -xzvf mujoco/mujoco.tar.gz -C mujoco
     - xargs --arg-file=requirements.txt apt-get install -y
     - apt-get install -y libglfw3 libglfw3-dev libglew-dev
     - if [ -d "mujoco" ]; then echo "Mujoco folder created:"; ls -l mujoco; else echo "Mujoco folder not created"; fi
-    - cd ..
   artifacts:
     paths:
       - src/mujoco
@@ -41,10 +39,10 @@ build_and_test:
     - prepare_environment
   script:
     - echo "Exporting environment variables for build and test..."
-    - export TPG="$CI_PROJECT_DIR/src"
-    - export PATH="$PATH:$CI_PROJECT_DIR/src/scripts/plot:$CI_PROJECT_DIR/src/scripts/run"
-    - export MUJOCO="$CI_PROJECT_DIR/src/mujoco/mujoco-3.2.2"
-    - export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CI_PROJECT_DIR/src/mujoco/mujoco-3.2.2/lib"
+    - export TPG="$CI_PROJECT_DIR"
+    - export PATH="$PATH:$CI_PROJECT_DIR/src/scripts/plot:$CI_PROJECT_DIR/scripts/run"
+    - export MUJOCO="$CI_PROJECT_DIR/mujoco/mujoco-3.2.2"
+    - export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CI_PROJECT_DIR/mujoco/mujoco-3.2.2/lib"
     - echo "TPG: $TPG"
     - echo "MUJOCO: $MUJOCO"
     - echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
