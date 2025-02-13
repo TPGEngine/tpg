@@ -63,3 +63,8 @@ cpp_linter:
          --tidy-review true \
          --database /workspace/src/compile_commands.json \
          --extra-args "--warnings-as-errors=-clang-diagnostic-pp-file-not-found"
+      # Process the linter output to generate a GitLab Code Quality report.
+  - python3 scripts/process_linter.py linter_output.txt codequality.json
+  artifacts:
+    reports:
+      codequality: codequality.json
