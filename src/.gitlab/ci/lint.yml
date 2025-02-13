@@ -1,0 +1,65 @@
+workflow:
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
+      changes:
+        - src/cpp/**
+    - when: never
+
+stages:
+  - prepare
+  - lint
+
+prepare_environment:
+  stage: prepare
+  image: ubuntu:22.04
+  script:
+    # Install required packages and set up GCC 13 and Clang.
+    - apt-get update && apt-get install -y software-properties-common wget xargs python3-pip cmake bear
+    - add-apt-repository ppa:ubuntu-toolchain-r/test -y
+    - apt-get update && apt-get install -y gcc-13 g++-13 clang
+    - gcc --version && g++ --version
+
+    # Set up Mujoco and other dependencies.
+    - cd src
+    - mkdir -p mujoco
+    - wget https://github.com/google-deepmind/mujoco/releases/download/3.2.2/mujoco-3.2.2-linux-x86_64.tar.gz -O mujoco/mujoco.tar.gz
+    - tar -xzvf mujoco/mujoco.tar.gz -C mujoco
+    - xargs --arg-file=requirements.txt apt-get install -y
+    - apt-get install -y libglfw3 libglfw3-dev libglew-dev
+    - if [ -d "./mujoco" ]; then echo "Mujoco folder created:"; ls -l "./mujoco"; else echo "Mujoco folder not created"; fi
+
+    # Generate the compilation database.
+    - cd src
+    - mkdir -p build
+    - cd build
+    - cmake -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
+    - cp compile_commands.json ../
+    - cd ../..
+  artifacts:
+    paths:
+      - src/compile_commands.json
+
+cpp_linter:
+  stage: lint
+  # Use an image with Docker and enable DinD so we can run the linter container.
+  image: docker:latest
+  services:
+    - docker:dind
+  dependencies:
+    - prepare_environment
+  script:
+    # Set environment variables (adjust as needed).
+    - export TPG="$CI_PROJECT_DIR/src"
+    - export PATH="$PATH:$CI_PROJECT_DIR/src/scripts/plot:$CI_PROJECT_DIR/src/scripts/run"
+    - export MUJOCO="$CI_PROJECT_DIR/src/mujoco/mujoco-3.2.2"
+    - export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CI_PROJECT_DIR/src/mujoco/mujoco-3.2.2/lib"
+    - echo "TPG: $TPG"
+    - echo "MUJOCO: $MUJOCO"
+    - echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
+
+    # Run the cpp-linter container.
+    - docker run --rm -v "$CI_PROJECT_DIR":/workspace cpp-linter/cpp-linter-action:2 \
+         --style /workspace/src/.clang-format \
+         --tidy-review true \
+         --database /workspace/src/compile_commands.json \
+         --extra-args "--warnings-as-errors=-clang-diagnostic-pp-file-not-found"
