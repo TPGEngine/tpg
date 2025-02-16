@@ -4,6 +4,7 @@
 
 #include <GLFW/glfw3.h>
 #include <mujoco/mujoco.h>
+#include <MujocoEnv.h>
 
 #include <GL/osmesa.h>
 #include <sys/types.h>

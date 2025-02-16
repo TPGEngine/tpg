@@ -15,6 +15,9 @@ endif()
 file(GLOB EXPERIMENTS_SOURCES
     *.cc
     *.h
+    ../environments/*.cc
+    ../environments/*.h
+    ../environments/mujoco/MujocoEnv.h
 )
 
 # Create the TPGExperimentMPI executable

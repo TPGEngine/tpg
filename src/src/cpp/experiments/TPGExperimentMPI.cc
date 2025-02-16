@@ -1,22 +1,10 @@
-#include <Acrobot.h>
-#include <CartCentering.h>
-#include <CartPole.h>
-#include <MountainCar.h>
-#include <MountainCarContinuous.h>
-#include <Mujoco_Ant_v4.h>
-#include <Mujoco_Half_Cheetah_v4.h>
-#include <Mujoco_Hopper_v4.h>
-#include <Mujoco_Inverted_Pendulum_v4.h>
-#include <Mujoco_Inverted_Double_Pendulum_v4.h>
-#include <Mujoco_Reacher_v4.h>
-#include <Mujoco_Humanoid_Standup_v4.h>
-#include <Pendulum.h>
 #include <RecursiveForecast.h>
 #include <TPG.h>
 #include <api_client.h>
 #include <misc.h>
 #include <phylogenetic_fitness.h>
 #include <tpg_eval_mpi.h>
+#include <TaskEnvFactory.h>
 
 #include <algorithm>
 #include <any>
@@ -43,6 +31,10 @@
 // task, phase, environment seed, internal test node id
 #define NUM_POINT_AUX_INT 4
 #define MODES_T 1000000000
+
+
+// Helper function
+std::vector<TaskEnv*> initializeTasks(TPG& tpg);
 
 int main(int argc, char** argv) {
    mpi::environment env(argc, argv);
@@ -82,77 +74,8 @@ int main(int argc, char** argv) {
 
    /****************************************************************************/
    // Read task sets from parameters and create environments.
-   vector<TaskEnv*> tasks;
-   stringstream ss(tpg.GetParam<string>("active_tasks"));
-   while (ss.good()) {
-      string substr;
-      getline(ss, substr, ',');
-      if (substr == "Cartpole")
-         tasks.push_back(new CartPole());
-      else if (substr == "Acrobot")
-         tasks.push_back(new Acrobot());
-      else if (substr == "CartCentering")
-         tasks.push_back(new CartCentering());
-      else if (substr == "Pendulum")
-         tasks.push_back(new Pendulum());
-      else if (substr == "MountainCar")
-         tasks.push_back(new MountainCar());
-      else if (substr == "MountainCarContinuous")
-         tasks.push_back(new MountainCarContinuous());
-      else if (substr == "Sunspots")
-         tasks.push_back(new RecursiveForecast("Sunspots"));
-      else if (substr == "Mackey")
-         tasks.push_back(new RecursiveForecast("Mackey"));
-      else if (substr == "Laser")
-         tasks.push_back(new RecursiveForecast("Laser"));
-      else if (substr == "Offset")
-         tasks.push_back(new RecursiveForecast("Offset"));
-      else if (substr == "Duration")
-         tasks.push_back(new RecursiveForecast("Duration"));
-      else if (substr == "Pitch")
-         tasks.push_back(new RecursiveForecast("Pitch"));
-      else if (substr == "PitchBach")
-         tasks.push_back(new RecursiveForecast("PitchBach"));
-      else if (substr == "Bach")
-         tasks.push_back(new RecursiveForecast("Bach"));
-      else if (substr == "Mujoco_Ant_v4")
-         tasks.push_back(new Mujoco_Ant_v4(tpg.params_));
-      else if (substr == "Mujoco_Inverted_Pendulum_v4")
-         tasks.push_back(new Mujoco_Inverted_Pendulum_v4(tpg.params_));
-      else if (substr == "Mujoco_Inverted_Double_Pendulum_v4")
-         tasks.push_back(new Mujoco_Inverted_Double_Pendulum_v4(tpg.params_));
-      else if (substr == "Mujoco_Half_Cheetah_v4")
-         tasks.push_back(new Mujoco_Half_Cheetah_v4(tpg.params_));
-      else if (substr == "Mujoco_Reacher_v4")
-         tasks.push_back(new Mujoco_Reacher_v4(tpg.params_));
-      else if (substr == "Mujoco_Hopper_v4")
-         tasks.push_back(new Mujoco_Hopper_v4(tpg.params_));
-      else if (substr == "Mujoco_Humanoid_Standup_v4")
-         tasks.push_back(new Mujoco_Humanoid_Standup_v4(tpg.params_));
-      else {
-         cerr << "Unrecognised task:" << substr << endl;
-         exit(1);
-      }
+   vector<TaskEnv*> tasks = initializeTasks(tpg);
 
-      if (tasks[tasks.size() - 1]->eval_type_ == "RecursiveForecast") {
-         RecursiveForecast* task =
-             dynamic_cast<RecursiveForecast*>(tasks.back());
-         task->n_prime_ = tpg.GetParam<int>("forecast_prime_steps");
-         task->n_predict_[0] = tpg.GetParam<int>("forecast_horizon_train");
-         task->n_predict_[1] = tpg.GetParam<int>("forecast_horizon_val");
-         task->n_predict_[2] = tpg.GetParam<int>("forecast_horizon_test");
-         task->n_eval_train_ = tpg.GetParam<int>("forecast_n_eval_train");
-         task->n_eval_val_ = tpg.GetParam<int>("forecast_n_eval_val");
-         task->PrepareData(tpg.rngs_[TPG_SEED]);
-         if (tpg.GetParam<int>("forecast_normalize_data")) {
-            task->Normalize();
-         }
-         if (tpg.GetParam<int>("forecast_discrete")) {
-            tpg.params_["n_discrete_action"] =
-                int(task->uniq_discrete_univars_.size());
-         }
-      }
-   }
 
    // Create task indices vector
    vector<int> taskIndices;
@@ -160,8 +83,7 @@ int main(int argc, char** argv) {
       taskIndices.push_back(i);
 
    // Read number of inpts per task from parameters
-   ss.clear();
-   ss.str(tpg.GetParam<string>("n_input"));
+   stringstream ss(tpg.GetParam<string>("n_input"));
    while (ss.good()) {
       string substr;
       getline(ss, substr, ',');
@@ -414,3 +336,42 @@ int main(int argc, char** argv) {
    tasks.clear();
    return 0;
 }
+
+vector<TaskEnv*> initializeTasks(TPG& tpg) {
+   vector<TaskEnv*> tasks;
+   stringstream ss(tpg.GetParam<std::string>("active_tasks"));
+   string taskName;
+   
+   while (std::getline(ss, taskName, ',')) {
+       TaskEnv* task = TaskEnvFactory::createTask(taskName, tpg.params_);
+       if (!task) {
+           std::cerr << "Unrecognized task: " << taskName << std::endl;
+           exit(1);
+       }
+
+       tasks.push_back(task);
+
+      // Configuration specific to this application
+      if (tasks[tasks.size() - 1]->eval_type_ == "RecursiveForecast") {
+      RecursiveForecast* task =
+            dynamic_cast<RecursiveForecast*>(tasks.back());
+      task->n_prime_ = tpg.GetParam<int>("forecast_prime_steps");
+      task->n_predict_[0] = tpg.GetParam<int>("forecast_horizon_train");
+      task->n_predict_[1] = tpg.GetParam<int>("forecast_horizon_val");
+      task->n_predict_[2] = tpg.GetParam<int>("forecast_horizon_test");
+      task->n_eval_train_ = tpg.GetParam<int>("forecast_n_eval_train");
+      task->n_eval_val_ = tpg.GetParam<int>("forecast_n_eval_val");
+      task->PrepareData(tpg.rngs_[TPG_SEED]);
+      if (tpg.GetParam<int>("forecast_normalize_data")) {
+         task->Normalize();
+      }
+      if (tpg.GetParam<int>("forecast_discrete")) {
+         tpg.params_["n_discrete_action"] =
+               int(task->uniq_discrete_univars_.size());
+      }
+   }
+       
+   }
+   return tasks;
+}
+
