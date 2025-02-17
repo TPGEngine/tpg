@@ -2,7 +2,7 @@
 #define evaluators_forecast_h
 
 #include <TPG.h>
-
+#include "RecursiveForecast.h"
 #include "EvalData.h"
 
 void SaveRecursiveForecast(TPG &tpg, EvalData &eval) {

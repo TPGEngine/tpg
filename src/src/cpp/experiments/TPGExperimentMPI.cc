@@ -1,10 +1,9 @@
 #include <RecursiveForecast.h>
 #include <TPG.h>
-#include <api_client.h>
-#include <misc.h>
-#include <phylogenetic_fitness.h>
-#include <tpg_eval_mpi.h>
 #include <TaskEnvFactory.h>
+#include "experiment_runner.h"
+#include "replay_runner.h"
+#include "training_runner.h"
 
 #include <algorithm>
 #include <any>
@@ -12,7 +11,6 @@
 #include <chrono>
 #include <cstdlib>
 
-#include "evaluators_mujoco.h"
 #include "storage/selection/selection_storage.h"
 #include "loggers/selection/selection_logger.h"
 #include "storage/timing/timing_storage.h"
@@ -24,15 +22,6 @@
 #include "storage/removal/removal_storage.h"
 #include "loggers/removal/removal_logger.h"
 
-#define CHECKPOINT_MOD 1000000
-#define PRINT_MOD 1
-// rawfitness,  mean visitedTeams, decisionInstructions
-#define NUM_POINT_AUX_DOUBLE 3
-// task, phase, environment seed, internal test node id
-#define NUM_POINT_AUX_INT 4
-#define MODES_T 1000000000
-
-
 // Helper function
 std::vector<TaskEnv*> initializeTasks(TPG& tpg);
 
@@ -43,39 +32,37 @@ int main(int argc, char** argv) {
    tpg.state_["world_rank"] = world.rank();
    tpg.SetParams(argc, argv);
 
-   APIClient* apiClient = nullptr;
+   // APIClient* apiClient = nullptr;
 
-   if (tpg.GetParam<int>("track_experiments")) {
-      // Only instantiate APIClient if trackExperiment is true
-      apiClient = new APIClient(getenv("COMET_API_KEY"),
-                                tpg.GetParam<std::string>("experiment_key"));
+   // if (tpg.GetParam<int>("track_experiments")) {
+   //    // Only instantiate APIClient if trackExperiment is true
+   //    apiClient = new APIClient(getenv("COMET_API_KEY"),
+   //                              tpg.GetParam<std::string>("experiment_key"));
 
-      // Track run parameters
-      cout << "Tracking experiment parameters" << endl;
-      for (auto& param : tpg.params_) {
-         std::string value;
+   //    // Track run parameters
+   //    cout << "Tracking experiment parameters" << endl;
+   //    for (auto& param : tpg.params_) {
+   //       std::string value;
 
-         if (param.second.type() == typeid(int)) {
-            value = std::to_string(std::any_cast<int>(param.second));
-         } else if (param.second.type() == typeid(double)) {
-            value = std::to_string(std::any_cast<double>(param.second));
-         } else {
-            value = std::any_cast<std::string>(param.second);
-         }
+   //       if (param.second.type() == typeid(int)) {
+   //          value = std::to_string(std::any_cast<int>(param.second));
+   //       } else if (param.second.type() == typeid(double)) {
+   //          value = std::to_string(std::any_cast<double>(param.second));
+   //       } else {
+   //          value = std::any_cast<std::string>(param.second);
+   //       }
 
-         apiClient->LogParameter(param.first, value);
-      }
+   //       apiClient->LogParameter(param.first, value);
+   //    }
 
-      // Add experiment tracking to TPG
-      tpg.InitExperimentTracking(apiClient);
-   }
+   //    // Add experiment tracking to TPG
+   //    tpg.InitExperimentTracking(apiClient);
+   // }
 
    ostringstream os;  // logging
 
-   /****************************************************************************/
-   // Read task sets from parameters and create environments.
+   // Read task sets from parameters and create environments
    vector<TaskEnv*> tasks = initializeTasks(tpg);
-
 
    // Create task indices vector
    vector<int> taskIndices;
@@ -131,30 +118,10 @@ int main(int argc, char** argv) {
       RemovalStorage::instance().init(seed_tpg, pid);
       RemovalLogger removalLogger;
       removalLogger.init();
-
    };
 
    if (world.rank() == 0) {  // Master Process
       string my_string = "MAIN";
-
-      // time logging
-      auto startGen = chrono::system_clock::now();
-      chrono::duration<double> endGen = chrono::system_clock::now() - startGen;
-      auto startGenTeams = chrono::system_clock::now();
-      chrono::duration<double> endGenTeams =
-          chrono::system_clock::now() - startGenTeams;
-      auto startSetEliteTeams = chrono::system_clock::now();
-      chrono::duration<double> endSetEliteTeams;
-      auto startSelTeams = chrono::system_clock::now();
-      chrono::duration<double> endSelTeams;
-      auto startEval = chrono::system_clock::now();
-      chrono::duration<double> endEval;
-      auto startChkp = chrono::system_clock::now();
-      chrono::duration<double> endChkp;
-      auto startMODES = chrono::system_clock::now();
-      chrono::duration<double> endMODES;
-      auto startReport = chrono::system_clock::now();
-      chrono::duration<double> endReport;
 
       // Initialization //////////////////////////////////////////////////////
       if (tpg.GetParam<int>("start_from_checkpoint")) {
@@ -165,164 +132,21 @@ int main(int argc, char** argv) {
          tpg.InitTeams();
       }
 
+      ExperimentRunner* runner = nullptr;
+
       // Main training loop.
       tpg.state_["phase"] = _TRAIN_PHASE;
       if (tpg.GetParam<int>("replay")) {
-         tpg.state_["phase"] = _TEST_PHASE;
-         tpg.state_["active_task"] = tpg.state_["task_to_replay"];
-         tpg.ProcessParams();
-         tpg.MarkEffectiveCode();
-         replayer(tpg, tasks);
+         runner = new ReplayRunner(tpg, tasks);
       } else {
-         while (tpg.GetState("t_current") <=
-                tpg.GetParam<int>("n_generations")) {  
-            tpg.phylo_graph_.clear();  // TODO(skelly): add switch for phylo     
-            // Replacement /////////////////////////////////////////////////
-            if (tpg.GetState("t_current") > tpg.GetState("t_start")) {
-               startGenTeams = chrono::system_clock::now();
-               tpg.GenerateNewTeams();
-               endGenTeams = chrono::system_clock::now() - startGenTeams;
-            }
-
-            // Evaluation //////////////////////////////////////////////////
-            startEval = chrono::system_clock::now();
-            tpg.MarkEffectiveCode();
-            if (tpg.GetState("t_current") > tpg.GetState("t_start") &&
-                tpg.HaveParam("n_sampled_tasks_for_eval")) {
-               // Split tasks into evaluated and estimated
-               vector<int> evalTasks, estTasks;
-               SplitSet(taskIndices, evalTasks, estTasks,
-                        tpg.GetParam<int>("n_sampled_tasks_for_eval"),
-                        tpg.rngs_[TPG_SEED]);
-
-               // Evaluate tasks
-               evaluate_main(tpg, world, tasks, evalTasks);
-
-               // Estimate remaining tasks with phylogeny
-               estimate_main(tpg, tasks, estTasks);
-            } else {
-               // If first generation, evaluate on all tasks
-               evaluate_main(tpg, world, tasks, taskIndices);
-            }
-
-            endEval = chrono::system_clock::now() - startEval;
-
-            // Selection ///////////////////////////////////////////////////
-            startSetEliteTeams = chrono::system_clock::now();
-            tpg.SetEliteTeams(tasks);
-            endSetEliteTeams = chrono::system_clock::now() - startSetEliteTeams;
-            startSelTeams = chrono::system_clock::now();
-            tpg.SelectTeams();
-            endSelTeams = chrono::system_clock::now() - startSelTeams;
-
-            // Accounting and reporting ////////////////////////////////////
-            startReport = chrono::system_clock::now();
-            if (tpg.GetParam<int>("test_mod") != 0 &&
-                tpg.GetState("t_current") % tpg.GetParam<int>("test_mod") ==
-                    0) {
-               // validation
-               tpg.state_["phase"] = _VALIDATION_PHASE;
-               evaluate_main(tpg, world, tasks, taskIndices);
-               tpg.SetEliteTeams(tasks);
-
-               // test
-               tpg.state_["phase"] = _TEST_PHASE;
-               evaluate_main(tpg, world, tasks, taskIndices);
-               tpg.SetEliteTeams(tasks);
-
-               tpg.state_["phase"] = _TRAIN_PHASE;
-            }
-            endReport = chrono::system_clock::now() - startReport;
-
-            /* MODES
-             * *************************************************************/
-            startMODES = chrono::system_clock::now();
-            if (tpg.GetState("t_current") == tpg.GetState("t_start") ||
-                tpg.GetState("t_current") % MODES_T == 0)
-               tpg.updateMODESFilters(true);
-            endMODES = chrono::system_clock::now() - startMODES;
-
-            /* checkpoint
-             * ********************************************************/
-            startChkp = chrono::system_clock::now();
-            if (tpg.GetParam<int>("write_train_checkpoints") > 0 &&
-                tpg.GetState("t_current") %
-                        tpg.GetParam<int>("write_train_checkpoints") ==
-                    0) {
-               // Checkpoint the entire population.
-               tpg.WriteCheckpoint(false);
-            }
-            if (tpg.GetParam<int>("write_phylogeny")) {
-               tpg.printPhyloGraphDot(tpg.GetBestTeam());
-            }
-            endChkp = chrono::system_clock::now() - startChkp;
-            endGen = chrono::system_clock::now() - startGen;
-
-            /* print generation timing
-             * *******************************************/
-            double lost = endGen.count() -
-                          (endEval.count() + endGenTeams.count() +
-                           endSetEliteTeams.count() + endSelTeams.count() +
-                           endChkp.count() + endReport.count());
-
-            if (tpg.GetParam<int>("track_experiments") &&
-                tpg.GetState("t_current") % tpg.GetParam<int>("track_mod") ==
-                    0) {
-               std::string gen = to_string(tpg.GetState("t_current"));
-               apiClient->LogMetric("sec", std::to_string(endGen.count()), "",
-                                    gen);
-               apiClient->LogMetric("evl", std::to_string(endEval.count()), "",
-                                    gen);
-               apiClient->LogMetric("gTms", std::to_string(endGenTeams.count()),
-                                    "", gen);
-               apiClient->LogMetric(
-                   "elTms", std::to_string(endSetEliteTeams.count()), "", gen);
-               apiClient->LogMetric("sTms", std::to_string(endSelTeams.count()),
-                                    "", gen);
-               apiClient->LogMetric("chkp", std::to_string(endChkp.count()), "",
-                                    gen);
-               apiClient->LogMetric("rprt", std::to_string(endReport.count()),
-                                    "", gen);
-               apiClient->LogMetric("MDS", std::to_string(endMODES.count()), "",
-                                    gen);
-               apiClient->LogMetric("lost", std::to_string(lost), "", gen);
-            }
-            TimingMetricsBuilder builder;
-            builder.with_generation(tpg.GetState("t_current"))
-                .with_total_generation_time(endGen.count())
-                .with_evaluation_time(endEval.count())
-                .with_generate_teams_time(endGenTeams.count())
-                .with_set_elite_teams_time(endSetEliteTeams.count())
-                .with_select_teams_time(endSelTeams.count())
-                .with_report_time(endReport.count())
-                .with_modes_time(endMODES.count())
-                .with_lost_time(lost);
-            
-            TimingMetrics metrics = builder.build();
-            EventDispatcher<TimingMetrics>::instance().notify(EventType::TMS, metrics);
-
-            os << setprecision(5) << fixed;
-            os << "gTime t " << tpg.GetState("t_current");
-            os << " sec " << endGen.count();
-            os << " evl " << endEval.count();
-            os << " gTms " << endGenTeams.count();
-            os << " elTms " << endSetEliteTeams.count();
-            os << " sTms " << endSelTeams.count();
-            os << " rprt " << endReport.count();
-            os << " MDS " << endMODES.count();
-            os << " lost " << lost;
-            os << endl;
-            tpg.printOss(os);
-
-            startGen = chrono::system_clock::now();
-            if (tpg.GetState("t_current") % PRINT_MOD == 0)
-               tpg.printOss();   
-            tpg.SanityCheck();
-            tpg.state_["t_current"]++;
-         }
+         runner = new TrainingRunner(tpg, tasks, world, taskIndices);
       }
+
+      runner->run();
+
       for (int ev = 1; ev <= world.size() - 1; ev++) {
          string d = "done";
+         delete runner;
          world.send(ev, 0, d);
       }
       tpg.printOss();
