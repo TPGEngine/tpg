@@ -1,0 +1,52 @@
+workflow:
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - when: manual
+
+stages:
+  - prepare
+  - build
+
+default:
+  image: ubuntu:22.04
+  before_script:
+    # Update package lists and install common dependencies.
+    - apt-get update && apt-get install -y software-properties-common wget xargs python3-pip
+    # Set up GCC 13.
+    - add-apt-repository ppa:ubuntu-toolchain-r/test -y
+    - apt-get update && apt-get install -y gcc-13 g++-13
+    - gcc --version
+    - g++ --version
+
+prepare_environment:
+  stage: prepare
+  script:
+    - echo "Setting up Mujoco environment..."
+    - mkdir -p mujoco
+    - wget https://github.com/google-deepmind/mujoco/releases/download/3.2.2/mujoco-3.2.2-linux-x86_64.tar.gz -O mujoco/mujoco.tar.gz
+    - tar -xzvf mujoco/mujoco.tar.gz -C mujoco
+    - xargs --arg-file=requirements.txt apt-get install -y
+    - apt-get install -y libglfw3 libglfw3-dev libglew-dev
+    - if [ -d "mujoco" ]; then echo "Mujoco folder created:"; ls -l mujoco; else echo "Mujoco folder not created"; fi
+  artifacts:
+    paths:
+      - src/mujoco
+
+build_and_test:
+  stage: build
+  dependencies:
+    - prepare_environment
+  script:
+    - echo "Exporting environment variables for build and test..."
+    - export TPG="$CI_PROJECT_DIR"
+    - export PATH="$PATH:$CI_PROJECT_DIR/src/scripts/plot:$CI_PROJECT_DIR/scripts/run"
+    - export MUJOCO="$CI_PROJECT_DIR/mujoco/mujoco-3.2.2"
+    - export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CI_PROJECT_DIR/mujoco/mujoco-3.2.2/lib"
+    - echo "TPG: $TPG"
+    - echo "MUJOCO: $MUJOCO"
+    - echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
+    - echo "Building project and running tests..."
+    - cd src
+    - cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+    - cmake --build build --config Release
