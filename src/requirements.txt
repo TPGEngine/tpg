@@ -29,3 +29,4 @@ cmake
 python3-pandas
 python3-matplotlib
 python3-venv
+pipx
