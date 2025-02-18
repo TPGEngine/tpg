@@ -4,6 +4,7 @@
 #include "experiment_runner.h"
 #include "replay_runner.h"
 #include "training_runner.h"
+#include <utility>
 
 #include <boost/mpi.hpp>
 
@@ -19,7 +20,7 @@
 #include "loggers/removal/removal_logger.h"
 
 // Helper function
-std::vector<TaskEnv*> initializeTasks(TPG& tpg);
+std::pair<std::vector<TaskEnv*>, std::vector<int>> initializeTasks(TPG& tpg);
 
 int main(int argc, char** argv) {
    mpi::environment env(argc, argv);
@@ -31,26 +32,8 @@ int main(int argc, char** argv) {
    ostringstream os;  // logging
 
    // Read task sets from parameters and create environments
-   vector<TaskEnv*> tasks = initializeTasks(tpg);
+   auto [tasks, taskIndices] = initializeTasks(tpg);
 
-   // Create task indices vector
-   vector<int> taskIndices;
-   for (int i = 0; i < (int)tasks.size(); i++)
-      taskIndices.push_back(i);
-
-   // Read number of inpts per task from parameters
-   stringstream ss(tpg.GetParam<string>("n_input"));
-   while (ss.good()) {
-      string substr;
-      getline(ss, substr, ',');
-      tpg.n_input_.push_back(std::stoi(substr));
-   }
-
-   tpg.state_["n_task"] = (int)tasks.size();
-   tpg.state_["active_task"] = 0;
-   tpg.params_["n_point_aux_double"] = NUM_POINT_AUX_DOUBLE;
-   tpg.params_["n_point_aux_int"] = NUM_POINT_AUX_INT;
-   tpg.state_["phase"] = _TRAIN_PHASE;
    if (world.rank() == 0) {
       os << "world_size " << world.size() << endl;
       os << "n_task " << tpg.GetState("n_task") << endl;
@@ -108,7 +91,7 @@ int main(int argc, char** argv) {
    return 0;
 }
 
-vector<TaskEnv*> initializeTasks(TPG& tpg) {
+std::pair<std::vector<TaskEnv*>, std::vector<int>> initializeTasks(TPG& tpg) {
    vector<TaskEnv*> tasks;
    stringstream ss(tpg.GetParam<std::string>("active_tasks"));
    string taskName;
@@ -143,6 +126,25 @@ vector<TaskEnv*> initializeTasks(TPG& tpg) {
    }
        
    }
-   return tasks;
+
+   // Create task indices vector
+   vector<int> taskIndices;
+   for (int i = 0; i < (int)tasks.size(); i++)
+      taskIndices.push_back(i);
+   ss.clear();
+   ss.str(tpg.GetParam<string>("n_input"));
+   while (ss.good()) {
+      string substr;
+      getline(ss, substr, ',');
+      tpg.n_input_.push_back(std::stoi(substr));
+   }
+
+   tpg.state_["n_task"] = (int)tasks.size();
+   tpg.state_["active_task"] = 0;
+   tpg.params_["n_point_aux_double"] = NUM_POINT_AUX_DOUBLE;
+   tpg.params_["n_point_aux_int"] = NUM_POINT_AUX_INT;
+   tpg.state_["phase"] = _TRAIN_PHASE;      
+
+   return {tasks, taskIndices};
 }
 
