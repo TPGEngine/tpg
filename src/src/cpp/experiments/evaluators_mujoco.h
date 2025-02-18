@@ -16,30 +16,30 @@
 
 /******************************************************************************/
 // MuJoCo data structures
-mjModel* m = NULL;  // MuJoCo model
-mjData* d = NULL;   // MuJoCo data
-mjvCamera cam;      // abstract camera
-mjvOption opt;      // visualization options
-mjvScene scn;       // abstract scene
-mjrContext con;     // custom GPU context
+inline mjModel* m = NULL;  // MuJoCo model
+inline mjData* d = NULL;   // MuJoCo data
+inline mjvCamera cam;      // abstract camera
+inline mjvOption opt;      // visualization options
+inline mjvScene scn;       // abstract scene
+inline mjrContext con;     // custom GPU context
 
 // mouse interaction
-bool button_left = false;
-bool button_middle = false;
-bool button_right = false;
-double lastx = 0;
-double lasty = 0;
+inline bool button_left = false;
+inline bool button_middle = false;
+inline bool button_right = false;
+inline double lastx = 0;
+inline double lasty = 0;
 
 // Add new global variables after existing globals
-OSMesaContext osmesa_ctx = NULL;
-unsigned char* osmesa_buffer = NULL;
-bool headless = false;
-int frame_idx = 0;
+inline OSMesaContext osmesa_ctx = NULL;
+inline unsigned char* osmesa_buffer = NULL;
+inline bool headless = false;
+inline int frame_idx = 0;
 
-GLFWwindow* window = 0;
+inline GLFWwindow* window = 0;
 
 // keyboard callback
-void keyboard(GLFWwindow* window, int key, int scancode, int act, int mods) {
+inline void keyboard(GLFWwindow* window, int key, int scancode, int act, int mods) {
     // backspace: reset simulation
     if (act == GLFW_PRESS && key == GLFW_KEY_BACKSPACE) {
         mj_resetData(m, d);
@@ -48,7 +48,7 @@ void keyboard(GLFWwindow* window, int key, int scancode, int act, int mods) {
 }
 
 // mouse button callback
-void mouse_button(GLFWwindow* window, int button, int act, int mods) {
+inline void mouse_button(GLFWwindow* window, int button, int act, int mods) {
     // update button state
     button_left =
         (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS);
@@ -62,7 +62,7 @@ void mouse_button(GLFWwindow* window, int button, int act, int mods) {
 }
 
 // mouse move callback
-void mouse_move(GLFWwindow* window, double xpos, double ypos) {
+inline void mouse_move(GLFWwindow* window, double xpos, double ypos) {
     // no buttons down: nothing to do
     if (!button_left && !button_middle && !button_right) {
         return;
@@ -97,12 +97,12 @@ void mouse_move(GLFWwindow* window, double xpos, double ypos) {
 }
 
 // scroll callback
-void scroll(GLFWwindow* window, double xoffset, double yoffset) {
+inline void scroll(GLFWwindow* window, double xoffset, double yoffset) {
     // emulate vertical mouse motion = 5% of window height
     mjv_moveCamera(m, mjMOUSE_ZOOM, 0, -0.05 * yoffset, &scn, &cam);
 }
 
-void InitVisualization(mjModel* task_m, mjData* task_d) {
+inline void InitVisualization(mjModel* task_m, mjData* task_d) {
     m = task_m;
     d = task_d;
 
@@ -174,7 +174,7 @@ void InitVisualization(mjModel* task_m, mjData* task_d) {
     }
 }
 
-void StepVisualization(TPG& tpg) {
+inline void StepVisualization(TPG& tpg) {
 if (!headless) {
         // Get framebuffer viewport
         mjrRect viewport = {0, 0, 0, 0};
@@ -232,7 +232,7 @@ if (!headless) {
     }
 }
 
-void MaybeStartAnimation(TPG& tpg, TaskEnv* task, EvalData& eval) {
+inline void MaybeStartAnimation(TPG& tpg, TaskEnv* task, EvalData& eval) {
     if (tpg.GetParam<int>("animate") && eval.episode == 0) {
         MujocoEnv* t = dynamic_cast<MujocoEnv*>(task);
         InitVisualization(t->m_, t->d_);
@@ -251,7 +251,7 @@ void MaybeStartAnimation(TPG& tpg, TaskEnv* task, EvalData& eval) {
     }
 }
 
-void MaybeAnimateStep(TPG& tpg) {
+inline void MaybeAnimateStep(TPG& tpg) {
     if (tpg.GetParam<int>("animate")) {
         StepVisualization(tpg);
         this_thread::sleep_for(std::chrono::milliseconds(25));
@@ -259,7 +259,7 @@ void MaybeAnimateStep(TPG& tpg) {
 }
 
 /******************************************************************************/
-void EvalMujoco(TPG& tpg, EvalData& eval) {
+inline void EvalMujoco(TPG& tpg, EvalData& eval) {
     MujocoEnv* task = dynamic_cast<MujocoEnv*>(eval.task);
     task->reset(tpg.rngs_[AUX_SEED]);
     MaybeStartAnimation(tpg, task, eval);

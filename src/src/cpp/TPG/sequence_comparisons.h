@@ -9,7 +9,7 @@
 #include <boost/math/statistics/bivariate_statistics.hpp>
 
 /******************************************************************************/
-double MeanSquaredError(std::vector<double> &targets,
+inline double MeanSquaredError(std::vector<double> &targets,
                         std::vector<double> &predictions) {
   double err = 0;
   for (size_t i = 0; i < targets.size(); i++) {
@@ -19,7 +19,7 @@ double MeanSquaredError(std::vector<double> &targets,
 }
 
 /******************************************************************************/
-double MeanAbsoluteError(const std::vector<double> &targets,
+inline double MeanAbsoluteError(const std::vector<double> &targets,
                          const std::vector<double> &predictions) {
   double err = 0;
   for (size_t i = 0; i < targets.size(); i++) {
@@ -29,7 +29,7 @@ double MeanAbsoluteError(const std::vector<double> &targets,
 }
 
 /******************************************************************************/
-double PearsonCorrelation(std::vector<double> &targets,
+inline double PearsonCorrelation(std::vector<double> &targets,
                           std::vector<double> &predictions) {
   double cc =
       boost::math::statistics::correlation_coefficient(targets, predictions);
@@ -37,14 +37,14 @@ double PearsonCorrelation(std::vector<double> &targets,
 }
 
 /******************************************************************************/
-double EuclideanDistSqrd(double *x, double *y, int dim) {
+inline double EuclideanDistSqrd(double *x, double *y, int dim) {
   double dist = 0;
   for (int i = 0; i < dim; i++) dist += (x[i] - y[i]) * (x[i] - y[i]);
   return dist;
 }
 
 /******************************************************************************/
-double EuclideanDistSqrd(vector<double> &x, vector<double> &y) {
+inline double EuclideanDistSqrd(vector<double> &x, vector<double> &y) {
   double dist = 0;
   vector<double>::iterator xiter, yiter, enditer;
   for (xiter = x.begin(), yiter = y.begin(), enditer = x.end();
@@ -54,7 +54,7 @@ double EuclideanDistSqrd(vector<double> &x, vector<double> &y) {
 }
 
 /******************************************************************************/
-double EuclideanDistSqrdNorm(vector<double> &x, vector<double> &y) {
+inline double EuclideanDistSqrdNorm(vector<double> &x, vector<double> &y) {
   double dist = 0;
   int numFeatures = 0;
   vector<double>::iterator xiter, yiter, enditer;
@@ -67,7 +67,7 @@ double EuclideanDistSqrdNorm(vector<double> &x, vector<double> &y) {
 }
 
 /******************************************************************************/
-double EuclideanDist(vector<double> &x, vector<double> &y) {
+inline double EuclideanDist(vector<double> &x, vector<double> &y) {
   double dist = 0;
   vector<double>::iterator xiter, yiter, enditer;
   for (xiter = x.begin(), yiter = y.begin(), enditer = x.end();
@@ -78,7 +78,7 @@ double EuclideanDist(vector<double> &x, vector<double> &y) {
 }
 
 /******************************************************************************/
-int hammingDist(vector<int> &x, vector<int> &y) {
+inline int hammingDist(vector<int> &x, vector<int> &y) {
   int dist = 0;
   vector<int>::iterator xiter, yiter, enditer;
   for (xiter = x.begin(), yiter = y.begin(), enditer = x.end();
@@ -88,7 +88,7 @@ int hammingDist(vector<int> &x, vector<int> &y) {
 }
 
 /******************************************************************************/
-double TheilsStatistic(const std::vector<double> &targets,
+inline double TheilsStatistic(const std::vector<double> &targets,
                        const std::vector<double> &predictions) {
   double epsilon = 1e-10;
   double numerator = 0;
@@ -104,7 +104,7 @@ double TheilsStatistic(const std::vector<double> &targets,
 }
 
 /******************************************************************************/
-double Correlation(const std::vector<double> &targets,
+inline double Correlation(const std::vector<double> &targets,
                    const std::vector<double> &predictions) {
   double epsilon = 1e-10;
 
@@ -131,7 +131,7 @@ double Correlation(const std::vector<double> &targets,
   return numerator / denominator;
 }
 
-double calculateTheils_Multi(const std::vector<double> &targets,
+inline double calculateTheils_Multi(const std::vector<double> &targets,
                              const std::vector<double> &predictions) {
   int8_t num_variables = 3;
   size_t num_elements = targets.size() / num_variables;
@@ -173,7 +173,7 @@ double calculateTheils_Multi(const std::vector<double> &targets,
 }
 
 /******************************************************************************/
-double calculateMSE_Multi(const std::vector<double> &targets,
+inline double calculateMSE_Multi(const std::vector<double> &targets,
                           const std::vector<double> &predictions) {
   int8_t num_variables = 3;
   size_t num_elements = targets.size() / num_variables;
@@ -200,7 +200,7 @@ double calculateMSE_Multi(const std::vector<double> &targets,
 }
 
 /******************************************************************************/
-double calculatePearson_Multi(const std::vector<double> &targets,
+inline double calculatePearson_Multi(const std::vector<double> &targets,
                               const std::vector<double> &predictions) {
   int8_t num_variables = 3;
   size_t num_elements = targets.size() / num_variables;

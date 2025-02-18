@@ -12,6 +12,7 @@ class ReplayRunner : public ExperimentRunner {
   void run() override;
 
  private:
+  void initialization();
   void performReplay();
 
   TPG& tpg_;

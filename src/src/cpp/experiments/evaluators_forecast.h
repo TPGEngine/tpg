@@ -5,7 +5,7 @@
 #include "RecursiveForecast.h"
 #include "EvalData.h"
 
-void SaveRecursiveForecast(TPG &tpg, EvalData &eval) {
+inline void SaveRecursiveForecast(TPG &tpg, EvalData &eval) {
     RecursiveForecast *task = dynamic_cast<RecursiveForecast *>(eval.task);  
             auto targ = task->data[eval.sample + 1];
             auto pred = WrapVectorActionSigmoid(eval);
@@ -18,7 +18,7 @@ void SaveRecursiveForecast(TPG &tpg, EvalData &eval) {
             // cerr << "pred " << VectorToString(pred) << endl;
 }
 
-void InitRecusiveForecastObs(TPG &tpg, EvalData &eval) {
+inline void InitRecusiveForecastObs(TPG &tpg, EvalData &eval) {
     eval.sequence_targ.clear();
     eval.sequence_pred.clear();
     eval.obs = new state(tpg.n_input_[tpg.GetState("active_task")]);
@@ -26,7 +26,7 @@ void InitRecusiveForecastObs(TPG &tpg, EvalData &eval) {
     eval.obs_vec.assign(tpg.n_input_[tpg.GetState("active_task")], 1.0);
 }
 
-void PrepareRecursiveForecastObs(TPG &tpg, EvalData &eval, bool prime) {
+inline void PrepareRecursiveForecastObs(TPG &tpg, EvalData &eval, bool prime) {
     RecursiveForecast *task = dynamic_cast<RecursiveForecast *>(eval.task);
     if (prime) {  // prime
             eval.obs->Set(task->data[eval.sample]);
@@ -38,7 +38,7 @@ void PrepareRecursiveForecastObs(TPG &tpg, EvalData &eval, bool prime) {
 }
 
 /******************************************************************************/
-void EvalRecursiveForecast(TPG &tpg, EvalData &eval) {
+inline void EvalRecursiveForecast(TPG &tpg, EvalData &eval) {
     RecursiveForecast *task = dynamic_cast<RecursiveForecast *>(eval.task);
     InitRecusiveForecastObs(tpg, eval);
 
@@ -68,7 +68,7 @@ void EvalRecursiveForecast(TPG &tpg, EvalData &eval) {
     delete eval.obs;
 }
 
-void PrintRecursizeForecast(string filename, int t_start, int n_var,
+inline void PrintRecursizeForecast(string filename, int t_start, int n_var,
                             vector<double> prime_samples,
                             vector<double> targets,
                             vector<double> predictions) {
@@ -102,7 +102,7 @@ void PrintRecursizeForecast(string filename, int t_start, int n_var,
 }
 
 /******************************************************************************/
-void EvalRecursiveForecastViz(TPG &tpg, EvalData &eval,
+inline void EvalRecursiveForecastViz(TPG &tpg, EvalData &eval,
                               vector<map<long, double>> &teamUseMapPerTask,
                               set<team *, teamIdComp> &teams_visitedAllTasks,
                               int &steps) {

@@ -14,6 +14,14 @@ void ReplayRunner::performReplay() {
   replayer(tpg_, tasks_);
 }
 
+void ReplayRunner::initialization() {
+    tpg_.ReadCheckpoint(tpg_.GetParam<int>("checkpoint_in_t"),
+                        tpg_.GetParam<int>("checkpoint_in_phase"), false,
+                        "");                                   
+
+}
+
 void ReplayRunner::run() {
+  initialization();
   performReplay();
 }
