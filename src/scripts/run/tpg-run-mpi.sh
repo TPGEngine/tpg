@@ -33,7 +33,7 @@ done
 if [ $mode -eq 0 ]; then
    echo "Starting run $seed_tpg..."
    mpirun --oversubscribe -np $num_mpi_proc \
-     $TPG/build/release/cpp/experiments/TPGExperimentMPI \
+     $TPG/build/release/experiments/TPGExperimentMPI \
      parameters_file=${parameters_file} \
      seed_tpg=${seed_tpg} pid=$$ \
      1> tpg.$seed_tpg.$$.std \
@@ -127,7 +127,7 @@ if [ $mode -eq 1 ]; then
    
   #  mpirun --oversubscribe -np 1 xterm -hold -e gdb -ex run --args \
    mpirun --oversubscribe -np 1 \
-    $TPG/build/release/cpp/experiments/TPGExperimentMPI \
+    $TPG/build/release/experiments/TPGExperimentMPI \
     parameters_file=${parameters_file} \
     seed_tpg=${seed_tpg} seed_aux=${seed_aux} \
     start_from_checkpoint=1 \
@@ -144,7 +144,7 @@ fi
 # Debug mode ###################################################################
 if [ $mode -eq 2 ]; then
    mpirun --oversubscribe -np $num_mpi_proc xterm -hold -e gdb -ex run \
-     --args $TPG/build/release/cpp/experiments/TPGExperimentMPI \
+     --args $TPG/build/release/experiments/TPGExperimentMPI \
      parameters_file=${parameters_file} \
      seed_tpg=${seed_tpg} n_root=10 n_root_gen=10 \
      1> tpg.$seed_tpg.$$.std \
@@ -157,7 +157,7 @@ if [ $mode -eq 3 ]; then
   mpirun --oversubscribe -np 2 \
   valgrind --leak-check=yes --show-reachable=yes \
   --log-file=vg.%p --suppressions=/usr/share/openmpi/openmpi-valgrind.supp \
-  $TPG/build/release/cpp/experiments/TPGExperimentMPI \
+  $TPG/build/release/experiments/TPGExperimentMPI \
   parameters_file=${parameters_file} \
   seed_tpg=${seed_tpg} n_root=10 n_root_gen=10 n_generations=3 \
   mj_max_timestep=1 mj_n_eval_train=1 \
@@ -175,7 +175,7 @@ if [ $mode -eq 4 ]; then
   pid=$(ls tpg.${seed_tpg}.*.std | cut -d '.' -f 3 | tail -n 1)
   echo "Starting run ${seed_tpg} t ${checkpoint_in_t} pid $pid"
   mpirun --oversubscribe -np $num_mpi_proc \
-    $TPG/build/release/cpp/experiments/TPGExperimentMPI \
+    $TPG/build/release/experiments/TPGExperimentMPI \
     parameters_file=${parameters_file} \
     seed_tpg=${seed_tpg} \
     start_from_checkpoint=1 \
@@ -190,14 +190,14 @@ fi
 
 # # Check for memoy leaks
 # if [ $mode -eq 3 ]; then
-# ##view profile with: google-pprof ../build/release/cpp/experiments/tpgExpBlocks_MPI ./tpg.out_27134   
-# ##google-pprof --gv --focus=genTeams ../build/release/cpp/experiments/TPGExperimentMPI tpg.out_441771
+# ##view profile with: google-pprof ../build/release/experiments/tpgExpBlocks_MPI ./tpg.out_27134   
+# ##google-pprof --gv --focus=genTeams ../build/release/experiments/TPGExperimentMPI tpg.out_441771
 # #LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libprofiler.so CPUPROFILE=tpg.out \
-# #mpirun --oversubscribe -np $num_mpi_proc ../build/release/cpp/experiments/TPGExperimentMPI -w -F $numFitMode -D $dim -p -S -T $tMax -s $seedTPG -g $seedEnv -a $activeTasks -d $taskSwitchMod -f $fitMode 1> tpg.$seedTPG.$$.std 2> tpg.$seedTPG.$$.err &
+# #mpirun --oversubscribe -np $num_mpi_proc ../build/release/experiments/TPGExperimentMPI -w -F $numFitMode -D $dim -p -S -T $tMax -s $seedTPG -g $seedEnv -a $activeTasks -d $taskSwitchMod -f $fitMode 1> tpg.$seedTPG.$$.std 2> tpg.$seedTPG.$$.err &
 
 # #valgrind
 # mpirun --oversubscribe -np $num_mpi_proc valgrind --leak-check=yes --show-reachable=yes --log-file=vg.%p --suppressions=/usr/share/openmpi/openmpi-valgrind.supp \
-# ../build/release/cpp/experiments/TPGExperimentMPI -s $seed 1> tpg.$seed.$$.std 2> tpg.$seed.$$.err &
+# ../build/release/experiments/TPGExperimentMPI -s $seed 1> tpg.$seed.$$.std 2> tpg.$seed.$$.err &
 # fi
 
 # #if [ $mode -eq 4 ]; then
@@ -208,6 +208,6 @@ fi
 # #echo "pid $pid"
 # #echo "Starting run seedTPG $seedTPG t $t"
 # #LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libprofiler.so CPUPROFILE=tpg.out \
-# #mpirun --oversubscribe -np $num_mpi_proc ../build/release/cpp/experiments/TPGExperimentMPI -s $seedTPG 1>> tpg.$seedTPG.$pid.std 2>> tpg.$seedTPG.$pid.err &
-# ##mpirun --oversubscribe -np $num_mpi_proc xterm -hold -e gdb -ex run --args ../build/release/cpp/experiments/TPGExperimentMPI -C 0 -t $t -w -F $numFitMode -D $dim -p -S -T $tMax -s $seedTPG -g $seedEnv -d $taskSwitchMod -a $activeTasks 1>> tpg.$seedTPG.$pid.std 2>> tpg.$seedTPG.$pid.err &
+# #mpirun --oversubscribe -np $num_mpi_proc ../build/release/experiments/TPGExperimentMPI -s $seedTPG 1>> tpg.$seedTPG.$pid.std 2>> tpg.$seedTPG.$pid.err &
+# ##mpirun --oversubscribe -np $num_mpi_proc xterm -hold -e gdb -ex run --args ../build/release/experiments/TPGExperimentMPI -C 0 -t $t -w -F $numFitMode -D $dim -p -S -T $tMax -s $seedTPG -g $seedEnv -d $taskSwitchMod -a $activeTasks 1>> tpg.$seedTPG.$pid.std 2>> tpg.$seedTPG.$pid.err &
 # #fi

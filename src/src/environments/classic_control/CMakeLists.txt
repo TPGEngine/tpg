@@ -7,7 +7,7 @@ file(GLOB CLASSIC_CONTROL_SOURCES
 include_directories(
     PUBLIC # Make these includes PUBLIC for dependent projects
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../TPG
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../engine
     /usr/include/eigen3
     /usr/include  # General include path
 )

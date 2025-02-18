@@ -2,7 +2,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>
 
-#include "../src/cpp/environments/mujoco/Mujoco_Half_Cheetah_v4.h"
+#include "../src/environments/mujoco/Mujoco_Half_Cheetah_v4.h"
 #include <random>
 #include <TPG.h>
 #include <instruction.h>
