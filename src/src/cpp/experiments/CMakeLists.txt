@@ -15,6 +15,11 @@ endif()
 file(GLOB EXPERIMENTS_SOURCES
     *.cc
     *.h
+    ../environments/*.cc
+    ../environments/*.h
+    ../environments/mujoco/MujocoEnv.h
+    runners/*.cc
+    runners/*.h
 )
 
 # Create the TPGExperimentMPI executable
@@ -24,6 +29,8 @@ add_executable(TPGExperimentMPI ${EXPERIMENTS_SOURCES})
 target_include_directories(TPGExperimentMPI
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/runners
+    ${CMAKE_CURRENT_SOURCE_DIR}/evaluators
     ${CMAKE_CURRENT_SOURCE_DIR}/../TPG
     ${CMAKE_CURRENT_SOURCE_DIR}/../environments
     ${CMAKE_CURRENT_SOURCE_DIR}/../environments/classic_control

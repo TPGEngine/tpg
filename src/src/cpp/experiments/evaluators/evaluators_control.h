@@ -6,7 +6,7 @@
 #include "EvalData.h"
 
 /******************************************************************************/
-void MaybeStartAnimation(TPG &tpg) {
+inline void MaybeStartAnimation(TPG &tpg) {
 #if !defined(CCANADA) && !defined(HPCC)
     if (tpg.GetParam<int>("animate")) {
         double _width = 1200;
@@ -25,7 +25,7 @@ void MaybeStartAnimation(TPG &tpg) {
 }
 
 /******************************************************************************/
-void MaybeAnimateStep(EvalData &eval) {
+inline void MaybeAnimateStep(EvalData &eval) {
     ClassicControlEnv *task = dynamic_cast<ClassicControlEnv *>(eval.task);
 #if !defined(CCANADA)
     if (eval.animate) {
@@ -42,7 +42,7 @@ void MaybeAnimateStep(EvalData &eval) {
 }
 
 /******************************************************************************/
-void EvalControl(TPG &tpg, EvalData &eval) {
+inline void EvalControl(TPG &tpg, EvalData &eval) {
     MaybeStartAnimation(tpg);
     eval.task->Reset(tpg.rngs_[AUX_SEED]);
     eval.n_prediction = 0;
@@ -67,7 +67,7 @@ void EvalControl(TPG &tpg, EvalData &eval) {
 }
 
 /******************************************************************************/
-void EvalControlViz(TPG &tpg, EvalData &eval,
+inline void EvalControlViz(TPG &tpg, EvalData &eval,
                     vector<map<long, double>> &teamUseMapPerTask,
                     set<team *, teamIdComp> &teams_visitedAllTasks,
                     int &steps) {
