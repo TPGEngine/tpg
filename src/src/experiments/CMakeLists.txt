@@ -31,7 +31,7 @@ target_include_directories(TPGExperimentMPI
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/runners
     ${CMAKE_CURRENT_SOURCE_DIR}/evaluators
-    ${CMAKE_CURRENT_SOURCE_DIR}/../TPG
+    ${CMAKE_CURRENT_SOURCE_DIR}/../engine
     ${CMAKE_CURRENT_SOURCE_DIR}/../environments
     ${CMAKE_CURRENT_SOURCE_DIR}/../environments/classic_control
     ${CMAKE_CURRENT_SOURCE_DIR}/../environments/mujoco
@@ -46,7 +46,7 @@ target_include_directories(TPGExperimentMPI
 # Link libraries
 target_link_libraries(TPGExperimentMPI
     PRIVATE
-    TPG
+    engine
     MPI::MPI_CXX
     Boost::thread
     Boost::system
@@ -68,4 +68,4 @@ target_link_libraries(TPGExperimentMPI
 
 # Set output directory for the executable to match the expected SCons path
 set_target_properties(TPGExperimentMPI PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/release/cpp/experiments") 
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/release/experiments") 

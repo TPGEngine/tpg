@@ -44,23 +44,23 @@ endforeach()
 
 # --- Library Target (tpg) ---
 file(GLOB TPG_SOURCES 
-  "../src/cpp/logging/metrics/mta/*.h"
-  "../src/cpp/logging/metrics/mta/*.cc"
-  "../src/cpp/TPG/*.h"
-  "../src/cpp/TPG/*.cc"
-  "../src/cpp/experiments/api_client.cc"
-  "../src/cpp/experiments/api_client.h"
+  "../src/logging/metrics/mta/*.h"
+  "../src/logging/metrics/mta/*.cc"
+  "../src/engine/*.h"
+  "../src/engine/*.cc"
+  "../src/experiments/api_client.cc"
+  "../src/experiments/api_client.h"
 )
-list(REMOVE_ITEM TPG_SOURCES "../src/cpp/experiments/TPGExperimentMPI.cc")
+list(REMOVE_ITEM TPG_SOURCES "../src/experiments/TPGExperimentMPI.cc")
 add_library(tpg ${TPG_SOURCES})
 
 # Combine include directories for tpg
 target_include_directories(tpg PUBLIC 
   ../src
-  ../src/cpp/TPG
-  ../src/cpp/environments
-  ../src/cpp/experiments
-  ../src/cpp/logging
+  ../src/engine
+  ../src/environments
+  ../src/experiments
+  ../src/logging
   ${EIGEN3_INCLUDE_DIR}
 )
 
@@ -78,7 +78,7 @@ endif()
 include_directories(${MUJOCO_INCLUDE})
 
 # Additional include for MuJoCo environments
-include_directories(../src/cpp/environments/mujoco)
+include_directories(../src/environments/mujoco)
 
 # --- Link Libraries to Executables ---
 

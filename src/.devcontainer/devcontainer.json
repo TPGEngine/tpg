@@ -7,7 +7,7 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": ["ms-vscode.cpptools", "mechatroner.rainbow-csv"]
+      "extensions": ["ms-vscode.cpptools", "mechatroner.rainbow-csv", "ms-python.python"]
     }
   },
   "mounts": [

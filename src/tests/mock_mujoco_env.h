@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "../src/cpp/environments/mujoco/MujocoEnv.h"
+#include "../src/environments/mujoco/MujocoEnv.h"
 
 class MockMujocoEnv : public MujocoEnv {
    public:

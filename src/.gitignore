@@ -49,3 +49,10 @@ MUJOCO_LOG.TXT
 
 # Images
 *.png
+
+# Python
+venv/
+__pycache__/
+
+# Pip files
+*.egg-info/
