@@ -48,46 +48,6 @@ if [ $mode -eq 1 ]; then
    if ls replay/frames/* 1> /dev/null 2>&1; then rm replay/frames/*; fi
    if ls replay/graphs/* 1> /dev/null 2>&1; then rm replay/graphs/*; fi
    if ls replay/graphs/* 1> /dev/null 2>&1; then rm replay/graphs/*; fi
-  
-  #  # Get fitness of best team
-  #  best_fitness=$(grep setElTmsMTA  tpg.${seed_tpg}.*.std | \
-  #    grep " fm 0 " | \
-  #    grep " phs $phase " | \
-  #    awk -F"mnOut" '{print $2}' | \
-  #    awk -F "p${phase}t${task_to_replay}a0 " '{print $2}' | \
-  #    awk '{print $1}' | \
-  #    sort -n | \
-  #    uniq | \
-  #    tail -n 1)
-
-  # if (( $(echo "$best_fitness > $min_fitness" |bc -l) )); then 
- 
-  # # Get generation of best team
-  #  best_fitness_t=$(grep setElTmsMTA tpg.${seed_tpg}.*.std | \
-  #    grep " fm 0 " | \
-  #    grep "p${phase}t${task_to_replay}a0 ${best_fitness} " | \
-  #    grep " phs $phase " | \
-  #    head -n 1 | \
-  #    awk -F" t " '{print $2}' | \
-  #    awk '{print $1}')  
-
-  #  # Get phase and generation of checkpoint file
-  #  checkpoint_in_phase=$(grep -iRl end \
-  #   checkpoints/cp.*.${seed_tpg}.*.rslt | \
-  #   cut -d '.' -f 4 | sort -n | tail -n 1)
-  #  checkpoint_in_t=$(grep -iRl end \
-  #   checkpoints/cp.*.${seed_tpg}.${checkpoint_in_phase}.rslt | \
-  #   cut -d '.' -f 2 | sort -n | tail -n 1) 
-
-  #  # Get id of best team
-  #  tm_id=$(grep "setElTmsMTA" tpg.${seed_tpg}.*.std | \
-  #    grep " fm 0 " | \
-  #    grep "p${phase}t${task_to_replay}a0 ${best_fitness} " | \
-  #    grep " phs $phase " | \
-  #    grep " t $best_fitness_t " | \
-  #    head -n 1 | \
-  #    awk -F"id" '{print $2}' | \
-  #    awk '{print $1}')  
 
   # Get fitness of best team
    best_fitness=$(grep setElTmsMTA  tpg.${seed_tpg}.*.std | \

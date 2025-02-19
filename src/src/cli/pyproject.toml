@@ -11,6 +11,7 @@ description = "A CLI application that runs experiments for Tangled Program Graph
 readme = "README.md"
 dependencies = [
     "click",
+    "pandas"
 ]
 
 [project.scripts]
