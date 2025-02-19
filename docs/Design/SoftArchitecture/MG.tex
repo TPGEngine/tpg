@@ -160,7 +160,7 @@ change.
   \item[\refstepcounter{acnum} \actheacnum \label{acOutput1}:] Support for additional MuJoCo environments.
   \item[\refstepcounter{acnum} \actheacnum \label{acOutput2}:] Simulation support for all types of operating systems.
   \item[\refstepcounter{acnum} \actheacnum \label{acOutput3}:] Comprehensive logging across all of TPG's components.
-  \item[\refstepcounter{acnum} \actheacnum \label{acVerif1}:] Extensive testing and checks for newly published code.
+  \item[\refstepcounter{acnum} \actheacnum \label{acVerify1}:] Extensive testing and checks for newly published code.
   \item[\refstepcounter{acnum} \actheacnum \label{acVerify2}:] Refactoring old and unstructured components.
   \item[\refstepcounter{acnum} \actheacnum \label{acInput}:] Format of inputting experimental parameters.
   \item[\refstepcounter{acnum} \actheacnum \label{acControl}:] Shift to a different dependency management tool such as CMake.
@@ -343,14 +343,14 @@ requirements and between the modules and the anticipated changes.
 \toprule
 \textbf{Req.} & \textbf{Modules}\\
 \midrule
-FR-1 & \mref{mMuJoCo}\\
-FR-2 & \mref{mVisualization}\\
-FR-3 & \mref{mLogging}\\
-FR-4 & \mref{mHH}, \mref{mLogging}, \mref{mExperiment}\\
-FR-5 & \mref{mClassicControl}, \mref{mMuJoCo}, \mref{mLogging}, \mref{mExperiment}\\
-FR-6 & \mref{mClassicControl}, \mref{mMuJoCo}, \mref{mVisualization}, \mref{mLogging}, \mref{mExperiment}\\
-FR-7 & \mref{mLogging}, \mref{mExperiment}\\
-FR-8 & \mref{mClassicControl}, \mref{mMuJoCo}, \mref{mVisualization}\\
+\href{https://github.com/TPGEngine/tpg/blob/main/docs/SRS/SRS.pdf}{FR-1} & \mref{mMuJoCo}\\
+\href{https://github.com/TPGEngine/tpg/blob/main/docs/SRS/SRS.pdf}{FR-2} & \mref{mVisualization}\\
+\href{https://github.com/TPGEngine/tpg/blob/main/docs/SRS/SRS.pdf}{FR-3} & \mref{mLogging}\\
+\href{https://github.com/TPGEngine/tpg/blob/main/docs/SRS/SRS.pdf}{FR-4} & \mref{mHH}, \mref{mLogging}, \mref{mExperiment}\\
+\href{https://github.com/TPGEngine/tpg/blob/main/docs/SRS/SRS.pdf}{FR-5} & \mref{mClassicControl}, \mref{mMuJoCo}, \mref{mLogging}, \mref{mExperiment}\\
+\href{https://github.com/TPGEngine/tpg/blob/main/docs/SRS/SRS.pdf}{FR-6} & \mref{mClassicControl}, \mref{mMuJoCo}, \mref{mVisualization}, \mref{mLogging}, \mref{mExperiment}\\
+\href{https://github.com/TPGEngine/tpg/blob/main/docs/SRS/SRS.pdf}{FR-7} & \mref{mLogging}, \mref{mExperiment}\\
+\href{https://github.com/TPGEngine/tpg/blob/main/docs/SRS/SRS.pdf}{FR-8} & \mref{mClassicControl}, \mref{mMuJoCo}, \mref{mVisualization}\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Requirements and Modules}
@@ -365,25 +365,25 @@ FR-8 & \mref{mClassicControl}, \mref{mMuJoCo}, \mref{mVisualization}\\
   & Modules & Module Numbers
   \\
   \midrule
-  AC1
+  \acref{acOutput1}
   & MuJoCo & \mref{mMuJoCo}
   \\
-  AC2
+  \acref{acOutput2}
   & Hardware, Visualization & \mref{mHH}, \mref{mVisualization}
   \\
-  AC3
+  \acref{acOutput3}
   & Hardware, Logging & \mref{mHH}, \mref{mLogging}
   \\
-  AC4
+  \acref{acVerify1}
   & Classic Control, MuJoCo, TPG Experiment  & \mref{mClassicControl}, \mref{mMuJoCo}, \mref{mExperiment}
   \\
-  AC5
+  \acref{acVerify2}
   & Classic Control, TPG Experiment  & \mref{mClassicControl}, \mref{mExperiment}
   \\
-  AC6
+  \acref{acInput}
   & Hardware, Classic Control, MuJoCo & \mref{mHH}, \mref{mClassicControl}, \mref{mMuJoCo}
   \\
-  AC7
+  \acref{acControl}
   & Visualization, Logging, TPG Experiment & \mref{mVisualization}, \mref{mLogging}, \mref{mExperiment}
   \\
   \bottomrule
