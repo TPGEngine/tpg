@@ -16,7 +16,7 @@
 
 TaskEnv* TaskEnvFactory::createTask(const std::string& name, std::unordered_map<std::string, std::any>& params) {
     static const std::map<std::string, CreatorFunc> registry = {
-        {"CartPole", [](std::unordered_map<std::string, std::any>&) { return new CartPole(); }},
+        {"Cartpole", [](std::unordered_map<std::string, std::any>&) { return new CartPole(); }},
         {"Acrobot", [](std::unordered_map<std::string, std::any>&) { return new Acrobot(); }},
         {"CartCentering", [](std::unordered_map<std::string, std::any>&) { return new CartCentering(); }},
         {"Pendulum", [](std::unordered_map<std::string, std::any>&) { return new Pendulum(); }},

@@ -103,6 +103,8 @@ def replay(ctx: click.Context, env: str, seed: int, seed_aux: int):
 
     stdout_file = f"tpg.{seed}.{seed_aux}.replay.std"
     stderr_file = f"tpg.{seed}.{seed_aux}.replay.err"
+
+    click.echo(f"Fitness: {metrics['best_fitness']}, Generation: {metrics['generation']}, Team ID: {metrics['team_id']}")
     
     click.echo(f"Launching MPI run with command:\n{' '.join(cmd)}")
     click.echo(f"Output will be written to {stdout_file} (stdout) and {stderr_file} (stderr).")
