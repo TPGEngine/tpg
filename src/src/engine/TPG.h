@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <iomanip>
 #include <random>
+#include <yaml-cpp/yaml.h>
 
 #include "RegisterMachine.h"
 #include "api_client.h"
@@ -200,8 +201,35 @@ class TPG {
     std::unordered_map<std::string, std::any> params_;
     template <typename T>
     T GetParam(string p) {
+        std::cout << "Retrieving Key: " << p 
+        << " | Expected Type: " << typeid(T).name()  // Print expected type
+        << " | Stored Type: " << params_[p].type().name()  // Print stored type
+        << std::endl;
         return std::any_cast<T>(params_[p]);
     }
+    // template<typename T>
+    // T GetParam(const std::string& key) {
+    //     if (!params_.count(key)) {
+    //         throw std::runtime_error("Key not found: " + key);
+    //     }
+    
+    //     try {
+    //         // std::cout << "Fetching key: " << key 
+    //         //           << " (Expected type: " << typeid(T).name() 
+    //         //           << ", Actual type: " << params_.at(key).type().name() << ")" 
+    //         //           << std::endl;
+    
+    //         return std::any_cast<T>(params_.at(key));  // This is where it fails
+    //     } catch (const std::bad_any_cast& e) {
+    //         std::cerr << "ERROR: Bad any_cast for key: " << key
+    //                   << " (Expected type: " << typeid(T).name()
+    //                   << ", Actual type: " << params_.at(key).type().name() << ")"
+    //                   << std::endl;
+    //         throw;
+    //     }
+    // }
+    
+
     bool HaveParam(string p) { return params_.find(p) != params_.end(); }
     std::unordered_map<std::string, int> state_;
     int GetState(string p) { return state_[p]; }

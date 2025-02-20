@@ -146,6 +146,7 @@ class instruction {
    // example: op_signatures_[SCALAR_COS_OP_] = {kScalarType_, kScalarType_};
    static vector<vector<size_t> > op_signatures_;
 
+   static int GetOpCodeFromName(const std::string& name);
    static vector<std::string> op_names_;
 
    string ToString();

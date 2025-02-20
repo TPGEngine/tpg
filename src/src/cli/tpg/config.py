@@ -9,7 +9,8 @@ def create_hyper_param_mapping(tpg_env_var):
         "reacher": os.path.join(tpg_env_var, "configs", "2025-02-03-MuJoco_Reacher.txt"),
         "humanoid_standup": os.path.join(tpg_env_var, "configs", "2025-02-05_TPG_MuJoco_Humanoid_Standup.txt"),
         "inverted_double_pendulum": os.path.join(tpg_env_var, "configs", "2025-02-05_TPG_MuJoco_Inverted_Double_Pendulum.txt"),
-        "inverted_pendulum": os.path.join(tpg_env_var, "configs", "2025-02-05_TPG_MuJoco_Inverted_Pendulum.txt"),
+        # "inverted_pendulum": os.path.join(tpg_env_var, "configs", "2025-02-05_TPG_MuJoco_Inverted_Pendulum.txt"),
+        "inverted_pendulum": os.path.join(tpg_env_var, "configs", "MuJoCo_Inverted_Pendulum.yaml"),
         "mujoco_multi_task": os.path.join(tpg_env_var, "configs", "2025-02-05_TPG_MuJoco_MultiTask.txt"),
     }
 

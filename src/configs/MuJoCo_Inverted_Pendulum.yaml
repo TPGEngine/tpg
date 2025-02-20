@@ -1,0 +1,171 @@
+# Experiment Tracking Parameters
+experiment_tracking:
+  track_experiments: 0  # Whether to track experiments in comet
+  experiment_key: "7ac170bcf3e64f6fb3a29646c316ba7e"  # Comet experiment key
+  track_mod: 20  # How frequently to track experiment metrics (in generations)
+
+# Experiment Type Parameters
+experiment_type:
+  replay: 0  # Re-evaluate an individual from a checkpoint file
+  id_to_replay: 0  # ID of the individual to replay from checkpoint file
+  task_to_replay: 0  # Index in active_tasks list starting at 0
+  animate: 0  # Re-evaluate an individual from a checkpoint file and animate behaviour, if available
+
+# GA Parameters
+ga_parameters:
+  start_from_checkpoint: 0  # Whether to start from a checkpoint file
+  checkpoint_in_t: 0  # Generation of the checkpoint file
+  checkpoint_in_phase: 2  # 0: Training, 1: Validation, 2: Test
+  save_champ_checkpoints: 0  # 0: Training phase, 1: Validation phase, 2: Test phase
+  write_train_checkpoints: 1  # Whether to save training checkpoints at each generation
+  write_phylogeny: 0  # Save phylogenetic data
+  test_mod: 0  # How frequently to run test procedure
+  n_fit_mode: 1  # Number of fitness functions available
+  fit_mode: 0  # Which fitness function to use, range is [0, n_fit_mode)
+  seed_tpg: 42  # Main seed for evolution
+  seed_aux: 42  # Auxiliary seed, e.g. for simulators
+  n_generations: 150  # Max number of generations
+  n_root: 1000  # Number of root teams (agents) to keep each generation
+  n_root_gen: 100  # Number of new root teams to create each generation
+  parent_select_roots_only: 1  # Whether to constrain parent selection to root teams
+  tournament_size: 3  # Tournament size for selection
+  keep_old_outcomes: 1  # Whether to keep evaluation outcome over time or re-evaluate each generation
+  seed_with_episode_number: 1  # Whether to seed the environment with the episode number
+
+# Team Parameters
+team_parameters:
+  max_initial_team_size: 1  # Initial team size
+  max_team_size: 10  # Max team size
+  pmx: 0.5  # Team variation: probability of team crossover
+  pmx_p: 0.5  # Team variation: probability of team crossover adding each parent prog to child
+  pmd: 0.25  # Team variation: probability of deleting program from team
+  pma: 0.2  # Team variation: probability of adding program to team
+  pmw: 0.25  # Team variation: probability of mutating program execution order
+
+# Program Parameters
+program_parameters:
+  p_clone_program: 1.0  # Probability of cloning program before modifying
+  pmn: 0.25  # Probability of mutating a program's action pointer
+  p_atomic: 0.995  # Probability of selecting atomic action when changing action pointer
+  p_instructions_mutate: 0.25  # Probability of changing a random instruction
+  p_instructions_swap: 0.25  # Probability of swapping the position of two instructions
+  p_instructions_delete: 0.25  # Probability of deleting an instruction
+  p_instructions_add: 0.2  # Probability of adding an instruction
+  p_memory_mu_const: 0.5  # Probability of mutating constants
+  stateful: 1  # Use stateful programs
+  skip_introns: 1  # Whether to skip introns during evaluation
+  continuous_output: 2  # Enable continuous outputs: 0 (disabled), 1 (scalar), 2 (vector), 3 (matrix)
+  n_input: "0"  # Number of inputs (features/state variables)
+  max_initial_prog_size: 10  # Max initial program size
+  max_prog_size: 10  # Max program size
+  n_memories: 8  # Number of memory indices
+  memory_size: 4  # Dimensionality for vector & matrix memory
+  min_memory_size: 2  # Minimum memory size
+  max_memory_size: 32  # Maximum memory size
+  observation_buff_size: 1  # Observations are stored in a buffer with this time window
+
+# General Task Parameters
+general_task_parameters:
+  active_tasks: "Mujoco_Inverted_Pendulum_v4"  # Which tasks are active
+  partially_observable: 0  # Use the partially-observable version of a task, if available
+  n_discrete_action: 0  # Number of discrete actions
+
+# Parameters Specific to Recursive Forecasting
+recursive_forecasting:
+  forecast_fitness: "mse"  # Fitness function: "mse", "correlation", "theils", "pearson"
+  forecast_discrete: 0  # Whether to use discrete actions for forecasting
+  forecast_normalize_data: 1  # Whether to normalize forecasting dataset in [0,1]
+  forecast_prime_steps: 50  # Number of prime steps
+  forecast_horizon_train: 50  # Forecasting horizon during training
+  forecast_horizon_val: 100  # Forecasting horizon during validation
+  forecast_horizon_test: 100  # Forecasting horizon during testing
+  forecast_n_eval_train: 20  # Number of evaluations for training
+  forecast_n_eval_val: 10  # Number of evaluations for validation
+
+# Parameters Specific to Mujoco
+mujoco_parameters:
+  mj_model_path: "$TPG/datasets/mujoco_models/"  # Model path
+  mj_max_timestep: 1000  # Max simulation time steps
+  mj_reward_control_weight: 0.0  # Reward control weight
+  mj_n_eval_train: 100  # Number of training evaluations
+  mj_n_eval_validation: 0  # Number of validation evaluations
+  mj_n_eval_test: 1  # Number of test evaluations
+
+# Operations (uncomment to activate)
+operations:
+  scalar:
+    - SCALAR_SUM_OP
+    - SCALAR_DIFF_OP
+    - SCALAR_PRODUCT_OP
+    - SCALAR_DIVISION_OP
+    - SCALAR_ABS_OP
+    - SCALAR_RECIPROCAL_OP
+    - SCALAR_SIN_OP
+    - SCALAR_COS_OP
+    - SCALAR_TAN_OP
+    - SCALAR_ARCSIN_OP
+    - SCALAR_ARCCOS_OP
+    - SCALAR_ARCTAN_OP
+    - SCALAR_EXP_OP
+    - SCALAR_LOG_OP
+    - SCALAR_HEAVYSIDE_OP
+    - SCALAR_CONDITIONAL_OP
+    - SCALAR_POW_OP
+    - SCALAR_SQR_OP
+    - SCALAR_CUBE_OP
+    - SCALAR_TANH_OP
+    - SCALAR_SQRT_OP
+    - SCALAR_CONST_SET_OP
+    - SCALAR_MIN_OP
+    - SCALAR_MAX_OP
+  vector:
+    - VECTOR_HEAVYSIDE_OP
+    - MATRIX_HEAVYSIDE_OP
+    - SCALAR_VECTOR_PRODUCT_OP
+    - SCALAR_BROADCAST_OP
+    - VECTOR_RECIPROCAL_OP
+    - VECTOR_NORM_OP
+    - VECTOR_ABS_OP
+    - VECTOR_SUM_OP
+    - VECTOR_DIFF_OP
+    - VECTOR_PRODUCT_OP
+    - VECTOR_DIVISION_OP
+    - VECTOR_INNER_PRODUCT_OP
+    - VECTOR_MIN_OP
+    - VECTOR_MAX_OP
+    - VECTOR_MEAN_OP
+    - VECTOR_ST_DEV_OP
+    - VECTOR_CONST_SET_OP
+    - SCALAR_VECTOR_ASSIGN_OP
+  matrix:
+    - VECTOR_OUTER_PRODUCT_OP
+    - SCALAR_MATRIX_PRODUCT_OP
+    - MATRIX_RECIPROCAL_OP
+    - MATRIX_VECTOR_PRODUCT_OP
+    - VECTOR_COLUMN_BROADCAST_OP
+    - VECTOR_ROW_BROADCAST_OP
+    - MATRIX_NORM_OP
+    - MATRIX_COLUMN_NORM_OP
+    - MATRIX_ROW_NORM_OP
+    - MATRIX_TRANSPOSE_OP
+    - MATRIX_ABS_OP
+    - MATRIX_SUM_OP
+    - MATRIX_DIFF_OP
+    - MATRIX_PRODUCT_OP
+    - MATRIX_DIVISION_OP
+    - MATRIX_MATRIX_PRODUCT_OP
+    - MATRIX_MIN_OP
+    - MATRIX_MAX_OP
+    - MATRIX_MEAN_OP
+    - MATRIX_ROW_MEAN_OP
+    - MATRIX_ROW_ST_DEV_OP
+    - MATRIX_ST_DEV_OP
+    - MATRIX_CONST_SET_OP
+    - SCALAR_MATRIX_ASSIGN_OP
+  noise:
+    # - SCALAR_UNIFORM_SET_OP
+    - SCALAR_GAUSSIAN_SET_OP
+    # - VECTOR_UNIFORM_SET_OP
+    - VECTOR_GAUSSIAN_SET_OP
+    # - MATRIX_UNIFORM_SET_OP
+    - MATRIX_GAUSSIAN_SET_OP

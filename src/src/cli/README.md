@@ -55,6 +55,8 @@ Redirect standard output and error to files named in the format:
 - tpg.<seed>.<pid>.std
 - tpg.<seed>.<pid>.err
 
+Environment mappings and examples can be found in `$TPG/src/cli/tpg/config.py`.
+
 **Replay the Best Policy:**
 
 ```bash
@@ -88,3 +90,7 @@ Description:
 #### Options:
 - --seed (int): Random seed for the replay (default: 42).
 - --seed-aux (int): An auxiliary seed (default: 42) used in the replay; its exact role is determined by the underlying experiment logic.
+
+## Troubleshooting
+If attempting to execute a tpg command leads you to an error such as: `Command 'tpg' not found`. Ensure your PATH
+environment variables are up to date. You can do this by running `pipx ensurepath` and restarting your terminal. 
