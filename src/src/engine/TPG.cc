@@ -376,22 +376,39 @@ void TPG::printOss(ostringstream& o) {
 //       }
 //       // otherwise we store the parameter as an integer
 //       else {
+//          std::cout << "Outcome: " << outcome_fields[0] << " Val: " << outcome_fields[1] << std::endl;
 //          params[outcome_fields[0]] = stringToInt(outcome_fields[1]);
 //       }
 //    }
 // }
 
+
+// Load operations - Scalar, Vector, Matrix
+// if (config["operations"]) {
+//    for (const std::string opType : {"scalar", "vector", "matrix"}) {
+//       if (config["operations"][opType]) {
+//          for (const auto& op : config["operations"][opType]) {
+//    int opCode = instruction::GetOpCodeFromName(item.as<std::string>());
+//    if (opCode != -1) {
+//       _ops[opCode] = true;
+//       params[op.as<std::string>()] = 1;
+//    } else {
+//       std::cerr << "Warning: Unknown operation '" << op.as<std::string>() << "' in YAML file." << std::endl;
+//    }
+//       }
+//    }
+
+// }
+// }
+
+
 void TPG::ReadParameters(std::string file_name, std::unordered_map<std::string, std::any>& params) {
    YAML::Node config = YAML::LoadFile(file_name);
+
 
    // Load standard parameters
    for (const auto& entry : config) {
        string category = entry.first.as<string>();
-
-       if (category == "operations") {
-         continue;
-       }
-       
        if (entry.second.IsMap()) {
            for (const auto& param : entry.second) {
                string key = param.first.as<string>(); // Flatten key
@@ -403,29 +420,31 @@ void TPG::ReadParameters(std::string file_name, std::unordered_map<std::string, 
                     params[key] = value;
                  } else if (value.find('.') != string::npos)
                      params[key] = stringToDouble(value);  // Store as double if it has a decimal
-                  else if (std::all_of(value.begin(),value.end(), ::isdigit)) 
+                  else {
                      params[key] = stringToInt(value);  // Otherwise, store as int
+                  }
+                  if (category == "operations") { // change _ops value if operations
+                     int opCode = instruction::GetOpCodeFromName(key);
+                     if (opCode != -1) {
+                        _ops[opCode] = param.second.as<int>() ? true : false;
+                     }
+                  }
+                  std::cout << "Outcome: " << key << " Val: ";
+        
+                  if (params[key].type() == typeid(int)) {
+                      std::cout << std::any_cast<int>(params[key]);
+                  } else if (params[key].type() == typeid(double)) {
+                      std::cout << std::any_cast<double>(params[key]);
+                  } else if (params[key].type() == typeid(std::string)) {
+                      std::cout << std::any_cast<std::string>(params[key]);
+                  } else {
+                      std::cout << "[Unknown Type]";
+                  }
+                  
+                  std::cout << std::endl;
                }
            }
        }
-   }
-
-   // Load operations - Scalar, Vector, Matrix
-   if (config["operations"]) {
-      for (const std::string opType : {"scalar", "vector", "matrix"}) {
-         if (config["operations"][opType]) {
-            for (const auto& op : config["operations"][opType]) {
-                  int opCode = instruction::GetOpCodeFromName(op.as<std::string>());
-                  if (opCode != -1) {
-                     _ops[opCode] = true;
-                     params[op.as<std::string>()] = 1;
-                  } else {
-                     std::cerr << "Warning: Unknown operation '" << op.as<std::string>() << "' in YAML file." << std::endl;
-                  }
-            }
-         }
-         
-      }
    }
 }
 
@@ -1137,29 +1156,6 @@ void TPG::SetParams(int argc, char** argv) {
       }
    }
    ProcessParams();
-
-   std::cout << "\n=== Stored Parameters ===" << std::endl;
-   for (const auto& p : params_) {
-       std::cout << "Key: " << p.first << " | Type: " << p.second.type().name() << " | Value: ";
-
-       try {
-           if (p.second.type() == typeid(int)) {
-               std::cout << std::any_cast<int>(p.second);
-           } else if (p.second.type() == typeid(double)) {
-               std::cout << std::any_cast<double>(p.second);
-           } else if (p.second.type() == typeid(std::string)) {
-               std::cout << std::any_cast<std::string>(p.second);
-           } else {
-               std::cout << "[Unknown Type]";
-           }
-       } catch (const std::bad_any_cast& e) {
-           std::cout << "[ERROR: Bad any_cast] (" << e.what() << ")";
-       }
-
-       std::cout << std::endl;
-   }
-
-
 }
 
 // void TPG::SetParams(int argc, char** argv) {
