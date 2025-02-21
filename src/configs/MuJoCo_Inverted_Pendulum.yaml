@@ -52,6 +52,9 @@ program_parameters:
   p_instructions_delete: 0.25  # Probability of deleting an instruction
   p_instructions_add: 0.2  # Probability of adding an instruction
   p_memory_mu_const: 0.5  # Probability of mutating constants
+  p_observation_buff_size: 0.0 # Program variation: probability of changing observation_buff_size
+  p_observation_index: 0.1 # Program variation: probability of changing observation_index
+  p_memory_size: 0.0 # Program variation: probability of changing memory_size
   stateful: 1  # Use stateful programs
   skip_introns: 1  # Whether to skip introns during evaluation
   continuous_output: 2  # Enable continuous outputs: 0 (disabled), 1 (scalar), 2 (vector), 3 (matrix)
@@ -62,7 +65,10 @@ program_parameters:
   memory_size: 4  # Dimensionality for vector & matrix memory
   min_memory_size: 2  # Minimum memory size
   max_memory_size: 32  # Maximum memory size
-  observation_buff_size: 1  # Observations are stored in a buffer with this time window
+  # Observations are stored in a buffer with this time window
+  observation_buff_size: 1
+  min_observation_buff_size: 1
+  max_observation_buff_size: 1
 
 # General Task Parameters
 general_task_parameters:
