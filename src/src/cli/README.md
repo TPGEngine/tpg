@@ -86,8 +86,8 @@ Here are the environments currently supported:
 - humanoid_standup
 - inverted_pendulum
 - inverted_double_pendulum
-- multi_task
-- multi_task_half_cheetah
+- multitask
+- multitask_half_cheetah
 
 #### Options:
 - --processes (int): Number of processes to use (default: 4).
