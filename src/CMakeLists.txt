@@ -29,6 +29,7 @@ find_package(GLEW REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(TBB REQUIRED)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+find_package(yaml-cpp REQUIRED)
 
 # Fetch Catch2 once for the entire project
 include(FetchContent)

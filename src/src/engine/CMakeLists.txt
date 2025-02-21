@@ -31,6 +31,7 @@ target_link_libraries(engine
     Boost::iostreams
     MPI::MPI_CXX
     logging
+    yaml-cpp
 )
 
 # Set output directory for the library

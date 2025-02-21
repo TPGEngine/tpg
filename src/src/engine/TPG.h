@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <iomanip>
 #include <random>
+#include <yaml-cpp/yaml.h>
 
 #include "RegisterMachine.h"
 #include "api_client.h"
@@ -202,6 +203,7 @@ class TPG {
     T GetParam(string p) {
         return std::any_cast<T>(params_[p]);
     }
+
     bool HaveParam(string p) { return params_.find(p) != params_.end(); }
     std::unordered_map<std::string, int> state_;
     int GetState(string p) { return state_[p]; }

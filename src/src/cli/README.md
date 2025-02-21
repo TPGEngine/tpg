@@ -55,6 +55,8 @@ Redirect standard output and error to files named in the format:
 - tpg.<seed>.<pid>.std
 - tpg.<seed>.<pid>.err
 
+Environment mappings and examples can be found in `$TPG/src/cli/tpg/config.py`.
+
 **Replay the Best Policy:**
 
 ```bash
@@ -76,6 +78,17 @@ Description:
 
 #### Arguments:
 - env (str): The target environment
+
+Here are the environments currently supported:
+- classic_control
+- half_cheetah
+- hopper
+- humanoid_standup
+- inverted_pendulum
+- inverted_double_pendulum
+- multitask
+- multitask_half_cheetah
+
 #### Options:
 - --processes (int): Number of processes to use (default: 4).
 - --seed (int): Random seed (default: 42).
@@ -88,3 +101,8 @@ Description:
 #### Options:
 - --seed (int): Random seed for the replay (default: 42).
 - --seed-aux (int): An auxiliary seed (default: 42) used in the replay; its exact role is determined by the underlying experiment logic.
+- --task-to-replay (int): Option for multitask experiments which task to visualize
+
+## Troubleshooting
+If attempting to execute a tpg command leads you to an error such as: `Command 'tpg' not found`. Ensure your PATH
+environment variables are up to date. You can do this by running `pipx ensurepath` and restarting your terminal. 

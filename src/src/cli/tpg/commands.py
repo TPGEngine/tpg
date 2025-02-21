@@ -59,9 +59,10 @@ def plot(csv_files: str, column_name: str):
 @click.command(help="Replay the best performing policy")
 @click.argument("env")
 @click.option("--seed", help="Random seed", default=42)
-@click.option("--seed-aux", help="Auxillary seed", default=42) # what does this do?
+@click.option("--seed-aux", help="Auxillary seed", default=42)
+@click.option("--task-to-replay", help="Task to replay for multitask", default=0)
 @click.pass_context
-def replay(ctx: click.Context, env: str, seed: int, seed_aux: int):
+def replay(ctx: click.Context, env: str, seed: int, seed_aux: int, task_to_replay: int):
     """Replay the best performing policy for the given environment"""
     
     # Fetch the hyperparameters for the environment
@@ -98,7 +99,7 @@ def replay(ctx: click.Context, env: str, seed: int, seed_aux: int):
         f"replay=1", 
         f"animate=1",
         f"id_to_replay={int(metrics['team_id'])}",
-        f"task_to_replay=0"
+        f"task_to_replay={task_to_replay}"
     ]
 
     stdout_file = f"tpg.{seed}.{seed_aux}.replay.std"

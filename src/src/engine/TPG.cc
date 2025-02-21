@@ -202,182 +202,37 @@ void TPG::printOss(ostringstream& o) {
 }
 
 /******************************************************************************/
-void TPG::ReadParameters(string file_name,
-                         std::unordered_map<string, std::any>& params) {
-   std::ifstream infile(file_name);
-   string oneline;
-   vector<string> outcome_fields;
-   while (std::getline(infile, oneline)) {
-      if (oneline.find('#') != std::string::npos || oneline.size() == 0)
-         continue;  // skip comments and empty lines
-      SplitString(oneline, ' ', outcome_fields);
+void TPG::ReadParameters(std::string file_name, std::unordered_map<std::string, std::any>& params) {
+   YAML::Node config = YAML::LoadFile(file_name);
 
-      if (outcome_fields[0] == "SCALAR_SUM_OP")
-         _ops[instruction::SCALAR_SUM_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_DIFF_OP")
-         _ops[instruction::SCALAR_DIFF_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_PRODUCT_OP")
-         _ops[instruction::SCALAR_PRODUCT_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_DIVISION_OP")
-         _ops[instruction::SCALAR_DIVISION_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_ABS_OP")
-         _ops[instruction::SCALAR_ABS_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_RECIPROCAL_OP")
-         _ops[instruction::SCALAR_RECIPROCAL_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_SIN_OP")
-         _ops[instruction::SCALAR_SIN_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_COS_OP")
-         _ops[instruction::SCALAR_COS_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_TAN_OP")
-         _ops[instruction::SCALAR_TAN_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_ARCSIN_OP")
-         _ops[instruction::SCALAR_ARCSIN_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_ARCCOS_OP")
-         _ops[instruction::SCALAR_ARCCOS_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_ARCTAN_OP")
-         _ops[instruction::SCALAR_ARCTAN_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_EXP_OP")
-         _ops[instruction::SCALAR_EXP_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_LOG_OP")
-         _ops[instruction::SCALAR_LOG_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_HEAVYSIDE_OP")
-         _ops[instruction::SCALAR_HEAVYSIDE_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_HEAVYSIDE_OP")
-         _ops[instruction::VECTOR_HEAVYSIDE_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_HEAVYSIDE_OP")
-         _ops[instruction::MATRIX_HEAVYSIDE_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_VECTOR_PRODUCT_OP")
-         _ops[instruction::SCALAR_VECTOR_PRODUCT_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_BROADCAST_OP")
-         _ops[instruction::SCALAR_BROADCAST_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_RECIPROCAL_OP")
-         _ops[instruction::VECTOR_RECIPROCAL_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_NORM_OP")
-         _ops[instruction::VECTOR_NORM_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_ABS_OP")
-         _ops[instruction::VECTOR_ABS_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_SUM_OP")
-         _ops[instruction::VECTOR_SUM_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_DIFF_OP")
-         _ops[instruction::VECTOR_DIFF_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_PRODUCT_OP")
-         _ops[instruction::VECTOR_PRODUCT_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_DIVISION_OP")
-         _ops[instruction::VECTOR_DIVISION_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_INNER_PRODUCT_OP")
-         _ops[instruction::VECTOR_INNER_PRODUCT_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_OUTER_PRODUCT_OP")
-         _ops[instruction::VECTOR_OUTER_PRODUCT_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_MATRIX_PRODUCT_OP")
-         _ops[instruction::SCALAR_MATRIX_PRODUCT_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_RECIPROCAL_OP")
-         _ops[instruction::MATRIX_RECIPROCAL_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_VECTOR_PRODUCT_OP")
-         _ops[instruction::MATRIX_VECTOR_PRODUCT_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_COLUMN_BROADCAST_OP")
-         _ops[instruction::VECTOR_COLUMN_BROADCAST_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_ROW_BROADCAST_OP")
-         _ops[instruction::VECTOR_ROW_BROADCAST_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_NORM_OP")
-         _ops[instruction::MATRIX_NORM_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_COLUMN_NORM_OP")
-         _ops[instruction::MATRIX_COLUMN_NORM_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_ROW_NORM_OP")
-         _ops[instruction::MATRIX_ROW_NORM_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_TRANSPOSE_OP")
-         _ops[instruction::MATRIX_TRANSPOSE_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_ABS_OP")
-         _ops[instruction::MATRIX_ABS_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_SUM_OP")
-         _ops[instruction::MATRIX_SUM_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_DIFF_OP")
-         _ops[instruction::MATRIX_DIFF_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_PRODUCT_OP")
-         _ops[instruction::MATRIX_PRODUCT_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_DIVISION_OP")
-         _ops[instruction::MATRIX_DIVISION_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_MATRIX_PRODUCT_OP")
-         _ops[instruction::MATRIX_MATRIX_PRODUCT_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_MIN_OP")
-         _ops[instruction::SCALAR_MIN_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_MIN_OP")
-         _ops[instruction::VECTOR_MIN_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_MIN_OP")
-         _ops[instruction::MATRIX_MIN_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_MAX_OP")
-         _ops[instruction::SCALAR_MAX_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_MAX_OP")
-         _ops[instruction::VECTOR_MAX_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_MAX_OP")
-         _ops[instruction::MATRIX_MAX_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_MEAN_OP")
-         _ops[instruction::VECTOR_MEAN_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_MEAN_OP")
-         _ops[instruction::MATRIX_MEAN_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_ROW_ST_DEV_OP")
-         _ops[instruction::MATRIX_ROW_ST_DEV_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_ST_DEV_OP")
-         _ops[instruction::VECTOR_ST_DEV_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_ST_DEV_OP")
-         _ops[instruction::MATRIX_ST_DEV_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_CONST_SET_OP")
-         _ops[instruction::SCALAR_CONST_SET_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_CONST_SET_OP")
-         _ops[instruction::VECTOR_CONST_SET_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_CONST_SET_OP")
-         _ops[instruction::MATRIX_CONST_SET_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_UNIFORM_SET_OP")
-         _ops[instruction::SCALAR_UNIFORM_SET_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_UNIFORM_SET_OP")
-         _ops[instruction::VECTOR_UNIFORM_SET_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_UNIFORM_SET_OP")
-         _ops[instruction::MATRIX_UNIFORM_SET_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_GAUSSIAN_SET_OP")
-         _ops[instruction::SCALAR_GAUSSIAN_SET_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_GAUSSIAN_SET_OP")
-         _ops[instruction::VECTOR_GAUSSIAN_SET_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_GAUSSIAN_SET_OP")
-         _ops[instruction::MATRIX_GAUSSIAN_SET_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_CONDITIONAL_OP")
-         _ops[instruction::SCALAR_CONDITIONAL_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_POW_OP")
-         _ops[instruction::SCALAR_POW_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_SQR_OP")
-         _ops[instruction::SCALAR_SQR_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_CUBE_OP")
-         _ops[instruction::SCALAR_CUBE_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_TANH_OP")
-         _ops[instruction::SCALAR_TANH_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_SQRT_OP")
-         _ops[instruction::SCALAR_SQRT_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_VECTOR_ASSIGN_OP")
-         _ops[instruction::SCALAR_VECTOR_ASSIGN_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_MATRIX_ASSIGN_OP")
-         _ops[instruction::SCALAR_MATRIX_ASSIGN_OP_] = true;
-      if (outcome_fields[0] == "OBS_BUFF_SLICE_OP")
-         _ops[instruction::OBS_BUFF_SLICE_OP_] = true;
+   // Load parameters
+   for (const auto& entry : config) {
+       string category = entry.first.as<string>();
+       if (entry.second.IsMap()) {
+           for (const auto& param : entry.second) {
+               string key = param.first.as<string>(); // Flatten key
 
-      // TODO(skelly): make types part of parameter file
-      // string parameters are "hard coded" here
-      if (outcome_fields[0] == "active_tasks" ||
-          outcome_fields[0] == "n_input" ||
-          outcome_fields[0] == "n_stored_outcomes_TRAIN" ||
-          outcome_fields[0] == "n_stored_outcomes_VALIDATION" ||
-          outcome_fields[0] == "n_stored_outcomes_TEST" ||
-          outcome_fields[0] == "forecast_fitness" ||
-          outcome_fields[0] == "action_dim" ||
-          outcome_fields[0] == "mj_model_path" ||
-          outcome_fields[0] == "experiment_key") {
-         params[outcome_fields[0]] = outcome_fields[1];
-      }
-      // double parameters are identified by a decimal place
-      else if (outcome_fields[1].find('.') != std::string::npos) {
-         params[outcome_fields[0]] = stringToDouble(outcome_fields[1]);
-      }
-      // otherwise we store the parameter as an integer
-      else {
-         params[outcome_fields[0]] = stringToInt(outcome_fields[1]);
-      }
+               if (param.second.IsScalar()) {
+                  string value = param.second.as<string>();
+                  string tag = param.second.Tag();
+
+                  if (tag == "!") {  // Check if value was quoted as a string
+                    params[key] = value;
+                 } else if (value.find('.') != string::npos)
+                     params[key] = stringToDouble(value);  // Store as double if it has a decimal
+                  else {
+                     params[key] = stringToInt(value);  // Otherwise, store as int
+                  }
+
+                  if (category == "operations") { // change _ops value if operations
+                     int opCode = instruction::GetOpCodeFromName(key);
+                     if (opCode != -1) {
+                        _ops[opCode] = param.second.as<int>() ? true : false;
+                     }
+                  }
+               }
+           }
+       }
    }
 }
 
@@ -1053,13 +908,13 @@ void TPG::ProcessParams() {
 }
 
 /******************************************************************************/
-// Parameters are set in the parameters.txt file.
+// Parameters are set in the parameters.yaml file.
 // TPG can also process command line parameters in the form: <name>=<value>
 // <name> must be a parameter with a default value in parameters.txt
 // Default values are overwritten by command line parameters
 void TPG::SetParams(int argc, char** argv) {
    // First read parameters file
-   // ReadParameters("parameters.txt", params_);
+   // ReadParameters("parameters.yaml", params_);
    // Parse command line parameters
    params_["pid"] = 0; // Set default param value for PID
    if (argc > 1) {
@@ -1082,7 +937,7 @@ void TPG::SetParams(int argc, char** argv) {
                std::string err_message =
                    "Unreconised command line parameter:" + key +
                    ". Command line parameters must have default values in "
-                   "parameters.txt";
+                   "parameters.yaml";
                die(__FILE__, __FUNCTION__, __LINE__, err_message.c_str());
             }
          }
@@ -1090,6 +945,7 @@ void TPG::SetParams(int argc, char** argv) {
    }
    ProcessParams();
 }
+
 
 /******************************************************************************/
 void TPG::GetPolicyFeatures(int hostId, set<long>& features, bool active) {

@@ -513,3 +513,12 @@ void instruction::Mutate(bool randomize, vector<bool> &legal_ops,
     }
   }
 }
+
+int instruction::GetOpCodeFromName(const std::string& name) {
+    for (size_t i = 0; i < op_names_.size(); ++i) {
+        if (op_names_[i] == name) {
+            return static_cast<int>(i);
+        }
+    }
+    return -1;  // Return an invalid opcode if not found
+}
