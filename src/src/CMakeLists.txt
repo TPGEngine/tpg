@@ -1,5 +1,5 @@
 # Add cpp subdirectories
-add_subdirectory(cpp/TPG)
-add_subdirectory(cpp/experiments)
-add_subdirectory(cpp/environments/classic_control)
-add_subdirectory(cpp/logging) 
+add_subdirectory(engine)
+add_subdirectory(experiments)
+add_subdirectory(environments/classic_control)
+add_subdirectory(logging) 

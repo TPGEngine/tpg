@@ -32,7 +32,7 @@ typedef void (*EvaluatorFunction)(TPG &, EvalData &);
   Return a vector of the teams that need to be evaluated, depending on the
   current phase (train, test, validate) and current task
 */
-vector<team *> GetTeamsToEval(TPG &tpg, TaskEnv *task) {
+inline vector<team *> GetTeamsToEval(TPG &tpg, TaskEnv *task) {
   auto root_teams = tpg.GetRootTeamsInVec();
   vector<team *> teams_to_eval;
   // Train and validate all teams.
@@ -75,7 +75,7 @@ vector<team *> GetTeamsToEval(TPG &tpg, TaskEnv *task) {
     task
   - mpi_job: keeps track of current mpi job
  */
-void AssignTeamsToEvaluators(TPG &tpg, mpi::communicator &world,
+inline void AssignTeamsToEvaluators(TPG &tpg, mpi::communicator &world,
                              vector<team *> &teams_to_eval,
                              int world_size_per_task, int &mpi_job) {
   auto teams_per_evaluator = teams_to_eval.size() / world_size_per_task;
@@ -99,7 +99,7 @@ void AssignTeamsToEvaluators(TPG &tpg, mpi::communicator &world,
 }
 
 /******************************************************************************/
-bool NotDoneAndActive(EvalData &eval) {
+inline bool NotDoneAndActive(EvalData &eval) {
   return eval.checkpointString.compare("x") != 0 &&
          eval.checkpointString.compare("done") != 0;
 }
@@ -118,7 +118,7 @@ bool NotDoneAndActive(EvalData &eval) {
  - tasks The set of all tasks in the TPG
  - eval_tasks The indices of the tasks to evaluate
 */
-void evaluate_main(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks,
+inline void evaluate_main(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks,
                    vector<int> eval_tasks) {
   string my_string = "MAIN";
   vector<team *> teams_this_eval;
@@ -157,7 +157,7 @@ void evaluate_main(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks,
   This is the evaluator mpi job. It receive agents from main MPI job, evaluates
   each agent in the environment, and returns results to the main job.
  */
-void evaluator(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks) {
+inline void evaluator(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks) {
   unordered_map<string, EvaluatorFunction> evaluator_map;
   evaluator_map["Control"] = &EvalControl;
   evaluator_map["RecursiveForecast"] = &EvalRecursiveForecast;
@@ -188,7 +188,7 @@ void evaluator(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks) {
 }
 
 /******************************************************************************/
-void replayer(TPG &tpg, vector<TaskEnv *> &tasks) {
+inline void replayer(TPG &tpg, vector<TaskEnv *> &tasks) {
   // MaybeStartAnimation(tpg);
   EvalData eval(tpg);
 

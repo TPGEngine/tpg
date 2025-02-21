@@ -5,10 +5,10 @@ file(GLOB TPG_SOURCES
 )
 
 # Create the TPG library
-add_library(TPG STATIC ${TPG_SOURCES})
+add_library(engine STATIC ${TPG_SOURCES})
 
 # Include directories
-target_include_directories(TPG
+target_include_directories(engine
     PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/../experiments
@@ -24,7 +24,7 @@ target_include_directories(TPG
 )
 
 # Link libraries
-target_link_libraries(TPG
+target_link_libraries(engine
     PUBLIC
     Eigen3::Eigen
     Boost::boost
@@ -34,6 +34,6 @@ target_link_libraries(TPG
 )
 
 # Set output directory for the library
-set_target_properties(TPG PROPERTIES
+set_target_properties(engine PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
 ) 

@@ -2,6 +2,16 @@
 #define RecursiveForecast_h
 
 #include <TaskEnv.h>
+#include <vector>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <random>
+#include <limits>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
 
 class RecursiveForecast : public TaskEnv {
    public:
@@ -25,15 +35,15 @@ class RecursiveForecast : public TaskEnv {
         const string delim;
 
        public:
-        CSVReader(string f, string dlm = " ") : filename(f), delim(dlm) {}
-        std::vector<std::vector<double>> ReadData() {
+        CSVReader(const string& f, const string& dlm = " ") : filename(f), delim(dlm) {}
+        vector<vector<double>> ReadData() {
             ifstream file(filename);
-            std::vector<std::vector<double>> data_vec;
+            vector<vector<double>> data_vec;
             string line;
             while (getline(file, line)) {
                 if (line.size() == 0) continue;
-                std::vector<double> row_values;
-                std::stringstream s(line);
+                vector<double> row_values;
+                stringstream s(line);
                 string word;
                 while (getline(s, word, ',')) {
                     row_values.push_back(stod(word.c_str()));
@@ -80,7 +90,7 @@ class RecursiveForecast : public TaskEnv {
             reader = new CSVReader(
                 "./datasets/input_bach_first_order_offset.csv", ",");
         else {
-            std::cerr << "Unrecognised RecursiveForecast task" << std::endl;
+            cerr << "Unrecognised RecursiveForecast task" << endl;
             exit(1);
         }
         data = reader->ReadData();
@@ -92,11 +102,11 @@ class RecursiveForecast : public TaskEnv {
         if (task_ == "Sunspots" || task_ == "Mackey" || task_ == "Laser") {
             // train (original, 19 start points)
             for (int s = 0; s <= 900; s += 50)
-                t_start[_TRAIN_PHASE].push_back(s);
+                t_start[0].push_back(s);
 
             // validation (original, 9 start points)
             for (int s = 50; s <= 850; s += 100)
-                t_start[_VALIDATION_PHASE].push_back(s);
+                t_start[1].push_back(s);
 
             // // train (original*2, 37 start points)
             // for (int s = 0; s <= 900; s += 25) t_start[0].push_back(s);
@@ -126,20 +136,20 @@ class RecursiveForecast : public TaskEnv {
 
             // Train
             for (int i = 0; i < n_eval_train_; i++)
-                t_start[_TRAIN_PHASE].push_back(DisTrain(rng));
+                t_start[0].push_back(DisTrain(rng));
 
             // Validation
             for (int i = 0; i < n_eval_val_; i++)
-                t_start[_VALIDATION_PHASE].push_back(DisVal(rng));
+                t_start[1].push_back(DisVal(rng));
 
             // Test
             t_start[2] = t_start[1];  // TODO(spkelly): test==val, fix
         }
-        cout << "time series train slices: " << t_start[_TRAIN_PHASE].size()
+        cout << "time series train slices: " << t_start[0].size()
              << endl;
         cout << "time series validation slices: "
-             << t_start[_VALIDATION_PHASE].size() << endl;
-        cout << "time series test slices: " << t_start[_TEST_PHASE].size()
+             << t_start[1].size() << endl;
+        cout << "time series test slices: " << t_start[2].size()
              << endl;
     }
 

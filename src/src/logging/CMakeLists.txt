@@ -40,4 +40,4 @@ target_include_directories(logging
         ${CMAKE_CURRENT_SOURCE_DIR}/storage         # logging/storage
 )
 
-target_link_libraries(logging PUBLIC TPG)
+target_link_libraries(logging PUBLIC engine)

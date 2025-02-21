@@ -5,7 +5,7 @@
 #include "tpg_eval_mpi.h"
 
 // Returns the fitness of a team on a given task using its phylogeny
-double estimate_fitness(TPG &tpg, team *tm, int task) {
+inline double estimate_fitness(TPG &tpg, team *tm, int task) {
   std::vector<long> visited = {tm->id_};
   list<long> queue = {tm->id_};
 
@@ -37,7 +37,7 @@ double estimate_fitness(TPG &tpg, team *tm, int task) {
 /// @param tpg The TPG instance with all the teams
 /// @param tasks The set of all tasks in the TPG
 /// @param estTasks Task indices to estimate fitness on
-void estimate_main(TPG &tpg, vector<TaskEnv *> &tasks, vector<int> estTasks) {
+inline void estimate_main(TPG &tpg, vector<TaskEnv *> &tasks, vector<int> estTasks) {
   // Loop through tasks
   for (int task : estTasks) {
     tpg.state_["active_task"] = task;

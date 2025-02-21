@@ -1,0 +1,18 @@
+# pyproject.toml
+
+[build-system]
+requires = ["setuptools>=65.5.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tpg"
+version = "0.1.0"
+description = "A CLI application that runs experiments for Tangled Program Graphs"
+readme = "README.md"
+dependencies = [
+    "click",
+    "pandas"
+]
+
+[project.scripts]
+tpg = "tpg.__main__:cli"
