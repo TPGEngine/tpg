@@ -10,6 +10,7 @@ def create_hyper_param_mapping(tpg_env_var):
         "humanoid_standup": os.path.join(tpg_env_var, "configs", "MuJoCo_Humanoid_Standup.yaml"),
         "inverted_double_pendulum": os.path.join(tpg_env_var, "configs", "MuJoCo_Inverted_Double_Pendulum.yaml"),
         "inverted_pendulum": os.path.join(tpg_env_var, "configs", "MuJoCo_Inverted_Pendulum.yaml"),
+        "ant": os.path.join(tpg_env_var, "configs", "MuJoCo_Ant.yaml"),
         "mujoco_multitask": os.path.join(tpg_env_var, "configs", "MuJoCo_MultiTask.yaml"),
         "mujoco_multitask_half_cheetah": os.path.join(tpg_env_var, "configs", "MuJoCo_MultiTask_Half_Cheetah.yaml"),
     }
