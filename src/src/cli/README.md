@@ -78,6 +78,17 @@ Description:
 
 #### Arguments:
 - env (str): The target environment
+
+Here are the environments currently supported:
+- classic_control
+- half_cheetah
+- hopper
+- humanoid_standup
+- inverted_pendulum
+- inverted_double_pendulum
+- multi_task
+- multi_task_half_cheetah
+
 #### Options:
 - --processes (int): Number of processes to use (default: 4).
 - --seed (int): Random seed (default: 42).
@@ -90,6 +101,7 @@ Description:
 #### Options:
 - --seed (int): Random seed for the replay (default: 42).
 - --seed-aux (int): An auxiliary seed (default: 42) used in the replay; its exact role is determined by the underlying experiment logic.
+- --task-to-replay (int): Option for multitask experiments which task to visualize
 
 ## Troubleshooting
 If attempting to execute a tpg command leads you to an error such as: `Command 'tpg' not found`. Ensure your PATH

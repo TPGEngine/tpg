@@ -1,18 +1,47 @@
-# config.py
 import os
+import glob
+
+def generate_key_from_filename(filename):
+    """
+    Transform the filename into a suitable key.
+    For example, transform 'MuJoCo_Inverted_Pendulum.yaml'
+    into 'inverted_pendulum'.
+    """
+    # Remove the extension (.yaml, .yml)
+    name, _ = os.path.splitext(filename)
+
+    # Optionally remove a known prefix
+    prefix = "MuJoCo_"
+    if name.startswith(prefix):
+        name = name[len(prefix):]
+
+    # Return the cleaned-up, lower-case key
+    return name.lower()
+
 
 def create_hyper_param_mapping(tpg_env_var):
-    return {
-        "half_cheetah": os.path.join(tpg_env_var, "configs", "MuJoCo_Half_Cheetah.yaml"),
-        "classic_control": os.path.join(tpg_env_var, "configs", "Classic_Control.yaml"),
-        "hopper": os.path.join(tpg_env_var, "configs", "MuJoCo_Hopper.yaml"),
-        "reacher": os.path.join(tpg_env_var, "configs", "MuJoCo_Reacher.yaml"),
-        "humanoid_standup": os.path.join(tpg_env_var, "configs", "MuJoCo_Humanoid_Standup.yaml"),
-        "inverted_double_pendulum": os.path.join(tpg_env_var, "configs", "MuJoCo_Inverted_Double_Pendulum.yaml"),
-        "inverted_pendulum": os.path.join(tpg_env_var, "configs", "MuJoCo_Inverted_Pendulum.yaml"),
-        "mujoco_multitask": os.path.join(tpg_env_var, "configs", "MuJoCo_MultiTask.yaml"),
-        "mujoco_multitask_half_cheetah": os.path.join(tpg_env_var, "configs", "MuJoCo_MultiTask_Half_Cheetah.yaml"),
-    }
+    """
+    Create mapping automatically by scanning the configs directory.
+    Each YAML file in the directory is processed to produce a command key.
+    """
+    config_dir = os.path.join(tpg_env_var, "configs")
+    mapping = {}
 
-TPG = os.getenv('TPG')
+    # Use glob to list all yaml files
+    yaml_files = glob.glob(os.path.join(config_dir, "*.yaml"))
+
+    for filepath in yaml_files:
+        filename = os.path.basename(filepath)
+        key = generate_key_from_filename(filename)
+        mapping[key] = filepath
+
+    return mapping
+
+
+TPG = os.getenv("TPG")
 HYPER_PARAM_MAPPING = create_hyper_param_mapping(TPG)
+
+# Debug print (optional)
+if __name__ == "__main__":
+    import pprint
+    pprint.pprint(HYPER_PARAM_MAPPING)
