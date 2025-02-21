@@ -3,15 +3,14 @@ import os
 
 def create_hyper_param_mapping(tpg_env_var):
     return {
-        "half_cheetah": os.path.join(tpg_env_var, "configs", "2024-01-18_TPG_MuJoco_Half_Cheetah.txt"),
-        "classic_control": os.path.join(tpg_env_var, "configs", "2025-02-03-Classic-Control.txt"),
-        "hopper": os.path.join(tpg_env_var, "configs", "2025-02-13_TPG_MuJoco_Hopper.txt"),
-        "reacher": os.path.join(tpg_env_var, "configs", "2025-02-03-MuJoco_Reacher.txt"),
-        "humanoid_standup": os.path.join(tpg_env_var, "configs", "2025-02-05_TPG_MuJoco_Humanoid_Standup.txt"),
-        "inverted_double_pendulum": os.path.join(tpg_env_var, "configs", "2025-02-05_TPG_MuJoco_Inverted_Double_Pendulum.txt"),
-        # "inverted_pendulum": os.path.join(tpg_env_var, "configs", "2025-02-05_TPG_MuJoco_Inverted_Pendulum.txt"),
+        "half_cheetah": os.path.join(tpg_env_var, "configs", "MuJoCo_Half_Cheetah"),
+        "classic_control": os.path.join(tpg_env_var, "configs", "Classic_Control.yaml"),
+        "hopper": os.path.join(tpg_env_var, "configs", "MuJoCo_Hopper.yaml"),
+        "reacher": os.path.join(tpg_env_var, "configs", "MuJoCo_Reacher.yaml"),
+        "humanoid_standup": os.path.join(tpg_env_var, "configs", "MuJoCo_Humanoid_Standup.yaml"),
+        "inverted_double_pendulum": os.path.join(tpg_env_var, "configs", "MuJoCo_Inverted_Double_Pendulum.yaml"),
         "inverted_pendulum": os.path.join(tpg_env_var, "configs", "MuJoCo_Inverted_Pendulum.yaml"),
-        "mujoco_multi_task": os.path.join(tpg_env_var, "configs", "2025-02-05_TPG_MuJoco_MultiTask.txt"),
+        "mujoco_multitask": os.path.join(tpg_env_var, "configs", "MuJoCo_MultiTask.yaml"),
     }
 
 TPG = os.getenv('TPG')
