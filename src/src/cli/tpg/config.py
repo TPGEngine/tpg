@@ -3,7 +3,7 @@ import os
 
 def create_hyper_param_mapping(tpg_env_var):
     return {
-        "half_cheetah": os.path.join(tpg_env_var, "configs", "MuJoCo_Half_Cheetah"),
+        "half_cheetah": os.path.join(tpg_env_var, "configs", "MuJoCo_Half_Cheetah.yaml"),
         "classic_control": os.path.join(tpg_env_var, "configs", "Classic_Control.yaml"),
         "hopper": os.path.join(tpg_env_var, "configs", "MuJoCo_Hopper.yaml"),
         "reacher": os.path.join(tpg_env_var, "configs", "MuJoCo_Reacher.yaml"),

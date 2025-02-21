@@ -37,6 +37,9 @@ ga_parameters:
 team_parameters:
   max_initial_team_size: 10  # Initial team size
   max_team_size: 1000  # Max team size
+
+# Independent Team Mutation Ops
+independent_team_mutation_ops:
   pmx: 0.5  # Team variation: probability of team crossover
   pmx_p: 0.5  # Team variation: probability of team crossover adding each parent prog to child
   pmd: 0.1  # Team variation: probability of deleting program from team

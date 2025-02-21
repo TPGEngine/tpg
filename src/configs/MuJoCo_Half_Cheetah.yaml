@@ -27,7 +27,7 @@ ga_parameters:
   seed_aux: 42  # Auxiliary seed, e.g. for simulators
   n_generations: 1000000  # Max number of generations
   n_root: 1000  # Number of root teams (agents) to keep each generation
-  n_root_gen: 200  # Number of new root teams to create each generation
+  n_root_gen: 100  # Number of new root teams to create each generation
   parent_select_roots_only: 1  # Whether to constrain parent selection to root teams
   tournament_size: 3  # Tournament size for selection
   keep_old_outcomes: 1  # Whether to keep evaluation outcome over time or re-evaluate each generation
@@ -62,11 +62,11 @@ program_parameters:
   stateful: 1  # Use stateful programs
   skip_introns: 1  # Whether to skip introns during evaluation
   continuous_output: 2  # Enable continuous outputs: 0 (disabled), 1 (scalar), 2 (vector), 3 (matrix)
-  n_input: "2"  # Number of inputs (features/state variables), Note: MuJoco does not use this
+  n_input: "0"  # Number of inputs (features/state variables), Note: MuJoco does not use this
   max_initial_prog_size: 10  # Max initial program size
   max_prog_size: 10  # Max program size
   n_memories: 8  # Number of memory indices
-  memory_size: 2  # Dimensionality for vector & matrix memory
+  memory_size: 17  # Dimensionality for vector & matrix memory
   min_memory_size: 2  # Minimum memory size
   max_memory_size: 32  # Maximum memory size
   # Observations are stored in a buffer with this time window
@@ -77,9 +77,9 @@ program_parameters:
 # General Task Parameters
 general_task_parameters:
   # Which tasks are active
-  active_tasks: "Cartpole"  # Right-hand-side should be a single task name or a comma-separated list
-  partially_observable: 1  # Use the partially-observable version of a task, if available
-  n_discrete_action: 3  # Number of discrete actions
+  active_tasks: "Mujoco_Half_Cheetah_v4"  # Right-hand-side should be a single task name or a comma-separated list
+  partially_observable: 0  # Use the partially-observable version of a task, if available
+  n_discrete_action: 0  # Number of discrete actions
 
 # Parameters Specific to Recursive Forecasting
 recursive_forecasting:
@@ -98,9 +98,9 @@ mujoco_parameters:
   mj_model_path: "$TPG/datasets/mujoco_models/"  # Model path
   mj_max_timestep: 1000  # Max simulation time steps
   mj_reward_control_weight: 0.0  # Reward control weight
-  mj_n_eval_train: 200  # Number of training evaluations
+  mj_n_eval_train: 3  # Number of training evaluations
   mj_n_eval_validation: 0  # Number of validation evaluations
-  mj_n_eval_test: 0  # Number of test evaluations
+  mj_n_eval_test: 1  # Number of test evaluations
 
 # Operations (set 1 to activate, 0 to deactivate)
 operations:
@@ -177,9 +177,9 @@ operations:
   SCALAR_MATRIX_ASSIGN_OP: 1
 
   # Noise Operations:
-  SCALAR_UNIFORM_SET_OP: 1
-  SCALAR_GAUSSIAN_SET_OP: 0
-  VECTOR_UNIFORM_SET_OP: 1
-  VECTOR_GAUSSIAN_SET_OP: 0
-  MATRIX_UNIFORM_SET_OP: 1
-  MATRIX_GAUSSIAN_SET_OP: 0
+  SCALAR_UNIFORM_SET_OP: 0
+  SCALAR_GAUSSIAN_SET_OP: 1
+  VECTOR_UNIFORM_SET_OP: 0
+  VECTOR_GAUSSIAN_SET_OP: 1
+  MATRIX_UNIFORM_SET_OP: 0
+  MATRIX_GAUSSIAN_SET_OP: 1
