@@ -1,8 +1,11 @@
-import click
+import glob
 import os
 import subprocess
-import glob
+
+import click
+
 from . import helpers
+
 
 @click.command(help="Evolve a policy")
 @click.argument("env")
@@ -15,6 +18,12 @@ def evolve(ctx: click.Context, env: str, processes: int, seed: int):
     # Fetch the hyperparameters for the environment
     hyper_parameters = ctx.obj["hyper_parameters"]
     TPG = ctx.obj["tpg"]
+    
+    # Setup environment directories and get working directory
+    env_dir = helpers.create_environment_directories(TPG, env)
+    
+    # Change working directory to environment directory
+    os.chdir(env_dir)
 
     # error handling for valid environment
     if env not in hyper_parameters:
@@ -68,9 +77,14 @@ def replay(ctx: click.Context, env: str, seed: int, seed_aux: int, task_to_repla
     # Fetch the hyperparameters for the environment
     hyper_parameters = ctx.obj["hyper_parameters"]
     TPG = ctx.obj["tpg"]
+    
+    env_dir = helpers.create_environment_directories(TPG, env)
+    
+    # Change working directory to environment directory
+    os.chdir(env_dir)
 
     # Find the selection.*.*.csv file
-    csv_files = glob.glob(os.path.join(TPG, "experiments", "generic", "selection.*.*.csv"))
+    csv_files = glob.glob(os.path.join(env_dir, "selection.*.*.csv"))
     if not csv_files:
         raise click.ClickException("Ensure that you've evolved a policy before replaying it and the selection.*.*.csv file exists.")
 
