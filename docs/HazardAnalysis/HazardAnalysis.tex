@@ -59,11 +59,11 @@
 
 % \wss{You can include your definition of what a hazard is here.}
 
-This document describes the potential hazards of the TPG capstone project. Details include information such as the scope and purpose of the hazard analysis, system boundaries and components, critical assumptions, FMEA tables, newly discovered safety and security requirements, and a roadmap describing the timeline for the Capstone project’s safety requirement implementation. 
+This document describes the potential hazards of the Tangled Program Graphs (TPG) capstone project. Details include information such as the scope and purpose of the hazard analysis, system boundaries and components, critical assumptions, Failure Mode \& Effects Analysis (FMEA) tables, newly discovered safety and security requirements, and a roadmap describing the timeline for the Capstone project’s safety requirement implementation. 
 \\\\
-The definition of a hazard utilized in this document is based on the definition by Nancy Leveson: 
+The definition of a hazard utilized in this document is based on the definition by Nancy Leveson:
 \\\\
-A \underline{hazard} is any potential condition within the system that could harm or damage the project. This includes unexpected conditions such as security risks and safety hazards. 
+A \underline{hazard} is any potential condition within the system that could harm or damage the project. This includes unexpected conditions such as security risks and safety hazards \citep{Leveson2020}.
 \\\\
 For some terminology used within the Hazard Analysis, such as \textbf{agent} or \textbf{environment}, please refer to the SRS documentation \citep{SRS}.
 \section{Scope and Purpose of Hazard Analysis}
@@ -71,9 +71,9 @@ For some terminology used within the Hazard Analysis, such as \textbf{agent} or 
 % \wss{You should say what \textbf{loss} could be incurred because of the
 % hazards.}
 
-The scope of the hazard analysis will focus on the TPG Repository and its integration with MuJoCo. In addition, the to-be-implemented CI/CD pipeline will also be in consideration within the scope of the analysis. 
+The document evaluates hazards that arise from (a) Tangle, (b) its integration with MuJoCo, and (c) the CI/CD pipeline during its development.
 \\\\
-The purpose of the hazard analysis is to identify any hazards that may occur within the system’s components. The hazards will be analyzed to find the reasons and causes of the failures, ultimately leading up to the creation of mitigation strategies in an attempt to reduce the hazard and its potential damage if such hazard arises. The analysis will result in the creation of new safety and security requirements for the project that had not been added in Revision 0 of the SRS.
+The purpose of the hazard analysis is to identify any hazards that may occur within the system's components. The hazards will be analyzed to find the reasons and causes of the failures, ultimately leading up to the creation of mitigation strategies in an attempt to reduce the hazard and its potential damage if such hazard arises. The analysis will result in the creation of new safety and security requirements for the project that had not been added in Revision 0 of the SRS.
 
 \section{System Boundaries and Components}
 
@@ -106,8 +106,8 @@ The hazard analysis will be conducted on the following system which will have th
 Here are the following critical assumptions that will be made: 
 
 \begin{itemize}
-    \item Dependent libraries and frameworks are stable and any current issues or bugs don\'t affect the product\'s functionality.
-    \item The MuJoCo environment works as intended as the documentation provides.
+    \item Dependent libraries and frameworks are stable and any current issues or bugs don't affect the product's functionality.
+    \item The MuJoCo environment functions as expected, following the documentation's specifications.
     \item The operators and users of the systems are using the product in its intended form.
 \end{itemize}
 
