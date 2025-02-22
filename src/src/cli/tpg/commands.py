@@ -120,7 +120,7 @@ def replay(ctx: click.Context, env: str, seed: int, seed_aux: int, task_to_repla
     os.chdir(env_dir)
 
     # Find the selection.*.*.csv file
-    csv_files = glob.glob(os.path.join(TPG, "experiments", "generic", "selection.*.*.csv"))
+    csv_files = glob.glob(os.path.join(env_dir, "selection.*.*.csv"))
     if not csv_files:
         raise click.ClickException("Ensure that you've evolved a policy before replaying it and the selection.*.*.csv file exists.")
 
