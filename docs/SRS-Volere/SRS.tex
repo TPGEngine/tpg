@@ -505,7 +505,7 @@ Relation:
 \subsection{Functional Requirements}
 % \lips
 \begin{itemize}
-\item \textbf{FR-1:} The system shall have an interface that is compatible with \hyperref[def:mujoco]{MujoCo}.
+\item \textbf{FR-1:} The system shall provide an interface for configuring, executing, and monitoring reinforcement learning experiments within \hyperref[def:mujoco]{MuJoCo} environments.
   \begin{itemize}
     \item \textbf{Rationale:} This is a requirement brought on by the stakeholders to have an interface that integrates \hyperref[def:tpg]{TPG} with the \hyperref[def:mujoco]{MuJoCo} environment.
   \end{itemize}
@@ -525,7 +525,13 @@ Relation:
   \begin{itemize}
     \item \textbf{Rationale:} Once all test cases have passed, the system can safely ensure that the update can be implemented into the code.
   \end{itemize}
-\item \textbf{FR-6:} The system shall adhere to SOLID code practices and the Google C++ Style Guide.
+\item \textbf{FR-6:} The system shall adhere to SOLID code principles and the Google C++ Style Guide by enforcing:
+  \begin{itemize}
+      \item[a)] Code reviews to ensure compliance with SOLID design principles.
+      \item[b)] Automated formatting checks using \texttt{clang-format} to enforce Google C++ Style Guide rules.
+      \item[c)] Static analysis tools (e.g., \texttt{clang-tidy}) to detect style and structural violations.
+      \item[d)] Unit test coverage of at least \textit{80\%} to maintain code reliability.
+  \end{itemize}
 \begin{itemize}
   \item \textbf{Rationale:} This is to allow for easy maintainability of the code. As this is a research project, the people working on the project will be constantly changing. Adhering to these practices minimizes development hassle.
 \end{itemize}
