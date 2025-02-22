@@ -11,6 +11,8 @@
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{multirow}
+\usepackage{pdflscape}
+
 \hypersetup{
     bookmarks=true,         % show bookmarks bar?
       colorlinks=true,      % false: boxed links; true: colored links
@@ -505,27 +507,27 @@ Relation:
 \subsection{Functional Requirements}
 % \lips
 \begin{itemize}
-\item \textbf{FR-1:} The system shall provide an interface for configuring, executing, and monitoring reinforcement learning experiments within \hyperref[def:mujoco]{MuJoCo} environments.
+\item \label{FR-1} \textbf{FR-1:} The system shall provide an interface for configuring, executing, and monitoring reinforcement learning experiments within \hyperref[def:mujoco]{MuJoCo} environments.
   \begin{itemize}
     \item \textbf{Rationale:} This is a requirement brought on by the stakeholders to have an interface that integrates \hyperref[def:tpg]{TPG} with the \hyperref[def:mujoco]{MuJoCo} environment.
   \end{itemize}
-\item \textbf{FR-2:} The system shall be able to visualize an experiment running from test data.
+\item \label{FR-2} \textbf{FR-2:} The system shall be able to visualize an experiment running from test data.
   \begin{itemize}
     \item \textbf{Rationale:} Visualizing the experiment from test data will allow for verification of the simulator and interface compatibility.
   \end{itemize}
-\item \textbf{FR-3:} The system shall have an integrated CI/CD pipeline.
+\item \label{FR-3} \textbf{FR-3:} The system shall have an integrated CI/CD pipeline.
   \begin{itemize}
     \item \textbf{Rationale:} To have a good workflow environment for the development of the project, a CI/CD pipeline is a beneficial way to do so.
   \end{itemize}
-\item \textbf{FR-4:} The system shall automatically run test cases once a new code change has been detected in the main branch.
+\item \label{FR-4} \textbf{FR-4:} The system shall automatically run test cases once a new code change has been detected in the main branch.
   \begin{itemize}
     \item \textbf{Rationale:} This is to ensure that all test cases pass when a new code update has been implemented and breakage of code or functionality is not all introduced.
   \end{itemize}
-\item \textbf{FR-5:} The system shall be automatically compiled and built once all automated test cases have passed.
+\item \label{FR-5} \textbf{FR-5:} The system shall be automatically compiled and built once all automated test cases have passed.
   \begin{itemize}
     \item \textbf{Rationale:} Once all test cases have passed, the system can safely ensure that the update can be implemented into the code.
   \end{itemize}
-\item \textbf{FR-6:} The system shall adhere to SOLID code principles and the Google C++ Style Guide by enforcing:
+\item \label{FR-6} \textbf{FR-6:} The system shall adhere to SOLID code principles and the Google C++ Style Guide by enforcing:
   \begin{itemize}
       \item[a)] Code reviews to ensure compliance with SOLID design principles.
       \item[b)] Automated formatting checks using \texttt{clang-format} to enforce Google C++ Style Guide rules.
@@ -535,11 +537,11 @@ Relation:
 \begin{itemize}
   \item \textbf{Rationale:} This is to allow for easy maintainability of the code. As this is a research project, the people working on the project will be constantly changing. Adhering to these practices minimizes development hassle.
 \end{itemize}
-\item \textbf{FR-7:} The system shall perform automatic code linting before building the project.
+\item \label{FR-7} \textbf{FR-7:} The system shall perform automatic code linting before building the project.
 \begin{itemize}
   \item \textbf{Rationale:} Code linting will allow for universal and consistent formatting of code within the project. 
 \end{itemize}
-\item \textbf{FR-8:} The system shall provide a well-defined interface for integrating new experiments from the simulator, ensuring that new experiments can be implemented and deployed without requiring modifications to the core system architecture.
+\item \label{FR-8} \textbf{FR-8:} The system shall provide a well-defined interface for integrating new experiments from the simulator, ensuring that new experiments can be implemented and deployed without requiring modifications to the core system architecture.
   \begin{itemize}
     \item \textbf{Rationale:} This is important as the system should not be dependent on the experiments being simulated, rather the interface shall be able to adapt easily to newly introduced experiments. 
   \end{itemize}
@@ -549,7 +551,7 @@ Relation:
 \subsection{Appearance Requirements}
 
 \begin{itemize}
-  \item \textbf{LFAR1:}  The codebase should follow clear and consistent formatting guidelines. This includes proper indentation, descriptive variable names, and potentially inline documentation to enhance readability for both new and experienced project developers.
+  \item \label{LFAR1} \textbf{LFAR1:}  The codebase should follow clear and consistent formatting guidelines. This includes proper indentation, descriptive variable names, and potentially inline documentation to enhance readability for both new and experienced project developers.
       \begin{itemize}
         \item \textbf{Rationale:} A consistent code style and formatting increases the maintainability of the project and allows developers to easily understand and contribute to the project. 
         \item \textbf{Phase In Plan:} This requirement will become phased in once most of the project’s features are completed, which begins after February 3, 2025. 
@@ -562,7 +564,7 @@ Relation:
 
 
 \begin{itemize}
-  \item \textbf{LFSR1:}  The style of the code, including naming conventions, commenting, and structure, should remain consistent across all modules of the TPG framework.
+  \item \label{LFSR1} \textbf{LFSR1:}  The style of the code, including naming conventions, commenting, and structure, should remain consistent across all modules of the TPG framework.
 
       \begin{itemize}
         \item \textbf{Rationale:} This consistency will ensure a cohesive development experience and make the project easier to maintain and expand in the future.
@@ -575,12 +577,12 @@ Relation:
 \section{Usability and Humanity Requirements}
 \subsection{Ease of Use Requirements}
 \begin{itemize}
-  \item \textbf{UH-E1:} The system shall have a clear and comprehensive documentation.
+  \item \label{UH-E1} \textbf{UH-E1:} The system shall have a clear and comprehensive documentation.
   \begin{itemize}
     \item \textbf{Rationale:} A consistent and comprehensive documentation on the CI/CD pipeline and agent-environment integration ensures ease of usage for all future users regardless of their technical level.
     \item \textbf{Phase In Plan:} This requirement will become phased in once most of the project’s features are completed, which begins after February 3, 2025. 
   \end{itemize}
-  \item \textbf{UH-E2:} The system shall provide real-time, accurate logging of messages for every action.
+  \item \label{UH-E2} \textbf{UH-E2:} The system shall provide real-time, accurate logging of messages for every action.
   \begin{itemize}
     \item \textbf{Rationale:} Real-time, accurate logging of messages allows users to understand the outcome of their inputs instantaneously, reducing confusion, habilitating more opportunities for debugging and empowers users of their expectations.
     \item  \textbf{Phase In Plan:} This requirement will become phased in midway through the project development process, which should be approximaly around December 2024. 
@@ -590,7 +592,7 @@ Relation:
 
 \subsection{Personalization and Internationalization Requirements}
 \begin{itemize}
-  \item \textbf{UH-PI1:} The system shall have the flexibility to adjust certain parameters when configuring MuJoCo.
+  \item \label{UH-PI1} \textbf{UH-PI1:} The system shall have the flexibility to adjust certain parameters when configuring MuJoCo.
   \begin{itemize}
     \item \textbf{Rationale:} Having the flexibility to change parameters provides users the opportunity to make the system fit to their specific needs and requirements.
     \item  \textbf{Phase In Plan:} This requirement will become phased in once the MuJoCo interface integration is completed, which begins after February 3, 2025.
@@ -599,12 +601,12 @@ Relation:
 
 \subsection{Learning Requirements}
 \begin{itemize}
-  \item \textbf{UH-L1:} The system shall have tutorials available to the users.
+  \item \label{UH-L1} \textbf{UH-L1:} The system shall have tutorials available to the users.
   \begin{itemize}
     \item \textbf{Rationale:} Having tutorials, simulation examples and guides for the TPG framework and MuJoCo provides guidance to understand user interaction between the entire system and agent-environments.
     \item  \textbf{Phase In Plan:} This requirement will become phased in once the CI/CD and MuJoCo integration are completed, which begins after February 3, 2025.
   \end{itemize}
-  \item \textbf{UH-L2:} The system shall ensure that relevant technical concepts and resources shall be accessible by users with ease.
+  \item \label{UH-L2} \textbf{UH-L2:} The system shall ensure that relevant technical concepts and resources shall be accessible by users with ease.
   \begin{itemize}
     \item \textbf{Rationale:} Acknowledging that TPG builds up on several machine learning concepts, listing resources that will complement learning the framework can accelerate user onboarding.
     \item \textbf{Phase In Plan:}  This requirement will become phased in once the CI/CD and MuJoCo integration are completed, which begins after February 3, 2025.
@@ -613,11 +615,11 @@ Relation:
 
 \subsection{Understandability and Politeness Requirements}
 \begin{itemize}
-  \item \textbf{UH-UP1:} The system shall accommodate symbols and words that are naturally understandable by all potential users.
+  \item \label{UH-UP1} \textbf{UH-UP1:} The system shall accommodate symbols and words that are naturally understandable by all potential users.
   \begin{itemize}
     \item \textbf{Rationale:} In addition to having clear and concise message outputs, avoiding the use of slang, jargons or ambiguous terms minimizes confusion and learning curve for users. This includes using traditional symbols and words that the majority of the users are familiar with.
   \end{itemize}
-  \item \textbf{UH-UP2:} The system shall not include offensive language in its logging.
+  \item \label{UH-UP2} \textbf{UH-UP2:} The system shall not include offensive language in its logging.
   \begin{itemize}
     \item \textbf{Rationale:} Explicit, biased or unnaturally used language may harm any users. It is best for the framework to avoid using any words to ensure a healthy environment. The use of offensive languiage can create an unsafe relationship between the user and the system, compromising user trust.
   \end{itemize}
@@ -625,7 +627,7 @@ Relation:
 
 \subsection{Accessibility Requirements}
 \begin{itemize}
-  \item \textbf{UH-A1:} The system shall accommodate users with different kinds of disabilities.
+  \item \label{UH-A1} \textbf{UH-A1:} The system shall accommodate users with different kinds of disabilities.
   \begin{itemize}
     \item \textbf{Rationale:} Supporting features such as text-to-speech, and color blindness assistance systems can allow users with different kinds of disabilities to leverage TPG, fostering an inclusive environment.
     \item \textbf{Phase In Plan:} This requirement will become phased in after the Rev 0 is completed, which begins after March 18, 2025.
@@ -634,37 +636,37 @@ Relation:
 
 \section{Performance Requirements}
 \begin{itemize}
-\item \textbf{PR-SL:} The system shall execute without introducing significant computational overhead. The integration with MuJoCo must not degrade performance, and any additional computational costs should be minimized through optimization.
+\item \label{PR-SL} \textbf{PR-SL:} The system shall execute without introducing significant computational overhead. The integration with MuJoCo must not degrade performance, and any additional computational costs should be minimized through optimization.
   \begin{itemize}
     \item \textbf{Rationale:} Ensures that processing times remain acceptable for real-time experimentation and testing.
     \item \textbf{Phase In Plan:} During development, in conjunction with the CI/CD pipeline.
   \end{itemize}
 
-\item \textbf{PR-PA:} The system shall produce accurate and reliable results in simulations and experiments. All calculations must maintain high numerical precision to ensure the validity of results, especially when dealing with complex reinforcement learning tasks and physics simulations.
+\item \label{PR-PA} \textbf{PR-PA:} The system shall produce accurate and reliable results in simulations and experiments. All calculations must maintain high numerical precision to ensure the validity of results, especially when dealing with complex reinforcement learning tasks and physics simulations.
   \begin{itemize}
     \item \textbf{Rationale:} Ensures the validity of the reinforcement models being developed. Otherwise, inaccurate results can lead to incorrect conclusions and hinder the development of effective learning agents.
     \item \textbf{Phase In Plan:} During development, starting Oct 14, 2024.
   \end{itemize}
 
-\item \textbf{PR-RFT:} The system shall be robust against invalid inputs and unexpected environmental conditions. It must handle exceptions gracefully, recover from errors without data loss, and maintain operational stability under varying workloads and stress conditions.
+\item \label{PR-RFT} \textbf{PR-RFT:} The system shall be robust against invalid inputs and unexpected environmental conditions. It must handle exceptions gracefully, recover from errors without data loss, and maintain operational stability under varying workloads and stress conditions.
   \begin{itemize}
     \item \textbf{Rationale:} In cases where the agent returns an action that is not defined by the environment, or the agent receives an out-of-bounds state, the system should be able to manage this gracefully.
     \item \textbf{Phase In Plan:} During development, starting Oct 14, 2024.
   \end{itemize}
 
-\item \textbf{PR-CR:} The system shall support scaling up to handle multiple simultaneous experiments or large-scale simulations without significant degradation in performance. Efficient resource management is essential to accommodate the demands of complex reinforcement learning tasks.
+\item \label{PR-CR} \textbf{PR-CR:} The system shall support scaling up to handle multiple simultaneous experiments or large-scale simulations without significant degradation in performance. Efficient resource management is essential to accommodate the demands of complex reinforcement learning tasks.
   \begin{itemize}
     \item \textbf{Rationale:} Efficient resource management is necessary to ensure that the system can accommodate the needs of diverse experiments without performance degradation.
     \item \textbf{Phase In Plan:} After phase 1 of the project, which starts in February 2025. The scale of the computational requirements will be better understood after this phase.
   \end{itemize}
 
-\item \textbf{PR-SE:} The system shall be designed for scalability, allowing for easy addition of new features, integration with other environments, and support for future research needs. The codebase should be modular and extensible, facilitating contributions from other researchers and developers.
+\item \label{PR-SE} \textbf{PR-SE:} The system shall be designed for scalability, allowing for easy addition of new features, integration with other environments, and support for future research needs. The codebase should be modular and extensible, facilitating contributions from other researchers and developers.
   \begin{itemize}
     \item \textbf{Rationale:} The system should be designed for scalability to allow for future enhancements to the TPG algorithm and the addition of new environments within MuJoCo. A modular and extensible design will facilitate these updates and ensure that the framework remains relevant.
     \item \textbf{Phase In Plan:} During development, starting Oct 14, 2024.
   \end{itemize}
 
-\item \textbf{PR-RR:} The system shall maintain high reliability, with minimal downtime or failures during operation. Continuous integration and automated testing shall be employed to detect and address issues promptly, ensuring consistent performance over time.
+\item \label{PR-RR} \textbf{PR-RR:} The system shall maintain high reliability, with minimal downtime or failures during operation. Continuous integration and automated testing shall be employed to detect and address issues promptly, ensuring consistent performance over time.
   \begin{itemize}
     \item \textbf{Rationale:} High reliability is crucial for maintaining user trust and ensuring that experiments yield consistent results. Continuous integration and automated testing will help identify and address issues promptly, minimizing downtime and ensuring that the system operates smoothly over time.
     \item \textbf{Phase In Plan:} During development, starting Oct 14, 2024.
@@ -673,25 +675,25 @@ Relation:
 
 \section{Operational and Environmental Requirements}
 \begin{itemize}
-\item \textbf{OE-EPE:} The system will operate in typical computing laboratory environments, which may include personal computers or servers running UNIX-like operating systems. It should function effectively on standard hardware without the need for specialized equipment, supporting researchers and developers in academic settings.
+\item \label{OE-EPE} \textbf{OE-EPE:} The system will operate in typical computing laboratory environments, which may include personal computers or servers running UNIX-like operating systems. It should function effectively on standard hardware without the need for specialized equipment, supporting researchers and developers in academic settings.
   \begin{itemize}
     \item \textbf{Rationale:} Ensuring compatibility across different hardware allows for broader accessibility and usability among researchers and developers.
     \item \textbf{Phase In Plan:} Before development. Virtual environments are being considered at this stage.
   \end{itemize}
 
-\item \textbf{OE-RIA:} The system must interface seamlessly with existing environments, MuJoCo, and potentially other simulation environments. Compatibility requires adherence to their API specifications and proper handling of data exchange protocols. Any dependencies or libraries required for integration must be managed effectively.
+\item \label{OE-RIA} \textbf{OE-RIA:} The system must interface seamlessly with existing environments, MuJoCo, and potentially other simulation environments. Compatibility requires adherence to their API specifications and proper handling of data exchange protocols. Any dependencies or libraries required for integration must be managed effectively.
   \begin{itemize}
     \item \textbf{Rationale:} Proper handling of data exchange protocols is essential for maintaining the integrity of experiments and ensuring that the TPG framework can be evaluated in diverse settings.
     \item \textbf{Phase In Plan:} During development, starting Oct 14, 2024.
   \end{itemize}
 
-\item \textbf{OE-RR:} The system shall be released under an appropriate open-source license (e.g., MIT license) to enable community collaboration. All releases must include comprehensive documentation, installation instructions, and user guides to assist researchers and developers in utilizing and contributing to the framework.
+\item \label{OE-RR} \textbf{OE-RR:} The system shall be released under an appropriate open-source license (e.g., MIT license) to enable community collaboration. All releases must include comprehensive documentation, installation instructions, and user guides to assist researchers and developers in utilizing and contributing to the framework.
   \begin{itemize}
     \item \textbf{Rationale:} Releasing the system under an open-source license encourages collaboration and ensures accessibility for researchers and developers. Clear documentation and guides help users utilize and contribute effectively, fostering a collaborative environment for framework improvement.
     \item \textbf{Phase In Plan:} Before development, starting Oct 14, 2024.
   \end{itemize}
 
-\item \textbf{OE-OSR:} Internal resources and mechanisms should be established to assist current and future members of the research group in utilizing and contributing to the TPG framework. This includes the GitHub repository and associated documentation such as this SRS report, troubleshooting resources, and history of issue tracking.
+\item \label{OE-OSR} \textbf{OE-OSR:} Internal resources and mechanisms should be established to assist current and future members of the research group in utilizing and contributing to the TPG framework. This includes the GitHub repository and associated documentation such as this SRS report, troubleshooting resources, and history of issue tracking.
   \begin{itemize}
     \item \textbf{Rationale:} Improves efficiency of knowledge sharing and ensures continuity of the project as team members change over time.
     \item \textbf{Phase In Plan:} Throughout lifecycle of the project.
@@ -703,17 +705,17 @@ Relation:
 % \lips
 
 \begin{itemize}
-  \item \textbf{MS-M1:} If a change is made to the software after the capstone project has concluded, any major changes to the software shall take no more than 20\% of the original time to compile and build, assuming the same resources are available. 
+  \item \label{MS-M1} \textbf{MS-M1:} If a change is made to the software after the capstone project has concluded, any major changes to the software shall take no more than 20\% of the original time to compile and build, assuming the same resources are available. 
     \begin{itemize}
       \item \textbf{Rationale:} One of the goals of the project is to ensure a more efficient and smooth software structure. As such 15\% is an appropriate reduction in development time to verify the project’s efficiency. 
       \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
     \end{itemize}
-  \item \textbf{MS-M2:} The software shall have code documentation covering all major functions, classes, and modules. The information shall include descriptions of the component’s purpose, inputs, outputs, and any exceptions that may occur.
+  \item \label{MS-M2} \textbf{MS-M2:} The software shall have code documentation covering all major functions, classes, and modules. The information shall include descriptions of the component’s purpose, inputs, outputs, and any exceptions that may occur.
   \begin{itemize}
     \item \textbf{Rationale:} Detailed and organized code documentation makes it easier for developers when it comes to traceability and verifiability. 
     \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
   \end{itemize}
-  \item \textbf{MS-M3:} The software shall maintain regular updates, at least once a month, assuming a change regarding dependent frameworks or libraries has occurred. 
+  \item \label{MS-M3} \textbf{MS-M3:} The software shall maintain regular updates, at least once a month, assuming a change regarding dependent frameworks or libraries has occurred. 
   \begin{itemize}
     \item \textbf{Rationale:} Maintaining regular updates is critical to ensure that the project is protected against any security or software bugs caused by the dependent frameworks. Ensuring updates at least once a month minimizes the risk of errors occurring. 
     \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
@@ -723,12 +725,12 @@ Relation:
 \subsection{Supportability Requirements}
 % \lips
 \begin{itemize}
-  \item \textbf{MS-S1:} The software shall maintain an online repository with resources, documentation and FAQs that can address common user issues or questions.
+  \item \label{MS-S1} \textbf{MS-S1:} The software shall maintain an online repository with resources, documentation and FAQs that can address common user issues or questions.
   \begin{itemize}
     \item \textbf{Rationale:} As new developers are introduced into the project, a repository with all information regarding common issues will help prevent delayed development changes.
     \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
   \end{itemize}
-  \item \textbf{MS-S2:} The software shall continue to support the latest stable version of Linux and other dependent code libraries throughout the duration of the Capstone project.
+  \item \label{MS-S2} \textbf{MS-S2:} The software shall continue to support the latest stable version of Linux and other dependent code libraries throughout the duration of the Capstone project.
   \begin{itemize}
     \item \textbf{Rationale:} Keeping the versions of dependent libraries up-to-date allows developers and researchers to continue work on the project without hassle.
     \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
@@ -737,17 +739,17 @@ Relation:
 \subsection{Adaptability Requirements}
 % \lips
 \begin{itemize}
-  \item \textbf{MS-A1:} The development team shall utilize a CI/CD pipeline to deliver new software additions.
+  \item \label{MS-A1} \textbf{MS-A1:} The development team shall utilize a CI/CD pipeline to deliver new software additions.
   \begin{itemize}
     \item \textbf{Rationale:} CI/CD pipelines allow for an automated process to ensure code changes have met standards. 
     \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
   \end{itemize}
-  \item \textbf{MS-A2:} The software shall take up to 15 steps to install and execute on major operating systems (Windows, Mac, Linux).
+  \item \label{MS-A2} \textbf{MS-A2:} The software shall take up to 15 steps to install and execute on major operating systems (Windows, Mac, Linux).
   \begin{itemize}
     \item \textbf{Rationale:} As many users of the system are on different platforms, ensuring easy installation and execution of the project is crucial to avoid unnecessary workarounds.
     \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
   \end{itemize}
-  \item \textbf{MS-A3:} The software shall be able to adapt to newly implemented experiments provided by the training environment.
+  \item \label{MS-A3} \textbf{MS-A3:} The software shall be able to adapt to newly implemented experiments provided by the training environment.
   \begin{itemize}
     \item \textbf{Rationale:} Adaptability of new experiments is a focal point when it comes to seeing the effectiveness of \hyperref[def:tpg]{TPG}’s \hyperref[def:rl]{RL} technique.
     \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
@@ -759,12 +761,12 @@ Relation:
 \section{Security Requirements}
 \subsection{Access Requirements}
 \begin{itemize}
-  \item \textbf{SR-A1:} The system shall allow a minimal and necessary amount of contributors to the framework.
+  \item \label{SR-A1} \textbf{SR-A1:} The system shall allow a minimal and necessary amount of contributors to the framework.
   \begin{itemize}
     \item \textbf{Rationale:} Limiting the number of contributors to only Tangle team members and supervisors makes it easy to monitor all code changes integrated into the main codebase.
     \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
   \end{itemize}
-  \item \textbf{SR-A2:} A form of secondary authentication shall be enabled for contributors.
+  \item \label{SR-A2} \textbf{SR-A2:} A form of secondary authentication shall be enabled for contributors.
   \begin{itemize}
     \item \textbf{Rationale:} Having Multi-factor Authentication (MFA) and Role-Based Access Control (RBAC) enabled restricts the roles of each contributor in the repository, minimizing the chance of unauthorized changes into the codebase.
     \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
@@ -773,7 +775,7 @@ Relation:
 
 \subsection{Integrity Requirements}
 \begin{itemize}
-  \item \textbf{SR-I1:} The system shall have a protection mechanism for the main branch.
+  \item \label{SR-I1} \textbf{SR-I1:} The system shall have a protection mechanism for the main branch.
   \begin{itemize}
     \item \textbf{Rationale:} Protecting the main branch on Github avoids unauthorized, corrupted code to be merged. With this, pull requests will require at least 1 review from other contributors and resolved comments before merging their changes.
     \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
@@ -782,7 +784,7 @@ Relation:
 
 \subsection{Privacy Requirements}
 \begin{itemize}
-  \item \textbf{SR-P1:} Any data that may include sensitive, personal information shall be obfuscated or anonymized where necessary.
+  \item \label{SR-P1} \textbf{SR-P1:} Any data that may include sensitive, personal information shall be obfuscated or anonymized where necessary.
   \begin{itemize}
     \item \textbf{Rationale:} Obfuscating and anonymizing sensitive data ensures that the system strictly follows the law and regulation, decreasing the chance of data breach. This includes any data that must remain private and should not be included in the public Github repository.
     \item \textbf{Phase In Plan:}  This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
@@ -791,7 +793,7 @@ Relation:
 
 \subsection{Audit Requirements}
 \begin{itemize}
-  \item \textbf{SR-A1:} All detailed message logging and simulation results shall be available for audit purposes.
+  \item \label{SR-AU1} \textbf{SR-AU1:} All detailed message logging and simulation results shall be available for audit purposes.
   \begin{itemize}
     \item \textbf{Rationale:} Storing all message logs and simulation results allows users to have access to them at a later time for auditing. This ensures traceability for compliance and debugging.
     \item \textbf{Phase In Plan:} This requirement will become phased in once CI/CD component of the project is completed, which begins after November 13, 2024. 
@@ -801,12 +803,12 @@ Relation:
 
 \subsection{Immunity Requirements}
 \begin{itemize}
-  \item \textbf{SR-IM1:} The system shall check and search for unauthorized and undesirable code.
+  \item \label{SR-IM1} \textbf{SR-IM1:} The system shall check and search for unauthorized and undesirable code.
   \begin{itemize}
     \item \textbf{Rationale:} Having regular code checks through the CI/CD pipeline guarantees that TPG's code is well-preserved and protected from undesirable code such as viruses, malware, and spyware, minimizing the probability of breaches, or data theft.
     \item \textbf{Phase In Plan:} This requirement will become phased in once the CI/CD pipeline is completed, which begins after November 13, 2024.
   \end{itemize}
-  \item \textbf{SR-IM2:} The system shall have a robust mechanism for handling errors and malfunctions.
+  \item \label{SR-IM2} \textbf{SR-IM2:} The system shall have a robust mechanism for handling errors and malfunctions.
   \begin{itemize}
     \item \textbf{Rationale:} A robust mechanism for handling errors and malfunctions ensures the system recovers gracefully from system malfunctions, avoiding downtime for users.
     \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
@@ -824,7 +826,7 @@ Relation:
 \section{Compliance Requirements}
 \subsection{Legal Requirements}
 \begin{itemize}
-  \item \textbf{CRL1:}  The TPG framework must comply with the intellectual property policies of the contributing institutions and researchers. It must comply with proper licensing (MIT license) to avoid conflicts with proprietary or open-source software practices.
+  \item \label{CRL1} \textbf{CRL1:}  The TPG framework must comply with the intellectual property policies of the contributing institutions and researchers. It must comply with proper licensing (MIT license) to avoid conflicts with proprietary or open-source software practices.
 
       \begin{itemize}
         \item \textbf{Rationale:} Ensuring compliance for intellectual property protects the rights of developers and contributors.Licensing allows the TPG framework to be shared and built upon by other researchers and open source developers while maintaining legal clarity regarding the use and distribution of the software.
@@ -834,7 +836,7 @@ Relation:
 
 \subsection{Standards Compliance Requirements}
 \begin{itemize}
-  \item \textbf{CRL1:}  TPG framework should follow the Google C++ style, a widely adopted C++ coding standard.
+  \item \label{CRL2} \textbf{CRL2:}  TPG framework should follow the Google C++ style, a widely adopted C++ coding standard.
 
       \begin{itemize}
         \item \textbf{Rationale:} Adhering to a well established coding standard helps reduce errors throughout development, increases accessibility, readability, and long-term maintainability of the code.
@@ -973,18 +975,18 @@ The main code of the TPG framework is stored in \href{https://gitlab.cas.mcmaste
 
 \subsection{Requirements for Migration to the New Product}
 \begin{itemize}
-  \item \textbf{MR-R1:} The project’s Github and GitLab repositories shall be continuously synchronized, ensuring changes on one version are reflected on the other.
+  \item \label{MR-R1} \textbf{MR-R1:} The project’s Github and GitLab repositories shall be continuously synchronized, ensuring changes on one version are reflected on the other.
   
 \begin{itemize}
   \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
 
 \end{itemize}
 
-  \item \textbf{MR-R2:} Github Actions shall be functional, establishing a seamless support for standard software engineering principles.
+  \item \label{MR-R2} \textbf{MR-R2:} Github Actions shall be functional, establishing a seamless support for standard software engineering principles.
   \begin{itemize}
   \item \textbf{Phase In Plan:} This requirement will become phased in once the CI/CD integration is completed, which begins after November 13, 2024. 
 \end{itemize}
-  \item \textbf{MR-R3:} The agent-environment interface between TPG and MuJoCo shall be functional, ensuring no conflicts with dependencies or existing code.
+  \item \label{MR-R3} \textbf{MR-R3:} The agent-environment interface between TPG and MuJoCo shall be functional, ensuring no conflicts with dependencies or existing code.
   \begin{itemize}
   \item \textbf{Phase In Plan:} This requirement will become phased in once Rev 0 is completed, which begins after February 3, 2025. 
 \end{itemize}
@@ -1000,17 +1002,17 @@ The project's goal for TPG will not accumulate any costs. Throughout the project
 \subsection{User Documentation Requirements}
 % \lips
 \begin{itemize}
-  \item \textbf{USD-UD1:} All user documentation shall be on the code repository, with versions provided in PDF format, so that they may be suitable for offline use.
+  \item \label{USD-UD1} \textbf{USD-UD1:} All user documentation shall be on the code repository, with versions provided in PDF format, so that they may be suitable for offline use.
   \begin{itemize}
     \item \textbf{Rationale:} It is important to have documentation available for both online and offline use in the event that online access is unavailable.
     \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025. 
   \end{itemize}
-  \item \textbf{USD-UD2:} Written user guides shall include platform-specific instructions (Windows, macOS, Linux, etc.), system requirements, and troubleshooting for common issues.
+  \item \label{USD-UD2} \textbf{USD-UD2:} Written user guides shall include platform-specific instructions (Windows, macOS, Linux, etc.), system requirements, and troubleshooting for common issues.
   \begin{itemize}
     \item \textbf{Rationale:} These detailed user guides allow for developers to access the project with minimal disruptions. 
     \item \textbf{Phase In Plan:} This requirement will become phased in once Revision 0 of the project is completed, which begins after February 3, 2025.
   \end{itemize}
-  \item \textbf{USD-UD3:} Release notes shall accompany each software update and provide a clear summary of new features, enhancements, and resolved issues.
+  \item \label{USD-UD3} \textbf{USD-UD3:} Release notes shall accompany each software update and provide a clear summary of new features, enhancements, and resolved issues.
   \begin{itemize}
     \item \textbf{Rationale:} Release notes are crucial to improving traceability and transparency in addition to keeping all code modifications organized.
     \item \textbf{Phase In Plan:} This requirement will become phased in once the initial development of the project has started, which begins after October 14, 2024. 
@@ -1026,6 +1028,133 @@ At this point, there are no additional tasks or requirements needed for the proj
 \section{Ideas for Solution}
 At this point, there are no additional tasks or requirements needed for the project's completion. This may be subject to change during the development if unforeseen challenges arise or the scope is modified.
 
+\begin{landscape}
+\section{Traceability Matrix}
+  \begin{longtable}{|c|p{6cm}|p{5cm}|p{4cm}|}
+    \caption{Traceability Matrix} \label{tab:traceability_matrix} \\
+    \hline
+    \textbf{Requirement ID} & \textbf{System Objective / Justification} & \textbf{Verification Method} & \textbf{Dependencies} \\
+    \hline
+    \endfirsthead
+    \multicolumn{4}{c}{\textbf{Table \ref{tab:traceability_matrix} -- Continued}}\\[0.5ex]
+    \hline
+    \textbf{Requirement ID} & \textbf{System Objective / Justification} & \textbf{Verification Method} & \textbf{Dependencies} \\
+    \hline
+    \endhead
+    % Functional Requirements (FR)
+    \hyperref[FR-1]{FR-1} & Integration with MuJoCo for reinforcement learning & System test: Verify data exchange with MuJoCo & Depends on \hyperref[OE-RIA]{OE-RIA} \\
+    \hline
+    \hyperref[FR-2]{FR-2} & Visualizing experiments for validation & Test: Verify graphical representation of experiments & Depends on \hyperref[FR-1]{FR-1} \\
+    \hline
+    \hyperref[FR-3]{FR-3} & Implementing CI/CD pipeline & Test: Validate automatic pipeline execution on commits & Supports \hyperref[MS-A1]{MS-A1} \\
+    \hline
+    \hyperref[FR-4]{FR-4} & Automated testing of new code changes & Test: Ensure all test cases run on code update & Depends on \hyperref[FR-3]{FR-3} \\
+    \hline
+    \hyperref[FR-5]{FR-5} & Automatic build and compilation after tests pass & Test: Check system build success after all tests pass & Depends on \hyperref[FR-4]{FR-4} \\
+    \hline
+    \hyperref[FR-6]{FR-6} & Maintainability through SOLID principles and style guides & Code review, static analysis (clang-tidy), test coverage & Supports \hyperref[MS-M2]{MS-M2}, \hyperref[MS-M3]{MS-M3} \\
+    \hline
+    \hyperref[FR-7]{FR-7} & Automatic code linting & Test: Verify \texttt{clang-format} enforces code consistency & Supports \hyperref[FR-6]{FR-6} \\
+    \hline
+    \hyperref[FR-8]{FR-8} & Adaptability for new experiments & Test: Add a new experiment and validate system integration & Depends on \hyperref[FR-1]{FR-1}, \hyperref[OE-RIA]{OE-RIA} \\
+    \hline
+    % Look and Feel Requirements (LF)
+    \hyperref[LFAR1]{LFAR1} & Consistent code formatting and documentation & Code review and static analysis & Supports \hyperref[FR-6]{FR-6}, \hyperref[MS-M2]{MS-M2} \\
+    \hline
+    \hyperref[LFSR1]{LFSR1} & Consistent coding style across all modules & Code review and automated formatting checks & Supports \hyperref[FR-6]{FR-6}, \hyperref[MS-M2]{MS-M2} \\
+    \hline
+    % Usability and Humanity Requirements (UH)
+    \hyperref[UH-E1]{UH-E1} & Comprehensive documentation & Documentation review, user feedback & Supports \hyperref[MS-M2]{MS-M2} \\
+    \hline
+    \hyperref[UH-E2]{UH-E2} & Real-time logging for debugging & System test: Check logs for accurate real-time messages & Depends on \hyperref[PR-RR]{PR-RR} \\
+    \hline
+    \hyperref[UH-PI1]{UH-PI1} & Parameter customization for MuJoCo & Configuration test: Verify parameter adjustments & Depends on \hyperref[FR-1]{FR-1} \\
+    \hline
+    \hyperref[UH-L1]{UH-L1} & Provide tutorials and guides & User test: Validate documentation with new users & Supports \hyperref[UH-E1]{UH-E1} \\
+    \hline
+    \hyperref[UH-L2]{UH-L2} & Ensure technical concepts are accessible & User feedback and onboarding review & Supports \hyperref[UH-E1]{UH-E1} \\
+    \hline
+    \hyperref[UH-UP1]{UH-UP1} & Use universally understandable symbols and words & UI review and user feedback & Supports \hyperref[UH-E1]{UH-E1} \\
+    \hline
+    \hyperref[UH-UP2]{UH-UP2} & Avoid offensive language in system logs & Log review and automated keyword scan & Depends on \hyperref[UH-E2]{UH-E2} \\
+    \hline
+    \hyperref[UH-A1]{UH-A1} & Ensure accessibility features (text-to-speech, color blindness support) & Accessibility compliance test & Supports \hyperref[UH-E1]{UH-E1} \\
+    \hline
+    % Performance Requirements (PR)
+    \hyperref[PR-SL]{PR-SL} & Minimize computational overhead & Performance test: Measure execution time and resource usage & Depends on \hyperref[FR-1]{FR-1} \\
+    \hline
+    \hyperref[PR-PA]{PR-PA} & Ensure numerical precision for simulations & Validation test: Compare outputs with expected values & Depends on \hyperref[FR-1]{FR-1} \\
+    \hline
+    \hyperref[PR-RFT]{PR-RFT} & Robustness against invalid inputs & System test: Validate error handling and recovery & Supports \hyperref[FR-5]{FR-5} \\
+    \hline
+    \hyperref[PR-CR]{PR-CR} & Scalability to support multiple experiments & Stress test: Run multiple experiments in parallel & Depends on \hyperref[FR-1]{FR-1}, \hyperref[FR-8]{FR-8} \\
+    \hline
+    \hyperref[PR-SE]{PR-SE} & Scalability for future extensions & Code review: Check modularity and extensibility & Supports \hyperref[MS-A1]{MS-A1} \\
+    \hline
+    \hyperref[PR-RR]{PR-RR} & Ensure reliability with minimal downtime & System uptime monitoring and CI/CD integration & Depends on \hyperref[FR-3]{FR-3}, \hyperref[FR-4]{FR-4} \\
+    \hline
+    % Operational and Environmental Requirements (OE)
+    \hyperref[OE-EPE]{OE-EPE} & Ensure compatibility with common computing environments & Test on multiple OS and hardware configurations & Supports \hyperref[FR-1]{FR-1} \\
+    \hline
+    \hyperref[OE-RIA]{OE-RIA} & Interfacing with MuJoCo and other environments & Integration test: Validate data exchange compatibility & Supports \hyperref[FR-1]{FR-1}, \hyperref[FR-8]{FR-8} \\
+    \hline
+    \hyperref[OE-RR]{OE-RR} & Ensure proper open-source licensing and documentation & License verification and documentation audit & Supports \hyperref[MS-M2]{MS-M2} \\
+    \hline
+    \hyperref[OE-OSR]{OE-OSR} & Establish internal resources for maintainers & Review documentation and repository setup & Supports \hyperref[UH-E1]{UH-E1} \\
+    \hline
+    % Maintainability and Support Requirements (MS)
+    \hyperref[MS-M1]{MS-M1} & Ensure future software updates take less time & Performance test: Compare build times before and after changes & Supports \hyperref[PR-SE]{PR-SE} \\
+    \hline
+    \hyperref[MS-M2]{MS-M2} & Code documentation for maintainability & Code review: Ensure all major functions/classes are documented & Depends on \hyperref[UH-E1]{UH-E1} \\
+    \hline
+    \hyperref[MS-M3]{MS-M3} & Regular updates for maintainability & Version control check: Ensure monthly updates & Depends on \hyperref[FR-3]{FR-3}, \hyperref[FR-6]{FR-6} \\
+    \hline
+    \hyperref[MS-S1]{MS-S1} & Maintain an online repository with resources & Repository check: Ensure all guides are available & Supports \hyperref[OE-OSR]{OE-OSR} \\
+    \hline
+    \hyperref[MS-S2]{MS-S2} & Support the latest stable Linux version & Dependency check: Verify compatibility with latest OS updates & Supports \hyperref[FR-1]{FR-1} \\
+    \hline
+    \hyperref[MS-A1]{MS-A1} & Deliver new features via CI/CD & CI/CD pipeline test: Validate automated builds and tests & Depends on \hyperref[FR-3]{FR-3} \\
+    \hline
+    \hyperref[MS-A2]{MS-A2} & Ensure easy installation and execution & Installation test: Verify steps across different OS & Supports \hyperref[OE-EPE]{OE-EPE} \\
+    \hline
+    \hyperref[MS-A3]{MS-A3} & Adapt to new experiments & Experiment validation: Verify system flexibility with new inputs & Depends on \hyperref[FR-8]{FR-8} \\
+    \hline
+    % Security Requirements (SR)
+    \hyperref[SR-A1]{SR-A1} & Restrict contributor access & Access control test: Verify contributor permissions & Depends on \hyperref[MS-S2]{MS-S2} \\
+    \hline
+    \hyperref[SR-A2]{SR-A2} & Enable multi-factor authentication for contributors & Security test: Validate MFA enforcement & Supports \hyperref[SR-A1]{SR-A1} \\
+    \hline
+    \hyperref[SR-I1]{SR-I1} & Main branch protection & Code repository check: Ensure branch protection rules & Supports \hyperref[FR-3]{FR-3}, \hyperref[FR-4]{FR-4} \\
+    \hline
+    \hyperref[SR-P1]{SR-P1} & Ensure sensitive data is anonymized & Security audit: Verify no sensitive data is exposed & Supports \hyperref[SR-A1]{SR-A1} \\
+    \hline
+    \hyperref[SR-AU1]{SR-AU1} & Store all message logs and simulation results & Audit check: Ensure traceability of logs & Supports \hyperref[UH-E2]{UH-E2} \\
+    \hline
+    \hyperref[SR-IM1]{SR-IM1} & Scan code for unauthorized modifications & Automated security scan in CI/CD pipeline & Supports \hyperref[SR-I1]{SR-I1} \\
+    \hline
+    \hyperref[SR-IM2]{SR-IM2} & Implement robust error handling mechanisms & System test: Validate error recovery & Supports \hyperref[PR-RFT]{PR-RFT} \\
+    \hline
+    % Compliance Requirements (CR)
+    \hyperref[CRL1]{CRL1} & Ensure legal compliance with open-source licensing & License review: Verify MIT compliance & Supports \hyperref[OE-RR]{OE-RR} \\
+    \hline
+    \hyperref[CRL2]{CRL2} & Adhere to Google C++ style guide & Automated linting and static analysis & Supports \hyperref[FR-6]{FR-6} \\
+    \hline
+    % Migration Requirements (MR)
+    \hyperref[MR-R1]{MR-R1} & Ensure continuous synchronization between GitHub and GitLab & Version control test: Verify repo sync process & Depends on \hyperref[FR-3]{FR-3} \\
+    \hline
+    \hyperref[MR-R2]{MR-R2} & Enable GitHub Actions for CI/CD & CI/CD test: Validate pipeline execution & Depends on \hyperref[FR-3]{FR-3} \\
+    \hline
+    \hyperref[MR-R3]{MR-R3} & Ensure seamless TPG-MuJoCo integration & Integration test: Validate system functionality & Depends on \hyperref[FR-1]{FR-1}, \hyperref[OE-RIA]{OE-RIA} \\
+    \hline
+    % User Documentation Requirements (USD)
+    \hyperref[USD-UD1]{USD-UD1} & Provide documentation in online and offline formats & Check repository for PDF and online versions & Supports \hyperref[UH-E1]{UH-E1} \\
+    \hline
+    \hyperref[USD-UD2]{USD-UD2} & Include platform-specific installation and troubleshooting & Verify documentation covers Windows, macOS, and Linux & Supports \hyperref[MS-A2]{MS-A2} \\
+    \hline
+    \hyperref[USD-UD3]{USD-UD3} & Provide release notes for updates & Check repository for updated release notes & Supports \hyperref[MS-M3]{MS-M3} \\
+    \hline
+  \end{longtable}
+\end{landscape}
 \newpage{}
 \section*{Appendix --- Reflection}
 
