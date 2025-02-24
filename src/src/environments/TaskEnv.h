@@ -6,8 +6,6 @@
 #include <deque>
 #include <random>
 
-// using namespace std;
-
 class TaskEnv {
    public:
     std::string eval_type_;
