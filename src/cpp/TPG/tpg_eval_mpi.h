@@ -148,7 +148,7 @@ void evaluate_main(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks,
   for (int proc = 1; proc < world.size(); proc++) {
     if (!all_strings[proc].empty()) {
       istringstream f(all_strings[proc]);
-      EvalData::DecodeEvalResultString(tpg, f, tasks, root_teams_map);
+      tpg.DecodeEvalResultString(f, tasks, root_teams_map);
     }
   }
 }
@@ -162,7 +162,8 @@ void evaluator(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks) {
   evaluator_map["Control"] = &EvalControl;
   evaluator_map["RecursiveForecast"] = &EvalRecursiveForecast;
   evaluator_map["Mujoco"] = &EvalMujoco;
-  EvalData eval(tpg);
+  // EvalData eval(tpg);
+  auto eval = tpg.InitEvalData();
   while (NotDoneAndActive(eval)) {
     world.recv(0, 0, eval.checkpointString);
     if (NotDoneAndActive(eval)) {
@@ -179,7 +180,8 @@ void evaluator(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks) {
            }
           eval.tm->InitMemory(tpg.team_map_, tpg.params_);
           evaluator_map[eval.task->eval_type_](tpg, eval);
-          eval.FinalizeStepData(tpg);
+          // eval.FinalizeStepData(tpg);
+          tpg.FinalizeStepData(eval);
         }
       }
       gather(world, eval.eval_result, 0);
@@ -190,7 +192,8 @@ void evaluator(TPG &tpg, mpi::communicator &world, vector<TaskEnv *> &tasks) {
 /******************************************************************************/
 void replayer(TPG &tpg, vector<TaskEnv *> &tasks) {
   // MaybeStartAnimation(tpg);
-  EvalData eval(tpg);
+  // EvalData eval(tpg);
+  auto eval = tpg.InitEvalData();
 
   vector<map<long, double>> teamUseMapPerTask;
   teamUseMapPerTask.resize(tpg.GetState("n_task"));
@@ -229,7 +232,8 @@ void replayer(TPG &tpg, vector<TaskEnv *> &tasks) {
             } else {
                 EvalMujoco(tpg, eval);
             }
-            eval.FinalizeStepData(tpg);
+            // eval.FinalizeStepData(tpg);
+            tpg.FinalizeStepData(eval);
             outcomes.push_back(eval.stats_double[REWARD1_IDX]);
         }
     }

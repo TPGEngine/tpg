@@ -12,6 +12,10 @@
 #include <cstring>
 #include <cstdio>
 #include <thread>
+#include "ActionWrappers.h"
+#include "EvalData.h"
+#include "MujocoEnv.h"
+#include "TPG.h"
 
 /******************************************************************************/
 // MuJoCo data structures
@@ -264,21 +268,19 @@ void EvalMujoco(TPG& tpg, EvalData& eval) {
     MaybeStartAnimation(tpg, task, eval);
     MaybeAnimateStep(tpg);
     eval.n_prediction = 0;
-    state* obs = new state(task->GetObsSize());
-    obs->Set(task->GetObsVec(eval.partially_observable));
+    eval.obs = new state(task->GetObsSize());
+    eval.obs->Set(task->GetObsVec(eval.partially_observable));
     while (!task->terminal()) {
-        eval.program_out = tpg.getAction(
-            eval.tm, obs, true, eval.teams_visited, eval.instruction_count,
-            task->step_, eval.team_path, tpg.rngs_[AUX_SEED], false);
+        tpg.GetAction(eval);
         auto ctrl = WrapVectorActionMuJoco(eval);
         TaskEnv::Results r = task->sim_step(ctrl);
         eval.stats_double[REWARD1_IDX] += r.r1;
         eval.AccumulateStepData();
         eval.n_prediction++;
-        obs->Set(task->GetObsVec(eval.partially_observable));
+        eval.obs->Set(task->GetObsVec(eval.partially_observable));
         MaybeAnimateStep(tpg);
     }
-    delete obs;
+    delete eval.obs;
 }
 
 #endif

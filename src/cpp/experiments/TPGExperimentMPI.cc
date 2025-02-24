@@ -18,13 +18,11 @@
 #include <phylogenetic_fitness.h>
 #include <tpg_eval_mpi.h>
 
-#include <algorithm>
 #include <any>
 #include <boost/mpi.hpp>
 #include <chrono>
 #include <cstdlib>
 
-#include "evaluators_mujoco.h"
 #include "storage/selection/selection_storage.h"
 #include "loggers/selection/selection_logger.h"
 #include "storage/timing/timing_storage.h"

@@ -46,13 +46,10 @@ void EvalControl(TPG &tpg, EvalData &eval) {
     MaybeStartAnimation(tpg);
     eval.task->Reset(tpg.rngs_[AUX_SEED]);
     eval.n_prediction = 0;
-    state *obs = new state(tpg.n_input_[tpg.GetState("active_task")]);
-    obs->Set(eval.task->GetObsVec(eval.partially_observable));
+    eval.obs = new state(tpg.n_input_[tpg.GetState("active_task")]);
+    eval.obs->Set(eval.task->GetObsVec(eval.partially_observable));
     while (!eval.task->Terminal()) {
-        eval.program_out = tpg.getAction(
-            eval.tm, obs, true, eval.teams_visited, eval.instruction_count,
-            eval.task->step_, eval.team_path, tpg.rngs_[AUX_SEED], false);
-
+        tpg.GetAction(eval);
         MaybeAnimateStep(eval);
         TaskEnv::Results r =
             eval.task->Update(WrapDiscreteAction(eval),
@@ -60,10 +57,10 @@ void EvalControl(TPG &tpg, EvalData &eval) {
         eval.stats_double[REWARD1_IDX] += r.r1;
         eval.AccumulateStepData();
         eval.n_prediction++;
-        obs->Set(eval.task->GetObsVec(eval.partially_observable));
+        eval.obs->Set(eval.task->GetObsVec(eval.partially_observable));
     }
     MaybeAnimateStep(eval);
-    delete obs;
+    delete eval.obs;
 }
 
 /******************************************************************************/
@@ -73,12 +70,11 @@ void EvalControlViz(TPG &tpg, EvalData &eval,
                     int &steps) {
     MaybeStartAnimation(tpg);
     eval.task->Reset(tpg.rngs_[AUX_SEED]);
-    state *obs = new state(tpg.n_input_[tpg.GetState("active_task")]);
-    obs->Set(eval.task->GetObsVec(eval.partially_observable));
+    eval.n_prediction = 0;
+    eval.obs = new state(tpg.n_input_[tpg.GetState("active_task")]);
+    eval.obs->Set(eval.task->GetObsVec(eval.partially_observable));
     while (!eval.task->Terminal()) {
-        eval.program_out = tpg.getAction(
-            eval.tm, obs, true, eval.teams_visited, eval.instruction_count,
-            eval.task->step_, eval.team_path, tpg.rngs_[AUX_SEED], false);
+        tpg.GetAction(eval);
         eval.n_prediction++;
         for (auto tm : eval.teams_visited) {
             if (teamUseMapPerTask[tpg.state_["active_task"]].find(tm->id_) ==
@@ -98,13 +94,13 @@ void EvalControlViz(TPG &tpg, EvalData &eval,
                               WrapContinuousAction(eval), tpg.rngs_[AUX_SEED]);
         eval.stats_double[REWARD1_IDX] += r.r1;
         eval.AccumulateStepData();
-        obs->Set(eval.task->GetObsVec(eval.partially_observable));
+        eval.obs->Set(eval.task->GetObsVec(eval.partially_observable));
     }
     for (auto p : teamUseMapPerTask[tpg.state_["active_task"]]) {
         p.second = p.second / eval.task->step_;
     }
     MaybeAnimateStep(eval);
-    delete obs;
+    delete eval.obs;
 }
 
 #endif
