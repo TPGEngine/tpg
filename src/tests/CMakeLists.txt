@@ -2,6 +2,7 @@
 include(CTest)
 include(Catch)
 enable_testing()
+find_package(TBB REQUIRED)
 
 # --- Executable Targets ---
 set(TEST_TARGETS
@@ -50,6 +51,8 @@ file(GLOB TPG_SOURCES
   "../src/engine/*.cc"
   "../src/experiments/api_client.cc"
   "../src/experiments/api_client.h"
+  "../src/experiments/evaluators/*.h"
+  "../src/experiments/evaluators/*.cc"
 )
 list(REMOVE_ITEM TPG_SOURCES "../src/experiments/TPGExperimentMPI.cc")
 add_library(tpg ${TPG_SOURCES})
@@ -61,10 +64,11 @@ target_include_directories(tpg PUBLIC
   ../src/environments
   ../src/experiments
   ../src/logging
+  ../src/experiments/evaluators
   ${EIGEN3_INCLUDE_DIR}
 )
 
-target_link_libraries(tpg PRIVATE CURL::libcurl)
+target_link_libraries(tpg PRIVATE CURL::libcurl TBB::tbb)
 
 # --- MuJoCo Setup ---
 set(MUJOCO_DIR "$ENV{MUJOCO}")  # Ensure the MUJOCO environment variable is set

@@ -3,6 +3,8 @@
 
 #include "instruction.h"
 
+class EvalData;
+
 #define MAX_GRAPH_DEPTH 1000.0
 
 class RegisterMachine {
@@ -92,7 +94,7 @@ class RegisterMachine {
    void MarkIntrons(std::unordered_map<std::string, std::any> &params_);
 
    // Execute this register machine
-   void Run(state *, int &time_step, const size_t &graph_depth, bool &verbose);
+   void Run(EvalData& eval_data, int &time_step, const size_t &graph_depth, bool &verbose);
 
    std::string ToString(bool);
    std::string ToStringMemory();

@@ -1,4 +1,5 @@
 #include "RegisterMachine.h"
+#include "EvalData.h"
 
 #include <stacktrace>
 
@@ -265,9 +266,7 @@ void RegisterMachine::Mutate(std::unordered_map<std::string, std::any> &params,
                              std::unordered_map<std::string, int> &state,
                              mt19937 &rng, vector<bool> &legal_ops) {
    uniform_real_distribution<> dis_real(0, 1.0);
-   bool changed = false;
 
-   while (!changed) {
       // Remove random instruction
       if (instructions_.size() > 1 &&
           dis_real(rng) <
@@ -276,7 +275,6 @@ void RegisterMachine::Mutate(std::unordered_map<std::string, std::any> &params,
          int i = disBid(rng);
          delete *(instructions_.begin() + i);
          instructions_.erase(instructions_.begin() + i);
-         changed = true;
       }
 
       // Insert a new random instruction
@@ -288,16 +286,17 @@ void RegisterMachine::Mutate(std::unordered_map<std::string, std::any> &params,
          uniform_int_distribution<int> disBid(0, instructions_.size());
          int i = disBid(rng);
          instructions_.insert(instructions_.begin() + i, instr);
-         changed = true;
       }
 
       // Mutate a randomly selected instruction
       if (dis_real(rng) <
           std::any_cast<double>(params["p_instructions_mutate"])) {
+            
          uniform_int_distribution<int> disBid(0, instructions_.size() - 1);
-         instructions_[disBid(rng)]->Mutate(false, legal_ops,
+         auto i = disBid(rng);
+         cerr <<"mu t" << state["t_current"] << " id" << id_  << " s" << instructions_.size() << " i" << i << endl;
+         instructions_[i]->Mutate(false, legal_ops,
                                             observation_buff_size_, rng);
-         changed = true;
       }
 
       // Mutate constants
@@ -306,7 +305,6 @@ void RegisterMachine::Mutate(std::unordered_map<std::string, std::any> &params,
          for (auto m : private_memory_) {
             m->MutateConstants(rng);
          }
-         changed = true;
       }
 
       // Swap positions of two instructions
@@ -320,7 +318,6 @@ void RegisterMachine::Mutate(std::unordered_map<std::string, std::any> &params,
             j = disBid(rng);
          } while (i == j);
          std::swap(instructions_[i], instructions_[j]);
-         changed = true;
       }
 
       // // Change observation buff size
@@ -328,13 +325,11 @@ void RegisterMachine::Mutate(std::unordered_map<std::string, std::any> &params,
       //     std::any_cast<double>(params["p_observation_buff_size"])) {
       //   MutateObsBuffSize(std::any_cast<int>(params["max_observation_buff_size"]),
       //                     rng);
-      //   changed = true;
       // }
 
       // Change memory size
       if (dis_real(rng) < std::any_cast<double>(params["p_memory_size"])) {
          MutateMemorySize(params, state, rng);
-         changed = true;
       }
 
       // Change observation index
@@ -346,9 +341,7 @@ void RegisterMachine::Mutate(std::unordered_map<std::string, std::any> &params,
          do {
             obs_index_ = dis(rng);
          } while (obs_index_ == prev);
-         changed = true;
       }
-   }
 }
 
 // This functions currently assumes obs is a vector of state vars
@@ -376,7 +369,7 @@ void RegisterMachine::CopyObservationToMemoryBuff(state *obs, size_t mem_t) {
    AddToInputMemoryBuff(mat, mem_t);
 }
 
-void RegisterMachine::Run(state *obs, int &time_step, const size_t &graph_depth,
+void RegisterMachine::Run(EvalData& eval_data, int &time_step, const size_t &graph_depth,
                           bool &verbose) {
    // Clear working memory prior to execution, making this program stateless
    if (!stateful_) {
@@ -413,24 +406,24 @@ void RegisterMachine::Run(state *obs, int &time_step, const size_t &graph_depth,
                // Copy to obs buff only once.
                if (istr->GetInType(in) == MemoryEigen::kVectorType_ &&
                    !copied_obs_vec) {
-                  CopyObservationToMemoryBuff(obs, MemoryEigen::kVectorType_);
+                  CopyObservationToMemoryBuff(eval_data.obs, MemoryEigen::kVectorType_);
                   copied_obs_vec = true;
                } else if (istr->GetInType(in) == MemoryEigen::kMatrixType_ &&
                           !copied_obs_mat) {
-                  CopyObservationToMemoryBuff(obs, MemoryEigen::kMatrixType_);
+                  CopyObservationToMemoryBuff(eval_data.obs, MemoryEigen::kMatrixType_);
                   copied_obs_mat = true;
                }
             }
             // This copies scalar input data to temporary scalar variables
             if (istr->GetInType(in) == MemoryEigen::kScalarType_) {
-               istr->SetupScalarIn(in, obs);
+               istr->SetupScalarIn(in, eval_data.obs);
             }
          }
       }
       // Track write times for temporal memory
       istr->out_->write_time_[istr->outIdxE_] =
           time_step + (graph_depth / MAX_GRAPH_DEPTH);
-      istr->exec(verbose);  // Execute instruction
+      istr->exec(eval_data);  // Execute instruction
    }
    bid_val_ =
        private_memory_[MemoryEigen::kScalarType_]->working_memory_[0](0, 0);

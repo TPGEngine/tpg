@@ -18,16 +18,16 @@ def evolve(ctx: click.Context, env: str, processes: int, seed: int):
     # Fetch the hyperparameters for the environment
     hyper_parameters = ctx.obj["hyper_parameters"]
     TPG = ctx.obj["tpg"]
+
+    # error handling for valid environment
+    if env not in hyper_parameters:
+        raise click.ClickException(f"Environment {env} is not supported. Supported environments are: {', '.join(hyper_parameters.keys())}")
     
     # Setup environment directories and get working directory
     env_dir = helpers.create_environment_directories(TPG, env)
     
     # Change working directory to environment directory
     os.chdir(env_dir)
-
-    # error handling for valid environment
-    if env not in hyper_parameters:
-        raise click.ClickException(f"Environment {env} is not supported. Supported environments are: {', '.join(hyper_parameters.keys())}")
 
     # Build the TPGExperimentMPI command
     executable = os.path.join(TPG, "build", "release", "experiments", "TPGExperimentMPI")

@@ -13,6 +13,10 @@
 #include <cstring>
 #include <cstdio>
 #include <thread>
+#include "ActionWrappers.h"
+#include "EvalData.h"
+#include "MujocoEnv.h"
+#include "TPG.h"
 
 /******************************************************************************/
 // MuJoCo data structures
@@ -259,27 +263,25 @@ inline void MaybeAnimateStep(TPG& tpg) {
 }
 
 /******************************************************************************/
-inline void EvalMujoco(TPG& tpg, EvalData& eval) {
-    MujocoEnv* task = dynamic_cast<MujocoEnv*>(eval.task);
-    task->reset(tpg.rngs_[AUX_SEED]);
-    MaybeStartAnimation(tpg, task, eval);
-    MaybeAnimateStep(tpg);
-    eval.n_prediction = 0;
-    state* obs = new state(task->GetObsSize());
-    obs->Set(task->GetObsVec(eval.partially_observable));
-    while (!task->terminal()) {
-        eval.program_out = tpg.getAction(
-            eval.tm, obs, true, eval.teams_visited, eval.instruction_count,
-            task->step_, eval.team_path, tpg.rngs_[AUX_SEED], false);
-        auto ctrl = WrapVectorActionMuJoco(eval);
-        TaskEnv::Results r = task->sim_step(ctrl);
-        eval.stats_double[REWARD1_IDX] += r.r1;
-        eval.AccumulateStepData();
-        eval.n_prediction++;
-        obs->Set(task->GetObsVec(eval.partially_observable));
-        MaybeAnimateStep(tpg);
-    }
-    delete obs;
+inline void EvalMujoco(TPG& tpg, EvalData& eval_data) {
+   MujocoEnv* task = dynamic_cast<MujocoEnv*>(eval_data.task);
+   task->reset(tpg.rngs_[AUX_SEED]);
+   MaybeStartAnimation(tpg, task, eval_data);
+   MaybeAnimateStep(tpg);
+   eval_data.n_prediction = 0;
+   eval_data.obs = new state(task->GetObsSize());
+   eval_data.obs->Set(task->GetObsVec(eval_data.partially_observable));                 
+   while (!task->terminal()) {
+      tpg.GetAction(eval_data);
+      auto ctrl = WrapVectorActionMuJoco(eval_data);
+      TaskEnv::Results r = task->sim_step(ctrl);
+      eval_data.stats_double[REWARD1_IDX] += r.r1;
+      eval_data.AccumulateStepData();
+      eval_data.n_prediction++;
+      eval_data.obs->Set(task->GetObsVec(eval_data.partially_observable));
+      MaybeAnimateStep(tpg);
+   }
+   delete eval_data.obs;
 }
 
 #endif

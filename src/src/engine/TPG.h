@@ -15,6 +15,8 @@
 #include "point.h"
 #include "state.h"
 #include "team.h"
+#include "EvalData.h"
+#include "sequence_comparisons.h"
 
 #define NUM_RNG 2
 #define TPG_SEED 0
@@ -62,18 +64,7 @@ class TPG {
     team *genTeamsInternal(long, mt19937 &, set<team *, teamIdComp> &,
                            map<long, team *> &);
     int genUniqueProgram(RegisterMachine *, set<RegisterMachine *, RegisterMachineIdComp>);
-    RegisterMachine *getAction(team *tm, state *s, bool updateActive,
-                       set<team *, teamIdComp> &visitedTeams,
-                       long &decisionInstructions, int timeStep,
-                       vector<team *> &teamPath, mt19937 &rng, bool verbose);
-
-    RegisterMachine *getAction(
-        team *tm, state *s, bool updateActive,
-        set<team *, teamIdComp> &visitedTeams, long &decisionInstructions,
-        int timeStep, vector<RegisterMachine *> &allPrograms,
-        vector<RegisterMachine *> &winningPrograms, vector<set<long>> &decisionFeatures,
-        // vector<set<MemoryEigen *, MemoryEigenIdComp>> &decisionMemories,
-        vector<team *> &teamPath, mt19937 &rng, bool verbose);
+    void GetAction(EvalData& eval_data);
     void GetAllNodes(team *tm, set<team *, teamIdComp> &teams,
                      set<RegisterMachine *, RegisterMachineIdComp> &RegisterMachines);
     // void GetAllNodes(team *tm, set<team *, teamIdComp> &teams,
@@ -212,7 +203,13 @@ class TPG {
     void MutateActionToTerminal(RegisterMachine *prog_to_mu, team *new_team);
     void MutateActionToTeam(RegisterMachine *prog_to_mu, team *new_team,
                             int &n_new_teams);
-                            
+
+    // Method used by TPG processes to share evaluation data.
+    void EncodeEvalResultString(EvalData& eval_data);
+    void DecodeEvalResultString(istringstream& f, vector<TaskEnv*>& tasks,
+                                std::map<long, team*> root_teams_map);
+    void FinalizeStepData(EvalData& eval_data);  
+    EvalData InitEvalData();
 };
 
 #endif

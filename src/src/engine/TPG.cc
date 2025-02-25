@@ -6,6 +6,7 @@
 #include "metrics/replacement/replacement_metrics_builder.h"
 #include "metrics/removal/removal_metrics_builder.h"
 #include "metrics/removal/removal_metrics.h"
+#include "EvalData.h"
 
 /******************************************************************************/
 TPG::TPG() {
@@ -90,38 +91,10 @@ void TPG::clearMemory() {
    }
 }
 
-/******************************************************************************/
-RegisterMachine* TPG::getAction(team* tm, state* s, bool updateActive,
-                                set<team*, teamIdComp>& visitedTeams,
-                                long& decisionInstructions, int timeStep,
-                                vector<team*>& teamPath, mt19937& rng,
-                                bool verbose) {
-   visitedTeams.clear();
-   decisionInstructions = 0;
-   teamPath.clear();
-   return tm->getAction(s, team_map_, updateActive, visitedTeams,
-                        decisionInstructions, timeStep, teamPath, rng, verbose);
-}
-
-/******************************************************************************/
-RegisterMachine* TPG::getAction(
-    team* tm, state* s, bool updateActive, set<team*, teamIdComp>& visitedTeams,
-    long& decisionInstructions, int timeStep,
-    vector<RegisterMachine*>& allPrograms,
-    vector<RegisterMachine*>& winningPrograms,
-    vector<set<long>>& decisionFeatures,
-    // vector<set<MemoryEigen *, MemoryEigenIdComp>> &decisionMemories,
-    vector<team*>& teamPath, mt19937& rng, bool verbose) {
-   allPrograms.clear();
-   winningPrograms.clear();
-   decisionInstructions = 0;
-   decisionFeatures.clear();
-   // decisionMemories.clear();
-   // visitedTeams.clear();
-   teamPath.clear();
-   return tm->getAction(
-       s, team_map_, updateActive, visitedTeams, decisionInstructions, timeStep,
-       allPrograms, winningPrograms, decisionFeatures, teamPath, rng, verbose);
+void TPG::GetAction(EvalData& eval_data){
+  eval_data.instruction_count = 0;
+  eval_data.team_path.clear();
+  eval_data.tm->GetAction(eval_data);
 }
 
 /******************************************************************************/
@@ -2664,4 +2637,113 @@ string TPG::AgentOpUseToString(team* agent) {
       ss << instruction::op_names_[i] << "," << op_use[i] << endl;
    }
    return ss.str();//VectorToString(op_use);
+}
+
+/******************************************************************************/
+
+void TPG::EncodeEvalResultString(EvalData& eval_data) {
+   eval_data.eval_result += to_string(static_cast<long>(eval_data.tm->id_));
+   eval_data.eval_result += ":" + VectorToStringNoSpace(eval_data.fingerprint);
+   eval_data.eval_result += ":" + to_string(GetState("active_task"));
+   for (size_t r = 0; r < eval_data.stats_double.size(); r++) {
+   eval_data.eval_result += ":" + to_string(eval_data.stats_double[r]);
+   }
+   for (size_t r = 0; r < eval_data.stats_int.size(); r++) {
+   eval_data.eval_result += ":" + to_string(eval_data.stats_int[r]);
+   }
+   eval_data.eval_result += "\n";
+}
+
+/******************************************************************************/
+void TPG::DecodeEvalResultString(istringstream& f, vector<TaskEnv*>& tasks,
+                                 std::map<long, team*> root_teams_map) {
+   string line;
+   vector<string> split_str;
+   while (getline(f, line)) {
+      vector<long> active;
+      vector<double> r_stats_double;
+      vector<int> r_stats_int;
+      SplitString(line, ':', split_str);
+      size_t s = 0;
+      long rslt_id = atol(split_str[s++].c_str());
+      string fingerprint = split_str[s++].c_str();
+      params_["active_task"] = atoi(split_str[s++].c_str());
+      for (int i = 0; i < GetParam<int>("n_point_aux_double"); i++)
+         r_stats_double.push_back(atof(split_str[s++].c_str()));
+      for (int i = 0; i < GetParam<int>("n_point_aux_int"); i++)
+         r_stats_int.push_back(atoi(split_str[s++].c_str()));
+      setOutcome(root_teams_map[rslt_id], fingerprint, r_stats_double,
+                 r_stats_int, GetState("t_current"));
+      // For control tasks, re-use training results as validation.
+      // TODO(skelly): fix
+      if (r_stats_int[POINT_AUX_INT_PHASE] == _TRAIN_PHASE &&
+          (tasks[GetParam<int>("active_task")]->eval_type_ == "Control" ||
+           tasks[GetParam<int>("active_task")]->eval_type_ == "Mujoco")) {
+         r_stats_int[POINT_AUX_INT_PHASE] = _VALIDATION_PHASE;
+         setOutcome(root_teams_map[rslt_id], fingerprint, r_stats_double,
+                    r_stats_int, GetState("t_current"));
+      }
+   }
+}
+
+/******************************************************************************/
+void TPG::FinalizeStepData(EvalData& eval_data) {
+   if (eval_data.task->eval_type_ == "RecursiveForecast") {
+      if (GetParam<string>("forecast_fitness") == "mse") {
+         auto err =
+             MeanSquaredError(eval_data.sequence_targ, eval_data.sequence_pred);
+         eval_data.stats_double[REWARD1_IDX] = -err;
+      } else if (GetParam<string>("forecast_fitness") == "correlation") {
+         auto corr =
+             Correlation(eval_data.sequence_targ, eval_data.sequence_pred);
+         eval_data.stats_double[REWARD1_IDX] = corr;
+      } else if (GetParam<string>("forecast_fitness") == "pearson") {
+         auto corr = PearsonCorrelation(eval_data.sequence_targ,
+                                        eval_data.sequence_pred);
+         eval_data.stats_double[REWARD1_IDX] = corr;
+      } else if (GetParam<string>("forecast_fitness") == "theils") {
+         auto err =
+             TheilsStatistic(eval_data.sequence_targ, eval_data.sequence_pred);
+         eval_data.stats_double[REWARD1_IDX] = -err;
+      } else if (GetParam<string>("forecast_fitness") == "mse_multivar") {
+         auto err = calculateMSE_Multi(eval_data.sequence_targ,
+                                       eval_data.sequence_pred);
+         eval_data.stats_double[REWARD1_IDX] = -err;
+      } else if (GetParam<string>("forecast_fitness") == "theils_multivar") {
+         auto err = calculateTheils_Multi(eval_data.sequence_targ,
+                                          eval_data.sequence_pred);
+         eval_data.stats_double[REWARD1_IDX] = -err;
+      } else if (GetParam<string>("forecast_fitness") == "pearson_multivar") {
+         auto corr = calculatePearson_Multi(eval_data.sequence_targ,
+                                            eval_data.sequence_pred);
+         eval_data.stats_double[REWARD1_IDX] = corr;
+         if (!isfinite(eval_data.stats_double[REWARD1_IDX]))
+            eval_data.stats_double[REWARD1_IDX] = 0;
+      } else {
+         die(__FILE__, __FUNCTION__, __LINE__,
+             "Unsupported forecast fitness function");
+      }
+   }
+   eval_data.stats_double[VISITED_TEAMS_IDX] /= eval_data.n_prediction;
+   eval_data.stats_double[INSTRUCTIONS_IDX] /= eval_data.n_prediction;
+   eval_data.stats_int[POINT_AUX_INT_TASK] = GetState("active_task");
+   eval_data.stats_int[POINT_AUX_INT_PHASE] = GetState("phase");
+   eval_data.stats_int[POINT_AUX_INT_ENVSEED] = eval_data.episode;
+   eval_data.stats_int[POINT_AUX_INT_internalTestNodeId] =
+       GetState("internal_test_node_id");
+   EncodeEvalResultString(eval_data);
+}
+
+/******************************************************************************/
+EvalData TPG::InitEvalData() {
+   EvalData eval_data;
+   eval_data.tpg_seed = seeds_[TPG_SEED];
+   eval_data.stats_double.resize(GetParam<int>("n_point_aux_double"));
+   eval_data.stats_int.resize(GetParam<int>("n_point_aux_int"));
+   eval_data.animate = GetParam<int>("animate") == 1;
+   eval_data.partially_observable = GetParam<int>("partially_observable") == 1;
+   eval_data.n_prediction = 0;
+   eval_data.team_map = team_map_;
+   eval_data.verbose = false;
+   return eval_data;
 }
