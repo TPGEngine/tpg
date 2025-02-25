@@ -47,9 +47,7 @@ inline void EvalRecursiveForecast(TPG &tpg, EvalData &eval) {
     for (int i = 0; i < task->n_prime_ - 1; i++) {
         PrepareRecursiveForecastObs(tpg, eval, true);
         // Execute graph
-        eval.program_out = tpg.getAction(
-            eval.tm, eval.obs, true, eval.teams_visited, eval.instruction_count,
-            eval.task->step_, eval.team_path, tpg.rngs_[AUX_SEED], false);
+        tpg.GetAction(eval);
         eval.sample++;
     }
     // Predict
@@ -58,9 +56,7 @@ inline void EvalRecursiveForecast(TPG &tpg, EvalData &eval) {
          eval.n_prediction++) {
         PrepareRecursiveForecastObs(tpg, eval, false);
         // Execute graph
-        eval.program_out = tpg.getAction(
-            eval.tm, eval.obs, true, eval.teams_visited, eval.instruction_count,
-            task->step_, eval.team_path, tpg.rngs_[AUX_SEED], false);
+        tpg.GetAction(eval);
         SaveRecursiveForecast(tpg, eval);
         eval.sample++;
         eval.AccumulateStepData();
@@ -121,10 +117,7 @@ inline void EvalRecursiveForecastViz(TPG &tpg, EvalData &eval,
                                       task->data[eval.sample].begin(),
                                       task->data[eval.sample].end());
         // Execute graph
-        eval.program_out = tpg.getAction(
-            eval.tm, eval.obs, true, eval.teams_visited, eval.instruction_count,
-            eval.task->step_, eval.team_path, tpg.rngs_[AUX_SEED], false);
-
+        tpg.GetAction(eval);
         // Team user per task stats TODO(skelly): move to accumulator?
         for (auto tm : eval.teams_visited) {
             if (teamUseMapPerTask[tpg.state_["active_task"]].find(tm->id_) ==
@@ -148,9 +141,7 @@ inline void EvalRecursiveForecastViz(TPG &tpg, EvalData &eval,
         PrepareRecursiveForecastObs(tpg, eval, false);
 
         // Execute graph
-        eval.program_out = tpg.getAction(
-            eval.tm, eval.obs, true, eval.teams_visited, eval.instruction_count,
-            task->step_, eval.team_path, tpg.rngs_[AUX_SEED], false);
+        tpg.GetAction(eval);
         // Team user per task stats TODO(skelly): move to accumulator?
         for (auto tm : eval.teams_visited) {
             if (teamUseMapPerTask[tpg.state_["active_task"]].find(tm->id_) ==

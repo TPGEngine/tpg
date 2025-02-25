@@ -12,6 +12,7 @@
 #include "state.h"
 #include "RegisterMachine.h"
 
+
 #define MEMBERS_RUN_ENTROPY_INDEX 3
 #define NUM_TEAM_DISTANCE_MEASURES 3
 // arbitrarily large, greater than max ALE frames/episode of 18000
@@ -19,6 +20,7 @@
 
 using namespace std;
 
+class EvalData;
 struct teamIdComp;
 
 class team {
@@ -226,15 +228,7 @@ class team {
     distances_2_.clear();
   }
   // void deleteOutcome(point *); /* Delete outcome. */
-  RegisterMachine *getAction(state *, map<long, team *> &, bool,
-                     set<team *, teamIdComp> &, long &, int, vector<team *> &,
-                     mt19937 &, bool &);
-  RegisterMachine *getAction(state *, map<long, team *> &, bool,
-                     set<team *, teamIdComp> &, long &, int,
-                     vector<RegisterMachine *> &, vector<RegisterMachine *> &,
-                     vector<set<long>> &,
-                     //  vector<set<MemoryEigen *, MemoryEigenIdComp>> &,
-                     vector<team *> &, mt19937 &, bool &);
+  void GetAction(EvalData& eval_data);
   // double ncdBehaviouralDistance(team*, int);
   void Shuffle(mt19937 &rng) {
     vector<RegisterMachine *> vec(members_.begin(), members_.end());

@@ -255,7 +255,7 @@ mj_max_timestep 1000
 
 mj_reward_control_weight 0.0
 
-mj_n_eval_train 20
+mj_n_eval_train 100
 mj_n_eval_validation 0
 mj_n_eval_test 1
 
