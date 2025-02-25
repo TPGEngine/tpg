@@ -3,7 +3,7 @@
 #include <catch2/catch_approx.hpp>
 
 
-#include "../src/cpp/environments/mujoco/Mujoco_Inverted_Pendulum_v4.h"
+#include "../src/environments/mujoco/Mujoco_Inverted_Pendulum_v4.h"
 #include <random>
 #include <TPG.h>
 #include <instruction.h>

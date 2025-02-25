@@ -2,6 +2,7 @@
 include(CTest)
 include(Catch)
 enable_testing()
+find_package(TBB REQUIRED)
 
 # --- Executable Targets ---
 set(TEST_TARGETS
@@ -44,27 +45,30 @@ endforeach()
 
 # --- Library Target (tpg) ---
 file(GLOB TPG_SOURCES 
-  "../src/cpp/logging/metrics/mta/*.h"
-  "../src/cpp/logging/metrics/mta/*.cc"
-  "../src/cpp/TPG/*.h"
-  "../src/cpp/TPG/*.cc"
-  "../src/cpp/experiments/api_client.cc"
-  "../src/cpp/experiments/api_client.h"
+  "../src/logging/metrics/mta/*.h"
+  "../src/logging/metrics/mta/*.cc"
+  "../src/engine/*.h"
+  "../src/engine/*.cc"
+  "../src/experiments/api_client.cc"
+  "../src/experiments/api_client.h"
+  "../src/experiments/evaluators/*.h"
+  "../src/experiments/evaluators/*.cc"
 )
-list(REMOVE_ITEM TPG_SOURCES "../src/cpp/experiments/TPGExperimentMPI.cc")
+list(REMOVE_ITEM TPG_SOURCES "../src/experiments/TPGExperimentMPI.cc")
 add_library(tpg ${TPG_SOURCES})
 
 # Combine include directories for tpg
 target_include_directories(tpg PUBLIC 
   ../src
-  ../src/cpp/TPG
-  ../src/cpp/environments
-  ../src/cpp/experiments
-  ../src/cpp/logging
+  ../src/engine
+  ../src/environments
+  ../src/experiments
+  ../src/logging
+  ../src/experiments/evaluators
   ${EIGEN3_INCLUDE_DIR}
 )
 
-target_link_libraries(tpg PRIVATE CURL::libcurl)
+target_link_libraries(tpg PRIVATE CURL::libcurl TBB::tbb)
 
 # --- MuJoCo Setup ---
 set(MUJOCO_DIR "$ENV{MUJOCO}")  # Ensure the MUJOCO environment variable is set
@@ -78,7 +82,7 @@ endif()
 include_directories(${MUJOCO_INCLUDE})
 
 # Additional include for MuJoCo environments
-include_directories(../src/cpp/environments/mujoco)
+include_directories(../src/environments/mujoco)
 
 # --- Link Libraries to Executables ---
 

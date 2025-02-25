@@ -9,20 +9,6 @@ This code is designed to be used in Linux. If you use Windows, you can use Windo
 bash ./setup.sh
 ```
 
-
-To run the build with compiler optimization flags. Run the cmake build command with enable high optimization flag on
-
-
-```bash
-cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DENABLE_HIGH_OPTIMIZATION=ON
-```
-
-instead of 
-
-```bash
-cmake -B build -S . -DCMAKE_BUILD_TYPE=Release 
-```
-
 This performs the setup and compilation of the steps below. If you want to manually install, follow the instructions below.
 
 For MacOS or Windows users, you can follow this [guide](https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/Dev-Container-Setup-Guide) to setup Dev Containers which spins up a Linux based environment right within VS Code.
@@ -62,13 +48,22 @@ cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug
 cmake --build build
 ```
 
-### 4. Run an experiment
-The folder tpg/experiments/generic contains basic directory structure required. Parameters are set in parameters file found in tpg/experiments/hyper_parameters.
+To run the build with compiler optimization flags:
+```bash
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DENABLE_HIGH_OPTIMIZATION=ON
+cmake --build build
+```
 
-To run an experiment for [Mujoco Inverted Pendulum](https://gymnasium.farama.org/environments/mujoco/inverted_pendulum/) using 4 parallel MPI processes, make tpg/experiments/generic your working directory and run:
+### 4. Run an experiment
+
+Refer to the [wiki](https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/Running-Experiments-with-the-TPG-CLI) for more information on how to run experiments with the CLI
+
+To run an experiment for [Mujoco Inverted Pendulum](https://gymnasium.farama.org/environments/mujoco/inverted_pendulum/) using 4 parallel MPI processes, we can use the `tpg` CLI tool to execute experiments:
 ```
-tpg-run-mpi.sh -n 4 -p ../hyper_parameters/2025-02-05_TPG_MuJoco_Inverted_Pendulum.txt
+tpg evolve inverted_pendulum
 ```
+
+The logs, plots, and replay videos would populate within the `experiments/inverted_pendulum` directory
 
 Note that as of right now, the number of assigned processes must be greater than the number of active tasks.
 
@@ -84,7 +79,7 @@ The first page will be a training curve looking something like the plot below. A
 ### 6. Visualize the best policy's behaviour
 Display an OpenGL animation of the single best policy interacting with the environment:
 ```
-tpg-run-mpi.sh -m 1 -p ../hyper_parameters/2025-02-05_TPG_MuJoco_Inverted_Pendulum.txt
+tpg replay inverted_pendulum
 ```
  
 ### 7. Cleanup

@@ -2,15 +2,9 @@
 #SBATCH --account=def-skelly
 
 # cpus anywhere
-<<<<<<< HEAD
-#SBATCH --ntasks=101               
-#SBATCH --mem-per-cpu=4G      
-#SBATCH --time=0-12:00  # time (DD-HH:MM)
-=======
 #SBATCH --ntasks=21               
 #SBATCH --mem-per-cpu=6G      
 #SBATCH --time=0-03:00  # time (DD-HH:MM)
->>>>>>> origin/main
 
 #defaults
 mode=0 #Train:0, Replay:1, Debug:2
@@ -29,16 +23,10 @@ done
 # Start from scratch ###########################################################
 if [ $mode -eq 0 ]; then
   srun $TPG/build/release/cpp/experiments/TPGExperimentMPI \
-<<<<<<< HEAD
   parameters_file=${parameters_file} \
   seed_tpg=${seed_tpg} \
   1> tpg.${seed_tpg}.$$.std \
   2> tpg.${seed_tpg}.$$.err
-=======
-  seed_tpg=$seed \
-  1> tpg.$seed.$$.std \
-  2> tpg.$seed.$$.err
->>>>>>> origin/main
 fi
 
 # Pickup from checkpoint #######################################################
@@ -49,7 +37,7 @@ if [ $mode -eq 4 ]; then
   cut -d '.' -f 2 | sort -n | tail -n 1)
   pid=$(ls tpg.${seed_tpg}.*.std | cut -d '.' -f 3 | tail -n 1)
   echo "Starting run ${seed_tpg} t ${checkpoint_in_t} pid $pid"
-  srun $TPG/build/release/cpp/experiments/TPGExperimentMPI \
+  srun $TPG/build/release/experiments/TPGExperimentMPI \
     parameters_file=${parameters_file} \
     seed_tpg=${seed_tpg} \
     start_from_checkpoint=1 \

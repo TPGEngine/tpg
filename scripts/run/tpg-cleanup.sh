@@ -1,7 +1,7 @@
 #!/bin/bash
 if ls *.err 1> /dev/null 2>&1; then rm *.err; fi
 if ls *.std 1> /dev/null 2>&1; then rm *.std; fi
-if ls *.rslt 1> /dev/null 2>&1; then rm *.rslt; fi
+if ls *.dbg 1> /dev/null 2>&1; then rm *.dbg; fi
 if ls *.mtrl 1> /dev/null 2>&1; then rm *.mtrl; fi
 if ls *.pdf 1> /dev/null 2>&1; then rm *.pdf; fi
 if ls checkpoints/*rslt 1> /dev/null 2>&1; then rm checkpoints/*rslt; fi

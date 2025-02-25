@@ -42,3 +42,8 @@ rm -rf build
 # Build TPG     
 cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
+
+# Build the Python CLI
+pipx ensurepath
+cd $TPG/src/cli
+pipx install -e .
