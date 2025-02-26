@@ -5,6 +5,10 @@
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{longtable}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{parskip}
 \hypersetup{
     colorlinks,
     citecolor=black,
@@ -96,13 +100,52 @@ FR-SLN2 & MuJoCo environments within the TPG framework can be successfully run w
 \end{longtable}
 \end{center}
 
+\subsection{Experiment Visualization}
+
+\begin{center}
+  \begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
+    \caption{Experiment Visualization Tests} \\
+  \hline
+  \textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
+  \hline
+  \endhead
+  FR-SLN3 & When an experiment is running or finished training, the best performing policy can be visualized using the TPG CLI tool. & Pass \\
+  \hline
+  \end{longtable}
+\end{center}
+
 \section{Nonfunctional Requirements Evaluation}
 
 \subsection{Usability}
 		
 \subsection{Performance}
 
-\subsection{etc.}
+\subsection{Operational and Environmental}
+
+\begin{center}
+  \begin{longtable}{|p{4cm}|p{4cm}|}
+  \caption{Operational and Environmental Tests} \\
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endhead
+  NFR-SLR6 & Pass \\
+  \hline
+  \end{longtable}
+\end{center}
+
+For NFR-SLN6, TPG now supports contributions from macOS, Windows, and Linux developers.
+Previously, only Linux was supported because TPG used SCons for C++ builds and Linux-specific dependencies from \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/blob/main/requirements.txt}{requirements.txt}.
+With VSCode Dev Containers, a Linux development environment is automatically launched for all developers, ensuring a standardized setup.
+Simply follow the \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/home}{Wiki} instructions to download all necessary Linux dependencies and build the C++ code reliably. Onboarding on a Macbook has been reduced from 2 weeks to just 5 minutes.
 
 \subsection{Compliance}
 
@@ -134,9 +177,31 @@ Any critical errors found during the linting process create blocking pull reques
   \label{fig:myimage}
 \end{figure}
 
-\section{Comparison to Existing Implementation}	
+\section{Comparison to Existing Implementation}
 
-This section will not be appropriate for every project.
+The starting point for our project was a repository maintained by Dr. Kelly’s research team. As is common with many academic projects, the original implementation focused on exploratory research rather than robust software engineering practices. While the code worked for experimental purposes, it lacked adherence to formal open source library standards---particularly in areas such as code modularity, automated testing, and the development workflow.
+
+\subsection{Enhancing Code Quality and Development Practices}
+
+\textbf{Open Source Best Practices:}  
+We integrated industry-standard practices, including CI/CD pipelines, branch protection, and automated builds. Every pull request now triggers unit tests to ensure that new contributions do not break the existing logic.
+
+\medskip
+\textbf{Code Refactoring and Modularity:}  
+Previously, experiment logic was contained within a single \texttt{Main} function, making maintenance and extension challenging. We refactored the code into well-organized classes, enhancing both modularity and maintainability. Additionally, we adopted ClangFormat with the Google C++ style guide and migrated from SCons to CMake---a modern and widely used C++ build tool.
+
+\subsection{Introduction of New Features}
+
+\textbf{Unit Testing:}  
+We have implemented unit tests for MuJoCo environments and key algorithms like Register Machine Crossover and Team Crossover. These tests are integrated into our automated build pipeline to ensure consistent validation of new features.
+
+\medskip
+\textbf{Enhanced Experimentation and User Experience:}  
+Previously, users had to manually run \texttt{cd \$TPG/experiments/generic} and execute a complex shell script with numerous parameters. This process was error-prone and inflexible. In contrast, our new CLI tool---built in Python using the Click library---allows users to run experiments from any directory with a simple command (e.g., \texttt{tpg evolve multitask}). The CLI provides built-in help and clear documentation, while automatically organizing outputs (logs, plots, replays) into designated directories, thereby streamlining the workflow.
+
+\medskip
+\textbf{Modern Development Environment Support:}  
+We containerized the development environment using Docker. This Linux-based container ensures a consistent deployment environment, reducing platform-specific issues during development and testing.
 
 \section{Unit Testing}
 
