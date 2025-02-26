@@ -120,7 +120,28 @@ FR-SLN2 & MuJoCo environments within the TPG framework can be successfully run w
 		
 \subsection{Performance}
 
-\subsection{etc.}
+\subsection{Operational and Environmental}
+
+\begin{center}
+  \begin{longtable}{|p{4cm}|p{4cm}|}
+  \caption{Operational and Environmental Tests} \\
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endhead
+  NFR-SLR6 & Pass \\
+  \hline
+  \end{longtable}
+\end{center}
+
+For NFR-SLN6, TPG now supports contributions from macOS, Windows, and Linux developers.
+Previously, only Linux was supported because TPG used SCons for C++ builds and Linux-specific dependencies from \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/blob/main/requirements.txt}{requirements.txt}.
+With VSCode Dev Containers, a Linux development environment is automatically launched for all developers, ensuring a standardized setup.
+Simply follow the \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/home}{Wiki} instructions to download all necessary Linux dependencies and build the C++ code reliably. Onboarding on a Macbook has been reduced from 2 weeks to just 5 minutes.
 
 \subsection{Compliance}
 
