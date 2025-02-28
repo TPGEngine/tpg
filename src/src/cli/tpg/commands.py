@@ -1,8 +1,11 @@
-import click
+import glob
 import os
 import subprocess
-import glob
+
+import click
+
 from . import helpers
+
 
 @click.command(help="Evolve a policy")
 @click.argument("env")
@@ -19,6 +22,12 @@ def evolve(ctx: click.Context, env: str, processes: int, seed: int):
     # error handling for valid environment
     if env not in hyper_parameters:
         raise click.ClickException(f"Environment {env} is not supported. Supported environments are: {', '.join(hyper_parameters.keys())}")
+    
+    # Setup environment directories and get working directory
+    env_dir = helpers.create_environment_directories(TPG, env)
+    
+    # Change working directory to environment directory
+    os.chdir(env_dir)
 
     # Build the TPGExperimentMPI command
     executable = os.path.join(TPG, "build", "release", "experiments", "TPGExperimentMPI")
@@ -59,17 +68,23 @@ def plot(csv_files: str, column_name: str):
 @click.command(help="Replay the best performing policy")
 @click.argument("env")
 @click.option("--seed", help="Random seed", default=42)
-@click.option("--seed-aux", help="Auxillary seed", default=42) # what does this do?
+@click.option("--seed-aux", help="Auxillary seed", default=42)
+@click.option("--task-to-replay", help="Task to replay for multitask", default=0)
 @click.pass_context
-def replay(ctx: click.Context, env: str, seed: int, seed_aux: int):
+def replay(ctx: click.Context, env: str, seed: int, seed_aux: int, task_to_replay: int):
     """Replay the best performing policy for the given environment"""
     
     # Fetch the hyperparameters for the environment
     hyper_parameters = ctx.obj["hyper_parameters"]
     TPG = ctx.obj["tpg"]
+    
+    env_dir = helpers.create_environment_directories(TPG, env)
+    
+    # Change working directory to environment directory
+    os.chdir(env_dir)
 
     # Find the selection.*.*.csv file
-    csv_files = glob.glob(os.path.join(TPG, "experiments", "generic", "selection.*.*.csv"))
+    csv_files = glob.glob(os.path.join(env_dir, "selection.*.*.csv"))
     if not csv_files:
         raise click.ClickException("Ensure that you've evolved a policy before replaying it and the selection.*.*.csv file exists.")
 
@@ -98,7 +113,7 @@ def replay(ctx: click.Context, env: str, seed: int, seed_aux: int):
         f"replay=1", 
         f"animate=1",
         f"id_to_replay={int(metrics['team_id'])}",
-        f"task_to_replay=0"
+        f"task_to_replay={task_to_replay}"
     ]
 
     stdout_file = f"tpg.{seed}.{seed_aux}.replay.std"

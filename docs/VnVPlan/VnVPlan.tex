@@ -76,8 +76,8 @@
     TPG & Tangled Program Graphs\\
     DNNs & Deep Neural Networks\\
     RL & Reinforcement Learning\\
-    Multi-Task RL & Multi-Task Reinforcement Learning\\
     SRS & Software Requirement Specification\\
+    SLN & System Level Number\\
     FR & Functional Requirement\\
     NFR & Non-Functional Requirement\\
     MIS & Module Interface Specification\\
@@ -97,7 +97,8 @@
 
 \pagenumbering{arabic}
 
-This document provides the Software Validation and verification plan of the TPG Capstone Project. It consists of general information such as objectives and relevant documentation, plans for the system's verification and validation, as well as test descriptions for both system and unit tests. This information is subject to change at any point throughout the project and will be updated accordingly with changes mentioned in the revision history table.
+This document provides the Software Validation and Verification plan of the TPG Capstone Project. It consists of general information such as objectives and relevant documentation, plans for the system's verification and validation, including test descriptions for both system and unit tests. This information is subject to change at any point throughout the project and will be updated accordingly with changes mentioned in the revision history table.
+Any complex and complicated aspects that may be required to complete an objective will be assisted by utilizing open-source external libraries.\\\\
 
 \section{General Information}
 
@@ -106,7 +107,9 @@ This document provides the Software Validation and verification plan of the TPG 
 % \wss{Say what software is being tested.  Give its name and a brief overview of
 %   its general functions.}
 
-The software being tested is the TPG framework. More specifically, the overall workflow of the open-source repository as well as the interface between the TPG framework and the physics engine environment, MuJoCo. TPG is a research framework currently being developed by a team led by Dr. Stephen Kelly. The software’s general functions include training agents within the OpenAI Gymnasium environment using reinforcement learning techniques to achieve a certain task. With TPG, the data is outputted through a variety of methods. You may choose to visualize the data within multiple plots or view an OpenGL simulation of the agent with the best performance at the time of running. The software to be implemented within this repository is an interface that allows for experiments to be run with MuJoCo, a physics-engine simulator. This is in addition to creating a software development pipeline within the repository that allows for an easier development experience as changes are implemented. 
+The software being tested is the overall workflow of the open-source repository including the interface between the TPG framework and the physics engine environment, MuJoCo.
+The software to be implemented within this repository is an interface that allows for experiments to be run with MuJoCo, a physics-engine simulator. This is in addition to creating a software development pipeline within the repository that allows for an easier development experience as changes are implemented. \\\\
+TPG is a research framework currently being developed by a team led by Dr. Stephen Kelly. The software’s general functions include training agents within the OpenAI Gymnasium environment using reinforcement learning techniques to achieve a certain task. With TPG, the data is outputted through a variety of methods. You may choose to visualize the data within multiple plots or view an OpenGL simulation of the agent with the best performance at the time of running.
 
 \subsection{Objectives}
 
@@ -127,16 +130,12 @@ The software being tested is the TPG framework. More specifically, the overall w
 % external library, you can explicitly state that you will assume that external library 
 % has already been verified by its implementation team.}
 
-Within the duration of the Capstone project, it is intended for this software to become fully integrated within the MuJoCo environment to allow for reinforcement learning to be performed. This is a crucial objective, as TPG is currently being used for research purposes. Allowing MuJoCo will assist in the research of Tangled Program Graphs and assist with solving potential research questions within this space of research. 
-\\\\
-Another objective for the software is to adhere to software engineering standards and practices. As this code is constantly being developed, good practices are required for the sustainability of the repository code. Building CI/CD pipelines that will automatically perform test cases, lint code that ensures code syntax follows Google C++ guidelines and the compilation of code will ensure a smooth development and prevent unnecessary development halts due to major code structure difficulties. 
-\\\\\
-Furthermore, another objective is to ensure that the TPG framework is an easy-to-install and seamless experience for developers who are on the major operating systems (MacOS, Linux, and Windows). This is important, as new researchers who aim to utilize TPG should be able to install and start reinforcement learning without hassle. As of right now, it is very difficult for users within MacOS to install the program without having to use any virtual machines. Additionally, if they do manage to start the environment, users are unable to view the OpenGL simulation. While installation and execution within Windows is much easier than MacOS, workarounds are required, which severely impact the usability of the software.
-\\\\\
-A future objective that won’t be covered within the scope of the capstone project is the ability to easily implement new environments other than MuJoCo further to enhance the usefulness of research projects for reinforcement learning. This will not be covered due to the time constraints within the capstone project and the overall complexity. However, if the opportunity to continue this project arises, this will be an objective that will be considered.
-\\\\\
-The above objectives describe the main ones for the duration of the capstone project. Any complex and complicated aspects that may be required to complete an objective will be assisted by utilizing open-source external libraries. 
-
+Tangle should achieve the following objectives:
+\begin{itemize}
+\item Tangle allows TPG to perform reinforcement learning in MuJoCo environments (\href{https://github.com/TPGEngine/tpg/blob/main/docs/SRS/SRS.pdf}{FR-1}).
+\item Tangle should adhere to software engineering standard and practices in the \href{https://www.computer.org/education/bodies-of-knowledge/software-engineering}{Software Engineering Body of Knowledge (SWEBOK)}. This includes requirements for coding style, unit tests, and CI/CD.
+\item Tangle should be easy to install and run on major operating systems (MacOS, Linux, and Windows).
+\end{itemize}
 
 \subsection{Challenge Level and Extras}
 
@@ -154,7 +153,7 @@ The above objectives describe the main ones for the duration of the capstone pro
 % You can use a pull request to update your extras (in TeamComposition.csv or
 % Repos.csv) if your plan changes as a result of the VnV planning exercise.}
 
-The challenge level of the project is \textbf{general} as agreed upon by the course instructor since this project is an extension of the current Tangled Program Graphs repository created by Dr. Stephen Kelly. The extras that will be tackled by this project include user documentation. This extra will allow new users to be guided through the installation and execution, as well as assist with any troubleshooting issues that may occur. Code documentation will also be completed to assist new research developers in navigating the new functionalities and integrations within the system. In addition, a DevOps pipeline integration will be integrated for developers and a research paper aims to be completed. 
+The challenge level of the project is \textbf{general} as agreed upon by the course instructor since this project is an extension of the current Tangled Program Graphs repository created by Dr. Stephen Kelly. The extras that will be tackled by this project include user documentation. This extra will allow new users to be guided through the installation and execution, including assistance with any troubleshooting issues that may occur. Code documentation will also be completed to assist new research developers in navigating the new functionalities and integrations within the system. In addition, a DevOps pipeline integration will be integrated for developers and a research paper aims to be completed. 
 
 \subsection{Relevant Documentation}
 
@@ -166,9 +165,9 @@ The challenge level of the project is \textbf{general} as agreed upon by the cou
 
 The following documentation is considered to be relevant and may provide more context about the project outside of this document:
 \begin{itemize}
-  \item \textbf{Problem Statement and Goals} \citep{ProblemStatementGoals}\textbf{:} This document specifies a more detailed outline of the project's goals and purpose. This involves important stakeholder information, inputs and outputs of the project as well as information in regards to the project's environment.
+  \item \textbf{Problem Statement and Goals} \citep{ProblemStatementGoals}\textbf{:} This document specifies a more detailed outline of the project's goals and purpose. This involves important stakeholder information, inputs and outputs of the project, including information in regards to the project's environment.
   \item \textbf{Development Plan:} \citep{DevelopmentPlan}\textbf{:} This document provides a guideline regarding all of the tools and technologies that will be utilized throughout this plan for verification and validation.
-  \item \textbf{Hazard Analysis:} \citep{HazardAnalysis}\textbf{:} This document describes detailed hazards that may occur throughout the development of the project. It specifies the system boundaries and components, as well as mitigation strategies in the form of safety and security requirements that may need verification and validation.
+  \item \textbf{Hazard Analysis:} \citep{HazardAnalysis}\textbf{:} This document describes detailed hazards that may occur throughout the development of the project. It specifies the system boundaries and components, including mitigation strategies in the form of safety and security requirements that may need verification and validation.
   \item \textbf{Software Requirements Specification} \citep{SRS}\textbf{:} This document specifies all the non-functional and functional requirements that the project should satisfy by the end of the capstone period. This is useful for creating test cases that will verify and validate that the requirements have been met.
   \item \textbf{Module Interface Specification:} This document describes how different components within the system will interact with each other. This is beneficial to determine the modules that will be present within the system, and help determine the scope of testing.
 
@@ -205,9 +204,9 @@ The following documentation is considered to be relevant and may provide more co
 
 \subsection{SRS Verification Plan}
 
-To verify the SRS, routine inspections will be conducted to ensure that the TPG framework meets both functional and non-functional requirements as outlined in the SRS. These inspections will involve regular reviews by the development team and collaborators such as Professor Stephen Kelly’s team with the TPG framework, who can provide ongoing insights and feedback as the project progresses. 
+To verify the SRS, routine inspections will be conducted to ensure that the TPG framework meets both functional and non-functional requirements as outlined in the SRS. These inspections will involve regular reviews by the development team and collaborators such as Dr. Stephen Kelly’s team with the TPG framework, who can provide ongoing insights and feedback as the project progresses. 
 
-Through these routine reviews, task based inspection will be leveraged to audit the most up to date progress made towards the project. This would involve walking through key tasks or scenarios (ie: new Mujoco environments, CI/CD integrations) that the system must support, and inspecting how each task complies to the SRS’s standards. Each review will employ a structured, scenario-based checklist that focuses on the specific tasks that the TPG framework needs to support, such as configuring simulations, setting up interactions with MuJoCo, and evaluating reinforcement learning performance metrics. By inspecting the SRS against these real-world tasks, the verification team will ensure that each requirement is clearly defined and actionable, supporting the development team in implementing functionality that aligns with user and system needs. In addition, the tasks/features implemented will be cross checked with the list of issues during the review section to display how each task satisfies the issue to ensure traceability.
+Through these routine reviews, task based inspection will be leveraged to audit the most up to date progress made towards the project. This would involve walking through key tasks or scenarios (i.e.: new MuJoCo environments, CI/CD integrations) that the system must support, and inspecting how each task complies to the SRS’s standards. Each review will employ a structured, scenario-based checklist that focuses on the specific tasks that the TPG framework needs to support, such as configuring simulations, setting up interactions with MuJoCo, and evaluating reinforcement learning performance metrics. By inspecting the SRS against these real-world tasks, the verification team will ensure that each requirement is clearly defined and actionable, supporting the development team in implementing functionality that aligns with user and system needs. In addition, the tasks/features implemented will be cross checked with the list of issues during the review section to display how each task satisfies the issue to ensure traceability.
 
 
 \subsection{Design Verification Plan}
@@ -241,7 +240,7 @@ For manual verification, we will leverage TPG's existing suite of plotting and s
 
 \subsection{Software Validation Plan}
 
-The software validation plan begins with establishing CartPole as a baseline for comparison. We will compare TPG's performance between the existing environment implementation and the new MuJoCo implementation. This comparison will include validating expected agent behaviors through visual inspection using both OpenGL and MuJoCo visualizations, as well as verifying that fitness scores achieve similar thresholds in both implementations. \\
+The software validation plan begins with establishing CartPole as a baseline for comparison. We will compare TPG's performance between the existing environment implementation and the new MuJoCo implementation. This comparison will include validating expected agent behaviors through visual inspection using both OpenGL and MuJoCo visualizations, including verifying that fitness scores achieve similar thresholds in both implementations. \\
 
 Core integration validation will focus on verifying TPG's ability to properly interact with MuJoCo environments. We will verify that TPG can successfully initialize MuJoCo environments, receive valid state information, send valid actions, and receive appropriate rewards. Throughout the training process, we will monitor the environment's response to agent actions and verify training progression through both fitness scores and visual behavior inspection. \\
 
@@ -391,7 +390,7 @@ Initial State: System has documentation that covers all key sections is availabl
 					
 Input/Condition: Users open the documentation to get started using the framework
 					
-Output/Result: Users are able to locate and follow along the instructions without any confusion or having to refer an outside source (ie. StackOverflow, Github Docs)
+Output/Result: Users are able to locate and follow along the instructions without any confusion or having to refer an outside source (i.e. StackOverflow, Github Docs)
 
 Test Case Derivation: Concise and comprehensive documentation of the framework including helpful concepts, and step-by-step guide is provided within the README files inside the repository
 

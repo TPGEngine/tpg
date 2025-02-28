@@ -20,6 +20,8 @@ file(GLOB EXPERIMENTS_SOURCES
     ../environments/mujoco/MujocoEnv.h
     runners/*.cc
     runners/*.h
+    evaluators/EvalData.cc
+    evaluators/EvalData.h
 )
 
 # Create the TPGExperimentMPI executable

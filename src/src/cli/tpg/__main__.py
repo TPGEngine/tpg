@@ -16,7 +16,6 @@ def cli(ctx: click.Context):
         "tpg": config.TPG
     }
 
-
 cli.add_command(commands.evolve)
 cli.add_command(commands.plot)
 cli.add_command(commands.replay)

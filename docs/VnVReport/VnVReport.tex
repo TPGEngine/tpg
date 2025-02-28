@@ -3,6 +3,12 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{parskip}
 \hypersetup{
     colorlinks,
     citecolor=black,
@@ -10,6 +16,7 @@
     linkcolor=red,
     urlcolor=blue
 }
+
 \usepackage[round]{natbib}
 
 \input{../Comments}
@@ -44,11 +51,18 @@ Date 2 & 1.1 & Notes\\
   \toprule		
   \textbf{symbol} & \textbf{description}\\
   \midrule 
-  T & Test\\
+  TPG & Tangled Program Graphs\\
+  DNNs & Deep Neural Networks\\
+  RL & Reinforcement Learning\\
+  SRS & Software Requirement Specification\\
+  FR & Functional Requirement\\
+  NFR & Non-Functional Requirement\\
+  SLN & System Level Number\\
+  VnV & Verification and Validation\\
   \bottomrule
 \end{tabular}\\
 
-\wss{symbols, abbreviations or acronyms -- you can reference the SRS tables if needed}
+% \wss{symbols, abbreviations or acronyms -- you can reference the SRS tables if needed}
 
 \newpage
 
@@ -62,9 +76,47 @@ Date 2 & 1.1 & Notes\\
 
 \pagenumbering{arabic}
 
-This document ...
+This document cohesively summarizes the results of each test as specified in the \href{https://github.com/TPGEngine/tpg/blob/main/docs/VnVPlan/VnVPlan.pdf}{VnV Plan} documentation.
 
 \section{Functional Requirements Evaluation}
+
+\subsection{MuJoCo Integration}
+
+\begin{center}
+\begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
+  \caption{MuJoCo Integration Tests} \\
+\hline
+\textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
+\hline
+\endfirsthead
+\hline
+\textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
+\hline
+\endhead
+FR-SLN1 & When executing the appropriate script, all MuJoCo environments can be run. The best-performing agent within the policy can be visualized using OpenGL or an MP4 file. & Pass \\
+\hline
+FR-SLN2 & MuJoCo environments within the TPG framework can be successfully run within the Digital Research Alliance, enabling research to be conducted by executing experiments. & Pass \\
+\hline
+\end{longtable}
+\end{center}
+
+\subsection{Experiment Visualization}
+
+\begin{center}
+  \begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
+    \caption{Experiment Visualization Tests} \\
+  \hline
+  \textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
+  \hline
+  \endhead
+  FR-SLN3 & When an experiment is running or finished training, the best performing policy can be visualized using the TPG CLI tool. & Pass \\
+  \hline
+  \end{longtable}
+\end{center}
 
 \section{Nonfunctional Requirements Evaluation}
 
@@ -72,22 +124,83 @@ This document ...
 		
 \subsection{Performance}
 
-\subsection{etc.}
-	
-\section{Comparison to Existing Implementation}	
+\subsection{Operational and Environmental}
 
-This section will not be appropriate for every project.
+\begin{center}
+  \begin{longtable}{|p{4cm}|p{4cm}|}
+  \caption{Operational and Environmental Tests} \\
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endhead
+  NFR-SLR6 & Pass \\
+  \hline
+  \end{longtable}
+\end{center}
+
+For NFR-SLN6, TPG now supports contributions from macOS, Windows, and Linux developers.
+Previously, only Linux was supported because TPG used SCons for C++ builds and Linux-specific dependencies from \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/blob/main/requirements.txt}{requirements.txt}.
+With VSCode Dev Containers, a Linux development environment is automatically launched for all developers, ensuring a standardized setup.
+Simply follow the \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/home}{Wiki} instructions to download all necessary Linux dependencies and build the C++ code reliably. Onboarding on a Macbook has been reduced from 2 weeks to just 5 minutes.
+
+\subsection{Compliance}
+
+\begin{center}
+\begin{longtable}{|p{4cm}|p{4cm}|}
+\caption{Compliance Tests} \\
+\hline
+\textbf{Test Id} & \textbf{Result} \\
+\hline
+\endfirsthead
+\hline
+\textbf{Test Id} & \textbf{Result} \\
+\hline
+\endhead
+NFR-SLR9 & Pass \\
+\hline
+\end{longtable}
+\end{center}
+
+The modified codebase is successfully analyzed using Clang-Tidy and Clang-Format within the CI/CD pipeline. 
+Code change discussions take place through pull request conversations made to the main branch. 
+All errors and warnings are generated based on the C++ Style Guidelines. 
+Any critical errors found during the linting process create blocking pull request conversations that must be resolved before merging into the main branch.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{linter-example.png}
+  \caption{Example of a Linter Error}
+  \label{fig:myimage}
+\end{figure}
 
 \section{Unit Testing}
 
 \section{Changes Due to Testing}
 
-\wss{This section should highlight how feedback from the users and from 
-the supervisor (when one exists) shaped the final product.  In particular 
-the feedback from the Rev 0 demo to the supervisor (or to potential users) 
-should be highlighted.}
+% \wss{This section should highlight how feedback from the users and from 
+% the supervisor (when one exists) shaped the final product.  In particular 
+% the feedback from the Rev 0 demo to the supervisor (or to potential users) 
+% should be highlighted.}
+\subsection{Feedback from Rev 0}
+The feedback given by the instructor and teaching assistant during Revision 0 was essential in guiding the next steps as the team looks toward the final demonstration.
+Emphasis was placed on ensuring that usability testing was executed systematically rather than in the more ad-hoc manner initially planned by the team.
+Some additional changes to be made include ensuring that unit testing and benchmarking of the implemented environments are cohesively executed and investigating whether the integration of deployment within the DRA is possible.
 
 \section{Automated Testing}
+
+As a result of the team’s conversion from building the project using SCons to CMake, automated testing became significantly easier to execute and debug.
+To run any automated tests within a developer’s local environment, a developer can simply execute a command to build the project. 
+This not only compiles everything but also runs all automated tests. If a developer wishes to run only the tests, they must navigate to the directory where the tests were already compiled (typically \texttt{/build/tests}). 
+From there, the command \texttt{ctest} can be entered into the command prompt. Similar to the compilation process, all automated tests are executed once this command is run.\\
+
+From the repository’s point of view, tests are executed using GitHub Actions or GitLab CI (depending on which repository is being viewed). 
+Both linting and compilation are performed using the same commands that would be executed within a developer’s local environment. These tests run when a new pull request is made to the main branch, ensuring that all tests pass before merging.
+The compiler workflow is also executed after merging into the main branch to ensure no errors or unintended changes in code behaviour have occurred. If any test or workflow fails, the logs of the workflow can be reviewed, providing a detailed summary of the reason for failure. 
+This not only allows for easier debugging but also resolves the “works on my machine” issue.
 		
 \section{Trace to Requirements}
 		

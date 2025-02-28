@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "MemoryEigen.h"
+#include "EvalData.h"
 
 class instruction {
   public:
@@ -146,6 +147,7 @@ class instruction {
    // example: op_signatures_[SCALAR_COS_OP_] = {kScalarType_, kScalarType_};
    static vector<vector<size_t> > op_signatures_;
 
+   static int GetOpCodeFromName(const std::string& name);
    static vector<std::string> op_names_;
 
    string ToString();
@@ -161,8 +163,11 @@ class instruction {
    static vector<operation> op_functions_;
 
    // Execute this instruction
-   inline void exec(bool dbg) {
-      (this->*op_functions_[op_])(dbg);
+   inline void exec(EvalData& eval_data) {
+      if (eval_data.verbose) {
+         eval_data.dbg_out << op_ << endl;
+      }
+      (this->*op_functions_[op_])(eval_data.verbose);
 
       // TODO(skelly): set to 1.0 instead of 0.0?
       // Change infinite values to 0.0 in output memory

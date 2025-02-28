@@ -12,6 +12,7 @@ target_include_directories(engine
     PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/../experiments
+    ${CMAKE_CURRENT_SOURCE_DIR}/../experiments/evaluators
     ${CMAKE_CURRENT_SOURCE_DIR}/../environments
     ${CMAKE_CURRENT_SOURCE_DIR}/../logging
     ${CMAKE_CURRENT_SOURCE_DIR}/../logging/core
@@ -31,6 +32,7 @@ target_link_libraries(engine
     Boost::iostreams
     MPI::MPI_CXX
     logging
+    yaml-cpp
 )
 
 # Set output directory for the library

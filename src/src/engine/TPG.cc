@@ -6,6 +6,7 @@
 #include "metrics/replacement/replacement_metrics_builder.h"
 #include "metrics/removal/removal_metrics_builder.h"
 #include "metrics/removal/removal_metrics.h"
+#include "EvalData.h"
 
 /******************************************************************************/
 TPG::TPG() {
@@ -90,38 +91,10 @@ void TPG::clearMemory() {
    }
 }
 
-/******************************************************************************/
-RegisterMachine* TPG::getAction(team* tm, state* s, bool updateActive,
-                                set<team*, teamIdComp>& visitedTeams,
-                                long& decisionInstructions, int timeStep,
-                                vector<team*>& teamPath, mt19937& rng,
-                                bool verbose) {
-   visitedTeams.clear();
-   decisionInstructions = 0;
-   teamPath.clear();
-   return tm->getAction(s, team_map_, updateActive, visitedTeams,
-                        decisionInstructions, timeStep, teamPath, rng, verbose);
-}
-
-/******************************************************************************/
-RegisterMachine* TPG::getAction(
-    team* tm, state* s, bool updateActive, set<team*, teamIdComp>& visitedTeams,
-    long& decisionInstructions, int timeStep,
-    vector<RegisterMachine*>& allPrograms,
-    vector<RegisterMachine*>& winningPrograms,
-    vector<set<long>>& decisionFeatures,
-    // vector<set<MemoryEigen *, MemoryEigenIdComp>> &decisionMemories,
-    vector<team*>& teamPath, mt19937& rng, bool verbose) {
-   allPrograms.clear();
-   winningPrograms.clear();
-   decisionInstructions = 0;
-   decisionFeatures.clear();
-   // decisionMemories.clear();
-   // visitedTeams.clear();
-   teamPath.clear();
-   return tm->getAction(
-       s, team_map_, updateActive, visitedTeams, decisionInstructions, timeStep,
-       allPrograms, winningPrograms, decisionFeatures, teamPath, rng, verbose);
+void TPG::GetAction(EvalData& eval_data){
+  eval_data.instruction_count = 0;
+  eval_data.team_path.clear();
+  eval_data.tm->GetAction(eval_data);
 }
 
 /******************************************************************************/
@@ -202,182 +175,37 @@ void TPG::printOss(ostringstream& o) {
 }
 
 /******************************************************************************/
-void TPG::ReadParameters(string file_name,
-                         std::unordered_map<string, std::any>& params) {
-   std::ifstream infile(file_name);
-   string oneline;
-   vector<string> outcome_fields;
-   while (std::getline(infile, oneline)) {
-      if (oneline.find('#') != std::string::npos || oneline.size() == 0)
-         continue;  // skip comments and empty lines
-      SplitString(oneline, ' ', outcome_fields);
+void TPG::ReadParameters(std::string file_name, std::unordered_map<std::string, std::any>& params) {
+   YAML::Node config = YAML::LoadFile(file_name);
 
-      if (outcome_fields[0] == "SCALAR_SUM_OP")
-         _ops[instruction::SCALAR_SUM_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_DIFF_OP")
-         _ops[instruction::SCALAR_DIFF_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_PRODUCT_OP")
-         _ops[instruction::SCALAR_PRODUCT_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_DIVISION_OP")
-         _ops[instruction::SCALAR_DIVISION_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_ABS_OP")
-         _ops[instruction::SCALAR_ABS_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_RECIPROCAL_OP")
-         _ops[instruction::SCALAR_RECIPROCAL_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_SIN_OP")
-         _ops[instruction::SCALAR_SIN_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_COS_OP")
-         _ops[instruction::SCALAR_COS_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_TAN_OP")
-         _ops[instruction::SCALAR_TAN_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_ARCSIN_OP")
-         _ops[instruction::SCALAR_ARCSIN_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_ARCCOS_OP")
-         _ops[instruction::SCALAR_ARCCOS_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_ARCTAN_OP")
-         _ops[instruction::SCALAR_ARCTAN_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_EXP_OP")
-         _ops[instruction::SCALAR_EXP_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_LOG_OP")
-         _ops[instruction::SCALAR_LOG_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_HEAVYSIDE_OP")
-         _ops[instruction::SCALAR_HEAVYSIDE_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_HEAVYSIDE_OP")
-         _ops[instruction::VECTOR_HEAVYSIDE_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_HEAVYSIDE_OP")
-         _ops[instruction::MATRIX_HEAVYSIDE_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_VECTOR_PRODUCT_OP")
-         _ops[instruction::SCALAR_VECTOR_PRODUCT_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_BROADCAST_OP")
-         _ops[instruction::SCALAR_BROADCAST_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_RECIPROCAL_OP")
-         _ops[instruction::VECTOR_RECIPROCAL_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_NORM_OP")
-         _ops[instruction::VECTOR_NORM_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_ABS_OP")
-         _ops[instruction::VECTOR_ABS_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_SUM_OP")
-         _ops[instruction::VECTOR_SUM_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_DIFF_OP")
-         _ops[instruction::VECTOR_DIFF_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_PRODUCT_OP")
-         _ops[instruction::VECTOR_PRODUCT_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_DIVISION_OP")
-         _ops[instruction::VECTOR_DIVISION_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_INNER_PRODUCT_OP")
-         _ops[instruction::VECTOR_INNER_PRODUCT_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_OUTER_PRODUCT_OP")
-         _ops[instruction::VECTOR_OUTER_PRODUCT_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_MATRIX_PRODUCT_OP")
-         _ops[instruction::SCALAR_MATRIX_PRODUCT_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_RECIPROCAL_OP")
-         _ops[instruction::MATRIX_RECIPROCAL_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_VECTOR_PRODUCT_OP")
-         _ops[instruction::MATRIX_VECTOR_PRODUCT_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_COLUMN_BROADCAST_OP")
-         _ops[instruction::VECTOR_COLUMN_BROADCAST_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_ROW_BROADCAST_OP")
-         _ops[instruction::VECTOR_ROW_BROADCAST_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_NORM_OP")
-         _ops[instruction::MATRIX_NORM_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_COLUMN_NORM_OP")
-         _ops[instruction::MATRIX_COLUMN_NORM_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_ROW_NORM_OP")
-         _ops[instruction::MATRIX_ROW_NORM_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_TRANSPOSE_OP")
-         _ops[instruction::MATRIX_TRANSPOSE_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_ABS_OP")
-         _ops[instruction::MATRIX_ABS_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_SUM_OP")
-         _ops[instruction::MATRIX_SUM_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_DIFF_OP")
-         _ops[instruction::MATRIX_DIFF_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_PRODUCT_OP")
-         _ops[instruction::MATRIX_PRODUCT_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_DIVISION_OP")
-         _ops[instruction::MATRIX_DIVISION_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_MATRIX_PRODUCT_OP")
-         _ops[instruction::MATRIX_MATRIX_PRODUCT_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_MIN_OP")
-         _ops[instruction::SCALAR_MIN_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_MIN_OP")
-         _ops[instruction::VECTOR_MIN_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_MIN_OP")
-         _ops[instruction::MATRIX_MIN_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_MAX_OP")
-         _ops[instruction::SCALAR_MAX_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_MAX_OP")
-         _ops[instruction::VECTOR_MAX_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_MAX_OP")
-         _ops[instruction::MATRIX_MAX_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_MEAN_OP")
-         _ops[instruction::VECTOR_MEAN_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_MEAN_OP")
-         _ops[instruction::MATRIX_MEAN_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_ROW_ST_DEV_OP")
-         _ops[instruction::MATRIX_ROW_ST_DEV_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_ST_DEV_OP")
-         _ops[instruction::VECTOR_ST_DEV_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_ST_DEV_OP")
-         _ops[instruction::MATRIX_ST_DEV_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_CONST_SET_OP")
-         _ops[instruction::SCALAR_CONST_SET_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_CONST_SET_OP")
-         _ops[instruction::VECTOR_CONST_SET_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_CONST_SET_OP")
-         _ops[instruction::MATRIX_CONST_SET_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_UNIFORM_SET_OP")
-         _ops[instruction::SCALAR_UNIFORM_SET_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_UNIFORM_SET_OP")
-         _ops[instruction::VECTOR_UNIFORM_SET_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_UNIFORM_SET_OP")
-         _ops[instruction::MATRIX_UNIFORM_SET_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_GAUSSIAN_SET_OP")
-         _ops[instruction::SCALAR_GAUSSIAN_SET_OP_] = true;
-      if (outcome_fields[0] == "VECTOR_GAUSSIAN_SET_OP")
-         _ops[instruction::VECTOR_GAUSSIAN_SET_OP_] = true;
-      if (outcome_fields[0] == "MATRIX_GAUSSIAN_SET_OP")
-         _ops[instruction::MATRIX_GAUSSIAN_SET_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_CONDITIONAL_OP")
-         _ops[instruction::SCALAR_CONDITIONAL_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_POW_OP")
-         _ops[instruction::SCALAR_POW_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_SQR_OP")
-         _ops[instruction::SCALAR_SQR_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_CUBE_OP")
-         _ops[instruction::SCALAR_CUBE_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_TANH_OP")
-         _ops[instruction::SCALAR_TANH_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_SQRT_OP")
-         _ops[instruction::SCALAR_SQRT_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_VECTOR_ASSIGN_OP")
-         _ops[instruction::SCALAR_VECTOR_ASSIGN_OP_] = true;
-      if (outcome_fields[0] == "SCALAR_MATRIX_ASSIGN_OP")
-         _ops[instruction::SCALAR_MATRIX_ASSIGN_OP_] = true;
-      if (outcome_fields[0] == "OBS_BUFF_SLICE_OP")
-         _ops[instruction::OBS_BUFF_SLICE_OP_] = true;
+   // Load parameters
+   for (const auto& entry : config) {
+       string category = entry.first.as<string>();
+       if (entry.second.IsMap()) {
+           for (const auto& param : entry.second) {
+               string key = param.first.as<string>(); // Flatten key
 
-      // TODO(skelly): make types part of parameter file
-      // string parameters are "hard coded" here
-      if (outcome_fields[0] == "active_tasks" ||
-          outcome_fields[0] == "n_input" ||
-          outcome_fields[0] == "n_stored_outcomes_TRAIN" ||
-          outcome_fields[0] == "n_stored_outcomes_VALIDATION" ||
-          outcome_fields[0] == "n_stored_outcomes_TEST" ||
-          outcome_fields[0] == "forecast_fitness" ||
-          outcome_fields[0] == "action_dim" ||
-          outcome_fields[0] == "mj_model_path" ||
-          outcome_fields[0] == "experiment_key") {
-         params[outcome_fields[0]] = outcome_fields[1];
-      }
-      // double parameters are identified by a decimal place
-      else if (outcome_fields[1].find('.') != std::string::npos) {
-         params[outcome_fields[0]] = stringToDouble(outcome_fields[1]);
-      }
-      // otherwise we store the parameter as an integer
-      else {
-         params[outcome_fields[0]] = stringToInt(outcome_fields[1]);
-      }
+               if (param.second.IsScalar()) {
+                  string value = param.second.as<string>();
+                  string tag = param.second.Tag();
+
+                  if (tag == "!") {  // Check if value was quoted as a string
+                    params[key] = value;
+                 } else if (value.find('.') != string::npos)
+                     params[key] = stringToDouble(value);  // Store as double if it has a decimal
+                  else {
+                     params[key] = stringToInt(value);  // Otherwise, store as int
+                  }
+
+                  if (category == "operations") { // change _ops value if operations
+                     int opCode = instruction::GetOpCodeFromName(key);
+                     if (opCode != -1) {
+                        _ops[opCode] = param.second.as<int>() ? true : false;
+                     }
+                  }
+               }
+           }
+       }
    }
 }
 
@@ -1053,13 +881,13 @@ void TPG::ProcessParams() {
 }
 
 /******************************************************************************/
-// Parameters are set in the parameters.txt file.
+// Parameters are set in the parameters.yaml file.
 // TPG can also process command line parameters in the form: <name>=<value>
 // <name> must be a parameter with a default value in parameters.txt
 // Default values are overwritten by command line parameters
 void TPG::SetParams(int argc, char** argv) {
    // First read parameters file
-   // ReadParameters("parameters.txt", params_);
+   // ReadParameters("parameters.yaml", params_);
    // Parse command line parameters
    params_["pid"] = 0; // Set default param value for PID
    if (argc > 1) {
@@ -1082,7 +910,7 @@ void TPG::SetParams(int argc, char** argv) {
                std::string err_message =
                    "Unreconised command line parameter:" + key +
                    ". Command line parameters must have default values in "
-                   "parameters.txt";
+                   "parameters.yaml";
                die(__FILE__, __FUNCTION__, __LINE__, err_message.c_str());
             }
          }
@@ -1090,6 +918,7 @@ void TPG::SetParams(int argc, char** argv) {
    }
    ProcessParams();
 }
+
 
 /******************************************************************************/
 void TPG::GetPolicyFeatures(int hostId, set<long>& features, bool active) {
@@ -2808,4 +2637,113 @@ string TPG::AgentOpUseToString(team* agent) {
       ss << instruction::op_names_[i] << "," << op_use[i] << endl;
    }
    return ss.str();//VectorToString(op_use);
+}
+
+/******************************************************************************/
+
+void TPG::EncodeEvalResultString(EvalData& eval_data) {
+   eval_data.eval_result += to_string(static_cast<long>(eval_data.tm->id_));
+   eval_data.eval_result += ":" + VectorToStringNoSpace(eval_data.fingerprint);
+   eval_data.eval_result += ":" + to_string(GetState("active_task"));
+   for (size_t r = 0; r < eval_data.stats_double.size(); r++) {
+   eval_data.eval_result += ":" + to_string(eval_data.stats_double[r]);
+   }
+   for (size_t r = 0; r < eval_data.stats_int.size(); r++) {
+   eval_data.eval_result += ":" + to_string(eval_data.stats_int[r]);
+   }
+   eval_data.eval_result += "\n";
+}
+
+/******************************************************************************/
+void TPG::DecodeEvalResultString(istringstream& f, vector<TaskEnv*>& tasks,
+                                 std::map<long, team*> root_teams_map) {
+   string line;
+   vector<string> split_str;
+   while (getline(f, line)) {
+      vector<long> active;
+      vector<double> r_stats_double;
+      vector<int> r_stats_int;
+      SplitString(line, ':', split_str);
+      size_t s = 0;
+      long rslt_id = atol(split_str[s++].c_str());
+      string fingerprint = split_str[s++].c_str();
+      params_["active_task"] = atoi(split_str[s++].c_str());
+      for (int i = 0; i < GetParam<int>("n_point_aux_double"); i++)
+         r_stats_double.push_back(atof(split_str[s++].c_str()));
+      for (int i = 0; i < GetParam<int>("n_point_aux_int"); i++)
+         r_stats_int.push_back(atoi(split_str[s++].c_str()));
+      setOutcome(root_teams_map[rslt_id], fingerprint, r_stats_double,
+                 r_stats_int, GetState("t_current"));
+      // For control tasks, re-use training results as validation.
+      // TODO(skelly): fix
+      if (r_stats_int[POINT_AUX_INT_PHASE] == _TRAIN_PHASE &&
+          (tasks[GetParam<int>("active_task")]->eval_type_ == "Control" ||
+           tasks[GetParam<int>("active_task")]->eval_type_ == "Mujoco")) {
+         r_stats_int[POINT_AUX_INT_PHASE] = _VALIDATION_PHASE;
+         setOutcome(root_teams_map[rslt_id], fingerprint, r_stats_double,
+                    r_stats_int, GetState("t_current"));
+      }
+   }
+}
+
+/******************************************************************************/
+void TPG::FinalizeStepData(EvalData& eval_data) {
+   if (eval_data.task->eval_type_ == "RecursiveForecast") {
+      if (GetParam<string>("forecast_fitness") == "mse") {
+         auto err =
+             MeanSquaredError(eval_data.sequence_targ, eval_data.sequence_pred);
+         eval_data.stats_double[REWARD1_IDX] = -err;
+      } else if (GetParam<string>("forecast_fitness") == "correlation") {
+         auto corr =
+             Correlation(eval_data.sequence_targ, eval_data.sequence_pred);
+         eval_data.stats_double[REWARD1_IDX] = corr;
+      } else if (GetParam<string>("forecast_fitness") == "pearson") {
+         auto corr = PearsonCorrelation(eval_data.sequence_targ,
+                                        eval_data.sequence_pred);
+         eval_data.stats_double[REWARD1_IDX] = corr;
+      } else if (GetParam<string>("forecast_fitness") == "theils") {
+         auto err =
+             TheilsStatistic(eval_data.sequence_targ, eval_data.sequence_pred);
+         eval_data.stats_double[REWARD1_IDX] = -err;
+      } else if (GetParam<string>("forecast_fitness") == "mse_multivar") {
+         auto err = calculateMSE_Multi(eval_data.sequence_targ,
+                                       eval_data.sequence_pred);
+         eval_data.stats_double[REWARD1_IDX] = -err;
+      } else if (GetParam<string>("forecast_fitness") == "theils_multivar") {
+         auto err = calculateTheils_Multi(eval_data.sequence_targ,
+                                          eval_data.sequence_pred);
+         eval_data.stats_double[REWARD1_IDX] = -err;
+      } else if (GetParam<string>("forecast_fitness") == "pearson_multivar") {
+         auto corr = calculatePearson_Multi(eval_data.sequence_targ,
+                                            eval_data.sequence_pred);
+         eval_data.stats_double[REWARD1_IDX] = corr;
+         if (!isfinite(eval_data.stats_double[REWARD1_IDX]))
+            eval_data.stats_double[REWARD1_IDX] = 0;
+      } else {
+         die(__FILE__, __FUNCTION__, __LINE__,
+             "Unsupported forecast fitness function");
+      }
+   }
+   eval_data.stats_double[VISITED_TEAMS_IDX] /= eval_data.n_prediction;
+   eval_data.stats_double[INSTRUCTIONS_IDX] /= eval_data.n_prediction;
+   eval_data.stats_int[POINT_AUX_INT_TASK] = GetState("active_task");
+   eval_data.stats_int[POINT_AUX_INT_PHASE] = GetState("phase");
+   eval_data.stats_int[POINT_AUX_INT_ENVSEED] = eval_data.episode;
+   eval_data.stats_int[POINT_AUX_INT_internalTestNodeId] =
+       GetState("internal_test_node_id");
+   EncodeEvalResultString(eval_data);
+}
+
+/******************************************************************************/
+EvalData TPG::InitEvalData() {
+   EvalData eval_data;
+   eval_data.tpg_seed = seeds_[TPG_SEED];
+   eval_data.stats_double.resize(GetParam<int>("n_point_aux_double"));
+   eval_data.stats_int.resize(GetParam<int>("n_point_aux_int"));
+   eval_data.animate = GetParam<int>("animate") == 1;
+   eval_data.partially_observable = GetParam<int>("partially_observable") == 1;
+   eval_data.n_prediction = 0;
+   eval_data.team_map = team_map_;
+   eval_data.verbose = false;
+   return eval_data;
 }

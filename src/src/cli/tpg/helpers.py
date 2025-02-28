@@ -1,5 +1,6 @@
 import pandas as pd
 import subprocess
+import os
 
 def get_metrics_from_csv(csv_file):
     # Read the CSV file
@@ -36,3 +37,26 @@ def get_checkpoint_values(seed_tpg):
                                             text=True).strip()
     
     return checkpoint_in_phase, checkpoint_in_t
+
+def create_environment_directories(TPG: str, env: str):
+    """Create directory structure for environment experiments"""
+    
+    # Convert environment name to snake_case for directory naming
+    env_dir = os.path.join(TPG, "experiments", env)
+    
+    directories = [
+        os.path.join(env_dir, "checkpoints"),
+        os.path.join(env_dir, "frames"),
+        os.path.join(env_dir, "replay", "frames"),
+        os.path.join(env_dir, "replay", "graphs")
+    ]
+    
+    for directory in directories:
+        os.makedirs(directory, exist_ok=True)
+        # Create .gitignore in each directory
+        gitignore_path = os.path.join(directory, ".gitignore")
+        if not os.path.exists(gitignore_path):
+            with open(gitignore_path, "w") as f:
+                f.write("*\n!.gitignore\n")
+                
+    return env_dir
