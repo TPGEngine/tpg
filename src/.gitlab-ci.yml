@@ -1,3 +1,0 @@
-include:
-  - local: '.gitlab/ci/build.yml'
-  - local: '.gitlab/ci/lint.yml'

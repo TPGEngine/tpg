@@ -7,15 +7,12 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": [
-        "ms-vscode.cpptools",
-        "mechatroner.rainbow-csv",
-        "ms-python.python",
-        "ms-vscode.cmake-tools"
-      ]
+      "extensions": ["ms-vscode.cpptools", "mechatroner.rainbow-csv", "ms-python.python", "ms-vscode.cmake-tools"]
     }
   },
-  "mounts": ["source=tmp-data,target=/tmp,type=volume"],
+  "mounts": [
+    "source=tmp-data,target=/tmp,type=volume"
+  ],
   "remoteEnv": {
     "DISPLAY": ""
   },

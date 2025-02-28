@@ -9,7 +9,7 @@
 #defaults
 mode=0 #Train:0, Replay:1, Debug:2
 seed_tpg=42
-parameters_file="parameters_TPG.txt"
+parameters_file="parameters_TPG.yaml"
 
 while getopts m:p:s: flag
 do
@@ -22,7 +22,7 @@ done
 
 # Start from scratch ###########################################################
 if [ $mode -eq 0 ]; then
-  srun $TPG/build/release/cpp/experiments/TPGExperimentMPI \
+  srun $TPG/build/release/experiments/TPGExperimentMPI \
   parameters_file=${parameters_file} \
   seed_tpg=${seed_tpg} \
   1> tpg.${seed_tpg}.$$.std \

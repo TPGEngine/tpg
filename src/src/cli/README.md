@@ -55,9 +55,6 @@ Redirect standard output and error to files named in the format:
 - tpg.<seed>.<pid>.std
 - tpg.<seed>.<pid>.err
 
-<<<<<<< HEAD
-Environment mappings and examples can be found in `$TPG/src/cli/tpg/config.py`.
-=======
 **Arguments:**
 - env (str): The target environment
 
@@ -74,7 +71,6 @@ Here are the environments currently supported:
 **Options:**
 - --processes (int): Number of processes to use (default: 4).
 - --seed (int): Random seed (default: 42).
->>>>>>> 15dea0a9d2210626141f2f15701af99fe644d4b3
 
 **Replay the Best Policy:**
 
@@ -90,40 +86,6 @@ Writes the output to files:
 - tpg.<seed>.<seed_aux>.replay.std
 - tpg.<seed>.<seed_aux>.replay.err
 
-<<<<<<< HEAD
-## Command Details
-### evolve
-Description:
-- Evolve a policy for the provided environment.
-
-#### Arguments:
-- env (str): The target environment
-
-Here are the environments currently supported:
-- classic_control
-- half_cheetah
-- hopper
-- humanoid_standup
-- inverted_pendulum
-- inverted_double_pendulum
-- multitask
-- multitask_half_cheetah
-
-#### Options:
-- --processes (int): Number of processes to use (default: 4).
-- --seed (int): Random seed (default: 42).
-
-### replay
-#### Description:
-- Replay the best performing policy for the specified environment.
-#### Arguments:
-- env (str): The target environment
-#### Options:
-- --seed (int): Random seed for the replay (default: 42).
-- --seed-aux (int): An auxiliary seed (default: 42) used in the replay; its exact role is determined by the underlying experiment logic.
-- --task-to-replay (int): Option for multitask experiments which task to visualize
-
-=======
 **Arguments:**
 - env (str): The target environment
 **Options:**
@@ -131,7 +93,6 @@ Here are the environments currently supported:
 - --seed-aux (int): An auxiliary seed (default: 42) used in the replay; its exact role is determined by the underlying experiment logic.
 - --task-to-replay (int): Option for multitask experiments which task to visualize
 j
->>>>>>> 15dea0a9d2210626141f2f15701af99fe644d4b3
 ## Troubleshooting
 If attempting to execute a tpg command leads you to an error such as: `Command 'tpg' not found`. Ensure your PATH
 environment variables are up to date. You can do this by running `pipx ensurepath` and restarting your terminal. 
