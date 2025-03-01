@@ -58,12 +58,46 @@ def evolve(ctx: click.Context, env: str, processes: int, seed: int):
 
     click.echo("Evolve (started in background)")
 
-# TODO: Implement the plot to wrap plotting functionality
 @click.command(help="Plot results for an experiment")
+@click.argument("env")
 @click.argument("csv_files", required=False)
 @click.argument("column_name", required=True)
-def plot(csv_files: str, column_name: str):
-    click.echo("Plot")
+@click.pass_context
+def plot(ctx: click.Context, env: str, csv_files: str, column_name: str):
+    """Plot results for an experiment using tpg-plot-evolution.py"""
+
+    # Fetch TPG directory for the environment
+    hyper_parameters = ctx.obj["hyper_parameters"]
+    TPG = ctx.obj["tpg"]
+
+    # error handling for valid environment
+    if env not in hyper_parameters:
+        raise click.ClickException(f"Environment {env} is not supported. Supported environments are: {', '.join(hyper_parameters.keys())}")
+
+    # Setup environment directories and get working directory
+    env_dir = helpers.create_environment_directories(TPG, env)
+    
+    # Change working directory to environment directory
+    os.chdir(env_dir)
+
+    # Build the `tpg-plot-evolution.py`` command
+    plot_script_path = os.path.join(TPG, "scripts", "plot", "tpg-plot-evolution.py")
+
+    if not os.path.exists(plot_script_path):
+        raise click.ClickException(f"{plot_script_path} does not exist. Ensure the script is located correctly.")
+
+    # Setup environment directories and get working directory
+    env_dir = helpers.create_environment_directories(TPG, env)
+    
+    # Change working directory to environment directory
+    os.chdir(env_dir)
+
+    cmd = ["python3", plot_script_path, csv_files, column_name]
+
+    try:
+        subprocess.run(cmd, check=True)
+    except subprocess.CalledProcessError as e:
+        raise click.ClickException(f"Plotting failed: {e}")
 
 @click.command(help="Replay the best performing policy")
 @click.argument("env")
