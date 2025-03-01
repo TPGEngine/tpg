@@ -81,6 +81,7 @@ This document cohesively summarizes the results of each test as specified in the
 \section{Functional Requirements Evaluation}
 
 \subsection{MuJoCo Integration}
+\label{mujoco_integration}
 
 \begin{center}
 \begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
@@ -101,6 +102,7 @@ FR-SLN2 & MuJoCo environments within the TPG framework can be successfully run w
 \end{center}
 
 \subsection{Experiment Visualization}
+\label{experiment_visualization}
 
 \begin{center}
   \begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
@@ -118,11 +120,58 @@ FR-SLN2 & MuJoCo environments within the TPG framework can be successfully run w
   \end{longtable}
 \end{center}
 
+\subsection{Github Actions CI/CD Pipeline}
+\label{github_actions}
+
+\subsection{Software Engineering Practices}
+\label{software_engineering_practices}
+
+\begin{center}
+  \begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
+    \caption{Software Engineering Practices Tests} \\
+  \hline
+  \textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
+  \hline
+  \endhead
+  FR-SLN6 & Newly added code in the TPG codebase follows Google's C++ Style Guide and software engineering best practices such as design patterns, and object-oriented design. This includes careful review and consideration of code readability, extendability, maintainability and scalability. A linter has also been implemented to check for such styling as discussed in \ref{github_actions}. & Pass \\
+  \hline
+  \end{longtable}
+\end{center}
+
 \section{Nonfunctional Requirements Evaluation}
 
 \subsection{Usability}
 		
 \subsection{Performance}
+
+\begin{center}
+  \begin{longtable}{|p{4cm}|p{4cm}|}
+  \caption{Performance Tests} \\
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endhead
+  NFR-SLR4 & Pass \\
+  \hline
+  \end{longtable}
+\end{center}
+
+For NFR-SLN4, test cases within TPG for the experimental environments have been implemented to check for the accuracy of the numerical computations associated during training. Declaration of variables with proper types (e.g. signed long or int, unsigned long or int) has also been taken into consideration to reduce issues in the future for extremely large or small numbers that may overflow. TPG has been comprehensively tested to guarantee that all computations with high numerical precision (e.g. during the runtime of an experiment) are accurate and contain an acceptable tolerance limit of 0.00001. The results were inspected manually by comparing the actual output to the anticipated output, and performing a calculation to check for quantitative error, and if such error meets the requirements for numerical precision.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{img/ant_test.png}
+  \caption{Example of a Numerical Computation Test}
+  \label{fig:myimage}
+\end{figure}
 
 \subsection{Operational and Environmental}
 
@@ -146,6 +195,28 @@ For NFR-SLN6, TPG now supports contributions from macOS, Windows, and Linux deve
 Previously, only Linux was supported because TPG used SCons for C++ builds and Linux-specific dependencies from \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/blob/main/requirements.txt}{requirements.txt}.
 With VSCode Dev Containers, a Linux development environment is automatically launched for all developers, ensuring a standardized setup.
 Simply follow the \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/home}{Wiki} instructions to download all necessary Linux dependencies and build the C++ code reliably. Onboarding on a Macbook has been reduced from 2 weeks to just 5 minutes.
+
+\subsection{Maintainability}
+
+\subsection{Security}
+
+\begin{center}
+  \begin{longtable}{|p{4cm}|p{4cm}|}
+  \caption{Security Tests} \\
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endhead
+  NFR-SLR8 & Pass \\
+  \hline
+  \end{longtable}
+\end{center}
+
+For NFR-SLN8, the .csv, .txt, .png and .mp4 files that are generated within Classic Control and MuJoCo experiments are ignored by Git when making commits to the public repositories in GitHub and GitLab to reduce chance of oversharing sensitive data. Currently, none of these files generate sensitive data, but to follow best practice and to keep the repository at a clean state, these are not recognized when synchronizing code to each respective repository. Additionally, the team has also manually checked all stored .csv, .txt, .png and .mp4 files along with others that may contain textual information to see if data within them are sensitive and must be kept private. 
 
 \subsection{Compliance}
 
@@ -172,7 +243,7 @@ Any critical errors found during the linting process create blocking pull reques
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=1\textwidth]{linter-example.png}
+  \includegraphics[width=1\textwidth]{img/linter-example.png}
   \caption{Example of a Linter Error}
   \label{fig:myimage}
 \end{figure}
