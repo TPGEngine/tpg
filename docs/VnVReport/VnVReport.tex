@@ -81,6 +81,7 @@ This document cohesively summarizes the results of each test as specified in the
 \section{Functional Requirements Evaluation}
 
 \subsection{MuJoCo Integration}
+\label{mujoco_integration}
 
 \begin{center}
 \begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
@@ -101,6 +102,7 @@ FR-SLN2 & MuJoCo environments within the TPG framework can be successfully run w
 \end{center}
 
 \subsection{Experiment Visualization}
+\label{experiment_visualization}
 
 \begin{center}
   \begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
@@ -121,10 +123,37 @@ FR-SLN2 & MuJoCo environments within the TPG framework can be successfully run w
 \pagebreak 
 
 \subsection{Github Actions CI/CD Pipeline}
+\label{github_actions}
 
 \begin{center}
   \begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
     \caption{Github Actions CI/CD Pipeline Tests} \\
+      \hline
+  \textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
+  \hline
+  \endhead
+      FR-SLN4 & Affirmed that the “Build TPG Project” pipeline properly builds the TPG framework with updated code when changes are pushed to any branch. & Pass \\
+  \hline
+  FR-SLN5 & When the project building pipeline runs properly, the TPG unit test cases are also automatically ran, and the build will only pass if all the unit tests passes
+  . & Pass \\
+  \hline
+
+  FR-SLN6 & Tested that linting and Latex compilation pipeline works as expected. & Pass \\
+
+  \hline
+  \end{longtable}
+\end{center}
+
+\subsection{Software Engineering Practices}
+\label{software_engineering_practices}
+
+\begin{center}
+  \begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
+    \caption{Software Engineering Practices Tests} \\
   \hline
   \textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
   \hline
@@ -133,13 +162,7 @@ FR-SLN2 & MuJoCo environments within the TPG framework can be successfully run w
   \textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
   \hline
   \endhead
-  FR-SLN4 & Affirmed that the “Build TPG Project” pipeline properly builds the TPG framework with updated code when changes are pushed to any branch. & Pass \\
-  \hline
-  FR-SLN5 & When the project building pipeline runs properly, the TPG unit test cases are also automatically ran, and the build will only pass if all the unit tests passes
-  . & Pass \\
-  \hline
-
-  FR-SLN6 & Tested that linting and Latex compilation pipeline works as expected. & Pass \\
+  FR-SLN7 & Newly added code in the TPG codebase follows Google's C++ Style Guide and software engineering best practices such as design patterns, and object-oriented design. This includes careful review and consideration of code readability, extendability, maintainability and scalability. A linter has also been implemented to check for such styling as discussed in \ref{github_actions}. & Pass \\
   \hline
   \end{longtable}
 \end{center}
@@ -149,6 +172,31 @@ FR-SLN2 & MuJoCo environments within the TPG framework can be successfully run w
 \subsection{Usability}
 		
 \subsection{Performance}
+
+\begin{center}
+  \begin{longtable}{|p{4cm}|p{4cm}|}
+  \caption{Performance Tests} \\
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endhead
+  NFR-SLR4 & Pass \\
+  \hline
+  \end{longtable}
+\end{center}
+
+For NFR-SLN4, test cases within TPG for the experimental environments have been implemented to check for the accuracy of the numerical computations associated during training. Declaration of variables with proper types (e.g. signed long or int, unsigned long or int) has also been taken into consideration to reduce issues in the future for extremely large or small numbers that may overflow. TPG has been comprehensively tested to guarantee that all computations with high numerical precision (e.g. during the runtime of an experiment) are accurate and contain an acceptable tolerance limit of 0.00001. The results were inspected manually by comparing the actual output to the anticipated output, and performing a calculation to check for quantitative error, and if such error meets the requirements for numerical precision.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{img/ant_test.png}
+  \caption{Example of a Numerical Computation Test}
+  \label{fig:myimage}
+\end{figure}
 
 \subsection{Operational and Environmental}
 
@@ -176,9 +224,9 @@ Simply follow the \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/home
 
 \subsection{Maintanability}
 
-\begin{center}
+  \begin{center}
   \begin{longtable}{|p{4cm}|p{4cm}|}
-  \caption{Maintanability Tests} \\
+  \caption{Maintainability Tests} \\
   \hline
   \textbf{Test Id} & \textbf{Result} \\
   \hline
@@ -193,6 +241,27 @@ Simply follow the \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/home
 \end{center}
 
 To satisfy the testing requirements for NFR-SLR7 - establishing a secure and robust repository management system, the team has implemented checks to ensure the repository prevents unauthorized access and defective code integration. The repository where our team is working on GitHub (whereas the base TPG repository is based in Gitlab), and access is controlled through a combination of two-factor authentication (2FA), and a main branch that is protected to ensure that merge requests can only be performed after the \href{https://github.com/TPGEngine/tpg/blob/main/.github/workflows/build-project.yaml}{TPG project GitHub workflow} action pipeline has successfully completed. This pipeline validates the building and testing process, ensuring that only code that passes all checks can be merged into the main branch. Any critical build errors or warnings, create blocking pull request conversations that must be resolved before merging. There is also a specific \href{https://github.com/TPGEngine/tpg/blob/main/.github/workflows/pull-gitlab.yml}{GitHub workflow} that is used to automatically pull changes from GitLab, eliminating the need for manual merging and risk of human error. 
+
+\subsection{Security}
+
+\begin{center}
+  \begin{longtable}{|p{4cm}|p{4cm}|}
+  \caption{Security Tests} \\
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endhead
+  NFR-SLR8 & Pass \\
+  \hline
+  \end{longtable}
+\end{center}
+
+
+For NFR-SLN8, the .csv, .txt, .png and .mp4 files that are generated within Classic Control and MuJoCo experiments are ignored by Git when making commits to the public repositories in GitHub and GitLab to reduce chance of oversharing sensitive data. Currently, none of these files generate sensitive data, but to follow best practice and to keep the repository at a clean state, these are not recognized when synchronizing code to each respective repository. Additionally, the team has also manually checked all stored .csv, .txt, .png and .mp4 files along with others that may contain textual information to see if data within them are sensitive and must be kept private. 
 
 \subsection{Compliance}
 
@@ -219,7 +288,7 @@ Any critical errors found during the linting process create blocking pull reques
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=1\textwidth]{linter-example.png}
+  \includegraphics[width=1\textwidth]{img/linter-example.png}
   \caption{Example of a Linter Error}
   \label{fig:myimage}
 \end{figure}
