@@ -3,6 +3,10 @@ include(CTest)
 include(Catch)
 enable_testing()
 find_package(TBB REQUIRED)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage")
+set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
 
 # --- Executable Targets ---
 set(TEST_TARGETS
@@ -133,3 +137,15 @@ add_custom_target(run_tests ALL
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/tests
     COMMENT "Running all tests..."
 )
+
+# Add a custom target for generating coverage reports
+add_custom_target(coverage
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/coverage
+    COMMAND lcov --capture --directory . --output-file ${CMAKE_BINARY_DIR}/coverage/coverage.info
+    COMMAND lcov --remove ${CMAKE_BINARY_DIR}/coverage/coverage.info '/usr/*' '*/tests/*' --output-file ${CMAKE_BINARY_DIR}/coverage/coverage_filtered.info
+    COMMAND genhtml ${CMAKE_BINARY_DIR}/coverage/coverage_filtered.info --output-directory ${CMAKE_BINARY_DIR}/coverage
+    COMMENT "Generating coverage report..."
+)
+
+# Ensure the coverage target runs after tests
+add_dependencies(coverage run_tests)
