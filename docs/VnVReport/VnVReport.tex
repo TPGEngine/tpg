@@ -56,7 +56,7 @@
   SRS & Software Requirement Specification\\
   FR & Functional Requirement\\
   NFR & Non-Functional Requirement\\
-  SLN & System Level Number\\
+  SLN & Solution\\
   VnV & Verification and Validation\\
   \bottomrule
 \end{tabular}\\
@@ -689,7 +689,7 @@ The compiler workflow is also executed after merging into the main branch to ens
 This not only allows for easier debugging but also resolves the “works on my machine” issue.
 		
 \section{Trace to Requirements}
-Please refer to the \href{https://github.com/TPGEngine/tpg/blob/main/docs/SRS/SRS.pdf}{SRS documentaion} \citep{SRS} for detailed information of each requirement.
+Please refer to the \href{https://github.com/TPGEngine/tpg/blob/main/docs/SRS/SRS.pdf}{SRS documentation} \citep{SRS} for detailed information of each requirement.
 \begin{longtable}{|p{0.45\linewidth}|p{0.45\linewidth}|}
 \hline
 \textbf{Req. ID} & \textbf{System Test ID} \\
@@ -752,7 +752,25 @@ SR-AU1 & \hyperref[usability]{NFR-SLN2} \\
 \hline
 \end{longtable}
 		
-\section{Trace to Modules}		
+\section{Trace to Modules}	
+Please refer to the \href{https://github.com/TPGEngine/tpg/blob/main/docs/Design/SoftArchitecture/MG.pdf}{Module Guide documentaion} \citep{MG} for detailed information of each module.
+\begin{longtable}{|p{0.45\linewidth}|p{0.45\linewidth}|}
+\hline
+\textbf{Req. ID} & \textbf{System Test ID} \\
+\hline
+M1 & N/A\\
+\hline
+M2 & \hyperref[experiment_visualization]{FR-SLN3}, \hyperref[software_engineering_practices]{FR-SLN5}, \hyperref[usability]{NFR-SLN1}, \hyperref[usability]{NFR-SLN2}, \hyperref[github_actions]{NFR-SLN4} \\
+\hline
+M3 & \hyperref[mujoco_integration]{FR-SLN1}, \hyperref[mujoco_integration]{FR-SLN2}, \hyperref[experiment_visualization]{FR-SLN3}, \hyperref[software_engineering_practices]{FR-SLN5}, \hyperref[usability]{NFR-SLN3}, \hyperref[github_actions]{NFR-SLN4} \\
+\hline
+M4 & \hyperref[experiment_visualization]{FR-SLN3}, \hyperref[software_engineering_practices]{FR-SLN5} \\
+\hline
+M5 & \hyperref[usability]{NFR-SLN2}, \hyperref[software_engineering_practices]{FR-SLN5}, \hyperref[usability]{NFR-SLN6}, \hyperref[operational]{NFR-SLN7}, \hyperref[operational]{NFR-SLN8} \\
+\hline
+M6 & \hyperref[github_actions]{FR-SLN4}, \hyperref[software_engineering_practices]{FR-SLN5}, \hyperref[usability]{NFR-SLN6} \\
+\hline
+\end{longtable}	
 
 \section{Code Coverage Metrics}
 
