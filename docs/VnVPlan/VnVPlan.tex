@@ -763,7 +763,8 @@ This section will be completed after the detailed design document has been compl
 %   verifying them.  There may also be modules that are part of your software, but
 %   have a lower priority for verification than others.  If this is the case,
 %   explain your rationale for the ranking of module importance.}
-This subsection will be completed after the detailed design document has been completed.
+For the purpose of our project, Dr. Kelly and our team identified the two most essential modules to be evaluated using unit-tests, which involve the behaviour-hiding module and the Mujoco module. The rationale for implementing unit tests for these two modules is that the behaviour-hiding module has to verify crucial functionality that is within the TPG class. The Mujoco module needs to be verified because it is a new and more complex environment setup, especially when compared to the classic control module.
+
 
 \subsection{Tests for Functional Requirements}
 
@@ -775,9 +776,11 @@ This subsection will be completed after the detailed design document has been co
 %   appropriate specific modules can be verified by a non-testing based
 %   technique.  That can also be documented in this section.}
 
-\subsubsection{Module 1}
+\subsubsection{Behaviour-Hiding Module}
 
-This subsection will be completed after the detailed design document has been completed.
+The unit tests for the Behaviour-Hiding Module are designed to verify the crucial algorithm based methods within the TPG class. These tests ensure that the behavior-hiding mechanisms operate correctly, maintaining the integrity and expected outcomes of the system's operations. The tests are implemented with C++ and with the popular unit testing framework Catch. It is executed automatically through a continuous integration pipeline, ensuring that any changes to the module are validated properly.
+
+
 
 
 % % \wss{Include a blurb here to explain why the subsections below cover the module.
@@ -822,63 +825,15 @@ This subsection will be completed after the detailed design document has been co
 % \end{enumerate}
 
 
-\subsubsection{Module 2}
-This subsection will be completed after the detailed design document has been completed.
+\subsubsection{Mujoco Module}
+The unit tests for the Mujoco Module cover various aspects of the Mujoco environment, such as initialization, terminal conditions, reward calculations, control and contact costs, health checks, simulation steps, observation retrieval, and reset functionality. The tests are implemented with C++ and with the popular unit testing framework Catch. It is executed automatically through a continuous integration pipeline, ensuring that the complex environment setup is consistently verified for correctness and performance..
 
-% ...
 
 \subsection{Tests for Nonfunctional Requirements}
-This subsection will be completed after the detailed design document has been completed.
+Unit tests do not cover non functional requirements
 
 
-
-% \wss{If there is a module that needs to be independently assessed for
-%   performance, those test cases can go here.  In some projects, planning for
-%   nonfunctional tests of units will not be that relevant.}
-
-% \wss{These tests may involve collecting performance data from previously
-%   mentioned functional tests.}
-
-\subsubsection{Module ?}
-This subsection will be completed after the detailed design document has been completed.
-
-
-		
-% \begin{enumerate}
-
-% \item{test-id1\\}
-
-% Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-%   be automatic}
-					
-% Initial State: 
-					
-% Input/Condition: 
-					
-% Output/Result: 
-					
-% How test will be performed: 
-					
-% \item{test-id2\\}
-
-% Type: Functional, Dynamic, Manual, Static etc.
-					
-% Initial State: 
-					
-% Input: 
-					
-% Output: 
-					
-% How test will be performed: 
-
-% \end{enumerate}
-
-\subsubsection{Module ?}
-This subsection will be completed after the detailed design document has been completed.
-% ...
-
-\subsection{Traceability Between Test Cases and Modules}
-This subsection will be completed after the detailed design document has been completed.
+% \subsection{Traceability Between Test Cases and Modules}
 
 
 % \wss{Provide evidence that all of the modules have been considered.}
