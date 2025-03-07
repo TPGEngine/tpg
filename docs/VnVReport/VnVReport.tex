@@ -37,8 +37,7 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+3/7/2025 & 1.0 & First write up of VnV Report \\
 \bottomrule
 \end{tabularx}
 
@@ -57,7 +56,7 @@ Date 2 & 1.1 & Notes\\
   SRS & Software Requirement Specification\\
   FR & Functional Requirement\\
   NFR & Non-Functional Requirement\\
-  SLN & System Level Number\\
+  SLN & Solution\\
   VnV & Verification and Validation\\
   \bottomrule
 \end{tabular}\\
@@ -80,29 +79,27 @@ This document cohesively summarizes the results of each test as specified in the
 
 \section{Functional Requirements Evaluation}
 
-\subsection{MuJoCo Integration}
-\label{mujoco_integration}
+\subsection{MuJoCo Integration}\label{mujoco_integration}
 
 \begin{center}
-\begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
-  \caption{MuJoCo Integration Tests} \\
-\hline
-\textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
-\hline
-\endfirsthead
-\hline
-\textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
-\hline
-\endhead
-FR-SLN1 & When executing the appropriate script, all MuJoCo environments can be run. The best-performing agent within the policy can be visualized using OpenGL or an MP4 file. & Pass \\
-\hline
-FR-SLN2 & MuJoCo environments within the TPG framework can be successfully run within the Digital Research Alliance, enabling research to be conducted by executing experiments. & Pass \\
-\hline
-\end{longtable}
+    \begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
+      \caption{MuJoCo Integration Tests} \\
+    \hline
+    \textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
+    \hline
+    \endhead
+    FR-SLN1 & When executing the appropriate script, all MuJoCo environments can be run. The best-performing agent within the policy can be visualized using OpenGL or an MP4 file. & Pass \\
+    \hline
+    FR-SLN2 & MuJoCo environments within the TPG framework can be successfully run within the Digital Research Alliance, enabling research to be conducted by executing experiments. & Pass \\
+    \hline
+    \end{longtable}
 \end{center}
 
-\subsection{Experiment Visualization}
-\label{experiment_visualization}
+\subsection{Experiment Visualization}\label{experiment_visualization}
 
 \begin{center}
   \begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
@@ -120,11 +117,34 @@ FR-SLN2 & MuJoCo environments within the TPG framework can be successfully run w
   \end{longtable}
 \end{center}
 
-\subsection{Github Actions CI/CD Pipeline}
-\label{github_actions}
+\pagebreak 
 
-\subsection{Software Engineering Practices}
-\label{software_engineering_practices}
+\subsection{Github Actions CI/CD Pipeline}\label{github_actions}
+
+\begin{center}
+  \begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
+    \caption{Github Actions CI/CD Pipeline Tests} \\
+      \hline
+  \textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
+  \hline
+  \endhead
+      FR-SLN4 & Affirmed that the “Build TPG Project” pipeline properly builds the TPG framework with updated code when changes are pushed to any branch. & Pass \\
+  \hline
+  FR-SLN5 & When the project building pipeline runs properly, the TPG unit test cases are also automatically ran, and the build will only pass if all the unit tests passes
+  . & Pass \\
+  \hline
+
+  FR-SLN6 & Tested that linting and Latex compilation pipeline works as expected. & Pass \\
+
+  \hline
+  \end{longtable}
+\end{center}
+
+\subsection{Software Engineering Practices}\label{software_engineering_practices}
 
 \begin{center}
   \begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
@@ -137,14 +157,14 @@ FR-SLN2 & MuJoCo environments within the TPG framework can be successfully run w
   \textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
   \hline
   \endhead
-  FR-SLN6 & Newly added code in the TPG codebase follows Google's C++ Style Guide and software engineering best practices such as design patterns, and object-oriented design. This includes careful review and consideration of code readability, extendability, maintainability and scalability. A linter has also been implemented to check for such styling as discussed in \ref{github_actions}. & Pass \\
+  FR-SLN7 & Newly added code in the TPG codebase follows Google's C++ Style Guide and software engineering best practices such as design patterns, and object-oriented design. This includes careful review and consideration of code readability, extendability, maintainability and scalability. A linter has also been implemented to check for such styling as discussed in \ref{github_actions}. & Pass \\
   \hline
   \end{longtable}
 \end{center}
 
 \section{Nonfunctional Requirements Evaluation}
 
-\subsection{Usability}
+\subsection{Usability}\label{usability}
 \begin{center}
   \begin{longtable}{|p{4cm}|p{4cm}|}
   \caption{Usability Tests} \\
@@ -171,7 +191,7 @@ For NFR-SLN2, an event-driven logging architecture was implemented to provide re
 
 For NFR-SLN3, the framework now offers extensive customization options for MuJoCo simulation parameters through YAML configuration files. Each environment includes specific parameters (reward weights, health criteria, observation settings) and common simulation parameters (maximum timesteps, model path). The CLI tool integrates these parameters, allowing users to specify different environments and configurations when running experiments. Usability testing confirmed the ease of locating and customizing parameters, with suggestions to place YAML files within the experiments directory and reduce the number of log files.
 		
-\subsection{Performance}
+\subsection{Performance}\label{performance}
 
 \begin{center}
   \begin{longtable}{|p{4cm}|p{4cm}|}
@@ -195,10 +215,9 @@ For NFR-SLN4, test cases within TPG for the experimental environments have been 
   \centering
   \includegraphics[width=1\textwidth]{img/ant_test.png}
   \caption{Example of a Numerical Computation Test}
-  \label{fig:myimage}
 \end{figure}
 
-\subsection{Operational and Environmental}
+\subsection{Operational and Environmental}\label{operational}
 
 \begin{center}
   \begin{longtable}{|p{4cm}|p{4cm}|}
@@ -221,9 +240,28 @@ Previously, only Linux was supported because TPG used SCons for C++ builds and L
 With VSCode Dev Containers, a Linux development environment is automatically launched for all developers, ensuring a standardized setup.
 Simply follow the \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/home}{Wiki} instructions to download all necessary Linux dependencies and build the C++ code reliably. Onboarding on a Macbook has been reduced from 2 weeks to just 5 minutes.
 
-\subsection{Maintainability}
 
-\subsection{Security}
+\subsection{Maintainability}\label{maintainability}
+
+  \begin{center}
+  \begin{longtable}{|p{4cm}|p{4cm}|}
+  \caption{Maintainability Tests} \\
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endhead
+  NFR-SLR7 & Pass \\
+  \hline
+  \end{longtable}
+\end{center}
+
+To satisfy the testing requirements for NFR-SLR7 - establishing a secure and robust repository management system, the team has implemented checks to ensure the repository prevents unauthorized access and defective code integration. The repository where our team is working on GitHub (whereas the base TPG repository is based in Gitlab), and access is controlled through a combination of two-factor authentication (2FA), and a main branch that is protected to ensure that merge requests can only be performed after the \href{https://github.com/TPGEngine/tpg/blob/main/.github/workflows/build-project.yaml}{TPG project GitHub workflow} action pipeline has successfully completed. This pipeline validates the building and testing process, ensuring that only code that passes all checks can be merged into the main branch. Any critical build errors or warnings, create blocking pull request conversations that must be resolved before merging. There is also a specific \href{https://github.com/TPGEngine/tpg/blob/main/.github/workflows/pull-gitlab.yml}{GitHub workflow} that is used to automatically pull changes from GitLab, eliminating the need for manual merging and risk of human error. 
+
+\subsection{Security}\label{security}
 
 \begin{center}
   \begin{longtable}{|p{4cm}|p{4cm}|}
@@ -241,9 +279,10 @@ Simply follow the \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/home
   \end{longtable}
 \end{center}
 
+
 For NFR-SLN8, the .csv, .txt, .png and .mp4 files that are generated within Classic Control and MuJoCo experiments are ignored by Git when making commits to the public repositories in GitHub and GitLab to reduce chance of oversharing sensitive data. Currently, none of these files generate sensitive data, but to follow best practice and to keep the repository at a clean state, these are not recognized when synchronizing code to each respective repository. Additionally, the team has also manually checked all stored .csv, .txt, .png and .mp4 files along with others that may contain textual information to see if data within them are sensitive and must be kept private. 
 
-\subsection{Compliance}
+\subsection{Compliance}\label{compliance}
 
 \begin{center}
 \begin{longtable}{|p{4cm}|p{4cm}|}
@@ -270,10 +309,386 @@ Any critical errors found during the linting process create blocking pull reques
   \centering
   \includegraphics[width=1\textwidth]{img/linter-example.png}
   \caption{Example of a Linter Error}
-  \label{fig:myimage}
 \end{figure}
 
 \section{Unit Testing}
+
+\subsection{Behaviour-Hiding Module}
+
+\subsubsection{RegisterMachine Crossover Tests}
+
+\textbf{Type:} Automatic, Functional
+
+\textbf{Initial State:} The \texttt{TPG} and \texttt{RegisterMachine} objects are initialized with default parameters and state.
+
+\textbf{Test Case Derivation:} The expected behavior is derived from the correct crossover functionality, chunk splitting, and recombination of \texttt{RegisterMachine} objects, ensuring valid instruction patterns and segment lengths.
+
+\textbf{Test Procedure:} The test will be performed as follows:
+\begin{itemize}
+    \item \textbf{Basic Crossover Functionality Test:}
+    \begin{itemize}
+        \item \textbf{Input:} Two parent \texttt{RegisterMachine} objects.
+        \item \textbf{Output:} Two child \texttt{RegisterMachine} objects with valid instructions and actions.
+        \item \textbf{Test Derivation:} Verifies that crossover produces children with reasonable sizes, valid actions, and instruction patterns derived from both parents.
+    \end{itemize}
+
+    \item \textbf{Chunk Splitting and Recombination Test:}
+    \begin{itemize}
+        \item \textbf{Input:} Two parent \texttt{RegisterMachine} objects with predefined instruction sequences.
+        \item \textbf{Output:} Two child \texttt{RegisterMachine} objects with instruction counts and patterns derived from both parents.
+        \item \textbf{Test Derivation:} Ensures that crossover produces children with valid instruction counts and different instruction patterns.
+    \end{itemize}
+
+    \item \textbf{Crossover Constraints Test:}
+    \begin{itemize}
+        \item \textbf{Input:} Two parent \texttt{RegisterMachine} objects with predefined instruction sequences.
+        \item \textbf{Output:} Two child \texttt{RegisterMachine} objects adhering to crossover constraints.
+        \item \textbf{Test Derivation:} Verifies that crossover points, segment lengths, and resulting program lengths adhere to predefined constraints (\texttt{dcmax}, \texttt{lsmax}, \texttt{dsmax}, \texttt{lmin}, \texttt{lmax}).
+    \end{itemize}
+\end{itemize}
+
+
+\subsubsection{Team Crossover Tests}
+
+\textbf{Type:} Automatic, Functional
+
+\textbf{Initial State:} The \texttt{TPG} and \texttt{team} objects are initialized with default parameters and state.
+
+\textbf{Test Case Derivation:} The expected behavior is derived from the correct crossover functionality of \texttt{team} objects, ensuring valid team sizes, atomic program preservation, and adherence to team size limits.
+
+\textbf{Test Procedure:} The test will be performed as follows:
+\begin{itemize}
+    \item \textbf{Single Program Teams - Linear Crossover Test:}
+    \begin{itemize}
+        \item \textbf{Input:} Two parent teams with single programs.
+        \item \textbf{Output:} A child team with one program.
+        \item \textbf{Test Derivation:} Verifies that crossover produces a child team with a single program and valid atomic count.
+    \end{itemize}
+
+    \item \textbf{Multi-Program Teams - Team Crossover Test:}
+    \begin{itemize}
+        \item \textbf{Input:} Two parent teams with multiple programs.
+        \item \textbf{Output:} A child team with programs derived from both parents.
+        \item \textbf{Test Derivation:} Ensures that crossover produces a child team with a valid size (within \texttt{max\_team\_size}) and at least one atomic program.
+    \end{itemize}
+
+    \item \textbf{Atomic Program Preservation Test:}
+    \begin{itemize}
+        \item \textbf{Input:} Two parent teams with atomic and non-atomic programs.
+        \item \textbf{Output:} A child team with at least one atomic program.
+        \item \textbf{Test Derivation:} Verifies that crossover preserves atomic programs in the child team.
+    \end{itemize}
+
+    \item \textbf{Team Size Limits Test:}
+    \begin{itemize}
+        \item \textbf{Input:} Two parent teams with the maximum number of programs.
+        \item \textbf{Output:} A child team with a size within \texttt{max\_team\_size}.
+        \item \textbf{Test Derivation:} Ensures that crossover produces a child team adhering to the predefined team size limit.
+    \end{itemize}
+\end{itemize}
+
+
+
+\subsection{Mujoco Module}
+
+\subsubsection{Mujoco Environment Test\\}
+
+
+\textbf{Type:} Automatic, Functional
+
+\textbf{Initial State:} The MuJoCo environment is initialized using the \texttt{MockMujocoEnv} class with the appropriate model path.
+
+\textbf{Test Case Derivation:} The expected behavior is derived from the correct initialization, state setting, and simulation execution of the MuJoCo environment.
+
+\textbf{Test Procedure:} The test will be performed as follows:
+\begin{itemize}
+    \item \textbf{Simulation Initialization Test:}
+    \begin{itemize}
+        \item \textbf{Input:} Model path determined by the \texttt{determine\_tpg\_env()} function.
+        \item \textbf{Output:} Successful initialization of the MuJoCo environment.
+        \item \textbf{Test Derivation:} Verifies that the \texttt{initialize\_simulation()} function correctly initializes the MuJoCo environment, ensuring that the model (\texttt{m\_}) and data (\texttt{d\_}) pointers are not null.
+    \end{itemize}
+
+    \item \textbf{Set State Test:}
+    \begin{itemize}
+        \item \textbf{Input:} Position vector \texttt{qpos} set to \texttt{\{0.5, 0.5, ...\}} and velocity vector \texttt{qvel} set to \texttt{\{0.1, 0.1, ...\}}.
+        \item \textbf{Output:} Updated state in the MuJoCo environment.
+        \item \textbf{Test Derivation:} Ensures that the \texttt{set\_state()} function correctly updates the position and velocity states in the MuJoCo environment, verifying that \texttt{d\_->qpos} and \texttt{d\_->qvel} match the input values.
+    \end{itemize}
+
+    \item \textbf{Do Simulation Test:}
+    \begin{itemize}
+        \item \textbf{Input:} Control vector \texttt{control} set to \texttt{\{0.2, 0.2, ...\}} and a step count of 5.
+        \item \textbf{Output:} Updated control values in the MuJoCo environment.
+        \item \textbf{Test Derivation:} Confirms that the \texttt{do\_simulation()} function correctly applies the control inputs and updates the simulation state, ensuring that \texttt{d\_->ctrl} matches the input control values.
+    \end{itemize}
+\end{itemize}
+
+\textbf{Test Cases}
+
+\textbf{Test Case 1: Simulation Initialization}
+\begin{itemize}
+    \item \textbf{Description:} Tests the initialization of the MuJoCo simulation environment.
+    \item \textbf{Steps:}
+    \begin{enumerate}
+        \item Create a \texttt{MockMujocoEnv} object with the model path.
+        \item Call \texttt{initialize\_simulation()}.
+        \item Verify that \texttt{m\_} and \texttt{d\_} are not null.
+    \end{enumerate}
+\end{itemize}
+
+\textbf{Test Case 2: Set State}
+\begin{itemize}
+    \item \textbf{Description:} Tests the ability to set the state of the MuJoCo environment.
+    \item \textbf{Steps:}
+    \begin{enumerate}
+        \item Create a \texttt{MockMujocoEnv} object and initialize the simulation.
+        \item Set \texttt{qpos} to \texttt{\{0.5, 0.5, ...\}} and \texttt{qvel} to \texttt{\{0.1, 0.1, ...\}}.
+        \item Call \texttt{set\_state(qpos, qvel)}.
+        \item Verify that \texttt{d\_->qpos} and \texttt{d\_->qvel} match the input values.
+    \end{enumerate}
+\end{itemize}
+
+\textbf{Test Case 3: Do Simulation}
+\begin{itemize}
+    \item \textbf{Description:} Tests the execution of a simulation step with control inputs.
+    \item \textbf{Steps:}
+    \begin{enumerate}
+        \item Create a \texttt{MockMujocoEnv} object and initialize the simulation.
+        \item Set \texttt{control} to \texttt{\{0.2, 0.2, ...\}}.
+        \item Call \texttt{do\_simulation(control, 5)}.
+        \item Verify that \texttt{d\_->ctrl} matches the input control values.
+    \end{enumerate}
+\end{itemize}
+
+\subsubsection{Mujoco Ant Test\\}
+
+\textbf{Type:} Automatic, Functional
+
+\textbf{Initial State:} The \texttt{Mujoco\_Ant\_v4} environment is initialized.
+
+\textbf{Test Case Derivation:} The expected value is based on the logic that the environment should be terminal when the step count reaches 200, as per the environment's design.
+
+\textbf{Test Procedure:} The test will be performed as follows:
+\begin{itemize}
+    \item \textbf{Healthy Reward Test:}
+    \begin{itemize}
+        \item \textbf{Input:} None.
+        \item \textbf{Output:} Returns \texttt{healthy\_reward\_}.
+        \item \textbf{Test Derivation:} Verifies that the \texttt{healthy\_reward()} function correctly returns the predefined \texttt{healthy\_reward\_} value.
+    \end{itemize}
+
+    \item \textbf{Control Cost Test:}
+    \begin{itemize}
+        \item \textbf{Input:} Action vector \texttt{\{0.1, -0.1, 0.2, 0.3\}}.
+        \item \textbf{Output:} Calculated control cost.
+        \item \textbf{Test Derivation:} Ensures the \texttt{control\_cost()} function computes the cost using \texttt{control\_cost\_weight\_} and the squared sum of action values.
+    \end{itemize}
+
+    \item \textbf{Contact Cost Test:}
+    \begin{itemize}
+        \item \textbf{Input:} None.
+        \item \textbf{Output:} Non-negative contact cost.
+        \item \textbf{Test Derivation:} Confirms that the \texttt{contact\_cost()} function always returns a non-negative value.
+    \end{itemize}
+
+    \item \textbf{Is Healthy Test:}
+    \begin{itemize}
+        \item \textbf{Input:} Modify \texttt{qpos[2]} to test health conditions.
+        \item \textbf{Output:} Boolean indicating health status.
+        \item \textbf{Test Derivation:} Validates that \texttt{is\_healthy()} returns \texttt{true} when \texttt{qpos[2]} is within the healthy range and \texttt{false} otherwise.
+    \end{itemize}
+
+    \item \textbf{Simulation Step Test:}
+    \begin{itemize}
+        \item \textbf{Input:} Action vector \texttt{\{0.1, -0.1, 0.2, 0.3\}}.
+        \item \textbf{Output:} Finite reward and incremented \texttt{step\_}.
+        \item \textbf{Test Derivation:} Checks that \texttt{sim\_step()} processes actions correctly, updating the environment state and returning a valid reward.
+    \end{itemize}
+
+    \item \textbf{Get Observation Test:}
+    \begin{itemize}
+        \item \textbf{Input:} None.
+        \item \textbf{Output:} Non-zero observation vector.
+        \item \textbf{Test Derivation:} Ensures \texttt{get\_obs()} reflects the current state of the environment in the observation vector.
+    \end{itemize}
+
+    \item \textbf{Reset Function Test:}
+    \begin{itemize}
+        \item \textbf{Input:} Random number generator.
+        \item \textbf{Output:} Reinitialized environment state.
+        \item \textbf{Test Derivation:} Verifies that \texttt{reset()} brings the environment back to its initial state, setting \texttt{step\_} to 0 and state values close to zero.
+    \end{itemize}
+\end{itemize}
+
+
+
+
+\subsubsection{Mujoco Half Cheetah Test\\}
+
+\textbf{Type:} Automatic, Functional
+
+\textbf{Initial State:} The \texttt{Mujoco\_Half\_Cheetah\_v4} environment is initialized with default parameters.
+
+\textbf{Test Case Derivation:} The expected behavior is derived from the correct initialization, terminal condition, control cost calculation, simulation step execution, and reset functionality of the environment.
+
+\textbf{Test Procedure:} The test will be performed as follows:
+\begin{itemize}
+    \item \textbf{Initialization Test:}
+    \begin{itemize}
+        \item \textbf{Input:} Default parameters.
+        \item \textbf{Output:} Correct initialization of environment variables.
+        \item \textbf{Test Derivation:} Verifies that \texttt{n\_eval\_train\_}, \texttt{n\_eval\_validation\_}, \texttt{n\_eval\_test\_}, and \texttt{max\_step\_} are set correctly.
+    \end{itemize}
+
+    \item \textbf{Terminal Condition Test:}
+    \begin{itemize}
+        \item \textbf{Input:} Step count set to 200.
+        \item \textbf{Output:} \texttt{terminal()} returns \texttt{true}.
+        \item \textbf{Test Derivation:} Ensures the environment terminates when the step count reaches 200.
+    \end{itemize}
+
+    \item \textbf{Control Cost Test:}
+    \begin{itemize}
+        \item \textbf{Input:} Action vector \texttt{\{0.1, -0.1, 0.2\}}.
+        \item \textbf{Output:} Calculated control cost.
+        \item \textbf{Test Derivation:} Confirms that \texttt{control\_cost()} computes the cost using the squared sum of action values.
+    \end{itemize}
+
+    \item \textbf{Simulation Step Test:}
+    \begin{itemize}
+        \item \textbf{Input:} Action vector \texttt{\{0.1, -0.1, 0.2\}}.
+        \item \textbf{Output:} Finite reward and incremented step count.
+        \item \textbf{Test Derivation:} Verifies that \texttt{sim\_step()} processes actions correctly and updates the step count.
+    \end{itemize}
+
+    \item \textbf{Reset Function Test:}
+    \begin{itemize}
+        \item \textbf{Input:} Random number generator and modified state.
+        \item \textbf{Output:} Reinitialized environment state.
+        \item \textbf{Test Derivation:} Ensures \texttt{reset()} resets the step count and state values to initial conditions.
+    \end{itemize}
+\end{itemize}
+
+
+\subsubsection{Mujoco Hopper Test\\}
+
+\textbf{Type:} Automatic, Functional
+
+\textbf{Initial State:} The \texttt{Mujoco\_Hopper\_v4} environment is initialized with default parameters.
+
+\textbf{Test Case Derivation:} The expected behavior is derived from the correct initialization, terminal condition, healthy reward, control cost calculation, health check, simulation step execution, observation retrieval, and reset functionality of the environment.
+
+\textbf{Test Procedure:} The test will be performed as follows:
+\begin{itemize}
+    \item \textbf{Initialization Test:} Similar to Half Cheetah or Ant test, but the input is default parameters.
+    
+    \item \textbf{Terminal Condition Test:} Similar to Half Cheetah or Ant test, but the input includes modifying \texttt{qpos[1]} to test the healthy z range and step count.
+    
+    \item \textbf{Healthy Reward Test:} Similar to Half Cheetah or Ant test, but the input is none, and the output is \texttt{healthy\_reward\_}.
+    
+    \item \textbf{Control Cost Test:} Similar to Half Cheetah or Ant test, but the input is action vector \texttt{\{0.1, -0.1, 0.2\}}.
+    
+    \item \textbf{Is Healthy Test:} Similar to Half Cheetah or Ant test, but the input includes modifying \texttt{qpos[1]} and \texttt{qpos[2]} to test the healthy z range and angle range.
+    
+    \item \textbf{Simulation Step Test:} Similar to Half Cheetah or Ant test, but the input is action vector \texttt{\{0.1, -0.1, 0.2\}}.
+    
+    \item \textbf{Get Observation Test:} Similar to Half Cheetah or Ant test, but the input includes manually setting \texttt{qpos} and \texttt{qvel} to non-zero values.
+    
+    \item \textbf{Reset Function Test:} Similar to Half Cheetah or Ant test, but the input includes modifying \texttt{qpos}, \texttt{qvel}, and step count before resetting.
+\end{itemize}
+
+\subsubsection{Mujoco Humanoid Standup Test\\}
+
+\textbf{Type:} Automatic, Functional
+
+\textbf{Initial State:} The \texttt{Mujoco\_Humanoid\_Standup\_v4} environment is initialized with default parameters.
+
+\textbf{Test Case Derivation:} The expected behavior is derived from the correct initialization, terminal condition, simulation step execution, observation retrieval, and reset functionality of the environment.
+
+\textbf{Test Procedure:} The test will be performed as follows:
+\begin{itemize}
+    \item \textbf{Initialization Test:} Similar to Hopper or Half Cheetah test, but the input is default parameters.
+    
+    \item \textbf{Terminal Condition Test:} Similar to Hopper or Half Cheetah test, but the input is step count set to 200.
+    
+    \item \textbf{Simulation Step Test:} Similar to Hopper or Half Cheetah test, but the input is action vector \texttt{\{0.1, -0.1, 0.2\}}.
+    
+    \item \textbf{Get Observation Test:} Similar to Hopper or Half Cheetah test, but the input includes verifying non-zero observation values.
+    
+    \item \textbf{Reset Function Test:} Similar to Hopper or Half Cheetah test, but the input includes modifying \texttt{qpos}, \texttt{qvel}, and step count before resetting.
+\end{itemize}
+
+
+\subsubsection{Mujoco Inverted Double Pendulum Test\\}
+
+\textbf{Type:} Automatic, Functional
+
+\textbf{Initial State:} The \texttt{Mujoco\_Inverted\_Double\_Pendulum\_v4} environment is initialized with default parameters.
+
+\textbf{Test Case Derivation:} The expected behavior is derived from the correct initialization, terminal condition, simulation step execution, observation retrieval, and reset functionality of the environment.
+
+\textbf{Test Procedure:} The test will be performed as follows:
+\begin{itemize}
+    \item \textbf{Initialization Test:} Similar to Humanoid Standup or Hopper test, but the input is default parameters.
+    
+    \item \textbf{Terminal Condition Test:} Similar to Humanoid Standup or Hopper test, but the input includes modifying \texttt{site\_xpos[2]} to test the terminal threshold and step count.
+    
+    \item \textbf{Simulation Step Test:} Similar to Humanoid Standup or Hopper test, but the input is action vector \texttt{\{0.1\}}.
+    
+    \item \textbf{Get Observation Test:} Similar to Humanoid Standup or Hopper test, but the input includes manually setting \texttt{qpos} and \texttt{qvel} to non-zero values.
+    
+    \item \textbf{Reset Function Test:} Similar to Humanoid Standup or Hopper test, but the input includes modifying \texttt{qpos}, \texttt{qvel}, and step count before resetting.
+\end{itemize}
+
+
+\subsubsection{Mujoco Inverted Pendulum Test\\}
+
+\textbf{Type:} Automatic, Functional
+
+\textbf{Initial State:} The \texttt{Mujoco\_Inverted\_Pendulum\_v4} environment is initialized with default parameters.
+
+\textbf{Test Case Derivation:} The expected behavior is derived from the correct initialization, terminal condition, simulation step execution, observation retrieval, and reset functionality of the environment.
+
+\textbf{Test Procedure:} The test will be performed as follows:
+\begin{itemize}
+    \item \textbf{Initialization Test:} Similar to Inverted Double Pendulum or Humanoid Standup test, but the input is default parameters.
+    
+    \item \textbf{Terminal Condition Test:} Similar to Inverted Double Pendulum or Humanoid Standup test, but the input includes modifying \texttt{qpos[1]} to test the terminal threshold and step count.
+    
+    \item \textbf{Simulation Step Test:} Similar to Inverted Double Pendulum or Humanoid Standup test, but the input is action vector \texttt{\{0.1\}} and the expected reward is \texttt{1.0}.
+    
+    \item \textbf{Get Observation Test:} Similar to Inverted Double Pendulum or Humanoid Standup test, but the input includes manually setting \texttt{qpos} and \texttt{qvel} to non-zero values and verifying the observation vector.
+    
+    \item \textbf{Reset Function Test:} Similar to Inverted Double Pendulum or Humanoid Standup test, but the input includes modifying \texttt{qpos}, \texttt{qvel}, and step count before resetting.
+\end{itemize}
+
+
+\subsubsection{Mujoco Reacher Test\\}
+
+\textbf{Type:} Automatic, Functional
+
+\textbf{Initial State:} The \texttt{Mujoco\_Reacher\_v4} environment is initialized with default parameters.
+
+\textbf{Test Case Derivation:} The expected behavior is derived from the correct initialization, terminal condition, control cost calculation, distance retrieval, simulation step execution, observation retrieval, and reset functionality of the environment.
+
+\textbf{Test Procedure:} The test will be performed as follows:
+\begin{itemize}
+    \item \textbf{Initialization Test:} Similar to Inverted Pendulum or Inverted Double Pendulum test, but the input is default parameters.
+    
+    \item \textbf{Terminal Condition Test:} Similar to Inverted Pendulum or Inverted Double Pendulum test, but the input is step count set to 200.
+    
+    \item \textbf{Control Cost Test:} Similar to Hopper or Half Cheetah test, but the input is action vector \texttt{\{0.1, -0.1\}}.
+    
+    \item \textbf{Get Distance Test:} Unique to Reacher, the input is none, and the output is a distance vector of size 2.
+    
+    \item \textbf{Simulation Step Test:} Similar to Inverted Pendulum or Inverted Double Pendulum test, but the input is action vector \texttt{\{0.1, -0.1\}}.
+    
+    \item \textbf{Get Observation Test:} Similar to Inverted Pendulum or Inverted Double Pendulum test, but the input includes verifying non-zero observation values.
+    
+    \item \textbf{Reset Function Test:} Similar to Inverted Pendulum or Inverted Double Pendulum test, but the input includes modifying \texttt{qpos}, \texttt{qvel}, and step count before resetting.
+\end{itemize}
+
 
 \section{Changes Due to Testing}
 
@@ -285,6 +700,17 @@ Any critical errors found during the linting process create blocking pull reques
 The feedback given by the instructor and teaching assistant during Revision 0 was essential in guiding the next steps as the team looks toward the final demonstration.
 Emphasis was placed on ensuring that usability testing was executed systematically rather than in the more ad-hoc manner initially planned by the team.
 Some additional changes to be made include ensuring that unit testing and benchmarking of the implemented environments are cohesively executed and investigating whether the integration of deployment within the DRA is possible.
+
+\subsection{Feedback from Usability Testing}
+A usability testing session was conducted with a core contributor from Dr. Kelly's research group, who is also a primary contributor to the TPG framework. Although the TPG framework is Linux-based, the test user operates on MacOS—a platform that traditionally presents challenges in onboarding and setup.
+
+The testing session revealed several positive aspects of the system. The installation process was rated a 10, with the documentation proving clear and straightforward. Executing the simulation environment using MuJoCo was also rated a 10, as the user found it very easy to follow, particularly appreciating the guidance provided for running multiple experiments.
+
+Regarding system feedback, the logging messages received a rating of 9 in terms of accuracy and utility. However, the user suggested improvements in the clarity of naming for CSV files, specifically by outlining in the wiki what “removal” and “replacement” refer to. For the plotting functionality, feedback indicated that replicating the approach of the previous state (via a script such as tpg-plot-stats.sh with a "-for all" flag) would help retrieve comprehensive plots. Additionally, providing an option to save visualizations as PDFs, in addition to PNGs, was recommended.
+
+The user also raised concerns about supporting flexible workflows with experiment parameterization. For instance, when experimenting with environments like the "Inverted Pendulum," he might create two different YAML files to test various hyperparameters. Currently, the repository supports only a single experiment instance at a time. This limitation means that when reviewing experiment results, he is forced to navigate through the file system to locate the associated hyperparameters file, a process that he finds inconvenient. Addressing this could involve enhancing the repository to support multiple experiment instances simultaneously, thereby streamlining both the experimentation process and the retrieval of results.
+
+A significant challenge highlighted during the session was the difficulty MacOS users face with a Linux-centric codebase. Previously, a current grad student hosted and maintained a Docker image to assist onboarding, but it proved cumbersome. In response, we introduced Visual Studio Dev Container support to automate the creation of a Linux-based development environment within VS Code. This change aims to simplify the onboarding process for MacOS users, ensuring a more seamless setup.
 
 \section{Automated Testing}
 
@@ -299,8 +725,88 @@ The compiler workflow is also executed after merging into the main branch to ens
 This not only allows for easier debugging but also resolves the “works on my machine” issue.
 		
 \section{Trace to Requirements}
+Please refer to the \href{https://github.com/TPGEngine/tpg/blob/main/docs/SRS/SRS.pdf}{SRS documentation} \citep{SRS} for detailed information of each requirement.
+\begin{longtable}{|p{0.45\linewidth}|p{0.45\linewidth}|}
+\hline
+\textbf{Req. ID} & \textbf{System Test ID} \\
+\hline
+FR-1 & \hyperref[mujoco_integration]{FR-SLN1}, \hyperref[mujoco_integration]{FR-SLN2} \\
+\hline
+FR-2 & \hyperref[experiment_visualization]{FR-SLN3} \\
+\hline
+FR-3 & \hyperref[github_actions]{FR-SLN4} \\
+\hline
+FR-4 & \hyperref[github_actions]{FR-SLN4} \\
+\hline
+FR-5 & \hyperref[github_actions]{FR-SLN4} \\
+\hline
+FR-6 & \hyperref[software_engineering_practices]{FR-SLN5} \\
+\hline
+FR-7 & \hyperref[github_actions]{FR-SLN4} \\
+\hline
+FR-8 & \hyperref[mujoco_integration]{FR-SLN2} \\
+\hline
+UH-E1 & \hyperref[usability]{NFR-SLN1} \\
+\hline
+UH-E2 & \hyperref[usability]{NFR-SLN2} \\
+\hline
+UH-PI1 & \hyperref[usability]{NFR-SLN3} \\
+\hline
+UH-L1 & \hyperref[usability]{NFR-SLN1} \\
+\hline
+UH-L2 & \hyperref[usability]{NFR-SLN1} \\
+\hline
+UH-UP1 & \hyperref[usability]{NFR-SLN1} \\
+\hline
+UH-UP2 & \hyperref[usability]{NFR-SLN1} \\
+\hline
+UH-A1 & \hyperref[usability]{NFR-SLN1} \\
+\hline
+PR-PA & \hyperref[performance]{NFR-SLN4} \\
+\hline
+OE-EPE & \hyperref[operational]{NFR-SLN6} \\
+\hline
+OE-OSR & \hyperref[usability]{NFR-SLN1} \\
+\hline
+MS-M2 & \hyperref[usability]{NFR-SLN1} \\
+\hline
+MS-S1 & \hyperref[usability]{NFR-SLN1}, \hyperref[maintainability]{NFR-SLN7} \\
+\hline
+MS-S2 & \hyperref[operational]{NFR-SLN6} \\
+\hline
+MS-A2 & \hyperref[operational]{NFR-SLN6} \\
+\hline
+SR-A1 & \hyperref[maintainability]{NFR-SLN7} \\
+\hline
+SR-A2 & \hyperref[maintainability]{NFR-SLN7} \\
+\hline
+SR-I1 & \hyperref[maintainability]{NFR-SLN7} \\
+\hline
+SR-P1 & \hyperref[maintainability]{NFR-SLN7}, \hyperref[security]{NFR-SLN8} \\
+\hline
+SR-AU1 & \hyperref[usability]{NFR-SLN2} \\
+\hline
+\end{longtable}
 		
-\section{Trace to Modules}		
+\section{Trace to Modules}	
+Please refer to the \href{https://github.com/TPGEngine/tpg/blob/main/docs/Design/SoftArchitecture/MG.pdf}{Module Guide documentation} \citep{MG} for detailed information of each module.
+\begin{longtable}{|p{0.45\linewidth}|p{0.45\linewidth}|}
+\hline
+\textbf{Req. ID} & \textbf{System Test ID} \\
+\hline
+M1 & N/A\\
+\hline
+M2 & \hyperref[experiment_visualization]{FR-SLN3}, \hyperref[software_engineering_practices]{FR-SLN5}, \hyperref[usability]{NFR-SLN1}, \hyperref[usability]{NFR-SLN2}, \hyperref[github_actions]{NFR-SLN4} \\
+\hline
+M3 & \hyperref[mujoco_integration]{FR-SLN1}, \hyperref[mujoco_integration]{FR-SLN2}, \hyperref[experiment_visualization]{FR-SLN3}, \hyperref[software_engineering_practices]{FR-SLN5}, \hyperref[usability]{NFR-SLN3}, \hyperref[github_actions]{NFR-SLN4} \\
+\hline
+M4 & \hyperref[experiment_visualization]{FR-SLN3}, \hyperref[software_engineering_practices]{FR-SLN5} \\
+\hline
+M5 & \hyperref[usability]{NFR-SLN2}, \hyperref[software_engineering_practices]{FR-SLN5}, \hyperref[usability]{NFR-SLN6}, \hyperref[operational]{NFR-SLN7}, \hyperref[operational]{NFR-SLN8} \\
+\hline
+M6 & \hyperref[github_actions]{FR-SLN4}, \hyperref[software_engineering_practices]{FR-SLN5}, \hyperref[usability]{NFR-SLN6} \\
+\hline
+\end{longtable}	
 
 \section{Code Coverage Metrics}
 
@@ -308,6 +814,72 @@ This not only allows for easier debugging but also resolves the “works on my m
 \bibliography{../../refs/References}
 
 \newpage{}
+\section{Appendix --- Usability Survey}
+
+\subsection{Usability Survey Questions and Answers}
+
+\textbf{1. What operating system do you use?}
+
+\begin{itemize}
+    \item MacOS
+\end{itemize}
+
+\vspace{1em}
+
+\textbf{2. On a scale from 1-10 (higher means better), how would you rate your installation experience through the documentation?}
+
+\begin{itemize}
+    \item 10 --- It was pretty simple to follow and understand.
+\end{itemize}
+
+\vspace{1em}
+
+\textbf{3. On a scale from 1-10 (higher means easier), how easy would you say it was to execute a simulation environment using MuJoCo?}
+
+\begin{itemize}
+    \item 10 --- Very easy to use. The documentation provided clear instructions,
+          including details on running multiple experiments.
+\end{itemize}
+
+\vspace{1em}
+
+\textbf{4. On a scale from 1-10 (higher means better), how accurate and useful are the messages logged by the system?}
+
+\begin{itemize}
+    \item 9 --- Some suggestions included providing more clarity on the naming of CSV files.
+          It was recommended that the wiki should explain what is meant by ``removal'' and
+          ``replacement.'' Additionally, for plotting, it was suggested to replicate the
+          approach of the previous setup (e.g., using a script like \texttt{tpg-plot-stats.sh}
+          with a \texttt{-for all} flag) and offer an option to save figures as PDF instead of
+          just PNG.
+\end{itemize}
+
+\vspace{1em}
+
+\textbf{5. On a scale from 1-10 (higher means easier), how easy would you say it was to locate and customize parameters for MuJoCo?}
+
+\begin{itemize}
+    \item The experience was rated positively. However, the current workflow does not fully 
+          support flexible experimentation. For example, when testing an environment like
+          the ``Inverted Pendulum'' to improve TPG's performance, the user might create two
+          different YAML files for different hyperparameter configurations. Presently, the
+          repository only supports a single experiment instance at a time, and when reviewing the
+          experiment results, the user has to navigate through the file system to locate the
+          associated hyperparameter file. A workflow that accommodates multiple experiment
+          instances would improve usability.
+\end{itemize}
+
+\vspace{1em}
+
+\textbf{6. If applicable, on a scale from 1-10 (higher means easier), how easy was it to implement changes to the code?}
+
+\begin{itemize}
+    \item The user mentioned a willingness to implement code changes related to 
+          ``Recursive Forecasting'' and indicated that he would provide further feedback on the process, since the branch he was working on 
+          has not been merged yet and there'd be quite a lot of merge conflicts.
+\end{itemize}
+
+
 \section*{Appendix --- Reflection}
 
 The information in this section will be used to evaluate the team members on the
@@ -317,6 +889,8 @@ graduate attribute of Reflection.
 
 \begin{enumerate}
   \item What went well while writing this deliverable? 
+
+  One part that went well for this deliverable is that valuating the functional and non functional requirements was relatively simple, as we were able to trace it back to our VNV plan and SRS report.
   \item What pain points did you experience during this deliverable, and how
     did you resolve them?
   \item Which parts of this document stemmed from speaking to your client(s) or
