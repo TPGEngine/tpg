@@ -64,7 +64,7 @@ def evolve(ctx: click.Context, env: str, processes: int, seed: int):
 @click.argument("column_name", required=True)
 @click.pass_context
 def plot(ctx: click.Context, env: str, csv_files: str, column_name: str):
-    """Plot results for an experiment using tpg-plot-evolution.py"""
+    """Plot results for an experiment using tpg-plot-evolve.py"""
 
     # Fetch TPG directory for the environment
     hyper_parameters = ctx.obj["hyper_parameters"]
@@ -80,8 +80,8 @@ def plot(ctx: click.Context, env: str, csv_files: str, column_name: str):
     # Change working directory to environment directory
     os.chdir(env_dir)
 
-    # Build the `tpg-plot-evolution.py`` command
-    plot_script_path = os.path.join(TPG, "scripts", "plot", "tpg-plot-evolution.py")
+    # Build the `tpg-plot-evolve.py`` command
+    plot_script_path = os.path.join(TPG, "scripts", "plot", "tpg-plot-evolve.py")
 
     if not os.path.exists(plot_script_path):
         raise click.ClickException(f"{plot_script_path} does not exist. Ensure the script is located correctly.")

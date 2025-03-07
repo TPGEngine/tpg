@@ -37,8 +37,7 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+3/7/2025 & 1.0 & First write up of VnV Report \\
 \bottomrule
 \end{tabularx}
 
@@ -57,7 +56,7 @@ Date 2 & 1.1 & Notes\\
   SRS & Software Requirement Specification\\
   FR & Functional Requirement\\
   NFR & Non-Functional Requirement\\
-  SLN & System Level Number\\
+  SLN & Solution\\
   VnV & Verification and Validation\\
   \bottomrule
 \end{tabular}\\
@@ -80,29 +79,27 @@ This document cohesively summarizes the results of each test as specified in the
 
 \section{Functional Requirements Evaluation}
 
-\subsection{MuJoCo Integration}
-\label{mujoco_integration}
+\subsection{MuJoCo Integration}\label{mujoco_integration}
 
 \begin{center}
-\begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
-  \caption{MuJoCo Integration Tests} \\
-\hline
-\textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
-\hline
-\endfirsthead
-\hline
-\textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
-\hline
-\endhead
-FR-SLN1 & When executing the appropriate script, all MuJoCo environments can be run. The best-performing agent within the policy can be visualized using OpenGL or an MP4 file. & Pass \\
-\hline
-FR-SLN2 & MuJoCo environments within the TPG framework can be successfully run within the Digital Research Alliance, enabling research to be conducted by executing experiments. & Pass \\
-\hline
-\end{longtable}
+    \begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
+      \caption{MuJoCo Integration Tests} \\
+    \hline
+    \textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
+    \hline
+    \endhead
+    FR-SLN1 & When executing the appropriate script, all MuJoCo environments can be run. The best-performing agent within the policy can be visualized using OpenGL or an MP4 file. & Pass \\
+    \hline
+    FR-SLN2 & MuJoCo environments within the TPG framework can be successfully run within the Digital Research Alliance, enabling research to be conducted by executing experiments. & Pass \\
+    \hline
+    \end{longtable}
 \end{center}
 
-\subsection{Experiment Visualization}
-\label{experiment_visualization}
+\subsection{Experiment Visualization}\label{experiment_visualization}
 
 \begin{center}
   \begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
@@ -122,8 +119,7 @@ FR-SLN2 & MuJoCo environments within the TPG framework can be successfully run w
 
 \pagebreak 
 
-\subsection{Github Actions CI/CD Pipeline}
-\label{github_actions}
+\subsection{Github Actions CI/CD Pipeline}\label{github_actions}
 
 \begin{center}
   \begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
@@ -148,8 +144,7 @@ FR-SLN2 & MuJoCo environments within the TPG framework can be successfully run w
   \end{longtable}
 \end{center}
 
-\subsection{Software Engineering Practices}
-\label{software_engineering_practices}
+\subsection{Software Engineering Practices}\label{software_engineering_practices}
 
 \begin{center}
   \begin{longtable}{|p{2cm}|p{8cm}|p{2cm}|}
@@ -169,9 +164,9 @@ FR-SLN2 & MuJoCo environments within the TPG framework can be successfully run w
 
 \section{Nonfunctional Requirements Evaluation}
 
-\subsection{Usability}
+\subsection{Usability}\label{usability}
 		
-\subsection{Performance}
+\subsection{Performance}\label{performance}
 
 \begin{center}
   \begin{longtable}{|p{4cm}|p{4cm}|}
@@ -195,10 +190,9 @@ For NFR-SLN4, test cases within TPG for the experimental environments have been 
   \centering
   \includegraphics[width=1\textwidth]{img/ant_test.png}
   \caption{Example of a Numerical Computation Test}
-  \label{fig:myimage}
 \end{figure}
 
-\subsection{Operational and Environmental}
+\subsection{Operational and Environmental}\label{operational}
 
 \begin{center}
   \begin{longtable}{|p{4cm}|p{4cm}|}
@@ -222,7 +216,7 @@ With VSCode Dev Containers, a Linux development environment is automatically lau
 Simply follow the \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/home}{Wiki} instructions to download all necessary Linux dependencies and build the C++ code reliably. Onboarding on a Macbook has been reduced from 2 weeks to just 5 minutes.
 
 
-\subsection{Maintanability}
+\subsection{Maintainability}\label{maintainability}
 
   \begin{center}
   \begin{longtable}{|p{4cm}|p{4cm}|}
@@ -242,7 +236,7 @@ Simply follow the \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/home
 
 To satisfy the testing requirements for NFR-SLR7 - establishing a secure and robust repository management system, the team has implemented checks to ensure the repository prevents unauthorized access and defective code integration. The repository where our team is working on GitHub (whereas the base TPG repository is based in Gitlab), and access is controlled through a combination of two-factor authentication (2FA), and a main branch that is protected to ensure that merge requests can only be performed after the \href{https://github.com/TPGEngine/tpg/blob/main/.github/workflows/build-project.yaml}{TPG project GitHub workflow} action pipeline has successfully completed. This pipeline validates the building and testing process, ensuring that only code that passes all checks can be merged into the main branch. Any critical build errors or warnings, create blocking pull request conversations that must be resolved before merging. There is also a specific \href{https://github.com/TPGEngine/tpg/blob/main/.github/workflows/pull-gitlab.yml}{GitHub workflow} that is used to automatically pull changes from GitLab, eliminating the need for manual merging and risk of human error. 
 
-\subsection{Security}
+\subsection{Security}\label{security}
 
 \begin{center}
   \begin{longtable}{|p{4cm}|p{4cm}|}
@@ -263,7 +257,7 @@ To satisfy the testing requirements for NFR-SLR7 - establishing a secure and rob
 
 For NFR-SLN8, the .csv, .txt, .png and .mp4 files that are generated within Classic Control and MuJoCo experiments are ignored by Git when making commits to the public repositories in GitHub and GitLab to reduce chance of oversharing sensitive data. Currently, none of these files generate sensitive data, but to follow best practice and to keep the repository at a clean state, these are not recognized when synchronizing code to each respective repository. Additionally, the team has also manually checked all stored .csv, .txt, .png and .mp4 files along with others that may contain textual information to see if data within them are sensitive and must be kept private. 
 
-\subsection{Compliance}
+\subsection{Compliance}\label{compliance}
 
 \begin{center}
 \begin{longtable}{|p{4cm}|p{4cm}|}
@@ -290,7 +284,6 @@ Any critical errors found during the linting process create blocking pull reques
   \centering
   \includegraphics[width=1\textwidth]{img/linter-example.png}
   \caption{Example of a Linter Error}
-  \label{fig:myimage}
 \end{figure}
 
 \section{Unit Testing}
@@ -683,6 +676,17 @@ The feedback given by the instructor and teaching assistant during Revision 0 wa
 Emphasis was placed on ensuring that usability testing was executed systematically rather than in the more ad-hoc manner initially planned by the team.
 Some additional changes to be made include ensuring that unit testing and benchmarking of the implemented environments are cohesively executed and investigating whether the integration of deployment within the DRA is possible.
 
+\subsection{Feedback from Usability Testing}
+A usability testing session was conducted with a core contributor from Dr. Kelly's research group, who is also a primary contributor to the TPG framework. Although the TPG framework is Linux-based, the test user operates on MacOS—a platform that traditionally presents challenges in onboarding and setup.
+
+The testing session revealed several positive aspects of the system. The installation process was rated a 10, with the documentation proving clear and straightforward. Executing the simulation environment using MuJoCo was also rated a 10, as the user found it very easy to follow, particularly appreciating the guidance provided for running multiple experiments.
+
+Regarding system feedback, the logging messages received a rating of 9 in terms of accuracy and utility. However, the user suggested improvements in the clarity of naming for CSV files, specifically by outlining in the wiki what “removal” and “replacement” refer to. For the plotting functionality, feedback indicated that replicating the approach of the previous state (via a script such as tpg-plot-stats.sh with a "-for all" flag) would help retrieve comprehensive plots. Additionally, providing an option to save visualizations as PDFs, in addition to PNGs, was recommended.
+
+The user also raised concerns about supporting flexible workflows with experiment parameterization. For instance, when experimenting with environments like the "Inverted Pendulum," he might create two different YAML files to test various hyperparameters. Currently, the repository supports only a single experiment instance at a time. This limitation means that when reviewing experiment results, he is forced to navigate through the file system to locate the associated hyperparameters file, a process that he finds inconvenient. Addressing this could involve enhancing the repository to support multiple experiment instances simultaneously, thereby streamlining both the experimentation process and the retrieval of results.
+
+A significant challenge highlighted during the session was the difficulty MacOS users face with a Linux-centric codebase. Previously, a current grad student hosted and maintained a Docker image to assist onboarding, but it proved cumbersome. In response, we introduced Visual Studio Dev Container support to automate the creation of a Linux-based development environment within VS Code. This change aims to simplify the onboarding process for MacOS users, ensuring a more seamless setup.
+
 \section{Automated Testing}
 
 As a result of the team’s conversion from building the project using SCons to CMake, automated testing became significantly easier to execute and debug.
@@ -696,8 +700,88 @@ The compiler workflow is also executed after merging into the main branch to ens
 This not only allows for easier debugging but also resolves the “works on my machine” issue.
 		
 \section{Trace to Requirements}
+Please refer to the \href{https://github.com/TPGEngine/tpg/blob/main/docs/SRS/SRS.pdf}{SRS documentation} \citep{SRS} for detailed information of each requirement.
+\begin{longtable}{|p{0.45\linewidth}|p{0.45\linewidth}|}
+\hline
+\textbf{Req. ID} & \textbf{System Test ID} \\
+\hline
+FR-1 & \hyperref[mujoco_integration]{FR-SLN1}, \hyperref[mujoco_integration]{FR-SLN2} \\
+\hline
+FR-2 & \hyperref[experiment_visualization]{FR-SLN3} \\
+\hline
+FR-3 & \hyperref[github_actions]{FR-SLN4} \\
+\hline
+FR-4 & \hyperref[github_actions]{FR-SLN4} \\
+\hline
+FR-5 & \hyperref[github_actions]{FR-SLN4} \\
+\hline
+FR-6 & \hyperref[software_engineering_practices]{FR-SLN5} \\
+\hline
+FR-7 & \hyperref[github_actions]{FR-SLN4} \\
+\hline
+FR-8 & \hyperref[mujoco_integration]{FR-SLN2} \\
+\hline
+UH-E1 & \hyperref[usability]{NFR-SLN1} \\
+\hline
+UH-E2 & \hyperref[usability]{NFR-SLN2} \\
+\hline
+UH-PI1 & \hyperref[usability]{NFR-SLN3} \\
+\hline
+UH-L1 & \hyperref[usability]{NFR-SLN1} \\
+\hline
+UH-L2 & \hyperref[usability]{NFR-SLN1} \\
+\hline
+UH-UP1 & \hyperref[usability]{NFR-SLN1} \\
+\hline
+UH-UP2 & \hyperref[usability]{NFR-SLN1} \\
+\hline
+UH-A1 & \hyperref[usability]{NFR-SLN1} \\
+\hline
+PR-PA & \hyperref[performance]{NFR-SLN4} \\
+\hline
+OE-EPE & \hyperref[operational]{NFR-SLN6} \\
+\hline
+OE-OSR & \hyperref[usability]{NFR-SLN1} \\
+\hline
+MS-M2 & \hyperref[usability]{NFR-SLN1} \\
+\hline
+MS-S1 & \hyperref[usability]{NFR-SLN1}, \hyperref[maintainability]{NFR-SLN7} \\
+\hline
+MS-S2 & \hyperref[operational]{NFR-SLN6} \\
+\hline
+MS-A2 & \hyperref[operational]{NFR-SLN6} \\
+\hline
+SR-A1 & \hyperref[maintainability]{NFR-SLN7} \\
+\hline
+SR-A2 & \hyperref[maintainability]{NFR-SLN7} \\
+\hline
+SR-I1 & \hyperref[maintainability]{NFR-SLN7} \\
+\hline
+SR-P1 & \hyperref[maintainability]{NFR-SLN7}, \hyperref[security]{NFR-SLN8} \\
+\hline
+SR-AU1 & \hyperref[usability]{NFR-SLN2} \\
+\hline
+\end{longtable}
 		
-\section{Trace to Modules}		
+\section{Trace to Modules}	
+Please refer to the \href{https://github.com/TPGEngine/tpg/blob/main/docs/Design/SoftArchitecture/MG.pdf}{Module Guide documentation} \citep{MG} for detailed information of each module.
+\begin{longtable}{|p{0.45\linewidth}|p{0.45\linewidth}|}
+\hline
+\textbf{Req. ID} & \textbf{System Test ID} \\
+\hline
+M1 & N/A\\
+\hline
+M2 & \hyperref[experiment_visualization]{FR-SLN3}, \hyperref[software_engineering_practices]{FR-SLN5}, \hyperref[usability]{NFR-SLN1}, \hyperref[usability]{NFR-SLN2}, \hyperref[github_actions]{NFR-SLN4} \\
+\hline
+M3 & \hyperref[mujoco_integration]{FR-SLN1}, \hyperref[mujoco_integration]{FR-SLN2}, \hyperref[experiment_visualization]{FR-SLN3}, \hyperref[software_engineering_practices]{FR-SLN5}, \hyperref[usability]{NFR-SLN3}, \hyperref[github_actions]{NFR-SLN4} \\
+\hline
+M4 & \hyperref[experiment_visualization]{FR-SLN3}, \hyperref[software_engineering_practices]{FR-SLN5} \\
+\hline
+M5 & \hyperref[usability]{NFR-SLN2}, \hyperref[software_engineering_practices]{FR-SLN5}, \hyperref[usability]{NFR-SLN6}, \hyperref[operational]{NFR-SLN7}, \hyperref[operational]{NFR-SLN8} \\
+\hline
+M6 & \hyperref[github_actions]{FR-SLN4}, \hyperref[software_engineering_practices]{FR-SLN5}, \hyperref[usability]{NFR-SLN6} \\
+\hline
+\end{longtable}	
 
 \section{Code Coverage Metrics}
 
@@ -705,6 +789,72 @@ This not only allows for easier debugging but also resolves the “works on my m
 \bibliography{../../refs/References}
 
 \newpage{}
+\section{Appendix --- Usability Survey}
+
+\subsection{Usability Survey Questions and Answers}
+
+\textbf{1. What operating system do you use?}
+
+\begin{itemize}
+    \item MacOS
+\end{itemize}
+
+\vspace{1em}
+
+\textbf{2. On a scale from 1-10 (higher means better), how would you rate your installation experience through the documentation?}
+
+\begin{itemize}
+    \item 10 --- It was pretty simple to follow and understand.
+\end{itemize}
+
+\vspace{1em}
+
+\textbf{3. On a scale from 1-10 (higher means easier), how easy would you say it was to execute a simulation environment using MuJoCo?}
+
+\begin{itemize}
+    \item 10 --- Very easy to use. The documentation provided clear instructions,
+          including details on running multiple experiments.
+\end{itemize}
+
+\vspace{1em}
+
+\textbf{4. On a scale from 1-10 (higher means better), how accurate and useful are the messages logged by the system?}
+
+\begin{itemize}
+    \item 9 --- Some suggestions included providing more clarity on the naming of CSV files.
+          It was recommended that the wiki should explain what is meant by ``removal'' and
+          ``replacement.'' Additionally, for plotting, it was suggested to replicate the
+          approach of the previous setup (e.g., using a script like \texttt{tpg-plot-stats.sh}
+          with a \texttt{-for all} flag) and offer an option to save figures as PDF instead of
+          just PNG.
+\end{itemize}
+
+\vspace{1em}
+
+\textbf{5. On a scale from 1-10 (higher means easier), how easy would you say it was to locate and customize parameters for MuJoCo?}
+
+\begin{itemize}
+    \item The experience was rated positively. However, the current workflow does not fully 
+          support flexible experimentation. For example, when testing an environment like
+          the ``Inverted Pendulum'' to improve TPG's performance, the user might create two
+          different YAML files for different hyperparameter configurations. Presently, the
+          repository only supports a single experiment instance at a time, and when reviewing the
+          experiment results, the user has to navigate through the file system to locate the
+          associated hyperparameter file. A workflow that accommodates multiple experiment
+          instances would improve usability.
+\end{itemize}
+
+\vspace{1em}
+
+\textbf{6. If applicable, on a scale from 1-10 (higher means easier), how easy was it to implement changes to the code?}
+
+\begin{itemize}
+    \item The user mentioned a willingness to implement code changes related to 
+          ``Recursive Forecasting'' and indicated that he would provide further feedback on the process, since the branch he was working on 
+          has not been merged yet and there'd be quite a lot of merge conflicts.
+\end{itemize}
+
+
 \section*{Appendix --- Reflection}
 
 The information in this section will be used to evaluate the team members on the
