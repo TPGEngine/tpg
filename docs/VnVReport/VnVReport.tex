@@ -145,6 +145,31 @@ FR-SLN2 & MuJoCo environments within the TPG framework can be successfully run w
 \section{Nonfunctional Requirements Evaluation}
 
 \subsection{Usability}
+\begin{center}
+  \begin{longtable}{|p{4cm}|p{4cm}|}
+  \caption{Usability Tests} \\
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endhead
+  NFR-SLN1 & Pass \\
+  \hline
+  NFR-SLN2 & Pass \\
+  \hline
+  NFR-SLN3 & Pass \\
+  \hline
+  \end{longtable}
+\end{center}
+
+For NFR-SLN1, the TPG framework now includes comprehensive documentation across multiple levels. The main README provides installation instructions and a quick start guide, while the CLI tool documentation details commands for evolving, plotting, and replaying policies. Code documentation with inline comments explains classes and methods, and YAML configuration files include detailed parameter descriptions. Usability testing with graduate students confirmed the documentation's effectiveness, with a rating of 10/10 for installation experience.
+
+For NFR-SLN2, an event-driven logging architecture was implemented to provide real-time, accurate message logging throughout the training process. Metrics are stored in CSV files, capturing timing, selection, replacement, and removal data. The CLI tool provides real-time feedback during experiment execution. Usability testing rated the accuracy and usefulness of system logs at 9/10, with suggestions to clarify CSV file naming conventions and document the meaning of removal and replacement metrics in the wiki.
+
+For NFR-SLN3, the framework now offers extensive customization options for MuJoCo simulation parameters through YAML configuration files. Each environment includes specific parameters (reward weights, health criteria, observation settings) and common simulation parameters (maximum timesteps, model path). The CLI tool integrates these parameters, allowing users to specify different environments and configurations when running experiments. Usability testing confirmed the ease of locating and customizing parameters, with suggestions to place YAML files within the experiments directory and reduce the number of log files.
 		
 \subsection{Performance}
 
@@ -296,6 +321,13 @@ graduate attribute of Reflection.
     did you resolve them?
   \item Which parts of this document stemmed from speaking to your client(s) or
   a proxy (e.g. your peers)? Which ones were not, and why?
+  
+  The usability testing section was directly informed by conversations with our client's graduate students, who provided valuable feedback on documentation clarity, logging functionality, and parameter customization. Their ratings (10/10 for installation experience, 9/10 for logging accuracy) and specific suggestions (clarifying CSV file naming, relocating YAML files) shaped our assessment of the system's usability.
+
+  The MuJoCo integration and performance sections were based on technical evaluations conducted in collaboration with Dr. Kelly's team, who provided expertise on expected agent behaviors and numerical precision requirements. Their involvement ensured our testing addressed research-relevant concerns rather than just technical functionality.
+
+  Sections covering CI/CD pipeline and software engineering practices were developed primarily through our team's technical assessment, with minimal client input. This was appropriate as these components primarily serve developer needs rather than research objectives, and our team had sufficient expertise to evaluate them independently.
+
   \item In what ways was the Verification and Validation (VnV) Plan different
   from the activities that were actually conducted for VnV?  If there were
   differences, what changes required the modification in the plan?  Why did
@@ -304,6 +336,14 @@ graduate attribute of Reflection.
   predict a feasible amount of effort and the right tasks needed to build the
   evidence that demonstrates the required quality?  (It is expected that most
   teams will have had to deviate from their original VnV Plan.)
+  
+  Our VnV activities deviated from the original plan in several key areas. First, we initially planned for comprehensive automated testing across all MuJoCo environments, but discovered that visual inspection by domain experts was more effective for validating agent behaviors. The complexity of reinforcement learning outcomes made it difficult to define automated pass/fail criteria, requiring us to rely more heavily on manual validation.
+
+  Second, our usability testing became more structured than originally planned. Following feedback from Revision 0, we implemented formal surveys and specific task-based evaluations rather than the ad-hoc approach initially outlined. This change improved the quality of feedback and provided more actionable insights.
+
+  Third, we underestimated the effort required for cross-platform compatibility testing. The diversity of development environments among researchers necessitated more extensive testing than anticipated, leading us to implement containerization solutions that weren't in the original plan.
+
+  These changes occurred primarily due to our initial unfamiliarity with the research domain and underestimation of the complexity of validating reinforcement learning systems. In future projects, we would anticipate similar challenges by consulting domain experts earlier in the planning process and allocating more resources to areas requiring specialized knowledge.
 \end{enumerate}
 
 \end{document}
