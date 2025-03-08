@@ -27,7 +27,7 @@ ga_parameters:
   seed_aux: 42  # Auxiliary seed, e.g. for simulators
   n_generations: 1000000  # Max number of generations
   n_root: 1000  # Number of root teams (agents) to keep each generation
-  n_root_gen: 100  # Number of new root teams to create each generation
+  n_root_gen: 500  # Number of new root teams to create each generation
   parent_select_roots_only: 1  # Whether to constrain parent selection to root teams
   tournament_size: 3  # Tournament size for selection
   keep_old_outcomes: 1  # Whether to keep evaluation outcome over time or re-evaluate each generation
@@ -57,7 +57,7 @@ program_parameters:
   p_instructions_add: 0.2  # Probability of adding an instruction
   p_memory_mu_const: 0.5  # Probability of mutating constants
   p_observation_buff_size: 0.0 # Program variation: probability of changing observation_buff_size
-  p_observation_index: 0.0 # Program variation: probability of changing observation_index
+  p_observation_index: 0.1 # Program variation: probability of changing observation_index
   p_memory_size: 0.0 # Program variation: probability of changing memory_size
   stateful: 1  # Use stateful programs
   skip_introns: 1  # Whether to skip introns during evaluation
