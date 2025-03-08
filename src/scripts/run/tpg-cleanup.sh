@@ -1,4 +1,6 @@
 #!/bin/bash
+if [ -d "logs" ]; then rm -rf logs; fi
+if [ -d "plots" ]; then rm -rf plots; fi
 if ls *.err 1> /dev/null 2>&1; then rm *.err; fi
 if ls *.std 1> /dev/null 2>&1; then rm *.std; fi
 if ls *.dbg 1> /dev/null 2>&1; then rm *.dbg; fi

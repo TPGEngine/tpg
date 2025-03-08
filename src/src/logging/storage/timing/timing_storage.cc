@@ -2,10 +2,9 @@
 #include <iomanip>
 
 void TimingStorage::init(const int& seed_tpg, const int& pid) {
-    std::stringstream filename;
-    filename << "timing." << seed_tpg << "." << pid << ".csv";
-
-    file_.open(filename.str());
+    std::string filename = generate_filename("timing", seed_tpg, pid);
+    
+    file_.open(filename);
     file_ << "generation,generation_time,evaluation_time,generate_teams_time,set_elite_teams_time,select_teams_time,report_time,modes_time,lost_time\n";
     file_.flush();
 }
