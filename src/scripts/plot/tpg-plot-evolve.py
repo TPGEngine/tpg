@@ -6,7 +6,9 @@ import matplotlib.pyplot as plt
 import glob
 import os
 import sys
+import csv
 from matplotlib.cm import get_cmap
+from matplotlib.backends.backend_pdf import PdfPages
 
 '''
 The script is included within the environmental variables for TPG.
@@ -30,10 +32,10 @@ For the optional parameter `csv_files`, possible values can be:
 
 Example:
     
-    tpg-plot-evolution.py all-selection best_fitness
-    tpg-plot-evolution.py selection.42.42.csv,selection.42.43.csv best_fitness
-    tpg-plot-evolution.py timing.42.42,timing.42.43 generation_time
-    tpg-plot-evolution.py best_fitness
+    tpg-plot-evolve.py all-selection best_fitness
+    tpg-plot-evolve.py selection.42.42.csv,selection.42.43.csv best_fitness
+    tpg-plot-evolve.py timing.42.42,timing.42.43 generation_time
+    tpg-plot-evolve.py best_fitness
 '''
 
 log_dir = "logs"
@@ -46,7 +48,6 @@ def get_unique_filename(base_filename):
     :param base_filename: The base filename (e.g., 'output.png')
     :return: A unique filename (e.g., 'output_1.png', 'output_2.png', etc.)
     """
-
     filename, ext = os.path.splitext(base_filename)
     counter = 1
     new_filename = base_filename
@@ -109,20 +110,15 @@ def plot_generations_single(csv_files, column_name, pdf = None):
             
         except Exception as e:
             print(f"Error processing {csv_file}: {str(e)}")
-    
+
     if not valid_files:
         print("No valid CSV files with required columns found!")
         return
 
-    # configure properties of the graph (x-axis, y-axis, title, grid)
+    # configure properties of the graph (x-axis, y-axis, grid)
     plt.xlabel('Generation', fontsize=12)
-    plt.ylabel(column_name, fontsize=12)
-    title = f'{column_name} vs. Generations'
-    
-    if len(valid_files) > 1:
-        title += f' ({len(valid_files)} files)'
-    plt.title(title, fontsize=14)
-    
+    plt.ylabel(capitalize_snake_case(column_name), fontsize=12)
+
     plt.grid(True, alpha=0.3)
     
     # if more than 1 file, add a legend of file names and color schemes
@@ -130,16 +126,6 @@ def plot_generations_single(csv_files, column_name, pdf = None):
         plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
     
     plt.tight_layout()
-
-    output_filename = f"{column_name}_vs_generations"
-
-    # multiple file plots will end with '_combined' 
-    if len(valid_files) > 1:
-        output_filename += "_combined"
-    output_filename += ".png"
-
-    # if output file already exists, add a number in the end
-    output_filename = get_unique_filename(output_filename)
     
     if pdf:
         pdf.savefig()
@@ -150,12 +136,9 @@ def plot_generations_single(csv_files, column_name, pdf = None):
         if len(valid_files) > 1:
             output_filename += "_combined"
         output_filename += ".pdf"
-    
-        if not os.path.exists(plot_dir):
-            os.makedirs(plot_dir)
 
         # if output file already exists, add a number in the end
-        output_filename = f"{plot_dir}/{get_unique_filename(output_filename)}"
+        output_filename =  f"{plot_dir}/{get_unique_filename(output_filename)}"
 
         plt.savefig(output_filename)
         print(f"Plot saved to '{output_filename}'")
@@ -222,9 +205,15 @@ if __name__ == "__main__":
     if not valid_files:
         print("No valid CSV files found!")
         sys.exit(1)
-    
+
+    column_name = args.column_name
+
     try:
-        plot_generations(valid_files, args.column_name)
+        if column_name == "all":
+            column_names = get_csv_columns(valid_files[0])
+            plot_generations_multiple(valid_files, column_names)
+        else:
+            plot_generations_single(valid_files, args.column_name)
     except Exception as e:
         print(f"Error: {str(e)}")
         sys.exit(1)
