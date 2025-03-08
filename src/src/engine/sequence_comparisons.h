@@ -2,6 +2,8 @@
 #define sequence_comparisons_h
 
 #include <bzlib.h>
+#include <cmath>  // Add this line
+#include <numeric>  // Add this line for std::accumulate
 
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/filter/gzip.hpp>

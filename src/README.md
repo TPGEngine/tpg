@@ -54,17 +54,6 @@ cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DENABLE_HIGH_OPTIMIZATION=ON
 cmake --build build
 ```
 
-To run the build with code coverage:
-```bash
-# Configure with coverage enabled
-cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
-cmake --build build
-
-# Run tests and generate coverage report
-cd build
-make coverage
-```
-
 ### 4. Run an experiment
 
 Refer to the [wiki](https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/Running-Experiments-with-the-TPG-CLI) for more information on how to run experiments with the CLI
