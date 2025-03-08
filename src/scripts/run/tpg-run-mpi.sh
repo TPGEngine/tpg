@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir -p logs
+
 # Default command line args
 mode=0 #Train:0, Replay:1, Debug:2
 animate=1
@@ -36,8 +38,8 @@ if [ $mode -eq 0 ]; then
      $TPG/build/release/experiments/TPGExperimentMPI \
      parameters_file=${parameters_file} \
      seed_tpg=${seed_tpg} pid=$$ \
-     1> tpg.$seed_tpg.$$.std \
-     2> tpg.$seed_tpg.$$.err &
+     1> logs/tpg.$seed_tpg.$$.std \
+     2> logs/tpg.$seed_tpg.$$.err &
 fi
 
 # Replay mode ##################################################################
@@ -50,7 +52,7 @@ if [ $mode -eq 1 ]; then
    if ls replay/graphs/* 1> /dev/null 2>&1; then rm replay/graphs/*; fi
 
   # Get fitness of best team
-   best_fitness=$(grep setElTmsMTA  tpg.${seed_tpg}.*.std | \
+   best_fitness=$(grep setElTmsMTA  logs/tpg.${seed_tpg}.*.std | \
      grep " fm 0 " | \
      grep " phs $phase " | \
      awk -F "p${phase}t${task_to_replay}a0 " '{print $2}' | \
@@ -58,7 +60,7 @@ if [ $mode -eq 1 ]; then
      tail -n 1)
  
   # Get generation of best team
-   best_fitness_t=$(grep setElTmsMTA  tpg.${seed_tpg}.*.std | \
+   best_fitness_t=$(grep setElTmsMTA  logs/tpg.${seed_tpg}.*.std | \
      grep " fm 0 " | \
      grep " phs $phase " | \
      awk -F " t " '{print $2}' | \
@@ -74,7 +76,7 @@ if [ $mode -eq 1 ]; then
     cut -d '.' -f 2 | sort -n | tail -n 1) 
 
    # Get id of best team
-   tm_id=$(grep "setElTmsMTA" tpg.${seed_tpg}.*.std | \
+   tm_id=$(grep "setElTmsMTA" logs/tpg.${seed_tpg}.*.std | \
      grep " fm 0 " | \
      grep "p${phase}t${task_to_replay}a0 ${best_fitness} " | \
      grep " phs $phase " | \
@@ -95,8 +97,8 @@ if [ $mode -eq 1 ]; then
     checkpoint_in_t=${checkpoint_in_t} \
     replay=1 animate=${animate} id_to_replay=${tm_id} \
     task_to_replay=${task_to_replay} \
-    1> tpg.${seed_tpg}.${seed_aux}.replay.std \
-    2> tpg.${seed_tpg}.${seed_aux}.replay.err &
+    1> logs/tpg.${seed_tpg}.${seed_aux}.replay.std \
+    2> logs/tpg.${seed_tpg}.${seed_aux}.replay.err &
 
 fi
 # fi
@@ -107,8 +109,8 @@ if [ $mode -eq 2 ]; then
      --args $TPG/build/release/experiments/TPGExperimentMPI \
      parameters_file=${parameters_file} \
      seed_tpg=${seed_tpg} n_root=10 n_root_gen=10 \
-     1> tpg.$seed_tpg.$$.std \
-     2> tpg.$seed_tpg.$$.err &
+     1> logs/tpg.$seed_tpg.$$.std \
+     2> logs/tpg.$seed_tpg.$$.err &
 fi
 
 # Valgrind #####################################################################
@@ -121,8 +123,8 @@ if [ $mode -eq 3 ]; then
   parameters_file=${parameters_file} \
   seed_tpg=${seed_tpg} n_root=10 n_root_gen=10 n_generations=3 \
   mj_max_timestep=1 mj_n_eval_train=1 \
-  1> tpg.$seed_tpg.$$.std \
-  2> tpg.$seed_tpg.$$.err &
+  1> logs/tpg.$seed_tpg.$$.std \
+  2> logs/tpg.$seed_tpg.$$.err &
 
 fi
 
@@ -141,8 +143,8 @@ if [ $mode -eq 4 ]; then
     start_from_checkpoint=1 \
     checkpoint_in_phase=${checkpoint_in_phase} \
     checkpoint_in_t=${checkpoint_in_t} \
-    1>> tpg.${seed_tpg}.${pid}.std \
-    2>> tpg.${seed_tpg}.${pid}.err &
+    1>> logs/tpg.${seed_tpg}.${pid}.std \
+    2>> logs/tpg.${seed_tpg}.${pid}.err &
 fi
 
 # below this line is just sketches to be cleaned ###############################
