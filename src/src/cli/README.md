@@ -72,29 +72,6 @@ Here are the environments currently supported:
 - --processes (int): Number of processes to use (default: 4).
 - --seed (int): Random seed (default: 42).
 
-**Plot Results from an Environment**
-
-```bash
-tpg plot <env> <csv_files> <column_name>
-```
-
-This plotting command will:
-
-Generate a plot based on the CSV data provided from a previous evolution run.
-Utilize the specified column from the CSV for plotting.
-
-**Arguments:**
-env (str): The target environment.
-csv_files (str): The path to the CSV files containing the results.
-column_name (str): The name of the column to plot.
-
-For more information regarding arguments `csv_files` and `column_name`, visit our [Wiki](https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/TPG-Generation-Plot-for-CSV-Logging-Files).
-
-**Example:**
-```bash
-tpg plot half_cheetah all-timing generation_time
-```
-
 **Replay the Best Policy:**
 
 ```bash
@@ -115,7 +92,7 @@ Writes the output to files:
 - --seed (int): Random seed for the replay (default: 42).
 - --seed-aux (int): An auxiliary seed (default: 42) used in the replay; its exact role is determined by the underlying experiment logic.
 - --task-to-replay (int): Option for multitask experiments which task to visualize
-
+j
 ## Troubleshooting
 If attempting to execute a tpg command leads you to an error such as: `Command 'tpg' not found`. Ensure your PATH
 environment variables are up to date. You can do this by running `pipx ensurepath` and restarting your terminal. 
