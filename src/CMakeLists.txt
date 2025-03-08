@@ -7,6 +7,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated -Wall -Wno-error -Wextra -Wno-unused-parameter")
 
+# Add the cmake module directory to path
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
+
+include(CodeCoverage)
+
+# Enable code coverage if this is a Debug build
+append_coverage_compiler_flags()
 
 option(ENABLE_HIGH_OPTIMIZATION "Enable high optimization flags" OFF)
 if(ENABLE_HIGH_OPTIMIZATION)
