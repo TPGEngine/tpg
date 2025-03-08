@@ -7,7 +7,7 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": ["ms-vscode.cpptools", "mechatroner.rainbow-csv", "ms-python.python"]
+      "extensions": ["ms-vscode.cpptools", "mechatroner.rainbow-csv", "ms-python.python", "ms-vscode.cmake-tools"]
     }
   },
   "mounts": [
@@ -16,5 +16,5 @@
   "remoteEnv": {
     "DISPLAY": ""
   },
-  "postCreateCommand": "cd src && sed -i 's/\\r$//' setup.sh && sed -i 's/\\r$//' requirements.txt && bash ./setup.sh"
+  "postCreateCommand": "sed -i 's/\\r$//' setup.sh && sed -i 's/\\r$//' requirements.txt && bash ./setup.sh"
 }
