@@ -10,21 +10,27 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated -Wall -Wno-error -Wextra
 # Add the cmake module directory to path
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
-include(CodeCoverage)
+# Add option to explicitly enable code coverage
+option(ENABLE_COVERAGE "Enable code coverage" OFF)
 
-# Enable code coverage if this is a Debug build
-append_coverage_compiler_flags()
+# Conditionally include code coverage
+if(CMAKE_BUILD_TYPE STREQUAL "Debug" AND NOT ENABLE_HIGH_OPTIMIZATION)
+  include(CodeCoverage)
+  append_coverage_compiler_flags()
+  message(STATUS "Code coverage enabled (Debug build)")
+elseif(ENABLE_COVERAGE)
+  include(CodeCoverage)
+  append_coverage_compiler_flags()
+  message(STATUS "Code coverage explicitly enabled")
+endif()
 
 option(ENABLE_HIGH_OPTIMIZATION "Enable high optimization flags" OFF)
 if(ENABLE_HIGH_OPTIMIZATION)
-  message(STATUS "Building project with optimization flags...\n")
-  set( CMAKE_CXX_FLAGS_DEBUG  "")
-  set( CMAKE_CXX_FLAGS_RELEASE  "")
+  message(STATUS "Building project with optimization flags...")
+  set(CMAKE_CXX_FLAGS_DEBUG "")
+  set(CMAKE_CXX_FLAGS_RELEASE "")
   set(CMAKE_REQUIRED_FLAGS "-fno-math-errno")
 endif()
-
-
-
 
 # Find required packages
 find_package(MPI REQUIRED)
