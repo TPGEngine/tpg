@@ -389,9 +389,9 @@ Any critical errors found during the linting process create blocking pull reques
 
 
 
-\subsection{Mujoco Module}
+\subsection{MuJoCo Module}
 
-\subsubsection{Mujoco Environment Test\\}
+\subsubsection{MuJoCo Environment Test}
 
 
 \textbf{Type:} Automatic, Functional
@@ -461,7 +461,7 @@ Any critical errors found during the linting process create blocking pull reques
     \end{enumerate}
 \end{itemize}
 
-\subsubsection{Mujoco Ant Test\\}
+\subsubsection{MuJoCo Ant Test}
 
 \textbf{Type:} Automatic, Functional
 
@@ -524,7 +524,7 @@ Any critical errors found during the linting process create blocking pull reques
 
 
 
-\subsubsection{Mujoco Half Cheetah Test\\}
+\subsubsection{MuJoCo Half Cheetah Test}
 
 \textbf{Type:} Automatic, Functional
 
@@ -571,7 +571,7 @@ Any critical errors found during the linting process create blocking pull reques
 \end{itemize}
 
 
-\subsubsection{Mujoco Hopper Test\\}
+\subsubsection{MuJoCo Hopper Test}
 
 \textbf{Type:} Automatic, Functional
 
@@ -598,7 +598,7 @@ Any critical errors found during the linting process create blocking pull reques
     \item \textbf{Reset Function Test:} Similar to Half Cheetah or Ant test, but the input includes modifying \texttt{qpos}, \texttt{qvel}, and step count before resetting.
 \end{itemize}
 
-\subsubsection{Mujoco Humanoid Standup Test\\}
+\subsubsection{MuJoCo Humanoid Standup Test}
 
 \textbf{Type:} Automatic, Functional
 
@@ -620,7 +620,7 @@ Any critical errors found during the linting process create blocking pull reques
 \end{itemize}
 
 
-\subsubsection{Mujoco Inverted Double Pendulum Test\\}
+\subsubsection{MuJoCo Inverted Double Pendulum Test}
 
 \textbf{Type:} Automatic, Functional
 
@@ -642,7 +642,7 @@ Any critical errors found during the linting process create blocking pull reques
 \end{itemize}
 
 
-\subsubsection{Mujoco Inverted Pendulum Test\\}
+\subsubsection{MuJoCo Inverted Pendulum Test}
 
 \textbf{Type:} Automatic, Functional
 
@@ -664,7 +664,7 @@ Any critical errors found during the linting process create blocking pull reques
 \end{itemize}
 
 
-\subsubsection{Mujoco Reacher Test\\}
+\subsubsection{MuJoCo Reacher Test}
 
 \textbf{Type:} Automatic, Functional
 
@@ -810,8 +810,15 @@ M6 & \hyperref[github_actions]{FR-SLN4}, \hyperref[software_engineering_practice
 
 \section{Code Coverage Metrics}
 
-\bibliographystyle{plainnat}
-\bibliography{../../refs/References}
+The image below displays code coverage report metrics for TPG. This is specific to the files that our team have unit tested. The code coverage for the existing TPG module are lower as there was a large amount of existing prewritten code, and the tests that have been written are specific to only a couple crucial TPG functions. The MuJoCo module which we have implemented ourselves has a much higher code coverage, as it was solely written by our team. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{img/code_coverage.png}
+    \caption{Example of a Numerical Computation Test}
+  \end{figure}
+  
+
 
 \newpage{}
 \section{Appendix --- Usability Survey}
@@ -890,9 +897,16 @@ graduate attribute of Reflection.
 \begin{enumerate}
   \item What went well while writing this deliverable? 
 
-  One part that went well for this deliverable is that valuating the functional and non functional requirements was relatively simple, as we were able to trace it back to our VNV plan and SRS report.
+  One part that went well for this deliverable is that valuating the functional and non functional requirements was relatively simple, as we were able to trace it back to our VNV plan and SRS report, which was relatively straightforward due to the clear traceability between the VnV Plan, the SRS report, and the implemented tests. The team was able to match crucial requirements to relevant test cases, ensuring that all functional requirements, such as MuJoCo integration, experiment visualization, and CI/CD pipeline functionality, were validated. For example, the functional requirements for MuJoCo integration (FR-SLN1 and FR-SLN2) were tested by running the environments and verifying their compatibility with the TPG framework, while the CI/CD pipeline requirements (FR-SLN4, FR-SLN5, and FR-SLN6) were validated through automated builds, unit tests, and linting checks. This goes for non-functional requirements, such as usability, maintainability, and compliance, which were evaluated through proper testing - including the implementation of VSCode Dev Containers to standardize the development environment and the integration of Clang-Tidy and Clang-Format to enforce coding standards. The team was able to confidently verify that the fundamental requirements were met, ensuring the project's reliability and functionality. Our team believes that we were able to provide clear evidence of the system's compliance with the specified requirements while writing this deliverable.
+
+
   \item What pain points did you experience during this deliverable, and how
     did you resolve them?
+
+    Writing out the specifications for the unit tests and revising the similar section in VnV plan, while mapping unit tests to their specific modules was relatively challenging. It was challenging because it required a deeper understanding of both the TPG project's structure and the expected behavior of each module. 
+
+    Another significant challenge was developing code coverage metrics for C++ for the project. Due to mismatching libraries and compiler versions, generating accurate code coverage reports proved to be difficult. The team encountered issues with compatibility between the coverage tools and the build system, which often resulted in errors generating code coverage reports.
+
   \item Which parts of this document stemmed from speaking to your client(s) or
   a proxy (e.g. your peers)? Which ones were not, and why?
   
