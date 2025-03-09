@@ -2,10 +2,9 @@
 #include <iomanip>
 
 void ReplacementStorage::init(const int& seed_tpg, const int& pid) {
-    std::stringstream filename;
-    filename << "replacement." << seed_tpg << "." << pid << ".csv";
+    std::string filename = generate_filename("replacement", seed_tpg, pid);
 
-    file_.open(filename.str());
+    file_.open(filename);
     file_ << "generation,num_teams,num_programs,memory_size,num_elite_teams,num_new_teams\n";
     file_.flush();
 }

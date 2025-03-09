@@ -29,6 +29,10 @@ def evolve(ctx: click.Context, env: str, processes: int, seed: int):
     # Change working directory to environment directory
     os.chdir(env_dir)
 
+    # Create logs directory if it doesn't exist
+    if not os.path.exists('logs'):
+        os.makedirs('logs')
+
     # Build the TPGExperimentMPI command
     executable = os.path.join(TPG, "build", "release", "experiments", "TPGExperimentMPI")
 
@@ -42,8 +46,8 @@ def evolve(ctx: click.Context, env: str, processes: int, seed: int):
         f"pid={os.getpid()}"
     ]
 
-    stdout_file = f"tpg.{seed}.{os.getpid()}.std"
-    stderr_file = f"tpg.{seed}.{os.getpid()}.err"
+    stdout_file = f"logs/tpg.{seed}.{os.getpid()}.std"
+    stderr_file = f"logs/tpg.{seed}.{os.getpid()}.err"
 
     click.echo(f"Launching MPI run with command:\n{' '.join(cmd)}")
     click.echo(f"Output will be written to {stdout_file} (stdout) and {stderr_file} (stderr).")
@@ -58,8 +62,8 @@ def evolve(ctx: click.Context, env: str, processes: int, seed: int):
 
     click.echo("Evolve (started in background)")
 
+# TODO: Implement the plot to wrap plotting functionality
 @click.command(help="Plot results for an experiment")
-@click.argument("env")
 @click.argument("csv_files", required=False)
 @click.argument("column_name", required=True)
 @click.pass_context
@@ -74,12 +78,6 @@ def plot(ctx: click.Context, env: str, csv_files: str, column_name: str):
     if env not in hyper_parameters:
         raise click.ClickException(f"Environment {env} is not supported. Supported environments are: {', '.join(hyper_parameters.keys())}")
 
-    # Setup environment directories and get working directory
-    env_dir = helpers.create_environment_directories(TPG, env)
-    
-    # Change working directory to environment directory
-    os.chdir(env_dir)
-
     # Build the `tpg-plot-evolve.py`` command
     plot_script_path = os.path.join(TPG, "scripts", "plot", "tpg-plot-evolve.py")
 
@@ -91,6 +89,10 @@ def plot(ctx: click.Context, env: str, csv_files: str, column_name: str):
     
     # Change working directory to environment directory
     os.chdir(env_dir)
+
+    # Create plots directory if it doesn't exist
+    if not os.path.exists('plots'):
+        os.makedirs('plots')
 
     cmd = ["python3", plot_script_path, csv_files, column_name]
 
@@ -118,7 +120,7 @@ def replay(ctx: click.Context, env: str, seed: int, seed_aux: int, task_to_repla
     os.chdir(env_dir)
 
     # Find the selection.*.*.csv file
-    csv_files = glob.glob(os.path.join(env_dir, "selection.*.*.csv"))
+    csv_files = glob.glob(os.path.join(env_dir, "logs", "selection.*.*.csv"))
     if not csv_files:
         raise click.ClickException("Ensure that you've evolved a policy before replaying it and the selection.*.*.csv file exists.")
 
@@ -150,8 +152,8 @@ def replay(ctx: click.Context, env: str, seed: int, seed_aux: int, task_to_repla
         f"task_to_replay={task_to_replay}"
     ]
 
-    stdout_file = f"tpg.{seed}.{seed_aux}.replay.std"
-    stderr_file = f"tpg.{seed}.{seed_aux}.replay.err"
+    stdout_file = f"logs/tpg.{seed}.{seed_aux}.replay.std"
+    stderr_file = f"logs/tpg.{seed}.{seed_aux}.replay.err"
 
     click.echo(f"Fitness: {metrics['best_fitness']}, Generation: {metrics['generation']}, Team ID: {metrics['team_id']}")
     

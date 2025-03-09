@@ -268,7 +268,7 @@ inline void replayer(TPG &tpg, vector<TaskEnv *> &tasks) {
         }
     }
   }
-  WriteStringToFile("op_use_" + to_string(tpg.seeds_[TPG_SEED]) + ".csv", tpg.AgentOpUseToString(eval_data.tm));
+  WriteStringToFile("logs/op_use_" + to_string(tpg.seeds_[TPG_SEED]) + ".csv", tpg.AgentOpUseToString(eval_data.tm));
 }
 
 #endif
