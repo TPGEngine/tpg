@@ -119,12 +119,19 @@ def replay(ctx: click.Context, env: str, seed: int, seed_aux: int, task_to_repla
     # Change working directory to environment directory
     os.chdir(env_dir)
 
-    # Find the selection.*.*.csv file
-    csv_files = glob.glob(os.path.join(env_dir, "logs", "selection.*.*.csv"))
-    if not csv_files:
-        raise click.ClickException("Ensure that you've evolved a policy before replaying it and the selection.*.*.csv file exists.")
-
-    csv_file = csv_files[0] 
+    # Find the selection CSV file based on seed if provided
+    if seed is not None:
+        # Look for a specific seed file
+        csv_files = glob.glob(os.path.join(env_dir, "logs", f"selection.{seed}.*.csv"))
+        if not csv_files:
+            raise click.ClickException(f"Could not find selection.{seed}.*.csv file. Ensure that you've evolved a policy with seed {seed}.")
+    else:
+        # No seed specified, find any selection file
+        csv_files = glob.glob(os.path.join(env_dir, "logs", "selection.*.*.csv"))
+        if not csv_files:
+            raise click.ClickException("Ensure that you've evolved a policy before replaying it and the selection.*.*.csv file exists.")
+    
+    csv_file = csv_files[0]
 
     # get the best fitness, generation and team id
     metrics = helpers.get_metrics_from_csv(csv_file)
