@@ -62,8 +62,8 @@ def evolve(ctx: click.Context, env: str, processes: int, seed: int):
 
     click.echo("Evolve (started in background)")
 
-# TODO: Implement the plot to wrap plotting functionality
 @click.command(help="Plot results for an experiment")
+@click.argument("env", required=True)
 @click.argument("csv_files", required=False)
 @click.argument("column_name", required=True)
 @click.pass_context

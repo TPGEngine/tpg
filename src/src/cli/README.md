@@ -68,6 +68,31 @@ Here are the environments currently supported:
 - multitask
 - multitask_half_cheetah
 
+**Note:** The environments supported are related to the yaml files present within `$TPG/src/configs`. The naming convention is extracting the string after `MuJoco_` and making everything lowercase and snakecase.
+
+**Plot Results from an Environment**
+
+```bash
+tpg plot <env> <csv_files> <column_name>
+```
+
+This plotting command will:
+
+Generate a plot based on the CSV data provided from a previous evolution run.
+Utilize the specified column from the CSV for plotting.
+
+**Arguments:**
+env (str): The target environment.
+csv_files (str): The path to the CSV files containing the results.
+column_name (str): The name of the column to plot.
+
+For more information regarding arguments `csv_files` and `column_name`, visit our [Wiki](https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/TPG-Generation-Plot-for-CSV-Logging-Files).
+
+**Example:**
+```bash
+tpg plot half_cheetah all-timing generation_time
+```
+
 **Options:**
 - --processes (int): Number of processes to use (default: 4).
 - --seed (int): Random seed (default: 42).
