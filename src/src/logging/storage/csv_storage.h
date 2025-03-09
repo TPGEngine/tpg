@@ -31,7 +31,7 @@ protected:
 
     std::string generate_filename(const std::string& base_name, int seed_tpg, int pid) {
         std::stringstream filename;
-        std::string dir = "logs/";
+        std::string dir = "logs/" + base_name + "/";
         ensure_directory_exists(dir);
         filename << dir << base_name << "." << seed_tpg << "." << pid << ".csv";
         return filename.str();

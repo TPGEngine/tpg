@@ -9,19 +9,23 @@ from . import helpers
 
 @click.command(help="Evolve a policy")
 @click.argument("env")
-@click.option("--processes", help="Number of processes to use", default=4)
-@click.option("--seed", help="Random seed", default=42)
+@click.option("-p", "--processes", help="Number of processes to use", default=4)
+@click.option("-s", "--seed", help="Random seed", default=42)
+@click.option("-n", "--num-experiments", help="Number of experiments to run", default=1)
 @click.pass_context
-def evolve(ctx: click.Context, env: str, processes: int, seed: int):
+def evolve(ctx: click.Context, env: str, processes: int, seed: int, num_experiments: int):
     """Evolve a policy for the given environment"""
 
     # Fetch the hyperparameters for the environment
     hyper_parameters = ctx.obj["hyper_parameters"]
     TPG = ctx.obj["tpg"]
 
-    # error handling for valid environment
+    # Error handling for valid environment
     if env not in hyper_parameters:
-        raise click.ClickException(f"Environment {env} is not supported. Supported environments are: {', '.join(hyper_parameters.keys())}")
+        raise click.ClickException(
+            f"Environment {env} is not supported. Supported environments are: "
+            f"{', '.join(hyper_parameters.keys())}"
+        )
     
     # Setup environment directories and get working directory
     env_dir = helpers.create_environment_directories(TPG, env)
@@ -30,37 +34,30 @@ def evolve(ctx: click.Context, env: str, processes: int, seed: int):
     os.chdir(env_dir)
 
     # Create logs directory if it doesn't exist
-    if not os.path.exists('logs'):
-        os.makedirs('logs')
+    os.makedirs('logs', exist_ok=True)
 
     # Build the TPGExperimentMPI command
     executable = os.path.join(TPG, "build", "release", "experiments", "TPGExperimentMPI")
 
-    cmd = [
-        "mpirun", 
-        "--oversubscribe",
-        "-np", str(processes),
-        executable,
-        f"parameters_file={hyper_parameters[env]}",
-        f"seed_tpg={seed}",
-        f"pid={os.getpid()}"
-    ]
+    # Run the appropriate number of experiments
+    if num_experiments > 1:
+        # Run multiple experiments with sequential seeds
+        for i in range(1, num_experiments + 1):
+            helpers.run_single_experiment(
+                executable=executable,
+                parameters_file=hyper_parameters[env],
+                processes=processes,
+                seed=i
+            )
+    else:
+        # Run a single experiment with the provided seed
+        helpers.run_single_experiment(
+            executable=executable,
+            parameters_file=hyper_parameters[env],
+            processes=processes,
+            seed=seed
+        )
 
-    stdout_file = f"logs/tpg.{seed}.{os.getpid()}.std"
-    stderr_file = f"logs/tpg.{seed}.{os.getpid()}.err"
-
-    click.echo(f"Launching MPI run with command:\n{' '.join(cmd)}")
-    click.echo(f"Output will be written to {stdout_file} (stdout) and {stderr_file} (stderr).")
-
-    try:
-        stdout = open(stdout_file, 'w')
-        stderr = open(stderr_file, 'w')
-        process = subprocess.Popen(cmd, stdout=stdout, stderr=stderr)
-        click.echo(f"Process started in the background with PID: {process.pid}")
-    except OSError as e:
-        raise click.ClickException(f"Failed to start experiment: {e}")
-
-    click.echo("Evolve (started in background)")
 
 @click.command(help="Plot results for an experiment")
 @click.argument("env", required=True)
@@ -103,7 +100,7 @@ def plot(ctx: click.Context, env: str, csv_files: str, column_name: str):
 
 @click.command(help="Replay the best performing policy")
 @click.argument("env")
-@click.option("--seed", help="Random seed", default=42)
+@click.option("-s", "--seed", help="Random seed", default=42)
 @click.option("--seed-aux", help="Auxillary seed", default=42)
 @click.option("--task-to-replay", help="Task to replay for multitask", default=0)
 @click.pass_context
