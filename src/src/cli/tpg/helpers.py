@@ -48,8 +48,8 @@ def create_environment_directories(TPG: str, env: str):
     directories = [
         os.path.join(env_dir, "checkpoints"),
         os.path.join(env_dir, "frames"),
-        os.path.join(env_dir, "replay", "frames"),
-        os.path.join(env_dir, "replay", "graphs")
+        os.path.join(env_dir, "graphs"),
+        os.path.join(env_dir, "logs", "misc"),
     ]
     
     for directory in directories:
@@ -66,8 +66,8 @@ def run_single_experiment(executable: str, parameters_file: str, processes: int,
     """Run a single TPG experiment with the specified parameters"""
     
     pid = os.getpid()
-    stdout_file = f"logs/tpg.{seed}.{pid}.std"
-    stderr_file = f"logs/tpg.{seed}.{pid}.err"
+    stdout_file = f"logs/misc/tpg.{seed}.{pid}.std"
+    stderr_file = f"logs/misc/tpg.{seed}.{pid}.err"
     
     cmd = [
         "mpirun", 

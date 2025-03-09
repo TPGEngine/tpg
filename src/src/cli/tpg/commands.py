@@ -100,7 +100,7 @@ def plot(ctx: click.Context, env: str, csv_files: str, column_name: str):
 
 @click.command(help="Replay the best performing policy")
 @click.argument("env")
-@click.option("-s", "--seed", help="Random seed", default=42)
+@click.option("-s", "--seed", help="Random seed")
 @click.option("--seed-aux", help="Auxillary seed", default=42)
 @click.option("-t", "--task-to-replay", help="Task to replay for multitask", default=0)
 @click.pass_context
@@ -116,7 +116,7 @@ def replay(ctx: click.Context, env: str, seed: int, seed_aux: int, task_to_repla
     # Change working directory to environment directory
     os.chdir(env_dir)
 
-    # Find the selection CSV file based on seed if provided
+    # Find the selection CSV file(s) based on seed if provided
     if seed is not None:
         # Look for a specific seed file
         csv_files = glob.glob(os.path.join(env_dir, "logs", "selection", f"selection.{seed}.*.csv"))
@@ -128,48 +128,63 @@ def replay(ctx: click.Context, env: str, seed: int, seed_aux: int, task_to_repla
         if not csv_files:
             raise click.ClickException("Ensure that you've evolved a policy before replaying it and the selection.*.*.csv file exists.")
     
-    csv_file = csv_files[0]
-
-    # get the best fitness, generation and team id
-    metrics = helpers.get_metrics_from_csv(csv_file)
-
-    # get the checkpoint values
-    checkpoint_in_phase, checkpoint_in_t = helpers.get_checkpoint_values(seed)
-
-    # build replay command
-    executable = os.path.join(TPG, "build", "release", "experiments", "TPGExperimentMPI")
-
-    cmd = [
-        "mpirun", 
-        "--oversubscribe",
-        "-np", str(1),
-        executable,
-        f"parameters_file={hyper_parameters[env]}",
-        f"seed_tpg={seed}",
-        f"seed_aux={seed_aux}",
-        f"start_from_checkpoint=1",
-        f"checkpoint_in_phase={checkpoint_in_phase}",
-        f"checkpoint_in_t={checkpoint_in_t}",
-        f"replay=1", 
-        f"animate=1",
-        f"id_to_replay={int(metrics['team_id'])}",
-        f"task_to_replay={task_to_replay}"
-    ]
-
-    stdout_file = f"logs/tpg.{seed}.{seed_aux}.replay.std"
-    stderr_file = f"logs/tpg.{seed}.{seed_aux}.replay.err"
-
-    click.echo(f"Fitness: {metrics['best_fitness']}, Generation: {metrics['generation']}, Team ID: {metrics['team_id']}")
+    # Ensure misc directory exists for log files
+    os.makedirs(os.path.join(env_dir, "logs", "misc"), exist_ok=True)
     
-    click.echo(f"Launching MPI run with command:\n{' '.join(cmd)}")
-    click.echo(f"Output will be written to {stdout_file} (stdout) and {stderr_file} (stderr).")
+    executable = os.path.join(TPG, "build", "release", "experiments", "TPGExperimentMPI")
+    
+    # Process each CSV file (either one specific file or all files)
+    for i, csv_file in enumerate(csv_files, 1):
+        # Extract the seed from the filename (selection.SEED.*.csv)
+        filename = os.path.basename(csv_file)
+        file_parts = filename.split('.')
+        file_seed = file_parts[1] if len(file_parts) > 2 else seed_aux
+        
+        # Get the best fitness, generation and team id
+        metrics = helpers.get_metrics_from_csv(csv_file)
+        
+        # Get the checkpoint values
+        checkpoint_in_phase, checkpoint_in_t = helpers.get_checkpoint_values(int(file_seed))
+        
+        # Build replay command
+        cmd = [
+            "mpirun", 
+            "--oversubscribe",
+            "-np", str(1),
+            executable,
+            f"parameters_file={hyper_parameters[env]}",
+            f"seed_tpg={file_seed}",
+            f"seed_aux={seed_aux}",
+            f"start_from_checkpoint=1",
+            f"checkpoint_in_phase={checkpoint_in_phase}",
+            f"checkpoint_in_t={checkpoint_in_t}",
+            f"replay=1", 
+            f"animate=1",
+            f"id_to_replay={int(metrics['team_id'])}",
+            f"task_to_replay={task_to_replay}"
+        ]
+        
+        stdout_file = f"logs/misc/tpg.{file_seed}.{seed_aux}.replay.std"
+        stderr_file = f"logs/misc/tpg.{file_seed}.{seed_aux}.replay.err"
+        
+        click.echo(f"\nReplaying from file: {filename} ({i}/{len(csv_files)})")
+        click.echo(f"Fitness: {metrics['best_fitness']}, Generation: {metrics['generation']}, Team ID: {metrics['team_id']}")
+        
+        click.echo(f"Launching MPI run with command:\n{' '.join(cmd)}")
+        click.echo(f"Output will be written to {stdout_file} (stdout) and {stderr_file} (stderr).")
+        
+        try:
+            with open(stdout_file, 'w') as stdout, open(stderr_file, 'w') as stderr:
+                click.echo(f"Running replay for seed {file_seed}... (waiting for completion)")
+                # Use subprocess.run() to wait for completion instead of Popen
+                result = subprocess.run(cmd, stdout=stdout, stderr=stderr)
+                if result.returncode != 0:
+                    click.echo(f"Warning: Process for seed {file_seed} exited with code {result.returncode}")
+                else:
+                    click.echo(f"Replay for seed {file_seed} completed successfully")
+        except OSError as e:
+            raise click.ClickException(f"Failed to start experiment: {e}")
 
-    try:
-        stdout = open(stdout_file, 'w')
-        stderr = open(stderr_file, 'w')
-        process = subprocess.Popen(cmd, stdout=stdout, stderr=stderr)
-        click.echo(f"Process started in the background with PID: {process.pid}")
-    except OSError as e:
-        raise click.ClickException(f"Failed to start experiment: {e}")
+    total_replays = len(csv_files)
+    click.echo(f"\nCompleted {total_replays} replay{'s' if total_replays > 1 else ''} sequentially")
 
-    click.echo("Replay (started in background)")    
