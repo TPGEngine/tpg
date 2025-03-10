@@ -9,6 +9,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{parskip}
+\usepackage{float}
 \hypersetup{
     colorlinks,
     citecolor=black,
@@ -205,18 +206,21 @@ For NFR-SLN3, the framework now offers extensive customization options for MuJoC
   \textbf{Test Id} & \textbf{Result} \\
   \hline
   \endhead
-  NFR-SLR4 & Pass \\
+  NFR-SLN4 & Pass \\
   \hline
   \end{longtable}
 \end{center}
 
-For NFR-SLN4, test cases within TPG for the experimental environments have been implemented to check for the accuracy of the numerical computations associated during training. Declaration of variables with proper types (e.g. signed long or int, unsigned long or int) has also been taken into consideration to reduce issues in the future for extremely large or small numbers that may overflow. TPG has been comprehensively tested to guarantee that all computations with high numerical precision (e.g. during the runtime of an experiment) are accurate and contain an acceptable tolerance limit of 0.00001. The results were inspected manually by comparing the actual output to the anticipated output, and performing a calculation to check for quantitative error, and if such error meets the requirements for numerical precision.
+For NFR-SLN4, test cases within TPG for the experimental environments have been implemented to check for the accuracy of the numerical computations associated during training. Declaration of variables with proper types (e.g. signed long or int, unsigned long or int) has also been taken into consideration to reduce issues in the future for extremely large or small numbers that may overflow.
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=1\textwidth]{img/ant_test.png}
-  \caption{Example of a Numerical Computation Test}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/ant_test.png}
+    \caption{Example of a Numerical Computation Test}
 \end{figure}
+
+TPG has been comprehensively tested to guarantee that all computations with high numerical precision (e.g. during the runtime of an experiment) are accurate and contain an acceptable tolerance limit of 0.00001. The results were inspected manually by comparing the actual output to the anticipated output, and performing a calculation to check for quantitative error, 
+and if such error meets the requirements for numerical precision.
 
 \subsection{Operational and Environmental}\label{operational}
 
@@ -231,7 +235,7 @@ For NFR-SLN4, test cases within TPG for the experimental environments have been 
   \textbf{Test Id} & \textbf{Result} \\
   \hline
   \endhead
-  NFR-SLR6 & Pass \\
+  NFR-SLN6 & Pass \\
   \hline
   \end{longtable}
 \end{center}
@@ -255,12 +259,12 @@ Simply follow the \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/home
   \textbf{Test Id} & \textbf{Result} \\
   \hline
   \endhead
-  NFR-SLR7 & Pass \\
+  NFR-SLN7 & Pass \\
   \hline
   \end{longtable}
 \end{center}
 
-To satisfy the testing requirements for NFR-SLR7 - establishing a secure and robust repository management system, the team has implemented checks to ensure the repository prevents unauthorized access and defective code integration. The repository where our team is working on GitHub (whereas the base TPG repository is based in Gitlab), and access is controlled through a combination of two-factor authentication (2FA), and a main branch that is protected to ensure that merge requests can only be performed after the \href{https://github.com/TPGEngine/tpg/blob/main/.github/workflows/build-project.yaml}{TPG project GitHub workflow} action pipeline has successfully completed. This pipeline validates the building and testing process, ensuring that only code that passes all checks can be merged into the main branch. Any critical build errors or warnings, create blocking pull request conversations that must be resolved before merging. There is also a specific \href{https://github.com/TPGEngine/tpg/blob/main/.github/workflows/pull-gitlab.yml}{GitHub workflow} that is used to automatically pull changes from GitLab, eliminating the need for manual merging and risk of human error. 
+To satisfy the testing requirements for NFR-SLN7 - establishing a secure and robust repository management system, the team has implemented checks to ensure the repository prevents unauthorized access and defective code integration. The repository where our team is working on GitHub (whereas the base TPG repository is based in Gitlab), and access is controlled through a combination of two-factor authentication (2FA), and a main branch that is protected to ensure that merge requests can only be performed after the \href{https://github.com/TPGEngine/tpg/blob/main/.github/workflows/build-project.yaml}{TPG project GitHub workflow} action pipeline has successfully completed. This pipeline validates the building and testing process, ensuring that only code that passes all checks can be merged into the main branch. Any critical build errors or warnings, create blocking pull request conversations that must be resolved before merging. There is also a specific \href{https://github.com/TPGEngine/tpg/blob/main/.github/workflows/pull-gitlab.yml}{GitHub workflow} that is used to automatically pull changes from GitLab, eliminating the need for manual merging and risk of human error. 
 
 \subsection{Security}\label{security}
 
@@ -275,7 +279,7 @@ To satisfy the testing requirements for NFR-SLR7 - establishing a secure and rob
   \textbf{Test Id} & \textbf{Result} \\
   \hline
   \endhead
-  NFR-SLR8 & Pass \\
+  NFR-SLN8 & Pass \\
   \hline
   \end{longtable}
 \end{center}
@@ -296,7 +300,7 @@ For NFR-SLN8, the .csv, .txt, .png and .mp4 files that are generated within Clas
 \textbf{Test Id} & \textbf{Result} \\
 \hline
 \endhead
-NFR-SLR9 & Pass \\
+NFR-SLN9 & Pass \\
 \hline
 \end{longtable}
 \end{center}
