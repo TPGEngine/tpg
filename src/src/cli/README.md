@@ -146,6 +146,46 @@ tpg replay inverted_pendulum -s 2
 
 This command would replay the best policy from a previously evolved experiment from a seed with value 2.
 
+**Cleanup the Experiment Directory:**
+
+```bash
+tpg clean <env>
+```
+
+The clean command:
+
+Removes the directory associated with the specified environment.
+
+**Arguments:**
+
+- env (str): The target environment
+
+**Example:**
+
+```bash
+tpg clean inverted_pendulum
+```
+
+**Kill the evolution of an experiment**
+
+```bash
+tpg kill <env>
+```
+
+The clean command:
+
+Kills the processes running the specified environment, or kills all running processes if no environment is specified.
+
+**Arguments:**
+
+- env (str): The target environment (optional; will kill all experiment processes if no environment is specified)
+
+**Example:**
+
+```bash
+tpg kill inverted_pendulum
+```
+
 ## Troubleshooting
 
 If attempting to execute a tpg command leads you to an error such as: `Command 'tpg' not found`. Ensure your PATH
