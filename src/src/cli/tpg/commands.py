@@ -1,6 +1,7 @@
 import glob
 import os
 import subprocess
+import shutil
 
 import click
 
@@ -188,3 +189,39 @@ def replay(ctx: click.Context, env: str, seed: int, seed_aux: int, task_to_repla
     total_replays = len(csv_files)
     click.echo(f"\nCompleted {total_replays} replay{'s' if total_replays > 1 else ''} sequentially")
 
+@click.command(help="Cleanup an experiment directory")
+@click.argument("env")
+@click.pass_context
+def clean(ctx: click.Context, env: str):
+    """Remove the experiment directory"""
+
+    # Fetch the hyperparameters for the environment
+    hyper_parameters = ctx.obj["hyper_parameters"]
+    TPG = ctx.obj["tpg"]
+    
+    env_dir = helpers.create_environment_directories(TPG, env)
+
+    # Check if the environment directory exists
+    if os.path.isdir(env_dir):
+        # Remove the entire environment directory
+        shutil.rmtree(env_dir)
+        click.echo(f"Deleted environment directory: {env_dir}")
+    else:
+        click.echo(f"Environment directory not found: {env_dir}")
+
+    click.echo("Cleanup completed.")
+
+@click.command(help="Stop the evolution for the given environment")
+@click.argument("env", required=False)
+@click.pass_context
+def kill(ctx: click.Context, env : str):
+    """Terminate processes for the given environment"""
+    try:
+        if env is not None:
+            hyper_parameters = ctx.obj["hyper_parameters"][env]
+            result = subprocess.run(["pkill", "-f", hyper_parameters])
+        else:
+            result = subprocess.run(["pkill", "-f", "TPGExperimentMPI"])
+        click.echo("Successfully killed processes.")
+    except Exception as e:
+        click.echo(f"Unexpected error: {e}")
