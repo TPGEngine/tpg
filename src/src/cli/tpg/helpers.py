@@ -1,6 +1,7 @@
 import pandas as pd
 import subprocess
 import os
+import click
 
 def get_metrics_from_csv(csv_file):
     # Read the CSV file
@@ -47,8 +48,8 @@ def create_environment_directories(TPG: str, env: str):
     directories = [
         os.path.join(env_dir, "checkpoints"),
         os.path.join(env_dir, "frames"),
-        os.path.join(env_dir, "replay", "frames"),
-        os.path.join(env_dir, "replay", "graphs")
+        os.path.join(env_dir, "graphs"),
+        os.path.join(env_dir, "logs", "misc"),
     ]
     
     for directory in directories:
@@ -60,3 +61,33 @@ def create_environment_directories(TPG: str, env: str):
                 f.write("*\n!.gitignore\n")
                 
     return env_dir
+
+def run_single_experiment(executable: str, parameters_file: str, processes: int, seed: int):
+    """Run a single TPG experiment with the specified parameters"""
+    
+    pid = os.getpid()
+    stdout_file = f"logs/misc/tpg.{seed}.{pid}.std"
+    stderr_file = f"logs/misc/tpg.{seed}.{pid}.err"
+    
+    cmd = [
+        "mpirun", 
+        "--oversubscribe",
+        "-np", str(processes),
+        executable,
+        f"parameters_file={parameters_file}",
+        f"seed_tpg={seed}",
+        f"pid={pid}"
+    ]
+
+    click.echo(f"Launching MPI run with command:\n{' '.join(cmd)}")
+    click.echo(f"Output will be written to {stdout_file} (stdout) and {stderr_file} (stderr).")
+
+    try:
+        with open(stdout_file, 'w') as stdout, open(stderr_file, 'w') as stderr:
+            process = subprocess.Popen(cmd, stdout=stdout, stderr=stderr)
+            click.echo(f"Process started in the background with PID: {process.pid}")
+    except OSError as e:
+        raise click.ClickException(f"Failed to start experiment: {e}")
+
+    click.echo("Evolve (started in background)")
+
