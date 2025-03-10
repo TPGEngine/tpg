@@ -19,18 +19,20 @@ the underlying experiments defined in the TPG framework.
 
 - **Evolve a Policy:** Launch an MPI run to evolve a policy for a specified environment.
 - **Replay a Policy:** Replay the best performing policy based on experiment outputs.
-- **Plot Results (Work in Progress):** A placeholder for future plotting functionality.
+- **Plot Results:** Plot statistics about experiments.
 
 ---
 
 ## Installation
 
 Ensure that you have `pipx` installed:
+
 ```bash
 sudo apt install pipx
 ```
 
 To utilize this CLI tool anywhere in the repo:
+
 ```bash
 cd $TPG/src/cli
 pipx install --editable .
@@ -43,22 +45,30 @@ pipx install --editable .
 Here are the main commands.
 
 **Evolve a Policy:**
+
 ```bash
 cd $TPG/experiments/generic
-tpg evolve <env> --processes 4
+tpg evolve <env>
 ```
+
 This command will:
 
 Verify that the given <env> is supported (as defined in your hyper_parameters).
 Build a command to launch the TPG experiment using mpirun with the specified number of processes.
-Redirect standard output and error to files named in the format:
-- tpg.<seed>.<pid>.std
-- tpg.<seed>.<pid>.err
+Redirect logs about the experiment to the `$TPG/experiments/<env>/logs` directory. There are subdirectories for each stage of the evolutionary training process: `replacement`, `removal`, `selection`, and `timing`.
 
 **Arguments:**
+
 - env (str): The target environment
 
+**Options:**
+
+- (-s) seed (int): Specifying a specific random number to run
+- (-p) processes (int): Specifying the number of parallel processes to run, this value defaults to 4
+- (-n) num-experiments (int): Specifying the number of experiments to executes
+
 Here are the environments currently supported:
+
 - classic_control
 - half_cheetah
 - hopper
@@ -69,6 +79,13 @@ Here are the environments currently supported:
 - multitask_half_cheetah
 
 **Note:** The environments supported are related to the yaml files present within `$TPG/src/configs`. The naming convention is extracting the string after `MuJoco_` and making everything lowercase and snakecase.
+
+**Example:**
+Running 3 experiemnts of the `inverted_pendulum` environment with 3 different seeds.
+
+```bash
+tpg evolve inverted_pendulum -n 3
+```
 
 **Plot Results from an Environment**
 
@@ -89,35 +106,47 @@ column_name (str): The name of the column to plot.
 For more information regarding arguments `csv_files` and `column_name`, visit our [Wiki](https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/TPG-Generation-Plot-for-CSV-Logging-Files).
 
 **Example:**
+
 ```bash
 tpg plot half_cheetah all-timing generation_time
 ```
 
 **Options:**
+
 - --processes (int): Number of processes to use (default: 4).
 - --seed (int): Random seed (default: 42).
 
 **Replay the Best Policy:**
 
 ```bash
-tpg replay <env> 
+tpg replay <env>
 ```
+
 The replay command:
 
-Scans for a selection.*.*.csv file (generated from a previous evolve run).
+Scans for a selection._._.csv file (generated from a previous evolve run).
 Uses helper functions to extract the best performing team's ID and checkpoint information.
-Launches an MPI run in replay mode with the given parameters.
-Writes the output to files:
-- tpg.<seed>.<seed_aux>.replay.std
-- tpg.<seed>.<seed_aux>.replay.err
+Launches an MPI run in replay mode with the given parameters. If running in a Dev Containers environment, MP4 replays would be populated within the `$TPG/experiments/<env>/videos` directory.
 
 **Arguments:**
+
 - env (str): The target environment
+
 **Options:**
-- --seed (int): Random seed for the replay (default: 42).
-- --seed-aux (int): An auxiliary seed (default: 42) used in the replay; its exact role is determined by the underlying experiment logic.
-- --task-to-replay (int): Option for multitask experiments which task to visualize
-j
+
+- (-s) seed (int): Replaying a specific seed for that environment
+- (--seed-aux) auxillary seed (int): An auxiliary seed (default: 42) used in the replay; its exact role is determined by the underlying experiment logic.
+- (-t) task to replay (int): Option for multitask experiments which task to visualize
+
+**Example:**
+
+```bash
+tpg replay inverted_pendulum -s 2
+```
+
+This command would replay the best policy from a previously evolved experiment from a seed with value 2.
+
 ## Troubleshooting
+
 If attempting to execute a tpg command leads you to an error such as: `Command 'tpg' not found`. Ensure your PATH
-environment variables are up to date. You can do this by running `pipx ensurepath` and restarting your terminal. 
+environment variables are up to date. You can do this by running `pipx ensurepath` and restarting your terminal.
