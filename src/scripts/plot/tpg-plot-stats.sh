@@ -21,7 +21,9 @@ do
    esac
 done
 
-numTask=$(grep "n_task" tpg.*.std | cut -d ' ' -f 2 | head -n 1)
+mkdir -p plots
+
+numTask=$(grep "n_task" logs/tpg.*.std | cut -d ' ' -f 2 | head -n 1)
 
 c=1
 #if ls *p${phs}*csv 1> /dev/null 2>&1; then rm *p${phs}.csv; fi
@@ -29,12 +31,12 @@ if ls *.csv 1> /dev/null 2>&1; then rm *.csv; fi
 maxT=$maxt
 if [ $maxt -eq 0 ] 
 then
-   maxT=$(grep "gTime t " tpg*.std | awk -F" t " '{print $2}' | awk '{print $1}' | sort -n | tail -n 1 | tr -d '\n')
+   maxT=$(grep "gTime t " logs/tpg*.std | awk -F" t " '{print $2}' | awk '{print $1}' | sort -n | tail -n 1 | tr -d '\n')
 
 
 elif [ $maxt -eq -1 ]
 then
-   files=$(ls tpg*.std | grep -v replay)
+   files=$(ls logs/tpg*.std | grep -v replay)
    mt=""
    for f in $files; do
       mt="$(grep "gTime t " $f | awk -F" t " '{print $2}' | awk '{print $1}' | sort -n | tail -n 1 | tr -d '\n') $mt"
@@ -42,7 +44,7 @@ then
    maxT=$(echo $mt | tr ' ' '\n' | sort -n | head -n 1)
 fi
 
-files=$(ls tpg*.std | sort -n -t '.' -k 3 | grep -v replay)
+files=$(ls logs/tpg*.std | sort -n -t '.' -k 3 | grep -v replay)
 
 for f in $files
 do
@@ -326,7 +328,7 @@ Rscript  $TPG/scripts/plot/plot-tpg-trainingCurves.R tpg-st-Lsize.csv "Program p
 
 
 
-pdfunite 0*.pdf ${wd}_p${phs}.pdf
+pdfunite 0*.pdf plots/${wd}_p${phs}.pdf
 rm 0*.pdf
-# rm *csv
+rm *csv
 

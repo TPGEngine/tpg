@@ -3,10 +3,9 @@
 #include <iomanip>
 
 void SelectionStorage::init(const int& seed_tpg, const int& pid) {
-    std::stringstream filename;
-    filename << "selection." << seed_tpg << "." << pid << ".csv";
+    std::string filename = generate_filename("selection", seed_tpg, pid);
 
-    file_.open(filename.str());
+    file_.open(filename);
     file_ << "generation,best_fitness,team_id,team_size,age,fitness_value_for_selection,program_instruction_count,effective_program_instruction_count";
     
     appendOperationHeaders();

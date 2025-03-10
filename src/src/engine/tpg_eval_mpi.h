@@ -202,73 +202,79 @@ inline void replayer(TPG &tpg, vector<TaskEnv *> &tasks) {
   eval_data.teams = tpg.GetRootTeamsInVec();
   eval_data.eval_result = "";
   for (auto tm : eval_data.teams) {
-    if (tm->id_ != tpg.GetParam<int>("id_to_replay")) continue;
-    eval_data.tm = tm;
-    
-    vector<int> steps_per_task(tpg.GetState("n_task"), 0);
-    // TODO(skelly): clean up
-    // tpg.rngs_[AUX_SEED].seed(tpg.GetParam<int>("seed_aux"));
-    std::vector<double> outcomes;
-    for (int task = 0; task < tpg.GetState("n_task"); task++) {
-        tpg.state_["active_task"] = task;
-        eval_data.task = tasks[tpg.GetState("active_task")];
-        tm->_n_eval =
-          eval_data.task->GetNumEval(_TEST_PHASE);
-        for (eval_data.episode = 0; eval_data.episode < eval_data.tm->_n_eval;
-             eval_data.episode++) {
-              if (!eval_data.animate) {
-                tpg.rngs_[AUX_SEED].seed(eval_data.episode * 42);
+      if (tm->id_ != tpg.GetParam<int>("id_to_replay")) continue;
+      eval_data.tm = tm;
+      
+      vector<int> steps_per_task(tpg.GetState("n_task"), 0);
+      // TODO(skelly): clean up
+      // tpg.rngs_[AUX_SEED].seed(tpg.GetParam<int>("seed_aux"));
+      std::vector<double> outcomes;
+      for (int task = 0; task < tpg.GetState("n_task"); task++) {
+          tpg.state_["active_task"] = task;
+          eval_data.task = tasks[tpg.GetState("active_task")];
+          tm->_n_eval =
+            eval_data.task->GetNumEval(_TEST_PHASE);
+          for (eval_data.episode = 0; eval_data.episode < eval_data.tm->_n_eval;
+              eval_data.episode++) {
+                if (!eval_data.animate) {
+                  tpg.rngs_[AUX_SEED].seed(eval_data.episode * 42);
+                }
+              eval_data.tm->InitMemory(tpg.team_map_, tpg.params_);
+
+              if (eval_data.task->eval_type_ == "RecursiveForecast") {
+                  EvalRecursiveForecastViz(
+                      tpg, eval_data, teamUseMapPerTask, teams_visitedAllTasks,
+                      steps_per_task[tpg.GetState("active_task")]);
+              } else if (eval_data.task->eval_type_ == "Control") {
+                  EvalControlViz(tpg, eval_data, teamUseMapPerTask,
+                                teams_visitedAllTasks,
+                                steps_per_task[tpg.GetState("active_task")]);
+              } else {
+                  EvalMujoco(tpg, eval_data);
               }
-            eval_data.tm->InitMemory(tpg.team_map_, tpg.params_);
+              // eval_data.FinalizeStepData(tpg);
+              tpg.FinalizeStepData(eval_data);
+              outcomes.push_back(eval_data.stats_double[REWARD1_IDX]);
+          }
+      }
+      tpg.printGraphDotGPTPXXI(eval_data.tm->id_, teams_visitedAllTasks,
+                              teamUseMapPerTask, steps_per_task);
 
-            if (eval_data.task->eval_type_ == "RecursiveForecast") {
-                EvalRecursiveForecastViz(
-                    tpg, eval_data, teamUseMapPerTask, teams_visitedAllTasks,
-                    steps_per_task[tpg.GetState("active_task")]);
-            } else if (eval_data.task->eval_type_ == "Control") {
-                EvalControlViz(tpg, eval_data, teamUseMapPerTask,
-                               teams_visitedAllTasks,
-                               steps_per_task[tpg.GetState("active_task")]);
-            } else {
-                EvalMujoco(tpg, eval_data);
-            }
-            // eval_data.FinalizeStepData(tpg);
-            tpg.FinalizeStepData(eval_data);
-            outcomes.push_back(eval_data.stats_double[REWARD1_IDX]);
-        }
-    }
-    tpg.printGraphDotGPTPXXI(eval_data.tm->id_, teams_visitedAllTasks,
-                             teamUseMapPerTask, steps_per_task);
+      cout << " Evaluation result team:" << eval_data.tm->id_ << " n_outcomes "
+          << outcomes.size() << " mean " << VectorMean(outcomes) << " median "
+          << VectorMedian(outcomes) << endl;
+      cout << VectorToString(outcomes) << endl;
 
-    cout << " Evaluation result team:" << eval_data.tm->id_ << " n_outcomes "
-         << outcomes.size() << " mean " << VectorMean(outcomes) << " median "
-         << VectorMedian(outcomes) << endl;
-    cout << VectorToString(outcomes) << endl;
-
-          // Add video creation for headless mode
+    // Add video creation for headless mode
     if (headless && frame_idx > 0) {
-        // Create videos directory if it doesn't exist
-        struct stat st{};
-        if (stat("replay/videos", &st) == -1) {
-            if (mkdir("replay/videos", 0700) != 0) {
-                cerr << "Failed to create videos directory" << endl;
-                return;
-            }
-        }
-        
-        // Create video from frames using ffmpeg
-        int ret = system("ffmpeg -y -framerate 30 -i frames/frame_%05d.ppm -c:v libx264 -pix_fmt yuv420p replay/videos/output.mp4");
-        if (ret != 0) {
-            cerr << "Error creating video file" << endl;
-        }
-        // Clean up frame files
-        ret = system("rm frames/frame_*.ppm");
-        if (ret != 0) {
-            cerr << "Error removing frame files" << endl;
-        }
+      // Create videos directory if it doesn't exist
+      struct stat st{};
+      if (stat("videos", &st) == -1) {
+          if (mkdir("videos", 0700) != 0) {
+              cerr << "Failed to create videos directory" << endl;
+              return;
+          }
+      }
+      
+      // using the tpg seed as the unique identifier
+      string video_filename = "videos/video_" + to_string(eval_data.tpg_seed) + ".mp4";
+      
+      // Create video from frames using ffmpeg
+      string ffmpeg_cmd = "ffmpeg -y -framerate 30 -i frames/frame_%05d.ppm -c:v libx264 -pix_fmt yuv420p " + video_filename;
+      int ret = system(ffmpeg_cmd.c_str());
+      if (ret != 0) {
+          cerr << "Error creating video file" << endl;
+      } else {
+          cout << "Video saved to " << video_filename << endl;
+      }
+      
+      // Clean up frame files
+      ret = system("rm frames/frame_*.ppm");
+      if (ret != 0) {
+          cerr << "Error removing frame files" << endl;
+      }
     }
   }
-  WriteStringToFile("op_use_" + to_string(tpg.seeds_[TPG_SEED]) + ".csv", tpg.AgentOpUseToString(eval_data.tm));
 }
 
 #endif

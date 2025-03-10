@@ -1,5 +1,3 @@
-#include <cmath>
-#include <numeric>
 #include "sequence_comparisons.h"
 
 /******************************************************************************/

@@ -2,10 +2,9 @@
 #include <iomanip>
 
 void RemovalStorage::init(const int& seed_tpg, const int& pid) {
-    std::stringstream filename;
-    filename << "removal." << seed_tpg << "." << pid << ".csv";
+    std::string filename = generate_filename("removal", seed_tpg, pid);
 
-    file_.open(filename.str());
+    file_.open(filename);
     file_ << "generation,num_teams,num_programs,num_root_programs,num_elite_teams,num_deleted,num_old_deleted,percent_old_deleted\n";
     file_.flush();
 }

@@ -9,6 +9,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{parskip}
+\usepackage{float}
 \hypersetup{
     colorlinks,
     citecolor=black,
@@ -21,6 +22,7 @@
 
 \input{../Comments}
 \input{../Common}
+
 
 \begin{document}
 
@@ -37,7 +39,7 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-3/7/2025 & 1.0 & First write up of VnV Report \\
+3/10/2025 & 1.0 & First write up of VnV Report \\
 \bottomrule
 \end{tabularx}
 
@@ -165,6 +167,31 @@ This document cohesively summarizes the results of each test as specified in the
 \section{Nonfunctional Requirements Evaluation}
 
 \subsection{Usability}\label{usability}
+\begin{center}
+  \begin{longtable}{|p{4cm}|p{4cm}|}
+  \caption{Usability Tests} \\
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Test Id} & \textbf{Result} \\
+  \hline
+  \endhead
+  NFR-SLN1 & Pass \\
+  \hline
+  NFR-SLN2 & Pass \\
+  \hline
+  NFR-SLN3 & Pass \\
+  \hline
+  \end{longtable}
+\end{center}
+
+For NFR-SLN1, the TPG framework now includes comprehensive documentation across multiple levels. The main README provides installation instructions and a quick start guide, while the CLI tool documentation details commands for evolving, plotting, and replaying policies. Code documentation with inline comments explains classes and methods, and YAML configuration files include detailed parameter descriptions. Usability testing with graduate students confirmed the documentation's effectiveness, with a rating of 10/10 for installation experience.
+
+For NFR-SLN2, an event-driven logging architecture was implemented to provide real-time, accurate message logging throughout the training process. Metrics are stored in CSV files, capturing timing, selection, replacement, and removal data. The CLI tool provides real-time feedback during experiment execution. Usability testing rated the accuracy and usefulness of system logs at 9/10, with suggestions to clarify CSV file naming conventions and document the meaning of removal and replacement metrics in the wiki.
+
+For NFR-SLN3, the framework now offers extensive customization options for MuJoCo simulation parameters through YAML configuration files. Each environment includes specific parameters (reward weights, health criteria, observation settings) and common simulation parameters (maximum timesteps, model path). The CLI tool integrates these parameters, allowing users to specify different environments and configurations when running experiments. Usability testing confirmed the ease of locating and customizing parameters, with suggestions to place YAML files within the experiments directory and reduce the number of log files.
 		
 \subsection{Performance}\label{performance}
 
@@ -179,18 +206,21 @@ This document cohesively summarizes the results of each test as specified in the
   \textbf{Test Id} & \textbf{Result} \\
   \hline
   \endhead
-  NFR-SLR4 & Pass \\
+  NFR-SLN4 & Pass \\
   \hline
   \end{longtable}
 \end{center}
 
-For NFR-SLN4, test cases within TPG for the experimental environments have been implemented to check for the accuracy of the numerical computations associated during training. Declaration of variables with proper types (e.g. signed long or int, unsigned long or int) has also been taken into consideration to reduce issues in the future for extremely large or small numbers that may overflow. TPG has been comprehensively tested to guarantee that all computations with high numerical precision (e.g. during the runtime of an experiment) are accurate and contain an acceptable tolerance limit of 0.00001. The results were inspected manually by comparing the actual output to the anticipated output, and performing a calculation to check for quantitative error, and if such error meets the requirements for numerical precision.
+For NFR-SLN4, test cases within TPG for the experimental environments have been implemented to check for the accuracy of the numerical computations associated during training. Declaration of variables with proper types (e.g. signed long or int, unsigned long or int) has also been taken into consideration to reduce issues in the future for extremely large or small numbers that may overflow.
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=1\textwidth]{img/ant_test.png}
-  \caption{Example of a Numerical Computation Test}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/ant_test.png}
+    \caption{Example of a Numerical Computation Test}
 \end{figure}
+
+TPG has been comprehensively tested to guarantee that all computations with high numerical precision (e.g. during the runtime of an experiment) are accurate and contain an acceptable tolerance limit of 0.00001. The results were inspected manually by comparing the actual output to the anticipated output, and performing a calculation to check for quantitative error, 
+and if such error meets the requirements for numerical precision.
 
 \subsection{Operational and Environmental}\label{operational}
 
@@ -205,7 +235,7 @@ For NFR-SLN4, test cases within TPG for the experimental environments have been 
   \textbf{Test Id} & \textbf{Result} \\
   \hline
   \endhead
-  NFR-SLR6 & Pass \\
+  NFR-SLN6 & Pass \\
   \hline
   \end{longtable}
 \end{center}
@@ -229,12 +259,12 @@ Simply follow the \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/home
   \textbf{Test Id} & \textbf{Result} \\
   \hline
   \endhead
-  NFR-SLR7 & Pass \\
+  NFR-SLN7 & Pass \\
   \hline
   \end{longtable}
 \end{center}
 
-To satisfy the testing requirements for NFR-SLR7 - establishing a secure and robust repository management system, the team has implemented checks to ensure the repository prevents unauthorized access and defective code integration. The repository where our team is working on GitHub (whereas the base TPG repository is based in Gitlab), and access is controlled through a combination of two-factor authentication (2FA), and a main branch that is protected to ensure that merge requests can only be performed after the \href{https://github.com/TPGEngine/tpg/blob/main/.github/workflows/build-project.yaml}{TPG project GitHub workflow} action pipeline has successfully completed. This pipeline validates the building and testing process, ensuring that only code that passes all checks can be merged into the main branch. Any critical build errors or warnings, create blocking pull request conversations that must be resolved before merging. There is also a specific \href{https://github.com/TPGEngine/tpg/blob/main/.github/workflows/pull-gitlab.yml}{GitHub workflow} that is used to automatically pull changes from GitLab, eliminating the need for manual merging and risk of human error. 
+To satisfy the testing requirements for NFR-SLN7 - establishing a secure and robust repository management system, the team has implemented checks to ensure the repository prevents unauthorized access and defective code integration. The repository where our team is working on GitHub (whereas the base TPG repository is based in Gitlab), and access is controlled through a combination of two-factor authentication (2FA), and a main branch that is protected to ensure that merge requests can only be performed after the \href{https://github.com/TPGEngine/tpg/blob/main/.github/workflows/build-project.yaml}{TPG project GitHub workflow} action pipeline has successfully completed. This pipeline validates the building and testing process, ensuring that only code that passes all checks can be merged into the main branch. Any critical build errors or warnings, create blocking pull request conversations that must be resolved before merging. There is also a specific \href{https://github.com/TPGEngine/tpg/blob/main/.github/workflows/pull-gitlab.yml}{GitHub workflow} that is used to automatically pull changes from GitLab, eliminating the need for manual merging and risk of human error. 
 
 \subsection{Security}\label{security}
 
@@ -249,7 +279,7 @@ To satisfy the testing requirements for NFR-SLR7 - establishing a secure and rob
   \textbf{Test Id} & \textbf{Result} \\
   \hline
   \endhead
-  NFR-SLR8 & Pass \\
+  NFR-SLN8 & Pass \\
   \hline
   \end{longtable}
 \end{center}
@@ -270,7 +300,7 @@ For NFR-SLN8, the .csv, .txt, .png and .mp4 files that are generated within Clas
 \textbf{Test Id} & \textbf{Result} \\
 \hline
 \endhead
-NFR-SLR9 & Pass \\
+NFR-SLN9 & Pass \\
 \hline
 \end{longtable}
 \end{center}
@@ -364,9 +394,9 @@ Any critical errors found during the linting process create blocking pull reques
 
 
 
-\subsection{Mujoco Module}
+\subsection{MuJoCo Module}
 
-\subsubsection{Mujoco Environment Test\\}
+\subsubsection{MuJoCo Environment Test}
 
 
 \textbf{Type:} Automatic, Functional
@@ -436,7 +466,7 @@ Any critical errors found during the linting process create blocking pull reques
     \end{enumerate}
 \end{itemize}
 
-\subsubsection{Mujoco Ant Test\\}
+\subsubsection{MuJoCo Ant Test}
 
 \textbf{Type:} Automatic, Functional
 
@@ -499,7 +529,7 @@ Any critical errors found during the linting process create blocking pull reques
 
 
 
-\subsubsection{Mujoco Half Cheetah Test\\}
+\subsubsection{MuJoCo Half Cheetah Test}
 
 \textbf{Type:} Automatic, Functional
 
@@ -546,7 +576,7 @@ Any critical errors found during the linting process create blocking pull reques
 \end{itemize}
 
 
-\subsubsection{Mujoco Hopper Test\\}
+\subsubsection{MuJoCo Hopper Test}
 
 \textbf{Type:} Automatic, Functional
 
@@ -573,7 +603,7 @@ Any critical errors found during the linting process create blocking pull reques
     \item \textbf{Reset Function Test:} Similar to Half Cheetah or Ant test, but the input includes modifying \texttt{qpos}, \texttt{qvel}, and step count before resetting.
 \end{itemize}
 
-\subsubsection{Mujoco Humanoid Standup Test\\}
+\subsubsection{MuJoCo Humanoid Standup Test}
 
 \textbf{Type:} Automatic, Functional
 
@@ -595,7 +625,7 @@ Any critical errors found during the linting process create blocking pull reques
 \end{itemize}
 
 
-\subsubsection{Mujoco Inverted Double Pendulum Test\\}
+\subsubsection{MuJoCo Inverted Double Pendulum Test}
 
 \textbf{Type:} Automatic, Functional
 
@@ -617,7 +647,7 @@ Any critical errors found during the linting process create blocking pull reques
 \end{itemize}
 
 
-\subsubsection{Mujoco Inverted Pendulum Test\\}
+\subsubsection{MuJoCo Inverted Pendulum Test}
 
 \textbf{Type:} Automatic, Functional
 
@@ -639,7 +669,7 @@ Any critical errors found during the linting process create blocking pull reques
 \end{itemize}
 
 
-\subsubsection{Mujoco Reacher Test\\}
+\subsubsection{MuJoCo Reacher Test}
 
 \textbf{Type:} Automatic, Functional
 
@@ -785,7 +815,16 @@ M6 & \hyperref[github_actions]{FR-SLN4}, \hyperref[software_engineering_practice
 
 \section{Code Coverage Metrics}
 
+The image below displays code coverage report metrics for TPG. This is specific to the files that our team have unit tested. The code coverage for the existing TPG module are lower as there was a large amount of existing prewritten code, and the tests that have been written are specific to only a couple crucial TPG functions. The MuJoCo module which we have implemented ourselves has a much higher code coverage, as it was solely written by our team. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{img/code_coverage.png}
+    \caption{Example of a Numerical Computation Test}
+  \end{figure}
+
 \bibliographystyle{plainnat}
+
 \bibliography{../../refs/References}
 
 \newpage{}
@@ -854,7 +893,6 @@ M6 & \hyperref[github_actions]{FR-SLN4}, \hyperref[software_engineering_practice
           has not been merged yet and there'd be quite a lot of merge conflicts.
 \end{itemize}
 
-
 \section*{Appendix --- Reflection}
 
 The information in this section will be used to evaluate the team members on the
@@ -865,11 +903,25 @@ graduate attribute of Reflection.
 \begin{enumerate}
   \item What went well while writing this deliverable? 
 
-  One part that went well for this deliverable is that valuating the functional and non functional requirements was relatively simple, as we were able to trace it back to our VNV plan and SRS report.
+  One part that went well for this deliverable is that valuating the functional and non functional requirements was relatively simple, as we were able to trace it back to our VNV plan and SRS report, which was relatively straightforward due to the clear traceability between the VnV Plan, the SRS report, and the implemented tests. The team was able to match crucial requirements to relevant test cases, ensuring that all functional requirements, such as MuJoCo integration, experiment visualization, and CI/CD pipeline functionality, were validated. For example, the functional requirements for MuJoCo integration (FR-SLN1 and FR-SLN2) were tested by running the environments and verifying their compatibility with the TPG framework, while the CI/CD pipeline requirements (FR-SLN4, FR-SLN5, and FR-SLN6) were validated through automated builds, unit tests, and linting checks. This goes for non-functional requirements, such as usability, maintainability, and compliance, which were evaluated through proper testing - including the implementation of VSCode Dev Containers to standardize the development environment and the integration of Clang-Tidy and Clang-Format to enforce coding standards. The team was able to confidently verify that the fundamental requirements were met, ensuring the project's reliability and functionality. Our team believes that we were able to provide clear evidence of the system's compliance with the specified requirements while writing this deliverable.
+
+
   \item What pain points did you experience during this deliverable, and how
     did you resolve them?
+
+    Writing out the specifications for the unit tests and revising the similar section in VnV plan, while mapping unit tests to their specific modules was relatively challenging. It was challenging because it required a deeper understanding of both the TPG project's structure and the expected behavior of each module. 
+
+    Another significant challenge was developing code coverage metrics for C++ for the project. Due to mismatching libraries and compiler versions, generating accurate code coverage reports proved to be difficult. The team encountered issues with compatibility between the coverage tools and the build system, which often resulted in errors generating code coverage reports.
+
   \item Which parts of this document stemmed from speaking to your client(s) or
   a proxy (e.g. your peers)? Which ones were not, and why?
+  
+  The usability testing section was directly informed by conversations with our client's graduate students, who provided valuable feedback on documentation clarity, logging functionality, and parameter customization. Their ratings (10/10 for installation experience, 9/10 for logging accuracy) and specific suggestions (clarifying CSV file naming, relocating YAML files) shaped our assessment of the system's usability.
+
+  The MuJoCo integration and performance sections were based on technical evaluations conducted in collaboration with Dr. Kelly's team, who provided expertise on expected agent behaviors and numerical precision requirements. Their involvement ensured our testing addressed research-relevant concerns rather than just technical functionality.
+
+  Sections covering CI/CD pipeline and software engineering practices were developed primarily through our team's technical assessment, with minimal client input. This was appropriate as these components primarily serve developer needs rather than research objectives, and our team had sufficient expertise to evaluate them independently.
+
   \item In what ways was the Verification and Validation (VnV) Plan different
   from the activities that were actually conducted for VnV?  If there were
   differences, what changes required the modification in the plan?  Why did
@@ -878,6 +930,14 @@ graduate attribute of Reflection.
   predict a feasible amount of effort and the right tasks needed to build the
   evidence that demonstrates the required quality?  (It is expected that most
   teams will have had to deviate from their original VnV Plan.)
+  
+  Our VnV activities deviated from the original plan in several key areas. First, we initially planned for comprehensive automated testing across all MuJoCo environments, but discovered that visual inspection by domain experts was more effective for validating agent behaviors. The complexity of reinforcement learning outcomes made it difficult to define automated pass/fail criteria, requiring us to rely more heavily on manual validation.
+
+  Second, our usability testing became more structured than originally planned. Following feedback from Revision 0, we implemented formal surveys and specific task-based evaluations rather than the ad-hoc approach initially outlined. This change improved the quality of feedback and provided more actionable insights.
+
+  Third, we underestimated the effort required for cross-platform compatibility testing. The diversity of development environments among researchers necessitated more extensive testing than anticipated, leading us to implement containerization solutions that weren't in the original plan.
+
+  These changes occurred primarily due to our initial unfamiliarity with the research domain and underestimation of the complexity of validating reinforcement learning systems. In future projects, we would anticipate similar challenges by consulting domain experts earlier in the planning process and allocating more resources to areas requiring specialized knowledge.
 \end{enumerate}
 
 \end{document}

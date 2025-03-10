@@ -38,6 +38,9 @@ Example:
     tpg-plot-evolve.py best_fitness
 '''
 
+log_dir = "logs"
+plot_dir = "plots"
+
 def get_unique_filename(base_filename):
     """
     Generates a unique filename by appending an increment if the file already exists.
@@ -49,15 +52,15 @@ def get_unique_filename(base_filename):
     counter = 1
     new_filename = base_filename
     
-    while os.path.exists(new_filename):
+    while os.path.exists(f"{plot_dir}/{new_filename}"):
         new_filename = f"{filename}_{counter}{ext}"
         counter += 1
     
     return new_filename
 
-def get_csv_columns(file):
+def get_csv_columns(filepath):
     """Extracts column names from a CSV file."""
-    with open(file, newline="", encoding="utf-8") as file:
+    with open(filepath, newline="", encoding="utf-8") as file:
         reader = csv.reader(file)
         column_names = next(reader)
         return column_names[1:]
@@ -82,7 +85,9 @@ def plot_generations_single(csv_files, column_name, pdf = None):
     # start processing the listed csv files
     for idx, csv_file in enumerate(csv_files):
         try:
-            df = pd.read_csv(csv_file)
+            # Use full path to read the CSV file
+            full_path = os.path.join(log_dir, csv_file)
+            df = pd.read_csv(full_path)
             if 'generation' not in df.columns:
                 print(f"Skipping {csv_file}: missing 'generation' column")
                 continue
@@ -107,7 +112,7 @@ def plot_generations_single(csv_files, column_name, pdf = None):
             
         except Exception as e:
             print(f"Error processing {csv_file}: {str(e)}")
-    
+
     if not valid_files:
         print("No valid CSV files with required columns found!")
         return
@@ -135,18 +140,22 @@ def plot_generations_single(csv_files, column_name, pdf = None):
         output_filename += ".pdf"
 
         # if output file already exists, add a number in the end
-        output_filename = get_unique_filename(output_filename)
+        output_filename =  f"{plot_dir}/{get_unique_filename(output_filename)}"
 
-        plt.savefig(output_filename, bbox_inches='tight')
+        plt.savefig(output_filename)
         print(f"Plot saved to '{output_filename}'")
 
     plt.close()
 
 def plot_generations_multiple(csv_files, column_names):
+    # Get prefix from the first file - use basename to handle subdirectory structure
+    first_file = os.path.basename(csv_files[0]) if csv_files else ""
+    prefix = first_file.split('.')[0] if first_file else ""
 
-    prefix = csv_files[0].split('.')[0] if csv_files else ""
+    if not os.path.exists(plot_dir):
+        os.makedirs(plot_dir)
 
-    output_filename = get_unique_filename(f"{prefix}_all_vs_generations.pdf")
+    output_filename = plot_dir + "/" + get_unique_filename(f"{prefix}_all_vs_generations.pdf")
 
     with PdfPages(output_filename) as pdf:
         for column_name in column_names:
@@ -171,24 +180,45 @@ if __name__ == "__main__":
     if csv_key.startswith("all-"):
         prefix = csv_key[4:]  # extract part after "all-"
         if prefix in prefixes:
-            csv_files = glob.glob(f"{prefix}.*.*.csv")
+            # Use direct path construction - don't rely on chdir
+            prefix_dir = os.path.join(log_dir, prefix)
+            
+            if not os.path.exists(prefix_dir):
+                raise ValueError(f"Subdirectory '{prefix}' not found in {log_dir}")
+            
+            csv_files = [f for f in os.listdir(prefix_dir) if f.endswith('.csv')]
+            if not csv_files:
+                print(f"No CSV files found in {prefix_dir}")
+                sys.exit(1)
+                
+            # Store paths relative to log_dir
+            csv_files = [os.path.join(prefix, f) for f in csv_files]
         else:
             raise ValueError(f"Invalid prefix '{prefix}'. Expected one of {prefixes}.")
     else:
-        csv_files = [f"{f.strip()}.csv" if not f.strip().lower().endswith(".csv") else f.strip()
-                    for f in args.csv_files.split(',')]
-
-        # ensure all files have the same valid prefix
-        file_prefixes = {f.split('.')[0].lower() for f in csv_files}
-        if len(file_prefixes) > 1 or not file_prefixes.issubset(prefixes):
-            raise ValueError(f"All files must have the same prefix, but found: {file_prefixes}")
+        # Extract files and determine their prefixes
+        raw_files = [f.strip() for f in args.csv_files.split(',')]
+        csv_files = []
+        
+        for f in raw_files:
+            if not f.lower().endswith(".csv"):
+                f = f"{f}.csv"
+                
+            # Extract prefix from filename
+            prefix = f.split('.')[0].lower()
+            if prefix not in prefixes:
+                raise ValueError(f"File '{f}' doesn't have a valid prefix. Expected one of {prefixes}.")
+            
+            # Store with subdirectory
+            csv_files.append(os.path.join(prefix, f))
 
         csv_files = list(set(csv_files))  # remove duplicates
-
+    
     valid_files = []
     for f in csv_files:
-        if not os.path.exists(f):
-            print(f"Warning: File '{f}' not found")
+        full_path = os.path.join(log_dir, f)
+        if not os.path.exists(full_path):
+            print(f"Warning: File '{full_path}' not found")
         else:
             valid_files.append(f)
     
@@ -200,10 +230,12 @@ if __name__ == "__main__":
 
     try:
         if column_name == "all":
-            column_names = get_csv_columns(valid_files[0])
+            # Get columns from the first valid file using full path
+            full_path = os.path.join(log_dir, valid_files[0])
+            column_names = get_csv_columns(full_path)
             plot_generations_multiple(valid_files, column_names)
         else:
-            plot_generations_single(valid_files, args.column_name)
+            plot_generations_single(valid_files, column_name)
     except Exception as e:
         print(f"Error: {str(e)}")
         sys.exit(1)
