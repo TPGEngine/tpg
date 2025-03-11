@@ -166,13 +166,13 @@ Removes the directory associated with the specified environment.
 tpg clean inverted_pendulum
 ```
 
-**Kill the evolution of an experiment**
+**Kill the Evolution of an Experiment:**
 
 ```bash
 tpg kill <env>
 ```
 
-The clean command:
+The kill command:
 
 Kills the processes running the specified environment, or kills all running processes if no environment is specified.
 
@@ -184,6 +184,31 @@ Kills the processes running the specified environment, or kills all running proc
 
 ```bash
 tpg kill inverted_pendulum
+```
+
+**Enter Debug Mode:**
+
+```bash
+tpg debug <env> -s 
+```
+
+The debug command:
+
+Creates an OpenGL GDB window that will allow for debugging of the environment.
+
+**Arguments:**
+
+- env (str): The target environment
+
+**Options:**
+
+- (-s) seed (int): Replaying a specific seed for that environment (default: 42)
+- (--seed-aux) auxillary seed (int): An auxiliary seed (default: 42) used in the replay; its exact role is determined by the underlying experiment logic.
+
+**Example:**
+
+```bash
+tpg debug inverted_pendulum
 ```
 
 ## Troubleshooting

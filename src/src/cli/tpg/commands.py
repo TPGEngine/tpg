@@ -225,3 +225,59 @@ def kill(ctx: click.Context, env : str):
         click.echo("Successfully killed processes.")
     except Exception as e:
         click.echo(f"Unexpected error: {e}")
+
+@click.command(help="Debug a given environment")
+@click.argument("env")
+@click.option("-s", "--seed", help="Random seed", default=42)
+@click.option("--seed-aux", help="Auxillary seed", default=42)
+@click.pass_context
+def debug(ctx: click.Context, env: str, seed : int, seed_aux : int):
+    """Debug a given environment"""
+    
+    # Fetch the hyperparameters for the environment
+    hyper_parameters = ctx.obj["hyper_parameters"]
+    TPG = ctx.obj["tpg"]
+    
+    env_dir = helpers.create_environment_directories(TPG, env)
+    
+    # Change working directory to environment directory
+    os.chdir(env_dir)
+    
+    executable = os.path.join(TPG, "build", "release", "experiments", "TPGExperimentMPI")
+    
+    # Build debugs command
+    cmd = [
+        "mpirun", 
+        "--oversubscribe",
+        "-np", str(2),
+        "xterm",
+        "-hold",
+        "-e",
+        "gdb",
+        "-ex",
+        "run",
+        "--args",
+        executable,
+        f"parameters_file={hyper_parameters[env]}",
+        f"seed_tpg={42}",
+        f"n_root=10", 
+        f"n_root_gen=10",
+    ]
+        
+    stdout_file = f"logs/misc/tpg.{seed}.{seed_aux}.replay.std"
+    stderr_file = f"logs/misc/tpg.{seed}.{seed_aux}.replay.err"
+        
+    click.echo(f"Launching MPI run with command:\n{' '.join(cmd)}")
+    click.echo(f"Output will be written to {stdout_file} (stdout) and {stderr_file} (stderr).")
+    
+    try:
+        with open(stdout_file, 'w') as stdout, open(stderr_file, 'w') as stderr:
+            click.echo(f"Running debug for seed {seed_aux}...")
+            # Use subprocess.run() to wait for completion instead of Popen
+            result = subprocess.run(cmd, stdout=stdout, stderr=stderr)
+            if result.returncode != 0:
+                click.echo(f"Warning: Process for seed {seed_aux} exited with code {result.returncode}")
+            else:
+                click.echo(f"Debug for seed {seed_aux} completed successfully")
+    except OSError as e:
+        raise click.ClickException(f"Failed to start debug: {e}")
