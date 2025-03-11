@@ -19,3 +19,6 @@ def cli(ctx: click.Context):
 cli.add_command(commands.evolve)
 cli.add_command(commands.plot)
 cli.add_command(commands.replay)
+cli.add_command(commands.clean)
+cli.add_command(commands.kill)
+cli.add_command(commands.debug)

@@ -2,6 +2,8 @@
 #define sequence_comparisons_h
 
 #include <bzlib.h>
+#include <cmath>
+#include <numeric>
 
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
