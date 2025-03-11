@@ -9,6 +9,7 @@
 #include <boost/iostreams/filter/gzip.hpp>
 #include <boost/iostreams/filtering_streambuf.hpp>
 #include <boost/math/statistics/bivariate_statistics.hpp>
+#include <vector>
 
 /******************************************************************************/
 double MeanSquaredError(std::vector<double>& targets,
