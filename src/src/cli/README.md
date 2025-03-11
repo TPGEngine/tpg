@@ -203,7 +203,7 @@ Creates an OpenGL GDB window that will allow for debugging of the environment.
 **Options:**
 
 - (-s) seed (int): Replaying a specific seed for that environment (default: 42)
-- (--seed-aux) auxillary seed (int): An auxiliary seed (default: 42) used in the replay; its exact role is determined by the underlying experiment logic.
+- (--seed-aux) auxillary seed (int): An auxiliary seed (default: 42) used in the debug; its exact role is determined by the underlying experiment logic.
 
 **Example:**
 
