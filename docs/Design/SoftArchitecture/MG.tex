@@ -94,14 +94,14 @@ This section records information for easy reference.
 
 Decomposing a system into modules is a commonly accepted approach to developing
 software.  A module is a work assignment for a programmer or programming
-team~\citep{ParnasEtAl1984}.  We advocate a decomposition
-based on the principle of information hiding~\citep{Parnas1972a}.  This
+team.  We advocate a decomposition
+based on the principle of information hiding.  This
 principle supports design for change, because the ``secrets'' that each module
 hides represent likely future changes.  Design for change is valuable in SC,
 where modifications are frequent, especially during initial development as the
 solution space is explored.  
 
-Our design follows the rules layed out by \citet{ParnasEtAl1984}, as follows:
+Our design follows the rules layed out below:
 \begin{itemize}
 \item System details that are likely to change independently should be the
   secrets of separate modules.
@@ -111,7 +111,7 @@ Our design follows the rules layed out by \citet{ParnasEtAl1984}, as follows:
 \end{itemize}
 
 After completing the first stage of the design, the Software Requirements
-Specification (SRS), the Module Guide (MG) is developed~\citep{ParnasEtAl1984}. The MG
+Specification (SRS), the Module Guide (MG) is developed by the Tangled team. The MG
 specifies the modular structure of the system and is intended to allow both
 designers and maintainers to easily identify the parts of the software.  The
 potential readers of this document are as follows:
@@ -272,7 +272,7 @@ to be implemented.
 \subsubsection{Classic Control Module (\mref{mClassicControl})}
 
 \begin{description}
-\item[Secrets:]Classic Control's data structures (such as disReset, actionTrace, etc…).
+\item[Secrets:]Classic Control's data structures (such as dis\_reset, action\_trace, \href{https://github.com/TPGEngine/tpg/blob/main/src/src/environments/classic_control/ClassicControlEnv.h}{etc…}).
 \item[Services:]Provides an interface between TPG and established for the classic control environments to allow for simulation and comparisons.
 \item[Implemented By:] Existing TPG framework
 \item[Type of Module:] Abstract Object
