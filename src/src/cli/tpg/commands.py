@@ -196,10 +196,9 @@ def clean(ctx: click.Context, env: str):
     """Remove the experiment directory"""
 
     # Fetch the hyperparameters for the environment
-    hyper_parameters = ctx.obj["hyper_parameters"]
     TPG = ctx.obj["tpg"]
     
-    env_dir = helpers.create_environment_directories(TPG, env)
+    env_dir = os.path.join(TPG, "experiments", env)
 
     # Check if the environment directory exists
     if os.path.isdir(env_dir):
@@ -207,7 +206,7 @@ def clean(ctx: click.Context, env: str):
         shutil.rmtree(env_dir)
         click.echo(f"Deleted environment directory: {env_dir}")
     else:
-        click.echo(f"Environment directory not found: {env_dir}")
+        raise click.ClickException(f"Environment directory {env_dir} does not exist.")
 
     click.echo("Cleanup completed.")
 
