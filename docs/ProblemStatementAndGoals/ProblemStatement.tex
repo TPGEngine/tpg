@@ -28,8 +28,8 @@
 9/23/2024 & Richard Li & Made suggestions to Calvyn's sections \\
 9/23/2024 & Calvyn Siong & Implemented feedback \\
 9/23/2024 & Richard Li, Calvyn Siong & Added reflection section \\
+11/03/2025 & Calvyn Siong & Changed goals to reflect feedback appropriately (Introduced more measurable outcomes rather than desired outcomes/methodology) \\
 
-... & ... & ...\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -98,43 +98,41 @@ The capstone project will primarily be based on the existing TPG framework envir
 \section{Goals}
 
 \begin{enumerate} [leftmargin=*]
-    \item \textbf{TPG Framework must adhere to a modern software engineering Dev Ops pipeline}
+    \item \textbf{Improve the maintainability and scalability of the TPG framework by developing better software engineering practises.}
     
-    Set up fully automated CI pipeline to ensure all code changes in the TPG framework are continuously tested, verified and follow proper guidelines
+    \textbf{Measurable Outcomes:}
+    \begin{itemize}
+      \item Implement a CI/CD pipeline to automate testing and validation of code changes.
+      \item Develop unit test coverage for core components of the TPG framework.
+      \item Provide comprehensive documentation for contributors, including setup instructions and contribution guidelines.
+    \end{itemize}
 
+    \textbf{Reasoning:} Ensuring the TPG framework adheres to software engineering best practices will reduce technical debt, streamline collaboration, and enable long-term scalability. This will be critical for improving productivity when working on the TPG framework.
 
-\textbf{Measurable Outcomes: 
-} To accomplish this goal, there should be a complete integration of a CI tool such as Github Actions or Gitlab CI. The CI pipeline should be invoked when changes are made to the framework via new PRs and should not result in blocking errors (either accept or reject changes after CI pipeline analyzes changes). 
-
-\textbf{Reasoning: } Establishing a CI pipeline will standardize software development workflows, reduce human error, and improve code reliability. It ensures that the framework is stable with each update, promoting scalability and maintainability
-
-\item \textbf{ The TPG Framework should be well tested}
-
-Develop a comprehensive testing suite for the TPG framework, including unit tests, to ensure major components are thoroughly validated and code coverage is maximized.
-
-\textbf{Measurable Outcomes:
-}To accomplish this goal, unit and integration tests will be implemented for core TPG functions, ideally hitting at least 80\% code coverage (subject to change after further analysis). The tests must be able to be run as part of the CI pipeline, ensuring that all functionality remains valid after code changes.
-
-
-\textbf{Reasoning:} Introducing a well-structured testing suite is critical for ensuring the reliability and correctness of the TPG framework. Unit tests will verify that individual components behave as expected, and adding integration tests will confirm the system functions correctly as a whole. High test coverage ensures that potential issues are caught early, reducing future bugs and improving maintainability. This goal also aligns with the project’s emphasis on adopting best practices in software engineering.
 
 \item \textbf{The TPG framework must have an Agent-Environment Interface between itself and MuJoCo}
 
-Develop a robust interface that allows the TPG framework to communicate and control robotic agents within the MuJoCo physics engine.
 
-\textbf{Measurable Outcomes:
-} To accomplish this goal,  the TPG framework should contain a fully functional interface for a basic agent (e.g., a program that controls a simple joint robotic arm) in MuJoCo. By the end of the project, this can be further expanded to having the interface to support more complex agents.
+    \textbf{Measurable Outcomes:}
+    \begin{itemize}
+      \item Develop an interface between TPG and the MuJoCo physics engine to support agent-environment interactions.
+      \item Successfully deploy TPG agents in at least three distinct MuJoCo environments.
+    \end{itemize}
 
 \textbf{Reasoning:} This interface will enable the TPG framework to be tested in more realistic and complex environments. Successful integration with MuJoCo will validate TPG’s performance in a cutting-edge robotics simulator, essential for showcasing its real-world capabilities. Furthermore, the current testing environment for TPG is stationary (all states are known/given), and integrating with Mujoco enables for testing with dynamic environments, where the agents will have to change over time.
 
 
 \item \textbf{The TPG Integration in MuJoCo should have determinable behavior when ran}
 
-Perform a series of experiments to evaluate the behavior and performance of agents controlled by the TPG algorithm within the MuJoCo environment.
 
-\textbf{Measurable outcomes:} Analyze and record key metrics such as agent performance, model selection process, task success rate, and behavior patterns in various scenarios. 
+\textbf{Measurable Outcomes:}
+    \begin{itemize}
+    \item Provide the capacity to generate a series of experiments to evaluate the behavior and performance of agents controlled by the TPG algorithm within any specified MuJoCo environment.
+      \item Quantify task success rates and fitness levels for TPG agents in MuJoCo environments.
+      \item Compare efficiency of TPG experiments in dynamic environments to static environments.
+    \end{itemize}
 
-\textbf{Reasoning:} Extending upon the previous goal, these experiments will provide insights into how well TPG can control complex agents in a physics-based simulator like MuJoCo. Understanding the agent’s behavior in a dynamic environment will be essential for evaluating the practical applicability of TPG, similar to the previous goal. 
+\textbf{Reasoning:} Extending upon the previous goal, these experiments will provide insights into how well TPG can control complex agents in a physics-based simulator like MuJoCo. Understanding the agent’s behavior in a dynamic environment will be essential for evaluating the practical applicability of TPG, similar to the previous goal.  Demonstrating TPG’s effectiveness in dynamic environments will also validate its potential for real-world applications and future research/development decisions.
 
 
 \end{enumerate}
@@ -148,7 +146,7 @@ Perform a series of experiments to evaluate the behavior and performance of agen
 
 
 
-    \begin{enumerate} [leftmargin=*]
+\begin{enumerate} [leftmargin=*]
         \item \textbf{The TPG framework is integrated with additional Robotics Simulators}
 
 Extend the agent-environment interface to support additional simulators
@@ -158,13 +156,19 @@ Extend the agent-environment interface to support additional simulators
 
 
 
-          \item \textbf{The TPG framework is linked to a User-Friendly GUI for Experiment Management}
+\item \textbf{The TPG framework is linked to a User-Friendly GUI for Experiment Management}
           
 Create a graphical user interface (GUI) for researchers to manage, run, and visualize experiments within the TPG framework.
 
 \textbf{Reasoning:} A user-friendly GUI would make the TPG framework more accessible and easier to use for the stakeholders involved. This could result in more efficient usage of the framework.
 
-    \end{enumerate}
+\item \textbf{Enable parallel execution of TPG agents across multiple MuJoCo environments.}
+
+Successfully run TPG agents with $\geq 2$ distinct MuJoCo environments simultaneously.
+
+\textbf{Reasoning:} Supporting concurrent experimentation in multiple environments would test TPG's scalability and resource efficiency. The ability to multi task reinforcement learning would validate TPG's readiness for more complex systems.
+
+\end{enumerate}
 
 \section{Challenge Level and Extras}
 
