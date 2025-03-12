@@ -48,7 +48,9 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\textbf{Date}} & {\textbf{Revision}} & {\textbf{Notes}}\\
 \midrule
-Oct. 9, 2024 & 0.0 & Intial draft of SRS document.\\
+10/9/2024 & 1.0 & Intial draft of SRS document.\\
+3/11/2025 & 1.1 & Modified functional requirements based on feedback\\
+
 % Date 2 & 1.1 & Notes\\
 \bottomrule
 \end{tabularx}
@@ -515,17 +517,17 @@ Relation:
   \begin{itemize}
     \item \textbf{Rationale:} Visualizing the experiment from test data will allow for verification of the simulator and interface compatibility.
   \end{itemize}
-\item \label{FR-3} \textbf{FR-3:} The system shall have an integrated CI/CD pipeline.
+  \item \label{FR-3} \textbf{FR-3:} The system shall have an integrated CI/CD pipeline.
   \begin{itemize}
     \item \textbf{Rationale:} To have a good workflow environment for the development of the project, a CI/CD pipeline is a beneficial way to do so.
   \end{itemize}
-\item \label{FR-4} \textbf{FR-4:} The system shall automatically run test cases once a new code change has been detected in the main branch.
+\item \label{FR-4} \textbf{FR-4:} The system shall automatically verify code changes to ensure they meet quality standards before integration.
+  \begin{itemize}
+    \item \textbf{Rationale:} Maintaining code quality is essential for a research framework that will be used and expanded upon in the future.
+  \end{itemize}
+\item \label{FR-5} \textbf{FR-5:} The system shall automatically run test cases once a new code change has been detected in the main branch.
   \begin{itemize}
     \item \textbf{Rationale:} This is to ensure that all test cases pass when a new code update has been implemented and breakage of code or functionality is not all introduced.
-  \end{itemize}
-\item \label{FR-5} \textbf{FR-5:} The system shall be automatically compiled and built once all automated test cases have passed.
-  \begin{itemize}
-    \item \textbf{Rationale:} Once all test cases have passed, the system can safely ensure that the update can be implemented into the code.
   \end{itemize}
 \item \label{FR-6} \textbf{FR-6:} The system shall adhere to SOLID code principles and the Google C++ Style Guide by enforcing:
   \begin{itemize}
@@ -537,11 +539,7 @@ Relation:
 \begin{itemize}
   \item \textbf{Rationale:} This is to allow for easy maintainability of the code. As this is a research project, the people working on the project will be constantly changing. Adhering to these practices minimizes development hassle.
 \end{itemize}
-\item \label{FR-7} \textbf{FR-7:} The system shall perform automatic code linting before building the project.
-\begin{itemize}
-  \item \textbf{Rationale:} Code linting will allow for universal and consistent formatting of code within the project. 
-\end{itemize}
-\item \label{FR-8} \textbf{FR-8:} The system shall provide a well-defined interface for integrating new experiments from the simulator, ensuring that new experiments can be implemented and deployed without requiring modifications to the core system architecture.
+\item \label{FR-8} \textbf{FR-7:} The system shall provide a well-defined interface for integrating new experiments from the simulator, ensuring that new experiments can be implemented and deployed without requiring modifications to the core system architecture.
   \begin{itemize}
     \item \textbf{Rationale:} This is important as the system should not be dependent on the experiments being simulated, rather the interface shall be able to adapt easily to newly introduced experiments. 
   \end{itemize}
@@ -1048,15 +1046,13 @@ At this point, there are no additional tasks or requirements needed for the proj
     \hline
     \hyperref[FR-3]{FR-3} & Implementing CI/CD pipeline & Test: Validate automatic pipeline execution on commits & Supports \hyperref[MS-A1]{MS-A1} \\
     \hline
-    \hyperref[FR-4]{FR-4} & Automated testing of new code changes & Test: Ensure all test cases run on code update & Depends on \hyperref[FR-3]{FR-3} \\
+    \hyperref[FR-4]{FR-4} & Automatic code change verification before integration & Test: Check system builds successfully and code changes meet predetermined standard & Depends on \hyperref[FR-5]{FR-5} \\
     \hline
-    \hyperref[FR-5]{FR-5} & Automatic build and compilation after tests pass & Test: Check system build success after all tests pass & Depends on \hyperref[FR-4]{FR-4} \\
+    \hyperref[FR-5]{FR-5} & Automated testing of new code changes & Test: Ensure all test cases run on code update & Depends on \hyperref[FR-3]{FR-3} \\
     \hline
     \hyperref[FR-6]{FR-6} & Maintainability through SOLID principles and style guides & Code review, static analysis (clang-tidy), test coverage & Supports \hyperref[MS-M2]{MS-M2}, \hyperref[MS-M3]{MS-M3} \\
     \hline
-    \hyperref[FR-7]{FR-7} & Automatic code linting & Test: Verify \texttt{clang-format} enforces code consistency & Supports \hyperref[FR-6]{FR-6} \\
-    \hline
-    \hyperref[FR-8]{FR-8} & Adaptability for new experiments & Test: Add a new experiment and validate system integration & Depends on \hyperref[FR-1]{FR-1}, \hyperref[OE-RIA]{OE-RIA} \\
+    \hyperref[FR-7]{FR-7} & Adaptability for new experiments & Test: Add a new experiment and validate system integration & Depends on \hyperref[FR-1]{FR-1}, \hyperref[OE-RIA]{OE-RIA} \\
     \hline
     % Look and Feel Requirements (LF)
     \hyperref[LFAR1]{LFAR1} & Consistent code formatting and documentation & Code review and static analysis & Supports \hyperref[FR-6]{FR-6}, \hyperref[MS-M2]{MS-M2} \\

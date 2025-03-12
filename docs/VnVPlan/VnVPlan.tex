@@ -33,7 +33,9 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-11/04/2024 & 0.0 & Initial draft of VnV plan.\\
+11/04/2024 & 1.0 & Initial draft of VnV plan.\\
+03/11/2024 & 1.1 & Modified VnV Plan to include unit testing plan and changed summary and objective section based on TA feedback\\
+
 \bottomrule
 \end{tabularx}
 
@@ -109,7 +111,9 @@ Any complex and complicated aspects that may be required to complete an objectiv
 
 The software being tested is the overall workflow of the open-source repository including the interface between the TPG framework and the physics engine environment, MuJoCo.
 The software to be implemented within this repository is an interface that allows for experiments to be run with MuJoCo, a physics-engine simulator. This is in addition to creating a software development pipeline within the repository that allows for an easier development experience as changes are implemented. \\\\
-TPG is a research framework currently being developed by a team led by Dr. Stephen Kelly. The software’s general functions include training agents within the OpenAI Gymnasium environment using reinforcement learning techniques to achieve a certain task. With TPG, the data is outputted through a variety of methods. You may choose to visualize the data within multiple plots or view an OpenGL simulation of the agent with the best performance at the time of running.
+
+The Verification and Validation (VnV) Plan developed by the Tangle team outlines a systematic approach to ensure that the TPG framework with MuJoCo integration meets all specified requirements and functions correctly. The plan details the verification and validation activities, including test methodologies, responsibilities, and success criteria that will be crucial for the project's success. It provides a guideline for evaluating the system's compliance with requirements, design specifications, and stakeholder expectations.
+
 
 \subsection{Objectives}
 
@@ -133,8 +137,16 @@ TPG is a research framework currently being developed by a team led by Dr. Steph
 Tangle should achieve the following objectives:
 \begin{itemize}
 \item Tangle allows TPG to perform reinforcement learning in MuJoCo environments (\href{https://github.com/TPGEngine/tpg/blob/main/docs/SRS/SRS.pdf}{FR-1}).
-\item Tangle should adhere to software engineering standard and practices in the \href{https://www.computer.org/education/bodies-of-knowledge/software-engineering}{Software Engineering Body of Knowledge (SWEBOK)}. This includes requirements for coding style, unit tests, and CI/CD.
+\item Tangle should adhere to standardized software engineering standard and practices in the \href{https://www.computer.org/education/bodies-of-knowledge/software-engineering}{Software Engineering Body of Knowledge (SWEBOK)}. This includes requirements for coding style, unit tests, and CI/CD.
 \item Tangle should be easy to install and run on major operating systems (MacOS, Linux, and Windows).
+\item Define a unit testing strategy that verifies critical functional requirements as well as modules that it applies to 
+\end{itemize}
+
+Out of scope for this VnV Plan:
+\begin{itemize}
+\item Exhaustive testing of previously existing TPG framework code
+\item Security testing beyond basic access control verification
+\item Usability testing with external users beyond the development team and Dr. Kelly's research group
 \end{itemize}
 
 \subsection{Challenge Level and Extras}
