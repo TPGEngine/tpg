@@ -1,7 +1,6 @@
 acmart.cls
 acmart.pdf
 acmguide.pdf
-samples/sample-*.pdf
 *.log
 *.aux
 *.cfg
@@ -27,8 +26,3 @@ samples/sample-*.pdf
 *~
 *.bcf
 *.run.xml
-samples/ACM-Reference-Format.bst
-samples/*.tex
-samples/*.bbx
-samples/*.cbx
-samples/*.dbx

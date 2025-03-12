@@ -18,7 +18,7 @@ BIBLATEXFILES= $(wildcard *.bbx) $(wildcard *.cbx) $(wildcard *.dbx) $(wildcard 
 SAMPLEBIBLATEXFILES=$(patsubst %,samples/%,$(BIBLATEXFILES))
 
 ACMCPSAMPLES= \
-	ResearchReport/ResearchReport.pdf \
+	ResearchReport.pdf \
 
 all:  ${PDF} ALLSAMPLES
 
@@ -48,25 +48,19 @@ acmguide.pdf: $(PACKAGE).dtx $(PACKAGE).cls
 
 
 ALLSAMPLES: $(SAMPLEBIBLATEXFILES)
-	cd ResearchReport; pdflatex samples.ins; cd ..
-	for texfile in ResearchReport/*.tex; do \
+	for texfile in ../*.tex; do \
 		pdffile=$${texfile%.tex}.pdf; \
 		${MAKE} $$pdffile; \
 	done
 
-samples/%: %
-	cp $^ samples
+$(PACKAGE).cls: $(PACKAGE).cls
+$(PACKAGE)-tagged.cls: $(PACKAGE)-tagged.cls
+ACM-Reference-Format.bst: ACM-Reference-Format.bst
 
-
-samples/$(PACKAGE).cls: $(PACKAGE).cls
-samples/$(PACKAGE)-tagged.cls: $(PACKAGE)-tagged.cls
-samples/ACM-Reference-Format.bst: ACM-Reference-Format.bst
-
-samples/abbrev.bib: ACM-Reference-Format.bst
+abbrev.bib: ACM-Reference-Format.bst
 	perl -pe 's/MACRO ({[^}]*}) *\n/MACRO \1/' ACM-Reference-Format.bst \
 	| grep MACRO | sed 's/MACRO {/@STRING{/' \
-	| sed 's/}  *{/ = /' > samples/abbrev.bib 
-
+	| sed 's/}  *{/ = /' > abbrev.bib 
 
 samples/%.bbx: %.bbx
 samples/%.cbx: %.cbx
@@ -74,8 +68,7 @@ samples/%.dbx: %.dbx
 samples/%.lbx: %.lbx
 
 
-
-ResearchReport/ResearchReport.pdf: ResearchReport/ResearchReport.tex $(SAMPLEBIBLATEXFILES)
+ResearchReport.pdf: ResearchReport.tex $(SAMPLEBIBLATEXFILES)
 	cd $(dir $@) && pdflatex${DEV} $(notdir $<)
 	- cd $(dir $@) && biber $(notdir $(basename $<))
 	cd $(dir $@) && pdflatex${DEV} $(notdir $<)
@@ -92,13 +85,13 @@ docclean:
 	*.ilg *.ind *.out *.lof \
 	*.lot *.bbl *.blg *.gls *.cut *.hd \
 	*.dvi *.ps *.thm *.tgz *.zip *.rpi \
-	ResearchReport/$(PACKAGE).cls \
-	ResearchReport/$(PACKAGE)-tagged.cls \
-	ResearchReport/ACM-Reference-Format.bst \
-	ResearchReport/*.log ResearchReport/*.aux ResearchReport/*.out \
-	ResearchReport/*.bbl ResearchReport/*.blg ResearchReport/*.cut ResearchReport/*.toc \
-	ResearchReport/acm-jdslogo.png \
-	ResearchReport/*.run.xml ResearchReport/*.bcf $(SAMPLEBIBLATEXFILES)
+	ResearchReport(Advanced)/$(PACKAGE).cls \
+	ResearchReport(Advanced)/$(PACKAGE)-tagged.cls \
+	ResearchReport(Advanced)/ACM-Reference-Format.bst \
+	ResearchReport(Advanced)/*.log ResearchReport(Advanced)/*.aux ResearchReport(Advanced)/*.out \
+	ResearchReport(Advanced)/*.bbl ResearchReport(Advanced)/*.blg ResearchReport(Advanced)/*.cut ResearchReport(Advanced)/*.toc \
+	ResearchReport(Advanced)/acm-jdslogo.png \
+	ResearchReport(Advanced)/*.run.xml ResearchReport(Advanced)/*.bcf $(SAMPLEBIBLATEXFILES)
 
 
 clean: docclean
@@ -106,7 +99,7 @@ clean: docclean
 	ResearchReport/*.tex
 
 distclean: clean
-	$(RM)  *.pdf ResearchReport/ResearchReport*.pdf
+	$(RM)  *.pdf ResearchReport*.pdf
 
 #
 # Archive for the distribution. Includes typeset documentation
@@ -121,8 +114,8 @@ zip:  all clean
 distros: all docclean
 	zip -r acm-distro.zip  \
 	acmart.pdf acmguide.pdf samples *.cls ACM-Reference-Format.* \
-	--exclude ResearchReport/ResearchReport*
-	zip -r acmengage-distro.zip ResearchReport/ResearchReport* \
+	--exclude ResearchReport*
+	zip -r acmengage-distro.zip ResearchReport* \
 	ResearchReport/*.bib \
 	acmart.pdf acmguide.pdf  *.cls ACM-Reference-Format.*
 
