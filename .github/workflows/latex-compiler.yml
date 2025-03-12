@@ -33,7 +33,7 @@ jobs:
       - name: Set up LaTeX environment
         run: |
           sudo apt-get update
-          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-science texlive-bibtex-extra texlive-publishers
+          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-science texlive-bibtex-extra texlive-publishers fonts-linuxlibertine
 
       - name: Find modified .tex files
         id: find_tex_files
