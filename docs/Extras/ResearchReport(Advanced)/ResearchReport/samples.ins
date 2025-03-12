@@ -1,0 +1,12 @@
+\def\batchfile{samples.ins}
+\input docstrip
+\keepsilent
+\showprogress
+
+
+\askforoverwritefalse
+
+\generate{%
+  \file{ResearchReport.tex}{\from{samples.dtx}{all,proceedings,sigconf-biblatex}}
+}
+
