@@ -49,17 +49,13 @@ COPY --from=builder /root/.local/bin /root/.local/bin
 COPY --from=builder /usr/local/lib/ /usr/local/lib/
 COPY --from=builder /tpg/build/ /app/build
 COPY --from=builder /tpg/configs/ /app/configs
-COPY --from=builder /tpg/experiments /app/experiments
 COPY --from=builder /tpg/src/cli/ /app/cli
 COPY --from=builder /tpg/src/api/ /app/api
 
+RUN mkdir -p /app/experiments
+
 # Install mpi
 RUN apt-get update && apt-get install -y mpi
-
-ENV MUJOCO=/usr/local/lib/mujoco-3.2.2 \
-    LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${MUJOCO}/lib" \
-    TPG=/app \
-    PATH="/root/.local/bin:${PATH}:${TPG}/scripts/plot:${TPG}/scripts/run"
 
 # Install pipx in this stage so we have the pipx command available
 RUN pip install pipx && pipx ensurepath

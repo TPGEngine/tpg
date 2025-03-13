@@ -1,5 +1,6 @@
 import subprocess
 import asyncio
+import re
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
@@ -26,6 +27,30 @@ async def execute_tpg(cmd):
 
     return output_lines, return_code
 
+def extract_seed_and_pid(log_messages):
+    """
+    Extracts the seed and PID from the given array of log messages.
+
+    Args:
+        log_messages (list): A list of log messages (strings).
+
+    Returns:
+        tuple: A tuple containing the seed and PID as integers, or (None, None)
+               if not found.
+    """
+    seed = None
+    pid = None
+
+    for message in log_messages:
+        # Match for seed and PID in the first message
+        match_seed_pid = re.search(r"seed: (\d+), and PID: (\d+)", message)
+        if match_seed_pid:
+            seed = int(match_seed_pid.group(1))
+            pid = int(match_seed_pid.group(2))
+            break  # Stop searching after finding the seed and PID
+
+    return seed, pid
+
 
 @router.post("/evolve", tags=["experiments"])
 async def evolve():
@@ -39,8 +64,10 @@ async def evolve():
             raise HTTPException(
                 status_code=400, detail=f"TPG evolve failed: {error_message}"
             )
+        
+        seed, pid = extract_seed_and_pid(output_lines)
 
-        response_data = {"status": "evolve", "response": output_lines}
+        response_data = {"seed": seed, "pid": pid}
 
         return JSONResponse(content=response_data)
     except Exception as e:
