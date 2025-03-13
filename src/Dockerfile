@@ -34,57 +34,59 @@ WORKDIR /tpg
 RUN rm -rf build && \
     make optimized 
 
-# Build Python CLI
-RUN pipx ensurepath && \
-    cd src/cli && \
-    pipx install -e .
-
 # api stage
-FROM python:3.12-slim AS api
+FROM ubuntu:24.04 AS api
+
+# install TPGExperimentMPI dependencies
+RUN apt-get update && apt-get install -y \
+    python3-pip \
+    pipx \
+    libboost-all-dev \
+    libcurl4-openssl-dev \
+    libglfw3-dev \
+    libtbb-dev \
+    freeglut3-dev \
+    libosmesa6-dev \
+    libyaml-cpp-dev \
+    libglx-dev \
+    openmpi-bin \
+    libopenmpi-dev
+
+# Create non-root user
+RUN groupadd -r appuser && useradd -r -g appuser -m appuser
 
 WORKDIR /app
 
 # Copy over CLI binaries and build artifacts from the builder stage
-COPY --from=builder /root/.local/bin /root/.local/bin
 COPY --from=builder /usr/local/lib/ /usr/local/lib/
 COPY --from=builder /tpg/build/ /app/build
 COPY --from=builder /tpg/configs/ /app/configs
 COPY --from=builder /tpg/src/cli/ /app/cli
 COPY --from=builder /tpg/src/api/ /app/api
 
-# Create non-root user
-RUN groupadd -r appuser && useradd -r -g appuser -m appuser
+# Create directories and set permissions
+RUN mkdir -p /app/experiments && \
+    chown -R appuser:appuser /app
 
-RUN mkdir -p /app/experiments
+# ONLY NOW switch to non-root user
+USER appuser
 
-# Install mpi
-RUN apt-get update && apt-get install -y mpi
+ENV TPG=/app \
+    MUJOCO=/usr/local/lib/mujoco-3.2.2 \
+    LD_LIBRARY_PATH="/usr/local/lib/mujoco-3.2.2/lib" \
+    PATH="/home/appuser/.local/bin:${PATH}:/tpg/scripts/plot:/tpg/scripts/run"
 
-# Install pipx in this stage so we have the pipx command available
-RUN pip install pipx && pipx ensurepath
+# Install user tools as non-root
+# No need to pip install pipx now - just ensure it's in path
+RUN pipx ensurepath && \
+    echo 'export PATH="$PATH:$HOME/.local/bin"' >> ~/.bashrc
 
-ENV PATH="/root/.local/bin:${PATH}"
-
+# Continue with user-level installations
 WORKDIR /app/cli
-
 RUN pipx install -e .
 
 WORKDIR /app/api
+RUN pipx install uv && \
+    uv sync
 
-ENV TPG=/tpg \
-    MUJOCO=/usr/local/lib/mujoco-3.2.2 \
-    LD_LIBRARY_PATH="/usr/local/lib/mujoco-3.2.2/lib" \
-    PATH="${PATH}:/tpg/scripts/plot:/tpg/scripts/run"
-
-# Now install the uv CLI and sync
-RUN pipx install uv && uv sync
-
-# Set proper ownership
-RUN chown -R appuser:appuser /app /root/.local
-
-# Switch to non-root user
-USER appuser
-
-CMD ["/app/api/.venv/bin/fastapi", "run", "app/main.py", "--port", "80", "--host", "0.0.0.0"]
-
-    
+CMD ["/app/api/.venv/bin/fastapi", "run", "app/main.py", "--port", "8080", "--host", "0.0.0.0"]

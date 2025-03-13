@@ -10,6 +10,8 @@ libarmadillo-dev
 r-base
 r-cran-catools
 r-cran-zoo
+openmpi-bin 
+libopenmpi-dev
 mpi
 git
 vim
