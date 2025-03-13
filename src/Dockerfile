@@ -26,8 +26,8 @@ RUN ARCH=$(uname -m) && \
 
 ENV TPG=/tpg \
     MUJOCO=/usr/local/lib/mujoco-3.2.2 \
-    LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${MUJOCO}/lib" \
-    PATH="${PATH}:${TPG}/scripts/plot:${TPG}/scripts/run"
+    LD_LIBRARY_PATH=/usr/local/lib/mujoco-3.2.2/lib \
+    PATH="${PATH}:/tpg/scripts/plot:/tpg/scripts/run"
 
 # Build TPG 
 WORKDIR /tpg
@@ -52,6 +52,9 @@ COPY --from=builder /tpg/configs/ /app/configs
 COPY --from=builder /tpg/src/cli/ /app/cli
 COPY --from=builder /tpg/src/api/ /app/api
 
+# Create non-root user
+RUN groupadd -r appuser && useradd -r -g appuser -m appuser
+
 RUN mkdir -p /app/experiments
 
 # Install mpi
@@ -60,14 +63,27 @@ RUN apt-get update && apt-get install -y mpi
 # Install pipx in this stage so we have the pipx command available
 RUN pip install pipx && pipx ensurepath
 
+ENV PATH="/root/.local/bin:${PATH}"
+
 WORKDIR /app/cli
 
 RUN pipx install -e .
 
 WORKDIR /app/api
 
+ENV TPG=/tpg \
+    MUJOCO=/usr/local/lib/mujoco-3.2.2 \
+    LD_LIBRARY_PATH="/usr/local/lib/mujoco-3.2.2/lib" \
+    PATH="${PATH}:/tpg/scripts/plot:/tpg/scripts/run"
+
 # Now install the uv CLI and sync
 RUN pipx install uv && uv sync
+
+# Set proper ownership
+RUN chown -R appuser:appuser /app /root/.local
+
+# Switch to non-root user
+USER appuser
 
 CMD ["/app/api/.venv/bin/fastapi", "run", "app/main.py", "--port", "80", "--host", "0.0.0.0"]
 
