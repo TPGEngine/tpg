@@ -45,34 +45,38 @@
 %%
 %%
 \documentclass[sigconf]{acmart}
-%%
-%% \BibTeX command to typeset BibTeX logo in the docs
+
 \AtBeginDocument{%
   \providecommand\BibTeX{{%
     Bib\TeX}}}
+
+\setcopyright{none}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+\pagestyle{plain}
+\settopmatter{printfolios=true,printccs=false, printacmref=false}
 
 %% Rights management information.  This information is sent to you
 %% when you complete the rights form.  These commands have SAMPLE
 %% values in them; it is your responsibility as an author to replace
 %% the commands and values with those provided to you when you
 %% complete the rights form.
-\setcopyright{acmlicensed}
+% \setcopyright{acmlicensed}
 
-\copyrightyear{2025}
-\acmYear{2025}
-\acmDOI{XXXXXXX.XXXXXXX}
-%% These commands are for a PROCEEDINGS abstract or paper.
-\acmConference[Conference acronym 'XX]{Make sure to enter the correct
-  conference title from your rights confirmation email}{June 03--05,
-  2018}{Woodstock, NY}
-%%
-%%  Uncomment \acmBooktitle if the title of the proceedings is different
-%%  from ``Proceedings of ...''!
-%%
-%%\acmBooktitle{Woodstock '18: ACM Symposium on Neural Gaze Detection,
-%%  June 03--05, 2018, Woodstock, NY}
+% \copyrightyear{2025}
+% \acmYear{2025}
+% \acmDOI{XXXXXXX.XXXXXXX}
+% %% These commands are for a PROCEEDINGS abstract or paper.
+% \acmConference[Conference acronym 'XX]{Make sure to enter the correct
+%   conference title from your rights confirmation email}{June 03--05,
+%   2018}{Woodstock, NY}
+% %%
+% %%  Uncomment \acmBooktitle if the title of the proceedings is different
+% %%  from ``Proceedings of ...''!
+% %%
+% %%\acmBooktitle{Woodstock '18: ACM Symposium on Neural Gaze Detection,
+% %%  June 03--05, 2018, Woodstock, NY}
 
-\acmISBN{978-1-4503-XXXX-X/2025/06}
+% \acmISBN{978-1-4503-XXXX-X/2025/06}
 
 %%
 %% Submission ID.
@@ -109,6 +113,10 @@
 
 %%
 %% end of the preamble, start of the body of the document source.
+\setcopyright{none}
+\makeatletter
+\renewcommand\@formatdoi[1]{\ignorespaces}
+\makeatother
 \begin{document}
 
 %%
@@ -232,22 +240,50 @@
 \maketitle
 
 \section{Introduction}
-ACM's consolidated article template, introduced in 2017, provides a
-consistent \LaTeX\ style for use across ACM publications, and
-incorporates accessibility and metadata-extraction functionality
-necessary for future Digital Library endeavors. Numerous ACM and
-SIG-specific \LaTeX\ templates have been examined, and their unique
-features incorporated into this single new template.
+Reinforcement learning (RL) has emerged as a powerful paradigm for 
+training autonomous agents to perform complex tasks. A key challenge 
+in RL is creating agents that can generalize to multiple tasks and 
+environments, a problem known as multi-task learning (MTL). Real-world 
+applications often require agents to adapt to diverse situations, 
+making MTL a critical area of research.
 
-If you are new to publishing with ACM, this document is a valuable
-guide to the process of preparing your work for publication. If you
-have published with ACM before, this document provides insight and
-instruction into more recent changes to the article template.
+Many existing reinforcement learning algorithms struggle with sample 
+inefficiency, difficulty in handling continuous control, and poor 
+generalization when applied to MuJoCo multi-task learning problems. 
+Deep reinforcement learning methods, while powerful, often require vast 
+amounts of training data and can be computationally expensive \cite{Mnih07}. These 
+methods often fail to capture the temporal dependencies and complex dynamics 
+inherent in these environments, leading to sub-optimal performance, especially 
+in partially observable scenarios.
 
-The ``\verb|acmart|'' document class can be used to prepare articles
-for any ACM publication --- conference or journal, and for any stage
-of publication, from review to final ``camera-ready'' copy, to the
-author's own version, with {\itshape very} few changes to the source.
+\subsection{MuJoCo}
+A significant domain for RL research, particularly in robotics, is physics 
+simulation. MuJoCo (Multi-Joint dynamics with Contact) is a widely used physics 
+engine, known for its accurate and efficient simulation of complex dynamics, 
+contact forces, and articulated bodies \cite{Todorov07}. Its ability to simulate realistic 
+physics and provide diverse, challenging control tasks makes MuJoCo an invaluable 
+tool for developing and evaluating reinforcement learning algorithms for robotics. 
+The unique MTL and Single-Task Learning (STL) environments formulated in this work 
+includes partially observable versions of the following 6 widely used RL benchmarks 
+found on Gymnasium's MuJoCo suite \cite{Towers07}: Ant, Half Cheetah, Hopper, Humanoid Standup, 
+Inverted Pendulum, and Inverted Double Pendulum, Figures 1(a) to 1(e).
+
+\begin{figure}[h]
+  \centering
+  \begin{tabular}{cc}
+    \includegraphics[width=0.3\linewidth]{assets/ant} &
+    \includegraphics[width=0.3\linewidth]{assets/half_cheetah} \\
+    (a) Ant & (b) Half Cheetah \\
+    \includegraphics[width=0.3\linewidth]{assets/hopper} &
+    \includegraphics[width=0.3\linewidth]{assets/humanoid_standup} \\
+    (c) Hopper & (d) Humanoid Standup \\
+    \includegraphics[width=0.3\linewidth]{assets/inverted_pendulum} &
+    \includegraphics[width=0.3\linewidth]{assets/inverted_double_pendulum} \\
+    (e) Inverted Pendulum & (f) Inverted Double Pendulum \\
+  \end{tabular}
+  \caption{MuJoCo Environments used in this work}
+  \Description{MuJoCo Environments used in this work}
+\end{figure}
 
 \section{Template Overview}
 As noted in the introduction, the ``\verb|acmart|'' document class can
