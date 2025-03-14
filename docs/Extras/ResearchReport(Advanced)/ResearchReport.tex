@@ -284,19 +284,18 @@ Inverted Pendulum, and Inverted Double Pendulum, Figures ~\ref{fig:mujoco_env}(a
   \Description{MuJoCo Environments used in this work}
 \end{figure}
 
-\section{Motivation}
-As noted in the introduction, the ``\verb|acmart|'' document class can
-be used to prepare many different kinds of documentation --- a
-double-anonymous initial submission of a full-length technical paper, a
-two-page SIGGRAPH Emerging Technologies abstract, a ``camera-ready''
-journal article, a SIGCHI Extended Abstract, and more --- all by
-selecting the appropriate {\itshape template style} and {\itshape
-  template parameters}.
+\subsection{Tangled Program Graphs }
+Tangled Program Graphs (TPG) is an RL framework developed by McMaster University’s Creative Algorithm Lab under the guidance of Dr. Stephen Kelly. It leverages genetic programming principles to evolve agents with the purpose of solving complex tasks in dynamic environments. Traditional RL methods, such as deep reinforcement learning (DRL), often rely on neural networks that require significant computational resources and large datasets for training. \cite{Winkler2025}  In contrast, TPG uses genetic programming to evolve agents that can learn and adapt to their environment through a process of selection, mutation, and crossover. This unique approach allows TPG to achieve competitive performance in RL tasks with better computation efficiency than DRL methods. \cite{Winkler2025}
 
-This document will explain the major features of the document
-class. For further information, the {\itshape \LaTeX\ User's Guide} is
-available from
-\url{https://www.acm.org/publications/proceedings-template}.
+TPG revolves around the concept of emergent modularity, where agents are composed of interconnected programs that map environmental states to actions. These programs are organized into hierarchical structures, known as program graphs, that allow agents to break complex tasks into simpler subtasks. \cite{Kelly21} To incorporate TPG with multi-task learning, an agent will have to be trained to perform multiple tasks sequentially. This is challenging as the agent must balance different objectives and environments while  avoiding catastrophic forgetting (learning a new task causes agent to forget previously learned tasks, effectively wasting progress). \cite{Kelly21} TPG’s hierarchical and modular structure however, is able to tackle this challenge by agents to dynamically adapt to different tasks by “recombining specialized behaviors”. \cite{Kelly21} TPG has been previously used to evolve agents capable of solving six distinct RL benchmarks from OpenAI’s Classic Control suite, including CartPole, Acrobot, and Pendulum. \cite{Kelly21} Currently, TPG is being further developed to gauge it’s capability to apply multi-task learning with more complex Mujoco environments.
+
+
+
+\section{Motivation}
+The primary motivation behind this research and development effort is to enhance the performance and efficiency of TPG in complex environments, specifically within the MuJoCo physics simulation framework. MuJoCo environments, such as Ant, Half Cheetah, and Humanoid Standup, present significant challenges due to their high-dimensional state and action spaces, as well as their dynamic nature. These environments require agents to learn proper control policies that generalize across diverse scenarios, making them ideal benchmarks for evaluating the scalability and adaptability of TPG.
+
+The goal is to both improve performance and increase efficiency. Performance will be measured by the best fitness score achieved by the TPG agent, reflecting its ability to maximize cumulative rewards. Efficiency will be measured by the number of generations required for the agent to converge to an optimal state, which also reflects the time and computational resources needed for training. By integrating dynamic memory and optimizing the evolutionary process, this research aims to reduce the time to learn while maintaining or improving the quality of the learned policies.
+
 
 \section{Research Questions}
 
