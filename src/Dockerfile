@@ -50,7 +50,9 @@ RUN apt-get update && apt-get install -y \
     libyaml-cpp-dev \
     libglx-dev \
     openmpi-bin \
-    libopenmpi-dev
+    libopenmpi-dev \
+    wget \
+    gdb
 
 # Create non-root user
 RUN groupadd -r appuser && useradd -r -g appuser -m appuser
