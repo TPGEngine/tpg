@@ -53,7 +53,9 @@ urlcolor=cyan          % color of external links
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-01/16/2025 & 0.0 & Revision 0\\
+01/16/2025 & 1.0 & Revision 0\\
+03/13/2025 & 1.1 & Modified uses to be consistent among modules based on peer feedback\\
+
 \bottomrule
 \end{tabularx}
 
@@ -180,7 +182,8 @@ The following table is taken directly from the Module Guide document for this pr
 ClassicControlEnv
 
 \subsection{Uses}
-OpenGL (GL/gl.h), GLUT (GL/glut.h), Task Environment (TaskEnv.h)
+The Classic Control Module is responsible for simulating and visualizing classic control tasks, such as cart-pole balancing or pendulum. These tasks provide a standardized environment for evaluating and training the TPG framework, allowing for a baseline assessment of the TPG algorithm. It relies on OpenGL and GLUT for rendering and visualizing the control environments. The module also uses the Task Environment (TaskEnv.h) to define the structure and behavior of the control tasks
+
 
 \subsection{Syntax}
 
@@ -318,7 +321,7 @@ None
 MujocoEnv
 
 \subsection{Uses}
-MuJoCo Framework (mujoco/mujoco.h), Task Environment (TaskEnv.h)
+The MuJoCo Module is developed to simulate complex robotic tasks and physical environments using the MuJoCo physics engine. This module enables the TPG framework to train and evaluate policies in more dynamic environments, such as robotic arm manipulation or humanoid movements. The MuJoCo Module is essential for testing TPG in scenarios that require precise physics simulation and interactions between agents and their environment. The Module uses the MuJoCo Framework (mujoco/mujoco.h) to simulate physical environments and model robotic systems.  It also uses the Task Environment (TaskEnv.h) like ClassicControl to define the tasks and objectives within the MuJoCo environment.
 
 \subsection{Syntax}
 
@@ -445,7 +448,7 @@ None
 The visualization module implements visualization functionality of a TPG experiment with graphs, charts, video playback, and a realtime simulation.
 
 \subsection{Uses}
-The visualization module is used to visualize the results of a TPG experiment while it is running or after the experiemnt has completed. This information contains data pertaining to what is going on in an experiment, and performance metrics.
+The visualization module is used to visualize the results of a TPG experiment while it is running or after the experiment has completed. This information contains data pertaining to what is going on in an experiment, and performance metrics.
 
 \subsection{Syntax}
 
