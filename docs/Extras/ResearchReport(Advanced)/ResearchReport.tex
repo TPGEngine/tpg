@@ -66,9 +66,7 @@
 % \acmYear{2025}
 % \acmDOI{XXXXXXX.XXXXXXX}
 % %% These commands are for a PROCEEDINGS abstract or paper.
-% \acmConference[Conference acronym 'XX]{Make sure to enter the correct
-%   conference title from your rights confirmation email}{June 03--05,
-%   2018}{Woodstock, NY}
+\acmConference[]{Capstone Research Report}{March 2025}{Hamilton, ON, Canada}
 % %%
 % %%  Uncomment \acmBooktitle if the title of the proceedings is different
 % %%  from ``Proceedings of ...''!
@@ -122,7 +120,7 @@
 %%
 %% The "title" command has an optional parameter,
 %% allowing the author to define a "short title" to be used in page headers.
-\title{Enhancing Reinforcement Learning for MuJoCo Tasks with Dynamic Memory in Tangled Program Graphs}
+\title[Dynamic Memory in Tangled Program Graphs]{Enhancing Reinforcement Learning for MuJoCo Tasks with Dynamic Memory in Tangled Program Graphs}
 
 %%
 %% The "author" command and its associated commands are used to define
@@ -176,7 +174,7 @@
 %% other information printed in the page headers. This command allows
 %% the author to define a more concise list
 %% of authors' names for this purpose.
-\renewcommand{\shortauthors}{Trovato et al.}
+% \renewcommand{\shortauthors}{Trovato et al.}
 
 %%
 %% The abstract is a short summary of the work to be presented in the
@@ -266,7 +264,7 @@ tool for developing and evaluating reinforcement learning algorithms for robotic
 The unique MTL and Single-Task Learning (STL) environments formulated in this work 
 includes partially observable versions of the following 6 widely used RL benchmarks 
 found on Gymnasium's MuJoCo suite \cite{Towers07}: Ant, Half Cheetah, Hopper, Humanoid Standup, 
-Inverted Pendulum, and Inverted Double Pendulum, Figures 1(a) to 1(e).
+Inverted Pendulum, and Inverted Double Pendulum, Figures ~\ref{fig:mujoco_env}(a) to ~\ref{fig:mujoco_env}(e).
 
 \begin{figure}[h]
   \centering
@@ -282,10 +280,11 @@ Inverted Pendulum, and Inverted Double Pendulum, Figures 1(a) to 1(e).
     (e) Inverted Pendulum & (f) Inverted Double Pendulum \\
   \end{tabular}
   \caption{MuJoCo Environments used in this work}
+  \label{fig:mujoco_env}
   \Description{MuJoCo Environments used in this work}
 \end{figure}
 
-\section{Template Overview}
+\section{Motivation}
 As noted in the introduction, the ``\verb|acmart|'' document class can
 be used to prepare many different kinds of documentation --- a
 double-anonymous initial submission of a full-length technical paper, a
@@ -299,7 +298,7 @@ class. For further information, the {\itshape \LaTeX\ User's Guide} is
 available from
 \url{https://www.acm.org/publications/proceedings-template}.
 
-\subsection{Template Styles}
+\section{Research Questions}
 
 The primary parameter given to the ``\verb|acmart|'' document class is
 the {\itshape template style} which corresponds to the kind of publication
@@ -324,29 +323,125 @@ The majority of conference proceedings documentation will use the {\verb|acmconf
 \item{\texttt{sigplan}}: Used for SIGPLAN conference articles.
 \end{itemize}
 
-\subsection{Template Parameters}
+\section{Methodology}
 
-In addition to specifying the {\itshape template style} to be used in
-formatting your work, there are a number of {\itshape template parameters}
-which modify some part of the applied template style. A complete list
-of these parameters can be found in the {\itshape \LaTeX\ User's Guide.}
 
-Frequently-used parameters, or combinations of parameters, include:
+This study evaluates task performance parameters such as generation time and 
+fitness level through experiments conducted in their respective MuJoCo environments 
+(see Figure ~\ref{fig:mujoco_env}). The methodology follows a two-phase approach: establishing baselines
+and integrating dynamic memory. We compare between baseline and dynamic memory-enhanced
+experiments that were conducted using statistical plots and TPG-generated data. All
+experiments utilized High Performance Parallel Compute (HPPC) resourcesprovided by the
+Digital Research Alliance of Canada (“The Alliance”). Each experiment was run with three
+random seeds for a three-hour duration.
+
+\subsection{Baseline Experiments}
+We conducted single-task and multi-task experiments using the following MuJoCo environments:
+inverted pendulum, inverted double pendulum, and half-cheetah. Single-task experiments used standardized
+hyperparameters listed in Table ~\ref{tab:hyperparameters}. Each experiment was assigned a specific memory\_size 
+parameter value basedon the dimensionality of the observation space, detailed in Table ~\ref{tab:observation_space}.
+
+\begin{table*}
+  \caption{Hyperparameters for MuJoCo environments, single-task team population, and program population}
+  \label{tab:hyperparameters}
+  \centering
+  \begin{tabular}{llcllcll}
+    \toprule
+    \multicolumn{2}{c}{\textbf{MuJoCo parameters}} & & \multicolumn{2}{c}{\textbf{Team population}} & & \multicolumn{2}{c}{\textbf{Program population}} \\
+    \cmidrule(r){1-2} \cmidrule(lr){4-5} \cmidrule(l){7-8}
+    \textbf{Parameter} & \textbf{Value} & & \textbf{Parameter} & \textbf{Value} & & \textbf{Parameter} & \textbf{Value} \\
+    \midrule
+    Max timestep & 1000 & & Agent (root team) population size & 1000 & & Initial program size & 10 \\
+    Reward control weight & 0.5 & & Initial team size & 1 & & $p_\text{delete}$ & 0.2 \\
+    Number of training evaluations & 20 & & Max team size & 10 & & $p_\text{add}$, $p_\text{swap}$, $p_\text{mutate}$ & 0.25 \\
+    Number of test evaluations & 1 & & $n\_root\_gen$ & 100 & & $mem_\text{min}$ & 2 \\
+    Number of validation evaluations & 0 & & & & & $mem_\text{max}$ & 32 \\
+    & & & & & & $p_\text{mem}$ & 0.0 \\
+    \bottomrule
+  \end{tabular}
+  \caption*{\small \textit{Note:} $n\_root\_gen$ denotes the number of new root teams to create each generation. $p_\text{x}$ in which $x \in \{add, delete, swap, mutate\}$ are the probabilities of adding, deleting, swapping, or mutating instructions within a program. $p_\text{mem}$ is the probability of changing the memory size, $mem_\text{size}$, within the $mem_\text{min}$ and $mem_\text{max}$ interval.}
+\end{table*}
+
+\begin{table}
+  \caption{Observation and action space sizes for the considered problems \cite{gymnasium_mujoco}}
+  \label{tab:observation_space}
+  \begin{tabular}{lll}
+    \toprule
+    \textbf{Environment}&\textbf{Obs.}~$\mathcal{O}$&\textbf{Act.}~$\mathcal{A}$\\
+    \midrule
+    Inverted pendulum & $\mathbb{R}^4$ & [-3, -3]\\
+    Inverted double pendulum & $\mathbb{R}^9$ & [-1, 1]\\
+    Half cheetah & $\mathbb{R}^{17}$ & [-1, 1]\\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+For multi-task experiments, we utilize the same MuJoCo environments. However, the root team size was increased to 3000,
+and $n\_root\_gen$ was increased to 300 to accommodate the added complexity of multi-task learning. Two multi-task
+experiments were conducted:
+
+\begin{enumerate}
+  \item \textbf{Two-environment multi-task:} Inverted pendulum and inverted double pendulum.
+  \item \textbf{Three-environment multi-task:} Inverted pendulum, inverted double pendulum, and half cheetah.
+\end{enumerate}
+
+The initial $mem_\text{size}$ parameter was set to 4 for the two-environment multi-task experiment and 17 for the three-environment
+multi-task experiment.
+
+\subsection{Dynamic Memory Experiments}
+To evaluate the benefits of adaptive memory allocation, we implemented a dynamic memory strategy by increasing the probability
+of changing memory size, $p_\text{mem}$, to 10\% (0.1). The effects of this modification were assessed across the same baseline experiments.
+
 \begin{itemize}
-\item {\texttt{anonymous,review}}: Suitable for a ``double-anonymous''
-  conference submission. Anonymizes the work and includes line
-  numbers. Use with the \texttt{\string\acmSubmissionID} command to print the
-  submission's unique ID on each page of the work.
-\item{\texttt{authorversion}}: Produces a version of the work suitable
-  for posting by the author.
-\item{\texttt{screen}}: Produces colored hyperlinks.
+  \item For single-task experiments, the minimum and maximum values for $mem_\text{size}$ remained fixed at 2 and 32, respectively.
+  \item For multi-task experiments, the minimum and maximum values for $mem_\text{size}$ were dynamically adjusted based on the smallest
+  and largest observation space dimensions among the participating environments.
 \end{itemize}
 
-This document uses the following string as the first command in the
-source file:
-\begin{verbatim}
-\documentclass[sigconf]{acmart}
-\end{verbatim}
+\subsection{Data Collection}
+For each experiment, performance metrics were systematically recorded and extracted from the \texttt{.std} output files,
+then parsed into structured \texttt{.csv} files. These \texttt{.csv} files were categorized into:
+
+\begin{itemize}
+  \item \textbf{Timing Metrics:} Measures of computational timing.
+  \item \textbf{Selection Metrics:} Data on operations used, fitness level, and instruction count.
+  \item \textbf{Replacement Metrics:} Statistics on team and program numbers.
+  \item \textbf{Removal Metrics:} Information on program and team deletions.
+\end{itemize}
+
+Key performance indicators analyzed include:
+
+\begin{itemize}
+  \item \textbf{Best Fitness Score:} The highest fitness score achieved during execution.
+  \item \textbf{Generations to Convergence:} The number of generations required to reach a specified performance threshold.
+  \item \textbf{Effective Program Instructions:} The number of program instructions contributing to the final output.
+\end{itemize}
+
+After data collection, comparative analyses were conducted to evaluate the differences between baseline and dynamic memory configurations
+across both single-task and multi-task experiments. Visualization techniques, including comparative plots, were used to identify performance
+trends and assess the impact of dynamic memory integration.
+
+% In addition to specifying the {\itshape template style} to be used in
+% formatting your work, there are a number of {\itshape template parameters}
+% which modify some part of the applied template style. A complete list
+% of these parameters can be found in the {\itshape \LaTeX\ User's Guide.}
+
+% Frequently-used parameters, or combinations of parameters, include:
+% \begin{itemize}
+% \item {\texttt{anonymous,review}}: Suitable for a ``double-anonymous''
+%   conference submission. Anonymizes the work and includes line
+%   numbers. Use with the \texttt{\string\acmSubmissionID} command to print the
+%   submission's unique ID on each page of the work.
+% \item{\texttt{authorversion}}: Produces a version of the work suitable
+%   for posting by the author.
+% \item{\texttt{screen}}: Produces colored hyperlinks.
+% \end{itemize}
+
+% This document uses the following string as the first command in the
+% source file:
+% \begin{verbatim}
+% \documentclass[sigconf]{acmart}
+% \end{verbatim}
 
 \section{Modifications}
 
@@ -690,36 +785,36 @@ command in the {\bfseries preamble} (before the command
 \end{verbatim}
 
 
-  Some examples.  A paginated journal article \cite{Abril07}, an
-  enumerated journal article \cite{Cohen07}, a reference to an entire
-  issue \cite{JCohen96}, a monograph (whole book) \cite{Kosiur01}, a
-  monograph/whole book in a series (see 2a in spec. document)
-  \cite{Harel79}, a divisible-book such as an anthology or compilation
-  \cite{Editor00} followed by the same example, however we only output
-  the series if the volume number is given \cite{Editor00a} (so
-  Editor00a's series should NOT be present since it has no vol. no.),
-  a chapter in a divisible book \cite{Spector90}, a chapter in a
-  divisible book in a series \cite{Douglass98}, a multi-volume work as
-  book \cite{Knuth97}, a couple of articles in a proceedings (of a
-  conference, symposium, workshop for example) (paginated proceedings
-  article) \cite{Andler79, Hagerup1993}, a proceedings article with
-  all possible elements \cite{Smith10}, an example of an enumerated
-  proceedings article \cite{VanGundy07}, an informally published work
-  \cite{Harel78}, a couple of preprints \cite{Bornmann2019,
-    AnzarootPBM14}, a doctoral dissertation \cite{Clarkson85}, a
-  master's thesis: \cite{anisi03}, an online document / world wide web
-  resource \cite{Thornburg01, Ablamowicz07, Poker06}, a video game
-  (Case 1) \cite{Obama08} and (Case 2) \cite{Novak03} and \cite{Lee05}
-  and (Case 3) a patent \cite{JoeScientist001}, work accepted for
-  publication \cite{rous08}, 'YYYYb'-test for prolific author
-  \cite{SaeediMEJ10} and \cite{SaeediJETC10}. Other cites might
-  contain 'duplicate' DOI and URLs (some SIAM articles)
-  \cite{Kirschmer:2010:AEI:1958016.1958018}. Boris / Barbara Beeton:
-  multi-volume works as books \cite{MR781536} and \cite{MR781537}. A
-  couple of citations with DOIs:
-  \cite{2004:ITE:1009386.1010128,Kirschmer:2010:AEI:1958016.1958018}. Online
-  citations: \cite{TUGInstmem, Thornburg01, CTANacmart}.
-  Artifacts: \cite{R} and \cite{UMassCitations}.
+  % Some examples.  A paginated journal article \cite{Abril07}, an
+  % enumerated journal article \cite{Cohen07}, a reference to an entire
+  % issue \cite{JCohen96}, a monograph (whole book) \cite{Kosiur01}, a
+  % monograph/whole book in a series (see 2a in spec. document)
+  % \cite{Harel79}, a divisible-book such as an anthology or compilation
+  % \cite{Editor00} followed by the same example, however we only output
+  % the series if the volume number is given \cite{Editor00a} (so
+  % Editor00a's series should NOT be present since it has no vol. no.),
+  % a chapter in a divisible book \cite{Spector90}, a chapter in a
+  % divisible book in a series \cite{Douglass98}, a multi-volume work as
+  % book \cite{Knuth97}, a couple of articles in a proceedings (of a
+  % conference, symposium, workshop for example) (paginated proceedings
+  % article) \cite{Andler79, Hagerup1993}, a proceedings article with
+  % all possible elements \cite{Smith10}, an example of an enumerated
+  % proceedings article \cite{VanGundy07}, an informally published work
+  % \cite{Harel78}, a couple of preprints \cite{Bornmann2019,
+  %   AnzarootPBM14}, a doctoral dissertation \cite{Clarkson85}, a
+  % master's thesis: \cite{anisi03}, an online document / world wide web
+  % resource \cite{Thornburg01, Ablamowicz07, Poker06}, a video game
+  % (Case 1) \cite{Obama08} and (Case 2) \cite{Novak03} and \cite{Lee05}
+  % and (Case 3) a patent \cite{JoeScientist001}, work accepted for
+  % publication \cite{rous08}, 'YYYYb'-test for prolific author
+  % \cite{SaeediMEJ10} and \cite{SaeediJETC10}. Other cites might
+  % contain 'duplicate' DOI and URLs (some SIAM articles)
+  % \cite{Kirschmer:2010:AEI:1958016.1958018}. Boris / Barbara Beeton:
+  % multi-volume works as books \cite{MR781536} and \cite{MR781537}. A
+  % couple of citations with DOIs:
+  % \cite{2004:ITE:1009386.1010128,Kirschmer:2010:AEI:1958016.1958018}. Online
+  % citations: \cite{TUGInstmem, Thornburg01, CTANacmart}.
+  % Artifacts: \cite{R} and \cite{UMassCitations}.
 
 \section{Acknowledgments}
 
