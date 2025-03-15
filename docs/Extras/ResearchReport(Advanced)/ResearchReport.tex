@@ -45,6 +45,12 @@
 %%
 %%
 \documentclass[sigconf]{acmart}
+\usepackage{pdfpages}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{float}
+\usepackage{afterpage}
+\usepackage[abs]{overpic}
 
 \AtBeginDocument{%
   \providecommand\BibTeX{{%
@@ -284,6 +290,26 @@ Inverted Pendulum, and Inverted Double Pendulum, Figures ~\ref{fig:mujoco_env}(a
   \Description{MuJoCo Environments used in this work}
 \end{figure}
 
+\subsection{Dynamic memory}
+Dynamic memory plays a crucial role in evolving program graphs, particularly 
+in multi-task learning (MTL), by providing a flexible and adaptive
+mechanism for encoding and processing temporal information. Unlike static memory 
+architectures, which impose fixed storage structures, dynamic memory allows each 
+program within an evolving graph to independently adjust its memory representation 
+based on task demands. This adaptability facilitates more efficient learning and 
+decision-making, ultimately accelerating evolutionary processes.
+
+Dynamic memory within program graphs consists of three primary types:
+\begin{itemize}
+  \item \textbf{Scalar Memory}: Stores single numerical values, useful for tracking individual state variables.
+  \item \textbf{Vector Memory}: Represents data as structured arrays, allowing operations across multiple related values.
+  \item \textbf{Matrix Memory}: Enables higher-dimensional representations, which can encode richer state information 
+  and facilitate more complex transformations.
+\end{itemize}
+
+Each program selects an appropriate memory type based on its computational needs, 
+and mutations can modify both the type and dimensionality of the memory structures over the course of evolution.
+
 \section{Motivation}
 As noted in the introduction, the ``\verb|acmart|'' document class can
 be used to prepare many different kinds of documentation --- a
@@ -443,15 +469,146 @@ trends and assess the impact of dynamic memory integration.
 % \documentclass[sigconf]{acmart}
 % \end{verbatim}
 
-\section{Modifications}
+\section{Baseline Experiments Results}
+This section presents the performance outcomes of the baseline experiments conducted in 
+the MuJoCo environments, including single-task and multi-task scenarios. The evaluation 
+metrics focus on \textbf{Best Fitness Score} and \textbf{Effective Program Instruction Count}, as illustrated in 
+Figures ~\ref{fig:best_fitness} and ~\ref{fig:effective_program}, respectively.
 
-Modifying the template --- including but not limited to: adjusting
-margins, typeface sizes, line spacing, paragraph and list definitions,
-and the use of the \verb|\vspace| command to manually adjust the
-vertical spacing between elements of your work --- is not allowed.
+\subsection{Best Fitness Score Analysis}
+The \textbf{Best Fitness Score} metric, depicted in Figure ~\ref{fig:best_fitness}, provides insights into the overall 
+learning progress of the different experiments. The results highlight several key observations:
 
-{\bfseries Your document will be returned to you for revision if
-  modifications are discovered.}
+\begin{itemize}
+  \item \textbf{Single-task environments}: The fitness scores for Half Cheetah and Inverted Pendulum show that while both static and dynamic memory setups improve over time, dynamic memory consistently achieves higher fitness scores faster.
+  \item \textbf{Multi-task environments}: Dynamic memory demonstrates a clear advantage, particularly in the Two- and Three-task multitask setups. It outperforms static memory across generations, highlighting its ability to adapt more effectively to increasing task complexity.
+\end{itemize}
+
+\subsection{Program Instruction Count Analysis}
+Figure ~\ref{fig:effective_program} presents the results of the \textbf{Effective Program Instruction Count}, a key metric reflecting the number of active 
+program instructions contributing to task performance.
+
+\begin{itemize}
+  \item \textbf{Single-task environments}: Dynamic environments show more fluctuations in active instruction counts, indicating frequent adaptation for optimization. In contrast, static environments stabilize early, limiting flexibility.
+  \item \textbf{Multi-task environments}: The Effective Program Instruction Count is significantly higher in dynamic multi-task setups, suggesting better management of complex learning structures. Static environments struggle to scale efficiently.
+\end{itemize}
+
+\afterpage{
+  \clearpage
+  \begin{figure*}[t]
+    \centering
+    \scalebox{0.87}{
+    \begin{tabular}{p{1\linewidth}}
+      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/half_cheetah.pdf}
+        \put(160,20){\color{black!50}Static Half Cheetah} % Adjust position
+        \put(-15,50){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
+      \end{overpic}
+      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/half_cheetah.pdf}
+        \put(145,20){\color{black!50}Dynamic Half Cheetah} % Adjust position
+      \end{overpic}
+    \end{tabular}
+    }
+
+    \scalebox{0.87}{
+    \begin{tabular}{p{1\linewidth}}
+      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/ip.pdf}
+        \put(160,20){\color{black!50}\shortstack[r]{Static \\ Inverted Pendulum}} % Adjust position
+        \put(-15,50){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
+      \end{overpic}
+      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/ip.pdf}
+        \put(160,20){\color{black!50}\shortstack[r]{Dynamic \\ Inverted Pendulum}} % Adjust position
+      \end{overpic}
+    \end{tabular}
+    }
+
+    \scalebox{0.87}{
+    \begin{tabular}{p{1\linewidth}}
+      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/multitask_general.pdf}
+        \put(130,20){\color{black!50}\shortstack[r]{Static \\ Two-Environment Multitask}} % Adjust position
+        \put(-15,50){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
+      \end{overpic}
+      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/multitask_general.pdf}
+        \put(125,20){\color{black!50}\shortstack[r]{Dynamic \\ Two-Environment Multitask}} % Adjust position
+      \end{overpic}
+    \end{tabular}
+    }
+
+    \scalebox{0.87}{
+    \begin{tabular}{p{1\linewidth}}
+      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/multitask_hc.pdf}
+        \put(125,20){\color{black!50}\shortstack[r]{Static \\ Three-Environment Multitask}} % Adjust position
+        \put(-15,50){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
+      \end{overpic}
+      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/multitask_hc.pdf}
+        \put(120,20){\color{black!50}\shortstack[r]{Dynamic \\ Three-Environment Multitask}} % Adjust position
+      \end{overpic}
+    \end{tabular}
+    }
+    
+    \caption{Best Fitness Score results from Single and Multi-task Baseline Experiments}
+    \label{fig:best_fitness}
+  \end{figure*}
+  
+  \clearpage
+}
+\afterpage{
+  \clearpage
+  \begin{figure*}[t]
+    \centering
+    \scalebox{0.87}{
+    \begin{tabular}{p{1\linewidth}}
+      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/half_cheetah.pdf}
+        \put(160,20){\color{black!50}Static Half Cheetah} % Adjust position
+        \put(-15,20){\rotatebox{90}{\color{black}\LARGE Effective Instruction Count}} % Adjust position and size
+      \end{overpic}
+      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/half_cheetah.pdf}
+        \put(145,20){\color{black!50}Dynamic Half Cheetah} % Adjust position
+      \end{overpic}
+    \end{tabular}
+    }
+
+    \scalebox{0.87}{
+    \begin{tabular}{p{1\linewidth}}
+      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/ip.pdf}
+        \put(160,20){\color{black!50}\shortstack[r]{Static \\ Inverted Pendulum}} % Adjust position
+        \put(-15,20){\rotatebox{90}{\color{black}\LARGE Effective Instruction Count}} % Adjust position and size
+      \end{overpic}
+      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/ip.pdf}
+        \put(160,20){\color{black!50}\shortstack[r]{Dynamic \\ Inverted Pendulum}} % Adjust position
+      \end{overpic}
+    \end{tabular}
+    }
+
+    \scalebox{0.87}{
+    \begin{tabular}{p{1\linewidth}}
+      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/multitask_general.pdf}
+        \put(130,20){\color{black!50}\shortstack[r]{Static \\ Two-Environment Multitask}} % Adjust position
+        \put(-15,20){\rotatebox{90}{\color{black}\LARGE Effective Instruction Count}} % Adjust position and size
+      \end{overpic}
+      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/multitask_general.pdf}
+        \put(125,20){\color{black!50}\shortstack[r]{Dynamic \\ Two-Environment Multitask}} % Adjust position
+      \end{overpic}
+    \end{tabular}
+    }
+
+    \scalebox{0.87}{
+    \begin{tabular}{p{1\linewidth}}
+      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/multitask_hc.pdf}
+        \put(125,20){\color{black!50}\shortstack[r]{Static \\ Three-Environment Multitask}} % Adjust position
+        \put(-15,20){\rotatebox{90}{\color{black}\LARGE Effective Instruction Count}} % Adjust position and size
+      \end{overpic}
+      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/multitask_hc.pdf}
+        \put(120,20){\color{black!50}\shortstack[r]{Dynamic \\ Three-Environment Multitask}} % Adjust position
+      \end{overpic}
+    \end{tabular}
+    }
+    
+    \caption{Effective Program Instruction Count results from Single and Multi-task Baseline Experiments}
+    \label{fig:effective_program}
+  \end{figure*}
+
+  \clearpage
+}
 
 \section{Typefaces}
 
