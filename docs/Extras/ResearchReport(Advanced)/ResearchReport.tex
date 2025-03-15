@@ -308,19 +308,15 @@ Dynamic memory within program graphs consists of three primary types:
 Each program selects an appropriate memory type based on its computational needs, 
 and mutations can modify both the type and dimensionality of the memory structures over the course of evolution.
 
-\section{Motivation}
-As noted in the introduction, the ``\verb|acmart|'' document class can
-be used to prepare many different kinds of documentation --- a
-double-anonymous initial submission of a full-length technical paper, a
-two-page SIGGRAPH Emerging Technologies abstract, a ``camera-ready''
-journal article, a SIGCHI Extended Abstract, and more --- all by
-selecting the appropriate {\itshape template style} and {\itshape
-  template parameters}.
+\subsection{Tangled Program Graphs}
+Tangled Program Graphs (TPG) is an RL framework developed by McMaster University’s Creative Algorithm Lab under the guidance of Dr. Stephen Kelly. It leverages genetic programming principles to evolve agents capable of solving complex tasks in dynamic environments. Traditional RL methods, such as deep reinforcement learning (DRL), often rely on neural networks that require significant computational resources and large datasets for training. \cite{Winkler2025}  In contrast, TPG uses genetic programming to evolve agents that can learn and adapt to their environment through a process of selection, mutation, and crossover. This unique approach allows TPG to achieve competitive performance in RL tasks with better computation efficiency than DRL methods. \cite{Winkler2025}
 
-This document will explain the major features of the document
-class. For further information, the {\itshape \LaTeX\ User's Guide} is
-available from
-\url{https://www.acm.org/publications/proceedings-template}.
+TPG revolves around the concept of emergent modularity, where agents are composed of interconnected programs that map environmental states to actions. These programs are organized into hierarchical structures, known as program graphs, that allow agents to break complex tasks into simpler subtasks. \cite{Kelly21} To incorporate TPG with multi-task learning, an agent will have to be trained to perform multiple tasks sequentially. This is challenging as the agent must balance different objectives and environments while  avoiding catastrophic forgetting (learning a new task causes agent to forget previously learned tasks, effectively wasting progress). \cite{Kelly21} TPG’s hierarchical and modular structure however, is able to tackle this challenge by allowing agents to dynamically adapt to different tasks by “recombining specialized behaviors”. \cite{Kelly21} TPG has been previously used to evolve agents capable of solving six distinct RL benchmarks from OpenAI’s Classic Control suite, including CartPole, Acrobot, and Pendulum. \cite{Kelly21} Currently, TPG is being further developed to gauge it’s capability of integrating multi-task learning with more complex Mujoco environments.
+
+\section{Motivation}
+The primary motivation behind this research and development effort is to enhance the performance and efficiency of TPG in complex environments, specifically within the MuJoCo physics simulation framework. MuJoCo environments, such as Ant, Half Cheetah, and Humanoid Standup, present significant challenges due to their high-dimensional state and action spaces, as well as their dynamic nature. These environments require agents to learn proper control policies that generalize across diverse scenarios, making them ideal benchmarks for evaluating the scalability and adaptability of TPG.
+
+The goal is to both improve performance and increase efficiency. Performance will be measured by the best fitness score achieved by the TPG agent, reflecting its ability to maximize cumulative rewards. Efficiency will be measured by the number of generations required for the agent to converge to an optimal state, which also reflects the time and computational resources needed for training. By integrating dynamic memory and optimizing the evolutionary process, this research aims to reduce the time to learn while maintaining or improving the quality of the learned policies.
 
 \section{Research Questions}
 
@@ -348,7 +344,6 @@ The majority of conference proceedings documentation will use the {\verb|acmconf
 \end{itemize}
 
 \section{Methodology}
-
 
 This study evaluates task performance parameters such as generation time and 
 fitness level through experiments conducted in their respective MuJoCo environments 
@@ -444,28 +439,6 @@ Key performance indicators analyzed include:
 After data collection, comparative analyses were conducted to evaluate the differences between baseline and dynamic memory configurations
 across both single-task and multi-task experiments. Visualization techniques, including comparative plots, were used to identify performance
 trends and assess the impact of dynamic memory integration.
-
-% In addition to specifying the {\itshape template style} to be used in
-% formatting your work, there are a number of {\itshape template parameters}
-% which modify some part of the applied template style. A complete list
-% of these parameters can be found in the {\itshape \LaTeX\ User's Guide.}
-
-% Frequently-used parameters, or combinations of parameters, include:
-% \begin{itemize}
-% \item {\texttt{anonymous,review}}: Suitable for a ``double-anonymous''
-%   conference submission. Anonymizes the work and includes line
-%   numbers. Use with the \texttt{\string\acmSubmissionID} command to print the
-%   submission's unique ID on each page of the work.
-% \item{\texttt{authorversion}}: Produces a version of the work suitable
-%   for posting by the author.
-% \item{\texttt{screen}}: Produces colored hyperlinks.
-% \end{itemize}
-
-% This document uses the following string as the first command in the
-% source file:
-% \begin{verbatim}
-% \documentclass[sigconf]{acmart}
-% \end{verbatim}
 
 \section{Baseline Experiments Results}
 This section presents the performance outcomes of the baseline experiments conducted in 
