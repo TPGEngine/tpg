@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 
-from .routers import experiments
+from .routers import experiments, signaling
 
 
 app = FastAPI()
@@ -22,6 +22,7 @@ app.add_middleware(
 
 
 app.include_router(experiments.router)
+app.include_router(signaling.router, prefix="/ws", tags=["signalling"])
 
 @app.get("/")
 async def root():
