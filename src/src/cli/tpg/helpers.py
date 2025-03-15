@@ -79,7 +79,7 @@ def run_single_experiment(executable: str, parameters_file: str, processes: int,
         f"pid={pid}"
     ]
 
-    click.echo(f"Launching MPI run with command:\n{' '.join(cmd)}")
+    click.echo(f"Launching MPI run with seed: {seed}, and PID: {pid}")
     click.echo(f"Output will be written to {stdout_file} (stdout) and {stderr_file} (stderr).")
 
     try:
