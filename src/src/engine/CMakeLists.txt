@@ -11,6 +11,7 @@ add_library(engine STATIC ${TPG_SOURCES})
 target_include_directories(engine
     PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/streaming
     ${CMAKE_CURRENT_SOURCE_DIR}/../experiments
     ${CMAKE_CURRENT_SOURCE_DIR}/../experiments/evaluators
     ${CMAKE_CURRENT_SOURCE_DIR}/../environments
@@ -39,3 +40,5 @@ target_link_libraries(engine
 set_target_properties(engine PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
 ) 
+
+target_compile_definitions(engine PUBLIC ENABLE_LIVE_STREAMING)
