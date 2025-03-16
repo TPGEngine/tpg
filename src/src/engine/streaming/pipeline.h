@@ -9,7 +9,7 @@ class GStreamerPipeline {
 public:
     // Public static method to get the single instance.
     static GStreamerPipeline& getInstance() {
-        static GStreamerPipeline instance; // Guaranteed to be lazy-initialized and thread-safe in C++11.
+        static GStreamerPipeline instance;
         return instance;
     }
 
@@ -25,7 +25,9 @@ public:
 
 private:
     // Private constructor ensures no external instantiation.
-    GStreamerPipeline() : pipeline(nullptr), appsrc(nullptr), timestamp(0), initialized(false) {}
+    GStreamerPipeline() : pipeline(nullptr), appsrc(nullptr), timestamp(0), initialized(false) {
+        gst_init(nullptr, nullptr);
+    }
     ~GStreamerPipeline() {}
 
     // Private member variables.

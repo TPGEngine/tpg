@@ -1,7 +1,12 @@
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GST REQUIRED gstreamer-1.0)
+
 # Source files for the TPG library
 file(GLOB TPG_SOURCES
     *.cc
     *.h
+    streaming/pipeline.cc
+    streaming/pipeline.h
 )
 
 # Create the TPG library
@@ -23,6 +28,7 @@ target_include_directories(engine
     /usr/include/eigen3
     ${Boost_INCLUDE_DIRS}
     /usr/include
+    ${GST_INCLUDE_DIRS}
 )
 
 # Link libraries
@@ -34,6 +40,7 @@ target_link_libraries(engine
     MPI::MPI_CXX
     logging
     yaml-cpp
+    ${GST_LIBRARIES}
 )
 
 # Set output directory for the library
@@ -41,4 +48,12 @@ set_target_properties(engine PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
 ) 
 
-target_compile_definitions(engine PUBLIC ENABLE_LIVE_STREAMING)
+if (ENABLE_LIVE_STREAMING)
+    target_compile_definitions(engine PUBLIC ENABLE_LIVE_STREAMING)
+endif()
+
+# Debugging: Print the GStreamer include directories
+message(STATUS "GStreamer include directories: ${GST_INCLUDE_DIRS}")
+
+# Debugging: Print the GStreamer libraries
+message(STATUS "GStreamer libraries: ${GST_LIBRARIES}")
