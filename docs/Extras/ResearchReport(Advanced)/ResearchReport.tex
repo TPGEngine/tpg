@@ -184,12 +184,20 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-  A clear and well-documented \LaTeX\ document is presented as an
-  article formatted for publication by ACM in a conference proceedings
-  or journal publication. Based on the ``acmart'' document class, this
-  article presents and explains many of the common variations, as well
-  as many of the formatting elements an author may use in the
-  preparation of the documentation of their work.
+  This paper investigates the impact of dynamic memory allocation within 
+  Tangled Program Graphs (TPG) for reinforcement learning in continuous control 
+  tasks, specifically within MuJoCo environments. TPG, an RL framework based on 
+  genetic programming, evolves agents composed of interconnected programs. 
+  We hypothesize that dynamic memory, which allows agents to adaptively adjust 
+  memory representation based on task demands, can enhance learning performance 
+  and efficiency compared to fixed-memory approaches. We explore this through 
+  single-task (STL) and multi-task (MTL) experiments on MuJoCo environments such as Inverted 
+  Pendulum, Half Cheetah, and Humanoid Standup. Our results demonstrate that dynamic 
+  memory leads to improved fitness scores and more effective program instruction utilization, 
+  particularly in multi-task scenarios, suggesting enhanced adaptability and knowledge sharing. 
+  We analyze the trade-offs between learning performance and computational efficiency, 
+  providing empirical validation for the theoretical benefits of dynamic memory in 
+  the genetic programming approach to RL like TPG.
 \end{abstract}
 
 %%
@@ -229,8 +237,9 @@
 %%
 %% Keywords. The author(s) should pick words that accurately describe
 %% the work being presented. Separate the keywords with commas.
-\keywords{Do, Not, Us, This, Code, Put, the, Correct, Terms, for,
-  Your, Paper}
+\keywords{Reinforcement Learning, Multi-Task Learning, Dynamic Memory, 
+Tangled Program Graphs, Genetic Programming, MuJoCo, Continuous Control}
+
 
 \received{20 February 2007}
 \received[revised]{12 March 2009}
@@ -590,28 +599,46 @@ program instructions contributing to task performance.
   \clearpage
 }
 
-\section{Typefaces}
+\section{Results and Conclusion}
 
-The ``\verb|acmart|'' document class requires the use of the
-``Libertine'' typeface family. Your \TeX\ installation should include
-this set of packages. Please do not substitute other typefaces. The
-``\verb|lmodern|'' and ``\verb|ltimes|'' packages should not be used,
-as they will override the built-in typeface families.
+This research investigated the impact of dynamic memory within Tangled Program Graphs (TPG) for 
+reinforcement learning in MuJoCo environments, addressing key questions regarding its role in 
+STL, MTL, computational efficiency, and validation of theoretical benefits.
 
-\section{Title Information}
+\subsection{RQ1: Role in Single-Task Learning} 
+Our experiments in single-task MuJoCo control tasks (Half Cheetah, Inverted Pendulum) demonstrate 
+that TPG agents with dynamic memory achieve higher fitness scores and faster learning convergence 
+compared to those with fixed memory. This suggests that dynamic memory enhances the agent's ability 
+to adapt to task-specific dynamics even in relatively simple, fully observable environments.
 
-The title of your work should use capital letters appropriately -
-\url{https://capitalizemytitle.com/} has useful rules for
-capitalization. Use the {\verb|title|} command to define the title of
-your work. If your work has a subtitle, define it with the
-{\verb|subtitle|} command.  Do not insert line breaks in your title.
+\subsection{RQ2: Role in Multi-Task Learning \& Adaptability} 
+In multi-task learning scenarios (Two-Environment and Three-Environment setups), dynamic memory exhibited a clear advantage. 
+Agents with dynamic memory showed significantly improved adaptability and performance, achieving 
+higher fitness scores across generations compared to their fixed-memory counterparts. This indicates 
+that dynamic memory facilitates better task identification, knowledge sharing, and policy adaptation 
+across multiple tasks with varying state dynamics.
 
-If your title is lengthy, you must define a short version to be used
-in the page headers, to prevent overlapping text. The \verb|title|
-command has a ``short title'' parameter:
-\begin{verbatim}
-  \title[short title]{full title}
-\end{verbatim}
+\subsection{RQ3: Performance vs. Computational Efficiency}
+The results indicate that the performance gains achieved through dynamic memory do not come at a 
+prohibitive computational cost. While dynamic memory agents demonstrate more fluctuations in active 
+program instruction counts, indicating frequent adaptation, the overall learning efficiency, as measured 
+by generations to convergence and best fitness score, is enhanced. This suggests that dynamic memory 
+allows for more effective utilization of computational resources, leading to improved learning outcomes without significant overhead.
+
+\subsection{RQ4: Validation of Theoretical Benefits}
+Our empirical findings largely validate the theoretical motivations 
+for integrating dynamic memory into TPG. The improved performance in both single-task and multi-task scenarios supports 
+the hypothesis that dynamic memory enables more effective temporal credit assignment and hierarchical problem decomposition. 
+The dynamic memory agents exhibited a more flexible reallocation of memory resources, aligning with the problem's demands 
+and demonstrating the anticipated benefits of better handling partial observability and long-term dependencies.
+
+In conclusion, this research provides strong evidence for the benefits of dynamic memory within TPG for reinforcement 
+learning in complex MuJoCo environments. The ability to adaptively allocate memory based on task demands enhances both 
+learning performance and efficiency, particularly in multi-task scenarios. These findings highlight the potential of 
+dynamic memory as a key component in developing more robust and adaptable RL agents capable of tackling real-world challenges. 
+Future work should focus on further optimizing the dynamic memory allocation process and exploring its application 
+in even more complex and partially observable environments.
+
 
 \section{Authors and Affiliations}
 
