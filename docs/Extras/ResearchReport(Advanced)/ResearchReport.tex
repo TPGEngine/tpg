@@ -1,5 +1,5 @@
 %%
-%% This is file `sample-sigconf.tex',
+%% This is file `ResearchReport.tex',
 %% generated with the docstrip utility.
 %%
 %% The original source files were:
@@ -11,7 +11,7 @@
 %% For the copyright see the source file.
 %% 
 %% Any modified versions of this file must be renamed
-%% with new filenames distinct from sample-sigconf.tex.
+%% with new filenames distinct from ResearchReport.tex.
 %% 
 %% For distribution of the original source see the terms
 %% for copying and modification in the file samples.dtx.
@@ -57,7 +57,7 @@
 \setcopyright{none}
 \renewcommand\footnotetextcopyrightpermission[1]{}
 \pagestyle{plain}
-\settopmatter{printfolios=true,printccs=false, printacmref=false}
+\settopmatter{printfolios=true,printccs=false, printacmref=true}
 
 %% Rights management information.  This information is sent to you
 %% when you complete the rights form.  These commands have SAMPLE
@@ -309,9 +309,21 @@ Each program selects an appropriate memory type based on its computational needs
 and mutations can modify both the type and dimensionality of the memory structures over the course of evolution.
 
 \subsection{Tangled Program Graphs}
-Tangled Program Graphs (TPG) is an RL framework developed by McMaster University’s Creative Algorithm Lab under the guidance of Dr. Stephen Kelly. It leverages genetic programming principles to evolve agents capable of solving complex tasks in dynamic environments. Traditional RL methods, such as deep reinforcement learning (DRL), often rely on neural networks that require significant computational resources and large datasets for training. \cite{Winkler2025}  In contrast, TPG uses genetic programming to evolve agents that can learn and adapt to their environment through a process of selection, mutation, and crossover. This unique approach allows TPG to achieve competitive performance in RL tasks with better computation efficiency than DRL methods. \cite{Winkler2025}
+Tangled Program Graphs (TPG) is an RL framework developed by McMaster University’s Creative Algorithm Lab under the guidance of Dr. Stephen Kelly.
+It leverages genetic programming principles to evolve agents capable of solving complex tasks in dynamic environments. Traditional RL methods,
+such as deep reinforcement learning (DRL), often rely on neural networks that require significant computational resources and large datasets for training.
+~\cite{Winkler2025}  In contrast, TPG uses genetic programming to evolve agents that can learn and adapt to their environment through a process of 
+selection, mutation, and crossover. This unique approach allows TPG to achieve competitive performance in RL tasks with better computation
+efficiency than DRL methods.~\cite{Winkler2025}
 
-TPG revolves around the concept of emergent modularity, where agents are composed of interconnected programs that map environmental states to actions. These programs are organized into hierarchical structures, known as program graphs, that allow agents to break complex tasks into simpler subtasks. \cite{Kelly21} To incorporate TPG with multi-task learning, an agent will have to be trained to perform multiple tasks sequentially. This is challenging as the agent must balance different objectives and environments while  avoiding catastrophic forgetting (learning a new task causes agent to forget previously learned tasks, effectively wasting progress). \cite{Kelly21} TPG’s hierarchical and modular structure however, is able to tackle this challenge by allowing agents to dynamically adapt to different tasks by “recombining specialized behaviors”. \cite{Kelly21} TPG has been previously used to evolve agents capable of solving six distinct RL benchmarks from OpenAI’s Classic Control suite, including CartPole, Acrobot, and Pendulum. \cite{Kelly21} Currently, TPG is being further developed to gauge it’s capability of integrating multi-task learning with more complex Mujoco environments.
+TPG revolves around the concept of emergent modularity, where agents are composed of interconnected programs that map environmental states to actions.
+These programs are organized into hierarchical structures, known as program graphs, that allow agents to break complex tasks into simpler subtasks.~\cite{Kelly21} To incorporate TPG with multi-task learning, an agent will have to be trained to perform multiple tasks sequentially.
+This is challenging as the agent must balance different objectives and environments while  avoiding catastrophic forgetting
+(learning a new task causes agent to forget previously learned tasks, effectively wasting progress).~\cite{Kelly21} TPG’s
+hierarchical and modular structure however, is able to tackle this challenge by allowing agents to dynamically adapt to different tasks by 
+“recombining specialized behaviors”.~\cite{Kelly21} TPG has been previously used to evolve agents capable of solving six distinct RL benchmarks from OpenAI’s
+Classic Control suite, including CartPole, Acrobot, and Pendulum.~\cite{Kelly21} Currently, TPG is being further developed to gauge it’s
+capability of integrating multi-task learning with more complex MuJoCo environments.
 
 \section{Motivation}
 The primary motivation behind this research and development effort is to enhance the performance and efficiency of TPG in complex environments, specifically within the MuJoCo physics simulation framework. MuJoCo environments, such as Ant, Half Cheetah, and Humanoid Standup, present significant challenges due to their high-dimensional state and action spaces, as well as their dynamic nature. These environments require agents to learn proper control policies that generalize across diverse scenarios, making them ideal benchmarks for evaluating the scalability and adaptability of TPG.
@@ -347,7 +359,7 @@ The majority of conference proceedings documentation will use the {\verb|acmconf
 
 This study evaluates task performance parameters such as generation time and 
 fitness level through experiments conducted in their respective MuJoCo environments 
-(see Figure ~\ref{fig:mujoco_env}). The methodology follows a two-phase approach: establishing baselines
+(see Figure~\ref{fig:mujoco_env}). The methodology follows a two-phase approach: establishing baselines
 and integrating dynamic memory. We compare between baseline and dynamic memory-enhanced
 experiments that were conducted using statistical plots and TPG-generated data. All
 experiments utilized High Performance Parallel Compute (HPPC) resourcesprovided by the
@@ -357,12 +369,11 @@ random seeds for a three-hour duration.
 \subsection{Baseline Experiments}
 We conducted single-task and multi-task experiments using the following MuJoCo environments:
 inverted pendulum, inverted double pendulum, and half-cheetah. Single-task experiments used standardized
-hyperparameters listed in Table ~\ref{tab:hyperparameters}. Each experiment was assigned a specific memory\_size 
-parameter value basedon the dimensionality of the observation space, detailed in Table ~\ref{tab:observation_space}.
+hyperparameters listed in Table~\ref{tab:hyperparameters}. Each experiment was assigned a specific memory\_size 
+parameter value basedon the dimensionality of the observation space, detailed in Table~\ref{tab:observation_space}.
 
 \begin{table*}
-  \caption{Hyperparameters for MuJoCo environments, single-task team population, and program population}
-  \label{tab:hyperparameters}
+  \caption{Hyperparameters for MuJoCo environments, single-task team population, and program population}\label{tab:hyperparameters}
   \centering
   \begin{tabular}{llcllcll}
     \toprule
@@ -382,8 +393,7 @@ parameter value basedon the dimensionality of the observation space, detailed in
 \end{table*}
 
 \begin{table}
-  \caption{Observation and action space sizes for the considered problems \cite{gymnasium_mujoco}}
-  \label{tab:observation_space}
+  \caption{Observation and action space sizes for the considered problems \cite{FaramaFoundation24}}\label{tab:observation_space}
   \begin{tabular}{lll}
     \toprule
     \textbf{Environment}&\textbf{Obs.}~$\mathcal{O}$&\textbf{Act.}~$\mathcal{A}$\\
@@ -444,19 +454,19 @@ trends and assess the impact of dynamic memory integration.
 This section presents the performance outcomes of the baseline experiments conducted in 
 the MuJoCo environments, including single-task and multi-task scenarios. The evaluation 
 metrics focus on \textbf{Best Fitness Score} and \textbf{Effective Program Instruction Count}, as illustrated in 
-Figures ~\ref{fig:best_fitness} and ~\ref{fig:effective_program}, respectively.
+Figures~\ref{fig:best_fitness} and~\ref{fig:effective_program}, respectively.
 
 \subsection{Best Fitness Score Analysis}
-The \textbf{Best Fitness Score} metric, depicted in Figure ~\ref{fig:best_fitness}, provides insights into the overall 
+The \textbf{Best Fitness Score} metric, depicted in Figure~\ref{fig:best_fitness}, provides insights into the overall 
 learning progress of the different experiments. The results highlight several key observations:
 
 \begin{itemize}
   \item \textbf{Single-task environments}: The fitness scores for Half Cheetah and Inverted Pendulum show that while both static and dynamic memory setups improve over time, dynamic memory consistently achieves higher fitness scores faster.
-  \item \textbf{Multi-task environments}: Dynamic memory demonstrates a clear advantage, particularly in the Two- and Three-task multitask setups. It outperforms static memory across generations, highlighting its ability to adapt more effectively to increasing task complexity.
+  \item \textbf{Multi-task environments}: Dynamic memory demonstrates a clear advantage, particularly in the Two- and Three-task multi-task setups. It outperforms static memory across generations, highlighting its ability to adapt more effectively to increasing task complexity.
 \end{itemize}
 
 \subsection{Program Instruction Count Analysis}
-Figure ~\ref{fig:effective_program} presents the results of the \textbf{Effective Program Instruction Count}, a key metric reflecting the number of active 
+Figure~\ref{fig:effective_program} presents the results of the \textbf{Effective Program Instruction Count}, a key metric reflecting the number of active 
 program instructions contributing to task performance.
 
 \begin{itemize}
@@ -495,11 +505,11 @@ program instructions contributing to task performance.
     \scalebox{0.87}{
     \begin{tabular}{p{1\linewidth}}
       \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/multitask_general.pdf}
-        \put(130,20){\color{black!50}\shortstack[r]{Static \\ Two-Environment Multitask}} % Adjust position
+        \put(130,20){\color{black!50}\shortstack[r]{Static \\ Two-Environment Multi-task}} % Adjust position
         \put(-15,50){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
       \end{overpic}
       \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/multitask_general.pdf}
-        \put(125,20){\color{black!50}\shortstack[r]{Dynamic \\ Two-Environment Multitask}} % Adjust position
+        \put(125,20){\color{black!50}\shortstack[r]{Dynamic \\ Two-Environment Multi-task}} % Adjust position
       \end{overpic}
     \end{tabular}
     }
@@ -507,11 +517,11 @@ program instructions contributing to task performance.
     \scalebox{0.87}{
     \begin{tabular}{p{1\linewidth}}
       \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/multitask_hc.pdf}
-        \put(125,20){\color{black!50}\shortstack[r]{Static \\ Three-Environment Multitask}} % Adjust position
+        \put(125,20){\color{black!50}\shortstack[r]{Static \\ Three-Environment Multi-task}} % Adjust position
         \put(-15,50){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
       \end{overpic}
       \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/multitask_hc.pdf}
-        \put(120,20){\color{black!50}\shortstack[r]{Dynamic \\ Three-Environment Multitask}} % Adjust position
+        \put(120,20){\color{black!50}\shortstack[r]{Dynamic \\ Three-Environment Multi-task}} % Adjust position
       \end{overpic}
     \end{tabular}
     }
@@ -553,11 +563,11 @@ program instructions contributing to task performance.
     \scalebox{0.87}{
     \begin{tabular}{p{1\linewidth}}
       \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/multitask_general.pdf}
-        \put(130,20){\color{black!50}\shortstack[r]{Static \\ Two-Environment Multitask}} % Adjust position
+        \put(130,20){\color{black!50}\shortstack[r]{Static \\ Two-Environment Multi-task}} % Adjust position
         \put(-15,20){\rotatebox{90}{\color{black}\LARGE Effective Instruction Count}} % Adjust position and size
       \end{overpic}
       \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/multitask_general.pdf}
-        \put(125,20){\color{black!50}\shortstack[r]{Dynamic \\ Two-Environment Multitask}} % Adjust position
+        \put(125,20){\color{black!50}\shortstack[r]{Dynamic \\ Two-Environment Multi-task}} % Adjust position
       \end{overpic}
     \end{tabular}
     }
@@ -565,7 +575,7 @@ program instructions contributing to task performance.
     \scalebox{0.87}{
     \begin{tabular}{p{1\linewidth}}
       \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/multitask_hc.pdf}
-        \put(125,20){\color{black!50}\shortstack[r]{Static \\ Three-Environment Multitask}} % Adjust position
+        \put(125,20){\color{black!50}\shortstack[r]{Static \\ Three-Environment Multi-task}} % Adjust position
         \put(-15,20){\rotatebox{90}{\color{black}\LARGE Effective Instruction Count}} % Adjust position and size
       \end{overpic}
       \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/multitask_hc.pdf}
@@ -574,8 +584,7 @@ program instructions contributing to task performance.
     \end{tabular}
     }
     
-    \caption{Effective Program Instruction Count results from Single and Multi-task Baseline Experiments}
-    \label{fig:effective_program}
+    \caption{Effective Program Instruction Count results from Single and Multi-task Baseline Experiments}\label{fig:effective_program}
   \end{figure*}
 
   \clearpage
@@ -798,7 +807,6 @@ which can be invoked with the usual
 \texttt{{\char'134}begin\,\ldots{\char'134}end} construction or with
 the short form \texttt{\$\,\ldots\$}. You can use any of the symbols
 and structures, from $\alpha$ to $\omega$, available in
-\LaTeX~\cite{Lamport:LaTeX}; this section will simply show a few
 examples of in-text equations in context. Notice how this equation:
 \begin{math}
   \lim_{n\rightarrow \infty}x=0
@@ -1021,14 +1029,14 @@ the margin:
 %% identification of the section in the article metadata, and the
 %% consistent spelling of the heading.
 \begin{acks}
-To Robert, for the bagels and explaining CMYK and color spaces.
+To Dr. Stephen Kelly, for guiding us throughout the research process and providing valuable insights and feedback.
 \end{acks}
 
 %%
 %% The next two lines define the bibliography style to be used, and
 %% the bibliography file.
 \bibliographystyle{assets/ACM-Reference-Format}
-\bibliography{assets/sample-base}
+\bibliography{assets/research-base}
 
 
 %%
@@ -1039,7 +1047,7 @@ To Robert, for the bagels and explaining CMYK and color spaces.
 
 \subsection{Part One}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi
+Lorem ipsum dolor sit amet, onsectetur adipiscing elit. Morbi
 malesuada, quam in pulvinar varius, metus nunc fermentum urna, id
 sollicitudin purus odio sit amet enim. Aliquam ullamcorper eu ipsum
 vel mollis. Curabitur quis dictum nisl. Phasellus vel semper risus, et
@@ -1068,4 +1076,4 @@ massa et mattis lacinia.
 \end{document}
 \endinput
 %%
-%% End of file `sample-sigconf.tex'.
+%% End of file `ResearchReport.tex'.
