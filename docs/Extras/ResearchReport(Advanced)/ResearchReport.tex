@@ -50,6 +50,7 @@
 \usepackage{afterpage}
 \usepackage[abs]{overpic}
 
+
 \AtBeginDocument{%
   \providecommand\BibTeX{{%
     Bib\TeX}}}
@@ -241,7 +242,7 @@
 Tangled Program Graphs, Genetic Programming, MuJoCo, Continuous Control}
 
 
-\received{16 March 2025}
+% \received{16 March 2025}
 % \received[revised]{12 March 2009}
 % \received[accepted]{5 June 2009}
 
@@ -341,7 +342,7 @@ The goal is to both improve performance and increase efficiency. Performance wil
 
 \section{Research Questions}
 
-Building on the motivation that memory mechanisms can significantly improve an agent's ability to handle temporal dependencies in reinforcement learning (RL)~\cite{Djavaherpour24}, we investigate the specific contribution of \textbf{dynamic memory} within the Tangled Program Graphs (TPG) framework. Prior work has shown that TPG agents without any persistent memory perform poorly on tasks requiring temporal integration (e.g., partially observable environments)~\cite{Kelly21}, underscoring the need for effective memory strategies. While the standard TPG uses a fixed-size (static) memory for all tasks, a \textit{dynamic} memory approach---where the agent can allocate and manage memory on the fly---offers a theoretically more flexible alternative~\cite{Kelly21TELO}. Such dynamic memory could allow hierarchical RL agents to encode and retrieve information more adaptively over time~\cite{Kelly21TELO}. We therefore pose the following research questions, which align with our methodology and experiments on continuous control tasks (MuJoCo environments):
+Building on the motivation that memory mechanisms can significantly improve an agent's ability to handle temporal dependencies in reinforcement learning (RL)~\cite{Djavaherpour24}, we investigate the specific contribution of \textbf{dynamic memory} within the Tangled Program Graphs (TPG) framework. Prior work has shown that TPG agents without any persistent memory perform poorly on tasks requiring temporal integration (e.g., partially observable environments)\cite{Kelly21}, underscoring the need for effective memory strategies. While the standard TPG uses a fixed-size (static) memory for all tasks, a \textit{dynamic} memory approach---where the agent can allocate and manage memory on the fly---offers a theoretically more flexible alternative~\cite{Kelly21TELO}. Such dynamic memory could allow hierarchical RL agents to encode and retrieve information more adaptively over time~\cite{Kelly21TELO}. We therefore pose the following research questions, which align with our methodology and experiments on continuous control tasks (MuJoCo environments):
 
 \begin{enumerate}
     \item \textbf{RQ1: Role in Single-Task Learning ---} \textit{How does the incorporation of dynamic memory influence learning performance in single-task MuJoCo control tasks using TPG, compared to a fixed-memory setup?} This question examines whether a TPG agent endowed with dynamic memory attains higher rewards or learns more efficiently on individual tasks (each trained in isolation) versus the baseline of fixed (static) memory. We seek to determine if dynamic memory provides any tangible benefit in single-task scenarios, or if fully observable single tasks already suffice with a static memory mechanism.
@@ -472,121 +473,18 @@ program instructions contributing to task performance.
   \item \textbf{Multi-task environments}: The Effective Program Instruction Count is significantly higher in dynamic multi-task setups, suggesting better management of complex learning structures. Static environments struggle to scale efficiently.
 \end{itemize}
 
-\afterpage{
-  \clearpage
-  \begin{figure*}[t]
-    \centering
-    \scalebox{0.87}{
-    \begin{tabular}{p{1\linewidth}}
-      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/half_cheetah.pdf}
-        \put(160,20){\color{black!50}Static Half Cheetah} % Adjust position
-        \put(-15,50){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
-      \end{overpic}
-      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/half_cheetah.pdf}
-        \put(145,20){\color{black!50}Dynamic Half Cheetah} % Adjust position
-      \end{overpic}
-    \end{tabular}
-    }
-
-    \scalebox{0.87}{
-    \begin{tabular}{p{1\linewidth}}
-      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/ip.pdf}
-        \put(160,20){\color{black!50}\shortstack[r]{Static \\ Inverted Pendulum}} % Adjust position
-        \put(-15,50){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
-      \end{overpic}
-      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/ip.pdf}
-        \put(160,20){\color{black!50}\shortstack[r]{Dynamic \\ Inverted Pendulum}} % Adjust position
-      \end{overpic}
-    \end{tabular}
-    }
-
-    \scalebox{0.87}{
-    \begin{tabular}{p{1\linewidth}}
-      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/multitask_general.pdf}
-        \put(130,20){\color{black!50}\shortstack[r]{Static \\ Two-Environment Multi-task}} % Adjust position
-        \put(-15,50){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
-      \end{overpic}
-      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/multitask_general.pdf}
-        \put(125,20){\color{black!50}\shortstack[r]{Dynamic \\ Two-Environment Multi-task}} % Adjust position
-      \end{overpic}
-    \end{tabular}
-    }
-
-    \scalebox{0.87}{
-    \begin{tabular}{p{1\linewidth}}
-      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/multitask_hc.pdf}
-        \put(125,20){\color{black!50}\shortstack[r]{Static \\ Three-Environment Multi-task}} % Adjust position
-        \put(-15,50){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
-      \end{overpic}
-      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/multitask_hc.pdf}
-        \put(120,20){\color{black!50}\shortstack[r]{Dynamic \\ Three-Environment Multi-task}} % Adjust position
-      \end{overpic}
-    \end{tabular}
-    }
-    
-    \caption{Best Fitness Score results from Single and Multi-task Baseline Experiments}
-    \label{fig:best_fitness}
-  \end{figure*}
+% \afterpage{
+%   \clearpage
   
-  \clearpage
-}
-\afterpage{
-  \clearpage
-  \begin{figure*}[t]
-    \centering
-    \scalebox{0.87}{
-    \begin{tabular}{p{1\linewidth}}
-      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/half_cheetah.pdf}
-        \put(160,20){\color{black!50}Static Half Cheetah} % Adjust position
-        \put(-15,20){\rotatebox{90}{\color{black}\LARGE Effective Instruction Count}} % Adjust position and size
-      \end{overpic}
-      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/half_cheetah.pdf}
-        \put(145,20){\color{black!50}Dynamic Half Cheetah} % Adjust position
-      \end{overpic}
-    \end{tabular}
-    }
+  
+%   \clearpage
+% }
+% \afterpage{
+%   \clearpage
 
-    \scalebox{0.87}{
-    \begin{tabular}{p{1\linewidth}}
-      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/ip.pdf}
-        \put(160,20){\color{black!50}\shortstack[r]{Static \\ Inverted Pendulum}} % Adjust position
-        \put(-15,20){\rotatebox{90}{\color{black}\LARGE Effective Instruction Count}} % Adjust position and size
-      \end{overpic}
-      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/ip.pdf}
-        \put(160,20){\color{black!50}\shortstack[r]{Dynamic \\ Inverted Pendulum}} % Adjust position
-      \end{overpic}
-    \end{tabular}
-    }
 
-    \scalebox{0.87}{
-    \begin{tabular}{p{1\linewidth}}
-      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/multitask_general.pdf}
-        \put(130,20){\color{black!50}\shortstack[r]{Static \\ Two-Environment Multi-task}} % Adjust position
-        \put(-15,20){\rotatebox{90}{\color{black}\LARGE Effective Instruction Count}} % Adjust position and size
-      \end{overpic}
-      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/multitask_general.pdf}
-        \put(125,20){\color{black!50}\shortstack[r]{Dynamic \\ Two-Environment Multi-task}} % Adjust position
-      \end{overpic}
-    \end{tabular}
-    }
-
-    \scalebox{0.87}{
-    \begin{tabular}{p{1\linewidth}}
-      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/multitask_hc.pdf}
-        \put(125,20){\color{black!50}\shortstack[r]{Static \\ Three-Environment Multi-task}} % Adjust position
-        \put(-15,20){\rotatebox{90}{\color{black}\LARGE Effective Instruction Count}} % Adjust position and size
-      \end{overpic}
-      \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/multitask_hc.pdf}
-        \put(120,20){\color{black!50}\shortstack[r]{Dynamic \\ Three-Environment Multitask}} % Adjust position
-      \end{overpic}
-    \end{tabular}
-    }
-    
-    \caption{Effective Program Instruction Count results from Single and Multi-task Baseline Experiments}\label{fig:effective_program}
-  \end{figure*}
-
-  \clearpage
-}
+%   \clearpage
+% }
 
 \section{Results and Conclusion}
 
@@ -642,6 +540,121 @@ To Dr. Stephen Kelly, for guiding us throughout the research process and providi
 %% the bibliography file.
 \bibliographystyle{assets/ACM-Reference-Format}
 \bibliography{assets/research-base}
+\clearpage
+\appendix
+
+\onecolumn
+\begin{figure*}
+  \section{Additional Figures}
+  \subsection{Best Fitness Score Results}
+  \centering
+  \scalebox{0.87}{
+  \begin{tabular}{p{1\linewidth}}
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/half_cheetah.pdf}
+      \put(160,20){\color{black!50}Static Half Cheetah} % Adjust position
+      \put(-15,50){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
+    \end{overpic}
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/half_cheetah.pdf}
+      \put(145,20){\color{black!50}Dynamic Half Cheetah} % Adjust position
+    \end{overpic}
+  \end{tabular}
+  }
+
+  \scalebox{0.87}{
+  \begin{tabular}{p{1\linewidth}}
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/ip.pdf}
+      \put(160,20){\color{black!50}\shortstack[r]{Static \\ Inverted Pendulum}} % Adjust position
+      \put(-15,50){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
+    \end{overpic}
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/ip.pdf}
+      \put(160,20){\color{black!50}\shortstack[r]{Dynamic \\ Inverted Pendulum}} % Adjust position
+    \end{overpic}
+  \end{tabular}
+  }
+
+  \scalebox{0.87}{
+  \begin{tabular}{p{1\linewidth}}
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/multitask_general.pdf}
+      \put(130,20){\color{black!50}\shortstack[r]{Static \\ Two-Environment Multi-task}} % Adjust position
+      \put(-15,50){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
+    \end{overpic}
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/multitask_general.pdf}
+      \put(125,20){\color{black!50}\shortstack[r]{Dynamic \\ Two-Environment Multi-task}} % Adjust position
+    \end{overpic}
+  \end{tabular}
+  }
+
+  \scalebox{0.87}{
+  \begin{tabular}{p{1\linewidth}}
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/multitask_hc.pdf}
+      \put(125,20){\color{black!50}\shortstack[r]{Static \\ Three-Environment Multi-task}} % Adjust position
+      \put(-15,50){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
+    \end{overpic}
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/multitask_hc.pdf}
+      \put(120,20){\color{black!50}\shortstack[r]{Dynamic \\ Three-Environment Multi-task}} % Adjust position
+    \end{overpic}
+  \end{tabular}
+  }
+  
+  \caption{Best Fitness Score results from Single and Multi-task Baseline Experiments}
+  \label{fig:best_fitness}
+\end{figure*}
+\clearpage
+\begin{figure*}
+  \subsection{Effective Program Instruction Count Results}
+
+  \centering
+  \scalebox{0.87}{
+  \begin{tabular}{p{1\linewidth}}
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/half_cheetah.pdf}
+      \put(160,20){\color{black!50}Static Half Cheetah} % Adjust position
+      \put(-15,20){\rotatebox{90}{\color{black}\LARGE Effective Instruction Count}} % Adjust position and size
+    \end{overpic}
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/half_cheetah.pdf}
+      \put(145,20){\color{black!50}Dynamic Half Cheetah} % Adjust position
+    \end{overpic}
+  \end{tabular}
+  }
+
+  \scalebox{0.87}{
+  \begin{tabular}{p{1\linewidth}}
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/ip.pdf}
+      \put(160,20){\color{black!50}\shortstack[r]{Static \\ Inverted Pendulum}} % Adjust position
+      \put(-15,20){\rotatebox{90}{\color{black}\LARGE Effective Instruction Count}} % Adjust position and size
+    \end{overpic}
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/ip.pdf}
+      \put(160,20){\color{black!50}\shortstack[r]{Dynamic \\ Inverted Pendulum}} % Adjust position
+    \end{overpic}
+  \end{tabular}
+  }
+
+  \scalebox{0.87}{
+  \begin{tabular}{p{1\linewidth}}
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/multitask_general.pdf}
+      \put(130,20){\color{black!50}\shortstack[r]{Static \\ Two-Environment Multi-task}} % Adjust position
+      \put(-15,20){\rotatebox{90}{\color{black}\LARGE Effective Instruction Count}} % Adjust position and size
+    \end{overpic}
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/multitask_general.pdf}
+      \put(125,20){\color{black!50}\shortstack[r]{Dynamic \\ Two-Environment Multi-task}} % Adjust position
+    \end{overpic}
+  \end{tabular}
+  }
+
+  \scalebox{0.87}{
+  \begin{tabular}{p{1\linewidth}}
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/multitask_hc.pdf}
+      \put(125,20){\color{black!50}\shortstack[r]{Static \\ Three-Environment Multi-task}} % Adjust position
+      \put(-15,20){\rotatebox{90}{\color{black}\LARGE Effective Instruction Count}} % Adjust position and size
+    \end{overpic}
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/multitask_hc.pdf}
+      \put(120,20){\color{black!50}\shortstack[r]{Dynamic \\ Three-Environment Multitask}} % Adjust position
+    \end{overpic}
+  \end{tabular}
+  }
+  
+  \caption{Effective Program Instruction Count results from Single and Multi-task Baseline Experiments}\label{fig:effective_program}
+\end{figure*}
+\twocolumn
 
 %%
 %% If your work has an appendix, this is the place to put it.
