@@ -18,17 +18,17 @@ bool GStreamerPipeline::initialize(int width, int height, int fps) {
     GstElement* videoconvert = gst_element_factory_make("videoconvert", "convert");
     GstElement* vp8enc       = gst_element_factory_make("vp8enc", "encoder");
     GstElement* rtpvp8pay    = gst_element_factory_make("rtpvp8pay", "rtppay");
-    GstElement* webrtcbin    = gst_element_factory_make("webrtcbin", "sendrecv");
-    // GstElement* fakesink = gst_element_factory_make("fakesink", "sink");
+    // GstElement* webrtcbin    = gst_element_factory_make("webrtcbin", "sendrecv");
+    GstElement* fakesink = gst_element_factory_make("fakesink", "sink");
 
 
-    if (!appsrc || !videoconvert || !vp8enc || !rtpvp8pay || !webrtcbin) {
+    if (!appsrc || !videoconvert || !vp8enc || !rtpvp8pay || !fakesink) {
         std::cerr << "[GStreamerPipeline] Failed to create one or more elements." << std::endl;
         return false;
     }
 
     // Add all elements into the pipeline.
-    gst_bin_add_many(GST_BIN(pipeline), appsrc, videoconvert, vp8enc, rtpvp8pay, webrtcbin, NULL);
+    gst_bin_add_many(GST_BIN(pipeline), appsrc, videoconvert, vp8enc, rtpvp8pay, fakesink, NULL);
 
     // Link appsrc -> videoconvert -> vp8enc -> rtpvp8pay
     if (!gst_element_link_many(appsrc, videoconvert, vp8enc, rtpvp8pay, NULL)) {
@@ -38,7 +38,7 @@ bool GStreamerPipeline::initialize(int width, int height, int fps) {
 
     //Link rtpvp8pay to webrtcbin. Note: webrtcbin uses dynamic pads, so we must request one.
     GstPad* srcPad = gst_element_get_static_pad(rtpvp8pay, "src");
-    GstPad* sinkPad = gst_element_request_pad_simple(webrtcbin, "sink_%u");
+    GstPad* sinkPad = gst_element_get_static_pad(fakesink, "sink");
     if (gst_pad_link(srcPad, sinkPad) != GST_PAD_LINK_OK) {
         std::cerr << "[GStreamerPipeline] Failed to link rtpvp8pay to webrtcbin." << std::endl;
         gst_object_unref(srcPad);
