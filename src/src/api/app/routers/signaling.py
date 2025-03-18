@@ -34,12 +34,13 @@ async def signaling_endpoint(websocket: WebSocket):
         while True:
             message = await websocket.receive_text()
             print("Received message:", message)
-            try:
-                # Parse message if you're using JSON signaling
-                data = json.loads(message)
-            except json.JSONDecodeError:
-                data = {"type": "unknown", "payload": message}
-            # Broadcast to other connected clients (or handle logic to route messages to a specific peer)
-            await manager.broadcast(message, sender=websocket)
+            # try:
+            #     # Parse message if you're using JSON signaling
+            #     data = json.loads(message)
+            # except json.JSONDecodeError:
+            #     data = {"type": "unknown", "payload": message}
+            # # Broadcast to other connected clients (or handle logic to route messages to a specific peer)
+            # await manager.broadcast(message, sender=websocket)
+            await websocket.send_text(message)
     except WebSocketDisconnect:
         manager.disconnect(websocket)
