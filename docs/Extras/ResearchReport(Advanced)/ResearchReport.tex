@@ -187,8 +187,7 @@
 \begin{abstract}
   This paper investigates the impact of dynamic memory allocation within 
   Tangled Program Graphs (TPG) for reinforcement learning in continuous control 
-  tasks, specifically within MuJoCo environments. TPG, an RL framework based on 
-  genetic programming, evolves agents composed of interconnected programs. 
+  tasks. TPG, an RL framework based on genetic programming, evolves agents composed of interconnected programs. 
   We hypothesize that dynamic memory, which allows agents to adaptively adjust 
   memory representation based on task demands, can enhance learning performance 
   and efficiency compared to fixed-memory approaches. We explore this through 
@@ -198,7 +197,7 @@
   particularly in multi-task scenarios, suggesting enhanced adaptability and knowledge sharing. 
   We analyze the trade-offs between learning performance and computational efficiency, 
   providing empirical validation for the theoretical benefits of dynamic memory in 
-  the genetic programming approach to RL like TPG.
+  the genetic programming approaches to RL such as TPG.
 \end{abstract}
 
 %%
@@ -252,35 +251,42 @@ Tangled Program Graphs, Genetic Programming, MuJoCo, Continuous Control}
 \maketitle
 
 \section{Introduction}
-Reinforcement learning (RL) has emerged as a powerful paradigm for 
-training autonomous agents to perform complex tasks. A key challenge 
-in RL is creating agents that can generalize to multiple tasks and 
-environments, a probltpem known as multi-task learning (MTL). Real-world 
-applications often require agents to adapt to diverse situations, 
-making MTL a critical area of research.
+Reinforcement learning (RL) has emerged as a powerful paradigm
+for training autonomous agents to perform complex tasks through 
+trial-and-error interaction with an environment. However, real-world applicability 
+demands that agents not only achieve high performance but also adapt efficiently 
+to varying task demands and environmental dynamics. This paper focuses on 
+enhancing the TPG framework, a genetic programming-based RL method, 
+for continuous control tasks in the MuJoCo physics simulation environment. 
 
-Many existing reinforcement learning algorithms struggle with sample 
-inefficiency, difficulty in handling continuous control, and poor 
-generalization when applied to MuJoCo multi-task learning problems. 
-Deep reinforcement learning methods, while powerful, often require vast 
-amounts of training data and can be computationally expensive~\cite{Mnih07}. These 
-methods often fail to capture the temporal dependencies and complex dynamics 
-inherent in these environments, leading to sub-optimal performance, especially 
-in partially observable scenarios.
+Traditional deep reinforcement learning (DRL) methods, while powerful, often require substantial 
+computational resources and large datasets for effective training~\cite{Mnih07}. 
+In contrast, TPG leverages emergent modularity and an adaptive, dynamically evolving 
+program structure, offering a more computationally efficient alternative~\cite{Kelly21}. 
+
+Our key contribution lies in integrating dynamic memory allocation within TPG. We hypothesize 
+that allowing TPG agents to adaptively adjust their memory representation based on task demands 
+will improve both learning performance and sample efficiency in complex MuJoCo environments. 
+We investigate this hypothesis through a series of single-task and multi-task experiments, 
+analyzing the trade-offs between performance, computational cost, and effective program structure, 
+and details our methodology and experimental setup in Section~\ref{sec:methodology}. We will go on to detail the 
+data collection and statistical comparison in Section~\ref{sec:experiments}, and lastly provides discussion and 
+conclusions of our findings in Section~\ref{sec:results}.
+
 
 \subsection{MuJoCo}
 A significant domain for RL research, particularly in robotics, is physics 
 simulation. MuJoCo (Multi-Joint dynamics with Contact) is a widely used physics 
 engine, known for its accurate and efficient simulation of complex dynamics, 
 contact forces, and articulated bodies~\cite{Todorov07}. Its ability to simulate realistic 
-physics and provide diverse, challenging control tasks makes MuJoCo an invaluable 
+physics and provide diverse, challenging multi-action continuous control tasks makes MuJoCo an invaluable 
 tool for developing and evaluating reinforcement learning algorithms for robotics. 
 The unique MTL and Single-Task Learning (STL) environments formulated in this work 
-includes partially observable versions of the following 6 widely used RL benchmarks 
-found on Gymnasium's MuJoCo suite~\cite{Towers07}: Ant, Half Cheetah, Hopper, Humanoid Standup, 
+includes the following 6 widely used RL benchmarks found on Gymnasium's 
+MuJoCo suite~\cite{Towers07}: Ant, Half Cheetah, Hopper, Humanoid Standup, 
 Inverted Pendulum, and Inverted Double Pendulum, Figures ~\ref{fig:mujoco_env}(a) to ~\ref{fig:mujoco_env}(e).
 
-\begin{figure}[h]
+\begin{figure}[t]
   \centering
   \begin{tabular}{cc}
     \includegraphics[width=0.3\linewidth]{assets/ant} &
@@ -355,6 +361,7 @@ Building on the motivation that memory mechanisms can significantly improve an a
 \end{enumerate}
 
 \section{Methodology}
+\label{sec:methodology}
 
 This study evaluates task performance parameters such as generation time and 
 fitness level through experiments conducted in their respective MuJoCo environments 
@@ -446,6 +453,7 @@ Key performance indicators analyzed include:
 \end{itemize}
 
 \section{Baseline Experiments Results}
+\label{sec:experiments}
 This section presents the performance outcomes of the baseline experiments conducted in 
 the MuJoCo environments, including single-task and multi-task scenarios. The evaluation 
 metrics focus on \textbf{Best Fitness Score} and \textbf{Effective Program Instruction Count}, as illustrated in 
@@ -470,6 +478,7 @@ program instructions contributing to task performance.
 \end{itemize}
 
 \section{Results and Conclusion}
+\label{sec:results}
 
 This research investigated the impact of dynamic memory within Tangled Program Graphs (TPG) for 
 reinforcement learning in MuJoCo environments, addressing key questions regarding its role in 
@@ -500,14 +509,14 @@ Our empirical findings largely validate the theoretical motivations
 for integrating dynamic memory into TPG. The improved performance in both single-task and multi-task scenarios supports 
 the hypothesis that dynamic memory enables more effective temporal credit assignment and hierarchical problem decomposition. 
 The dynamic memory agents exhibited a more flexible reallocation of memory resources, aligning with the problem's demands 
-and demonstrating the anticipated benefits of better handling partial observability and long-term dependencies.
+and demonstrating the anticipated benefits of better handling long-term dependencies.
 
 In conclusion, this research provides strong evidence for the benefits of dynamic memory within TPG for reinforcement 
 learning in complex MuJoCo environments. The ability to adaptively allocate memory based on task demands enhances both 
 learning performance and efficiency, particularly in multi-task scenarios. These findings highlight the potential of 
 dynamic memory as a key component in developing more robust and adaptable RL agents capable of tackling real-world challenges. 
 Future work should focus on further optimizing the dynamic memory allocation process and exploring its application 
-in even more complex and partially observable environments.
+in even more complex environments.
 
 %%
 %% The acknowledgments section is defined using the "acks" environment
