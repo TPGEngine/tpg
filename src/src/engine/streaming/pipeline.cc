@@ -1,69 +1,86 @@
+// Helper callback for promise fulfillment to extract the SDP offer.
 #include "pipeline.h"
-#include "streaming/signaling_client.h"  
+#include "streaming/signaling_client.h"
 #include <iostream>
 #include <gst/sdp/sdp.h>
 #include <gst/webrtc/webrtc.h>
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
 
 // Helper callback for promise fulfillment to extract the SDP offer.
 static void on_offer_created(GstPromise* promise, gpointer user_data) {
-    const GstStructure* reply = gst_promise_get_reply(promise);
-    GstWebRTCSessionDescription* offer = nullptr;
+  const GstStructure* reply = gst_promise_get_reply(promise);
+  GstWebRTCSessionDescription* offer = nullptr;
 
-    // Extract the offer from the reply structure.
-    gst_structure_get(reply, "offer", GST_TYPE_WEBRTC_SESSION_DESCRIPTION, &offer, NULL);
-    gst_promise_unref(promise);
+  // Extract the offer from the reply structure.
+  gst_structure_get(reply, "offer", GST_TYPE_WEBRTC_SESSION_DESCRIPTION, &offer,
+                    NULL);
+  gst_promise_unref(promise);
 
-    if (!offer) {
-        std::cerr << "[GStreamerPipeline] Failed to create offer" << std::endl;
-        return;
-    }
+  if (!offer) {
+    std::cerr << "[GStreamerPipeline] Failed to create offer" << std::endl;
+    return;
+  }
 
-    // Convert the SDP to string.
-    gchar* sdp_text = gst_sdp_message_as_text(offer->sdp);
-    if (!sdp_text) {
-        std::cerr << "[GStreamerPipeline] Failed to convert SDP to text" << std::endl;
-        gst_webrtc_session_description_free(offer);
-        return;
-    }
-
-    // Create a JSON message with the offer SDP.
-    std::string offerMsg = std::string("{\"type\":\"offer\",\"sdp\":\"") +
-                           sdp_text + "\"}";
-    g_free(sdp_text);
+  // Convert the SDP to string.
+  gchar* sdp_text = gst_sdp_message_as_text(offer->sdp);
+  if (!sdp_text) {
+    std::cerr << "[GStreamerPipeline] Failed to convert SDP to text"
+              << std::endl;
     gst_webrtc_session_description_free(offer);
+    return;
+  }
 
-    std::cout << "[GStreamerPipeline] Sending SDP offer:\n" << offerMsg << std::endl;
-    
-    // Get the global WebSocketClient singleton instance and send the offer.
-    WebSocketClient &wsClient = WebSocketClient::getInstance();
-    wsClient.sendMessage(offerMsg);
+  // Use nlohmann::json to build the offer message.
+  json offerJson;
+  offerJson["type"] = "offer";
+  offerJson["sdp"] = std::string(sdp_text);
+
+  // Serialize JSON to a string.
+  std::string offerMsg = offerJson.dump();
+
+  std::cout << "[GStreamerPipeline] Sending SDP offer:\n" << offerMsg << std::endl;
+
+  // Cleanup.
+  g_free(sdp_text);
+  gst_webrtc_session_description_free(offer);
+
+  // Get the global WebSocketClient singleton instance and send the offer.
+  WebSocketClient& wsClient = WebSocketClient::getInstance();
+  wsClient.sendMessage(offerMsg);
 }
 
 // Callback: Called when negotiation is needed.
 static void on_negotiation_needed(GstElement* webrtc, gpointer user_data) {
-    std::cout << "[GStreamerPipeline] on_negotiation_needed triggered." << std::endl;
-    
-    // Create a promise that will be fulfilled when the offer is created
-    GstPromise* promise = gst_promise_new_with_change_func(on_offer_created, webrtc, NULL);
-    
-    // Request the webrtcbin element to create an SDP offer
-    g_signal_emit_by_name(webrtc, "create-offer", NULL, promise);
+  std::cout << "[GStreamerPipeline] on_negotiation_needed triggered." << std::endl;
+
+  // Create a promise that will be fulfilled when the offer is created.
+  GstPromise* promise =
+      gst_promise_new_with_change_func(on_offer_created, webrtc, NULL);
+
+  // Request the webrtcbin element to create an SDP offer.
+  g_signal_emit_by_name(webrtc, "create-offer", NULL, promise);
 }
 
-
 // Callback: Called when an ICE candidate is generated.
-static void on_ice_candidate(GstElement* webrtc, guint mlineindex, gchar* candidate, gpointer user_data) {
-    std::cout << "[GStreamerPipeline] on-ice-candidate triggered, mlineindex: "
-              << mlineindex << " candidate: " << candidate << std::endl;
-    
-    // Create a JSON message with the candidate information.
-    std::string candidateMsg = "{\"type\":\"ice\",\"mlineindex\":" +
-                               std::to_string(mlineindex) +
-                               ",\"candidate\":\"" + candidate + "\"}";
-    
-    // Get the WebSocket client singleton and send the ICE candidate.
-    WebSocketClient &wsClient = WebSocketClient::getInstance();
-    wsClient.sendMessage(candidateMsg);
+static void on_ice_candidate(GstElement* webrtc, guint mlineindex,
+                             gchar* candidate, gpointer user_data) {
+  std::cout << "[GStreamerPipeline] on-ice-candidate triggered, mlineindex: "
+            << mlineindex << " candidate: " << candidate << std::endl;
+
+  // Use nlohmann::json to build the candidate message.
+  json candidateJson;
+  candidateJson["type"] = "ice";
+  candidateJson["sdpMLineIndex"] = mlineindex;
+  candidateJson["candidate"] = std::string(candidate);
+
+  // Serialize JSON to a string.
+  std::string candidateMsg = candidateJson.dump();
+
+  // Get the WebSocket client singleton and send the ICE candidate.
+  WebSocketClient& wsClient = WebSocketClient::getInstance();
+  wsClient.sendMessage(candidateMsg);
 }
 
 bool GStreamerPipeline::initialize(int width, int height, int fps) {

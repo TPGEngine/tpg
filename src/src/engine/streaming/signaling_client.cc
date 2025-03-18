@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <nlohmann/json.hpp>
 
 // The singleton accessor
 WebSocketClient& WebSocketClient::getInstance(const std::string &host,
@@ -84,7 +85,11 @@ void WebSocketClient::onHandshake(const boost::system::error_code &ec) {
     }
     std::cout << "WebSocket connection established to " << host_ << "\n";
 
-    // Start reading incoming messages.
+    // Build the registration message using nlohmann::json or a raw string.
+    nlohmann::json registration;
+    registration["type"] = "register";
+    registration["id"] = "pipeline-client";
+    sendMessage(registration.dump());
     doRead();
 }
 

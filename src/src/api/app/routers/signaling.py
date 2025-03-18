@@ -40,9 +40,20 @@ class ConnectionManager:
             print(f"Client {client_id} not found.")
 
     async def broadcast(self, message: str, sender: WebSocket):
+        to_remove = []
         for connection in self.active_connections:
             if connection != sender:
-                await connection.send_text(message)
+                try:
+                    await connection.send_text(message)
+                except RuntimeError as e:
+                    # Log the error and mark the connection for removal.
+                    print(
+                        f"Error when sending broadcast message: {e}. Removing connection."
+                    )
+                    to_remove.append(connection)
+        for connection in to_remove:
+            if connection in self.active_connections:
+                self.active_connections.remove(connection)
         print("Broadcasted message:", message)
 
 

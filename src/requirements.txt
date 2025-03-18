@@ -51,3 +51,4 @@ gstreamer1.0-qt5
 gstreamer1.0-pulseaudio
 gstreamer1.0-nice
 libnice10 
+nlohmann-json3-dev
