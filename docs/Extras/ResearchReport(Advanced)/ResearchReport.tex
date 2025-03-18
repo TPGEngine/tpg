@@ -264,12 +264,15 @@ computational resources and large datasets for effective training~\cite{Mnih07}.
 In contrast, TPG leverages emergent modularity and an adaptive, dynamically evolving 
 program structure, offering a more computationally efficient alternative~\cite{Kelly21}. 
 
-Our key contribution lies in integrating dynamic memory allocation within TPG. 
-We hypothesize that allowing TPG agents to adaptively adjust their memory representation 
-based on task demands will improve both learning performance and sample efficiency in 
-complex MuJoCo environments. We investigate this hypothesis through a series of 
-single-task and multi-task experiments, analyzing the trade-offs between performance, 
-computational cost, and effective program structure. 
+Our key contribution lies in integrating dynamic memory allocation within TPG. We hypothesize 
+that allowing TPG agents to adaptively adjust their memory representation based on task demands 
+will improve both learning performance and sample efficiency in complex MuJoCo environments. 
+We investigate this hypothesis through a series of single-task and multi-task experiments, 
+analyzing the trade-offs between performance, computational cost, and effective program structure, 
+and details our methodology and experimental setup in Section~\ref{sec:methodology}. We will go on to detail the 
+data collection and statistical comparison in Section~\ref{sec:experiments}, and lastly provides discussion and 
+conclusions of our findings in Section~\ref{sec:results}.
+
 
 \subsection{MuJoCo}
 A significant domain for RL research, particularly in robotics, is physics 
@@ -358,6 +361,7 @@ Building on the motivation that memory mechanisms can significantly improve an a
 \end{enumerate}
 
 \section{Methodology}
+\label{sec:methodology}
 
 This study evaluates task performance parameters such as generation time and 
 fitness level through experiments conducted in their respective MuJoCo environments 
@@ -449,6 +453,7 @@ Key performance indicators analyzed include:
 \end{itemize}
 
 \section{Baseline Experiments Results}
+\label{sec:experiments}
 This section presents the performance outcomes of the baseline experiments conducted in 
 the MuJoCo environments, including single-task and multi-task scenarios. The evaluation 
 metrics focus on \textbf{Best Fitness Score} and \textbf{Effective Program Instruction Count}, as illustrated in 
@@ -473,6 +478,7 @@ program instructions contributing to task performance.
 \end{itemize}
 
 \section{Results and Conclusion}
+\label{sec:results}
 
 This research investigated the impact of dynamic memory within Tangled Program Graphs (TPG) for 
 reinforcement learning in MuJoCo environments, addressing key questions regarding its role in 
