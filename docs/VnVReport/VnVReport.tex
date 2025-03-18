@@ -40,6 +40,7 @@
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 3/10/2025 & 1.0 & First write up of VnV Report \\
+3/18/2025 & 1.1 & Fixed extra FR-SLN6 test case \\
 \bottomrule
 \end{tabularx}
 
@@ -134,14 +135,9 @@ This document cohesively summarizes the results of each test as specified in the
   \textbf{Test Id} & \textbf{Notes} & \textbf{Result} \\
   \hline
   \endhead
-      FR-SLN4 & Affirmed that the “Build TPG Project” pipeline properly builds the TPG framework with updated code when changes are pushed to any branch. & Pass \\
+    FR-SLN4 & Affirmed that the “Build TPG Project” pipeline properly builds the TPG framework with updated code when changes are pushed to any branch, the TPG unit test cases are also automatically ran, and the build will only pass if all the unit tests passes. & Pass \\
   \hline
-  FR-SLN5 & When the project building pipeline runs properly, the TPG unit test cases are also automatically ran, and the build will only pass if all the unit tests passes
-  . & Pass \\
-  \hline
-
-  FR-SLN6 & Tested that linting and Latex compilation pipeline works as expected. & Pass \\
-
+    FR-SLN5 & Tested that linting and Latex compilation pipeline works as expected. & Pass \\
   \hline
   \end{longtable}
 \end{center}
