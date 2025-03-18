@@ -427,8 +427,8 @@ of changing memory size, $p_\text{mem}$, to 10\% (0.1). The effects of this modi
 \end{itemize}
 
 \subsection{Data Collection}
-For each experiment, performance metrics were systematically recorded and extracted from the \texttt{.std} output files,
-then parsed into structured \texttt{.csv} files. These \texttt{.csv} files were categorized into:
+For each experiment, performance metrics were systematically recorded and outtputed into structured \texttt{.csv} files. 
+These \texttt{.csv} files were categorized into:
 
 \begin{itemize}
   \item \textbf{Timing Metrics:} Measures of computational timing.
@@ -444,10 +444,6 @@ Key performance indicators analyzed include:
   \item \textbf{Generations to Convergence:} The number of generations required to reach a specified performance threshold.
   \item \textbf{Effective Program Instructions:} The number of program instructions contributing to the final output.
 \end{itemize}
-
-After data collection, comparative analyses were conducted to evaluate the differences between baseline and dynamic memory configurations
-across both single-task and multi-task experiments. Visualization techniques, including comparative plots, were used to identify performance
-trends and assess the impact of dynamic memory integration.
 
 \section{Baseline Experiments Results}
 This section presents the performance outcomes of the baseline experiments conducted in 
@@ -472,19 +468,6 @@ program instructions contributing to task performance.
   \item \textbf{Single-task environments}: Dynamic environments show more fluctuations in active instruction counts, indicating frequent adaptation for optimization. In contrast, static environments stabilize early, limiting flexibility.
   \item \textbf{Multi-task environments}: The Effective Program Instruction Count is significantly higher in dynamic multi-task setups, suggesting better management of complex learning structures. Static environments struggle to scale efficiently.
 \end{itemize}
-
-% \afterpage{
-%   \clearpage
-  
-  
-%   \clearpage
-% }
-% \afterpage{
-%   \clearpage
-
-
-%   \clearpage
-% }
 
 \section{Results and Conclusion}
 
