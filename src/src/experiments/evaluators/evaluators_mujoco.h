@@ -223,10 +223,16 @@ if (!headless) {
                 std::cerr << "Failed to initialize streaming pipeline" << std::endl;
             }
         }
-        int frameSize = 3 * viewport.width * viewport.height; // raw RGB data size
-        if (!gstPipeline.pushFrame(rgb, frameSize)) {
-            std::cerr << "Failed to push frame to streaming pipeline" << std::endl;
-        }
+        // GStreamerPipeline& gstPipeline = GStreamerPipeline::getInstance();
+        // if (!gstPipeline.isInitialized()) {
+        //     if (!gstPipeline.initialize(viewport.width, viewport.height, 30)) {
+        //         std::cerr << "Failed to initialize streaming pipeline" << std::endl;
+        //     }
+        // }
+        // int frameSize = 3 * viewport.width * viewport.height; // raw RGB data size
+        // if (!gstPipeline.pushFrame(rgb, frameSize)) {
+        //     std::cerr << "Failed to push frame to streaming pipeline" << std::endl;
+        // }
     #else
         // Existing code: write the frame to disk as a PPM file.
         char filename[100];

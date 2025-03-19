@@ -4,6 +4,8 @@
 #include <iomanip>
 #include <sstream>
 #include <iostream>
+#include <gst/gst.h>
+#include <gst/base/gstbytereader.h>
 #include <gst/sdp/sdp.h>
 #include <gst/webrtc/webrtc.h>
 #include <nlohmann/json.hpp>
@@ -117,152 +119,121 @@ static void on_ice_candidate(GstElement* webrtc, guint mlineindex,
 
 bool GStreamerPipeline::initialize(int width, int height, int fps) {
   if (initialized) {
-    return true;  // Already initialized.
+    return true; // Already initialized.
   }
 
-  // Initialize GStreamer pipeline
+  // Create a new pipeline.
   pipeline = gst_pipeline_new("webrtc-pipeline");
   if (!pipeline) {
     std::cerr << get_current_timestamp()
-              << " [GStreamerPipeline] Failed to create pipeline."
-              << std::endl;
+              << " [GStreamerPipeline] Failed to create pipeline." << std::endl;
     return false;
   }
 
-  // Create elements
-  appsrc = gst_element_factory_make("appsrc", "src");
-  GstElement* videoconvert =
-      gst_element_factory_make("videoconvert", "convert");
+  // Create elements.
+  // Use videotestsrc instead of appsrc for testing.
+  GstElement* source = gst_element_factory_make("videotestsrc", "source");
+  GstElement* videoconvert = gst_element_factory_make("videoconvert", "convert");
   GstElement* vp8enc = gst_element_factory_make("vp8enc", "encoder");
-  GstElement* rtpvp8pay =
-      gst_element_factory_make("rtpvp8pay", "payloader");
-  GstElement* capsfilter =
-      gst_element_factory_make("capsfilter", "rtpcaps");
-  GstElement* webrtcbin =
-      gst_element_factory_make("webrtcbin", "webrtc");
+  GstElement* rtpvp8pay = gst_element_factory_make("rtpvp8pay", "payloader");
+  GstElement* capsfilter = gst_element_factory_make("capsfilter", "rtpcaps");
+  GstElement* webrtcbin = gst_element_factory_make("webrtcbin", "webrtc");
 
-  // Check all elements were created
-  if (!appsrc || !videoconvert || !vp8enc || !rtpvp8pay ||
-      !capsfilter || !webrtcbin) {
+  if (!source || !videoconvert || !vp8enc || !rtpvp8pay || !capsfilter || !webrtcbin) {
     std::cerr << get_current_timestamp()
-              << " [GStreamerPipeline] Failed to create elements."
-              << std::endl;
+              << " [GStreamerPipeline] Failed to create elements." << std::endl;
     return false;
   }
 
-  // Configure appsrc
-  GstCaps* srcCaps = gst_caps_new_simple(
-      "video/x-raw", "format", G_TYPE_STRING, "RGB", "width",
-      G_TYPE_INT, width, "height", G_TYPE_INT, height, "framerate",
-      GST_TYPE_FRACTION, fps, 1, NULL);
-  g_object_set(appsrc, "caps", srcCaps, "format", GST_FORMAT_TIME,
-               "is-live", TRUE, "do-timestamp", TRUE, NULL);
-  gst_caps_unref(srcCaps);
+  // Configure videotestsrc.
+  g_object_set(source, "is-live", TRUE, "pattern", 0, NULL);
 
-  // Configure encoder
-  g_object_set(vp8enc, "deadline", 1,             // Fastest encoding
-               "target-bitrate", 500000, NULL);
+  // Configure the VP8 encoder.
+  g_object_set(vp8enc, "deadline", 1, "target-bitrate", 500000, NULL);
 
-  // Configure RTP payloader
-  g_object_set(rtpvp8pay, "pt", 96, NULL);  // Set payload type to 96
+  // Configure RTP payloader.
+  g_object_set(rtpvp8pay, "pt", 96, NULL);
 
-  // Configure caps filter
+  // Configure caps filter.
   GstCaps* rtpCaps = gst_caps_from_string(
       "application/x-rtp,media=video,encoding-name=VP8,payload=96");
   g_object_set(capsfilter, "caps", rtpCaps, NULL);
   gst_caps_unref(rtpCaps);
 
-  // Configure WebRTC
-  g_object_set(webrtcbin, "bundle-policy",
-               GST_WEBRTC_BUNDLE_POLICY_MAX_BUNDLE, "stun-server",
-               "stun://stun.l.google.com:19302", NULL);
+  // Configure WebRTC.
+  g_object_set(webrtcbin,
+               "bundle-policy", GST_WEBRTC_BUNDLE_POLICY_MAX_BUNDLE,
+               "stun-server", "stun://stun.l.google.com:19302",
+               NULL);
 
-  // Add all elements to the pipeline
-  gst_bin_add_many(GST_BIN(pipeline), appsrc, videoconvert, vp8enc,
+  // Add all elements to the pipeline.
+  gst_bin_add_many(GST_BIN(pipeline), source, videoconvert, vp8enc,
                    rtpvp8pay, capsfilter, webrtcbin, NULL);
 
-  // Link the pipeline up to capsfilter
-  if (!gst_element_link_many(appsrc, videoconvert, vp8enc, rtpvp8pay,
-                             capsfilter, NULL)) {
+  // Link the source elements up to the capsfilter.
+  if (!gst_element_link_many(source, videoconvert, vp8enc, rtpvp8pay, capsfilter, NULL)) {
     std::cerr << get_current_timestamp()
-              << " [GStreamerPipeline] Failed to link pipeline elements."
-              << std::endl;
+              << " [GStreamerPipeline] Failed to link pipeline elements." << std::endl;
     return false;
   }
 
-  // Get source pad from capsfilter
-  GstPad* srcPad =
-      gst_element_get_static_pad(capsfilter, "src");
+  // *** Attach a pad probe to capsfilter's src pad ***
+  GstPad* srcPad = gst_element_get_static_pad(capsfilter, "src");
   if (!srcPad) {
     std::cerr << get_current_timestamp()
-              << " [GStreamerPipeline] Failed to get source pad from "
-                 "capsfilter."
-              << std::endl;
+              << " [GStreamerPipeline] Failed to get source pad from capsfilter." << std::endl;
     return false;
   }
-
-  // Get sink pad from webrtcbin (use the specific pad template)
-  GstPad* sinkPad =
-      gst_element_request_pad_simple(webrtcbin, "sink_%u");
-  if (!sinkPad) {
-    std::cerr << get_current_timestamp()
-              << " [GStreamerPipeline] Failed to get request pad from "
-                 "webrtcbin."
-              << std::endl;
-    gst_object_unref(srcPad);
-    return false;
-  }
-  if (sinkPad) {
-    gst_pad_add_probe(sinkPad, GST_PAD_PROBE_TYPE_BUFFER, [](GstPad *pad, GstPadProbeInfo *info, gpointer user_data) -> GstPadProbeReturn {
-        GstBuffer *buffer = GST_PAD_PROBE_INFO_BUFFER(info);
+  gst_pad_add_probe(srcPad, GST_PAD_PROBE_TYPE_BUFFER,
+      [](GstPad* pad, GstPadProbeInfo* info, gpointer user_data) -> GstPadProbeReturn {
+        GstBuffer* buffer = GST_PAD_PROBE_INFO_BUFFER(info);
         if (buffer) {
-          g_print("RTP buffer received on pad %s\n", GST_PAD_NAME(pad));
-          // Optionally, you could inspect buffer timestamps, sizes, etc.
+          g_print("Buffer on pad %s, size: %u\n", GST_PAD_NAME(pad), gst_buffer_get_size(buffer));
         }
         return GST_PAD_PROBE_OK;
-      }, NULL, NULL);
-      gst_object_unref(sinkPad);    
+      },
+      NULL, NULL);
+  // You can unref srcPad after adding the probe.
+  gst_object_unref(srcPad);
+
+  // Request a sink pad from webrtcbin.
+  GstPad* sinkPad = gst_element_request_pad_simple(webrtcbin, "sink_%u");
+  if (!sinkPad) {
+    std::cerr << get_current_timestamp()
+              << " [GStreamerPipeline] Failed to get request pad from webrtcbin." << std::endl;
+    return false;
   }
 
-  // Link the pads
+  // Link capsfilter's output to webrtcbin's sink pad.
   GstPadLinkReturn linkRet = gst_pad_link(srcPad, sinkPad);
   if (GST_PAD_LINK_FAILED(linkRet)) {
     std::cerr << get_current_timestamp()
               << " [GStreamerPipeline] Failed to link capsfilter to webrtcbin: "
               << linkRet << std::endl;
-    gst_object_unref(srcPad);
     gst_object_unref(sinkPad);
     return false;
   }
-
-  // Release the pads
-  gst_object_unref(srcPad);
   gst_object_unref(sinkPad);
 
-  // Connect signals
+  // Connect signals for negotiation and ICE candidates.
   g_signal_connect(webrtcbin, "on-negotiation-needed",
                    G_CALLBACK(on_negotiation_needed), this);
   g_signal_connect(webrtcbin, "on-ice-candidate",
                    G_CALLBACK(on_ice_candidate), this);
 
-  // Set the pipeline to PLAYING state
-  GstStateChangeReturn ret =
-      gst_element_set_state(pipeline, GST_STATE_PLAYING);
+  // Set the pipeline state to PLAYING.
+  GstStateChangeReturn ret = gst_element_set_state(pipeline, GST_STATE_PLAYING);
   if (ret == GST_STATE_CHANGE_FAILURE) {
     std::cerr << get_current_timestamp()
-              << " [GStreamerPipeline] Unable to set pipeline to PLAYING "
-                 "state."
-              << std::endl;
+              << " [GStreamerPipeline] Unable to set pipeline to PLAYING state." << std::endl;
     return false;
   }
 
-  // Reset timestamp and mark as initialized
   timestamp = 0;
   initialized = true;
 
   std::cout << get_current_timestamp()
-            << " [GStreamerPipeline] Pipeline initialized successfully."
-            << std::endl;
+            << " [GStreamerPipeline] Pipeline initialized successfully with videotestsrc." << std::endl;
   return true;
 }
 
