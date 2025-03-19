@@ -96,7 +96,7 @@ async def signaling_endpoint(websocket: WebSocket):
             target_id = data.get("target")
 
             # For signaling types, route appropriately.
-            if msg_type in ("offer", "answer", "ice", "test"):
+            if msg_type in ("offer", "answer", "ice-candidate", "test"):
                 if target_id:
                     # Send to the specific target client.
                     await manager.send_to_client(target_id, message)
