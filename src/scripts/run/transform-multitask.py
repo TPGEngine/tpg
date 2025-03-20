@@ -21,7 +21,6 @@ misc_dir = os.path.join(log_dir, "misc")
 selection_dir = os.path.join(log_dir, "selection")
 
 std_file_pattern = "tpg.*.*.std"
-keys_to_store = ["p0t0a0", "ePIns"]
 column_list = ["generation", "best_fitness", "effective_program_instruction_count"]
 
 def get_project_root(filename=".devcontainer"):
@@ -83,37 +82,38 @@ def process_std_files():
 
         csv_data = {task: [column_list] for task in active_tasks}
         with open(file_path, "r") as file:
-            current_task = 0
             generation = 0
             for line in file:
                 words = line.strip()
-                if not words.startswith("setElTmsST"): continue
+                if not words.startswith("setElTmsMTA"): continue
 
                 words = words.split()
                 if not words: continue
 
                 key_value_pairs = words[1:]
+                current_task, key_idx = 0, 0
+                line_dict = {task: [None] * (len(column_list) - 1) for task in active_tasks}
 
-                data_dict = {}
                 for i in range(0, len(key_value_pairs)):
                     key = key_value_pairs[i]
+                    keys_to_store = [f"p0t{current_task}a0", f"p0t{current_task}a2"]
 
                     if key in keys_to_store and i + 1 <= len(key_value_pairs):
                         value = key_value_pairs[i + 1]
-                        data_dict[key] = value
+                        line_dict[active_tasks[current_task]][key_idx] = value
+                    
+                        key_idx += 1
 
+                        if key == keys_to_store[-1]:
+                            current_task += 1
+                            key_idx = 0
 
-                csv_data[active_tasks[current_task]].append(
-                        [generation] + [data_dict[key] if key in data_dict 
-                            else None for key in keys_to_store]
-                    )
+                for task, arr_data in line_dict.items():
+                    csv_data[task].append(
+                            [generation] + arr_data
+                        )
 
-                next_task = (current_task + 1) % len(active_tasks)
-
-                if next_task == 0:
-                    generation += 1
-
-                current_task = next_task
+                generation += 1
 
         for task, data in csv_data.items():
             output_filename = f"selection.{seed}.0_{task}.csv"
