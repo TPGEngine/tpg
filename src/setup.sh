@@ -40,8 +40,7 @@ fi
 rm -rf build
 
 # Build TPG     
-cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
-cmake --build build --config Release
+make optimized
 
 # Build the Python CLI
 pipx ensurepath
