@@ -7,6 +7,7 @@ import glob
 import os
 import sys
 import csv
+import numpy as np
 from matplotlib.cm import get_cmap
 from matplotlib.backends.backend_pdf import PdfPages
 
@@ -68,7 +69,7 @@ def get_csv_columns(filepath):
 def capitalize_snake_case(s):
     return ' '.join(word.capitalize() for word in s.split('_'))
 
-def plot_generations_single(csv_files, column_name, pdf = None):
+def plot_generations_single(csv_files, column_name, pdf = None, num_x = None, num_y = None):
     """
     Plots the given csv_files and column name against generations.
     
@@ -88,9 +89,11 @@ def plot_generations_single(csv_files, column_name, pdf = None):
             # Use full path to read the CSV file
             full_path = os.path.join(log_dir, csv_file)
             df = pd.read_csv(full_path)
+            
             if 'generation' not in df.columns:
                 print(f"Skipping {csv_file}: missing 'generation' column")
                 continue
+            
             if column_name not in df.columns:
                 print(f"Skipping {csv_file}: missing '{column_name}' column")
                 continue
@@ -99,6 +102,9 @@ def plot_generations_single(csv_files, column_name, pdf = None):
             color = cmap(idx % 10) # line color of the current file is decided using % 10
             line_style = line_styles[(idx // 10) % len(line_styles)] # with 10 color schemes, the line style is changed after 10 iterations
             label = os.path.splitext(os.path.basename(csv_file))[0]
+
+            if num_x is not None:
+                df = df.head(num_x)  # keep only the first `num_x` rows from dataframe
             
             plt.plot(df['generation'], df[column_name], 
                     marker='o' if len(csv_files) == 1 else '',
@@ -113,15 +119,22 @@ def plot_generations_single(csv_files, column_name, pdf = None):
         except Exception as e:
             print(f"Error processing {csv_file}: {str(e)}")
 
+    if num_y is not None:
+        plt.ylim(0, num_y)  # set y-axis range from 0 to `num_y`
+
     if not valid_files:
         print("No valid CSV files with required columns found!")
         return
 
     # configure properties of the graph (x-axis, y-axis, grid)
-    plt.xlabel('Generation', fontsize=12)
-    plt.ylabel(capitalize_snake_case(column_name), fontsize=12)
+    plt.xlabel('Generation', fontsize=14)
+    plt.ylabel(capitalize_snake_case(column_name), fontsize=14)
 
     plt.grid(True, alpha=0.3)
+    plt.tick_params(axis='both', which='major', labelsize=16)
+
+    # only show integers for `generation` x-axis
+    plt.gca().xaxis.set_major_locator(plt.MaxNLocator(integer=True))
     
     # if more than 1 file, add a legend of file names and color schemes
     if len(valid_files) > 1:
@@ -147,7 +160,7 @@ def plot_generations_single(csv_files, column_name, pdf = None):
 
     plt.close()
 
-def plot_generations_multiple(csv_files, column_names):
+def plot_generations_multiple(csv_files, column_names, num_x, num_y):
     # Get prefix from the first file - use basename to handle subdirectory structure
     first_file = os.path.basename(csv_files[0]) if csv_files else ""
     prefix = first_file.split('.')[0] if first_file else ""
@@ -159,7 +172,7 @@ def plot_generations_multiple(csv_files, column_names):
 
     with PdfPages(output_filename) as pdf:
         for column_name in column_names:
-            plot_generations_single(csv_files, column_name, pdf)
+            plot_generations_single(csv_files, column_name, pdf, num_x, num_y)
 
     print(f"All plots saved to '{output_filename}'")
 
@@ -170,6 +183,10 @@ if __name__ == "__main__":
     # csv_files defaults to 'all-selection' if left blank, plotting all CSV within the directory
     parser.add_argument('csv_files', type=str, nargs="?", default='all-selection', help='Comma-separated list of CSV files (or use "all" for *.csv)')
     parser.add_argument('column_name', type=str, help='Column name to plot against generations')
+
+    # new arguments for number of x and y-axes
+    parser.add_argument('--num-x', type=int, help='Number of x-axes')
+    parser.add_argument('--num-y', type=int, help='Number of y-axes')
     
     args = parser.parse_args()
     
@@ -227,15 +244,17 @@ if __name__ == "__main__":
         sys.exit(1)
 
     column_name = args.column_name
+    num_x = args.num_x
+    num_y = args.num_y
 
     try:
         if column_name == "all":
             # Get columns from the first valid file using full path
             full_path = os.path.join(log_dir, valid_files[0])
             column_names = get_csv_columns(full_path)
-            plot_generations_multiple(valid_files, column_names)
+            plot_generations_multiple(valid_files, column_names, num_x, num_y)
         else:
-            plot_generations_single(valid_files, column_name)
+            plot_generations_single(valid_files, column_name, num_x = num_x, num_y = num_y)
     except Exception as e:
         print(f"Error: {str(e)}")
         sys.exit(1)
