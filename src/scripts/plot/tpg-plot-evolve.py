@@ -7,6 +7,7 @@ import glob
 import os
 import sys
 import csv
+import re
 import numpy as np
 from matplotlib.cm import get_cmap
 from matplotlib.backends.backend_pdf import PdfPages
@@ -203,7 +204,11 @@ if __name__ == "__main__":
             if not os.path.exists(prefix_dir):
                 raise ValueError(f"Subdirectory '{prefix}' not found in {log_dir}")
             
-            csv_files = [f for f in os.listdir(prefix_dir) if f.endswith('.csv')]
+            csv_files = [
+                f for f in os.listdir(prefix_dir) 
+                if re.match(rf"^{prefix}\.\d+\.\d+\.csv$", f)
+            ]
+
             if not csv_files:
                 print(f"No CSV files found in {prefix_dir}")
                 sys.exit(1)
