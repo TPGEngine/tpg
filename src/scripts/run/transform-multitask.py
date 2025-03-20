@@ -38,8 +38,8 @@ def get_config_yaml_file(target_name):
     config_dir = os.path.join(project_root, "configs")
 
     for file in os.listdir(config_dir):
-        target_file = "mujoco_" + target_name
-        if file.lower().startswith(target_file) and file.endswith(".yaml"):
+        target_file = "mujoco_" + target_name + ".yaml"
+        if file.lower() == target_file:
             yaml_file_path = os.path.join(config_dir, file)
             
             print(f"Found YAML file: {yaml_file_path}")
