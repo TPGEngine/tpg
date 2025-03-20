@@ -2,6 +2,9 @@
 
 \usepackage{tabularx}
 \usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage{hyperref}
 
 \title{Reflection and Traceability Report on \progname}
 
@@ -16,55 +19,176 @@
 
 \maketitle
 
-\plt{Reflection is an important component of getting the full benefits from a
-learning experience.  Besides the intrinsic benefits of reflection, this
-document will be used to help the TAs grade how well your team responded to
-feedback.  Therefore, traceability between Revision 0 and Revision 1 is and
-important part of the reflection exercise.  In addition, several CEAB (Canadian
-Engineering Accreditation Board) Learning Outcomes (LOs) will be assessed based
-on your reflections.}
+% \plt{Reflection is an important component of getting the full benefits from a
+% learning experience. Besides the intrinsic benefits of reflection, this
+% document will be used to help the TAs grade how well your team responded to
+% feedback. Therefore, traceability between Revision 0 and Revision 1 is an
+% important part of the reflection exercise. In addition, several CEAB (Canadian
+% Engineering Accreditation Board) Learning Outcomes (LOs) will be assessed based
+% on your reflections.}
 
 \section{Changes in Response to Feedback}
+This section summarizes the changes made over the course of the capstone project in response to
+feedback from sources such as TAs, the supervisor and other teams. The associated commits can be
+found by clicking on the associated issue created.
 
-\plt{Summarize the changes made over the course of the project in response to
-feedback from TAs, the instructor, teammates, other teams, the project
-supervisor (if present), and from user testers.}
+% \plt{Summarize the changes made over the course of the project in response to
+% feedback from TAs, the instructor, teammates, other teams, the project
+% supervisor (if present), and from user testers.}
 
-\plt{For those teams with an external supervisor, please highlight how the feedback 
-from the supervisor shaped your project.  In particular, you should highlight the 
-supervisor's response to your Rev 0 demonstration to them.}
+% \plt{For those teams with an external supervisor, please highlight how the feedback 
+% from the supervisor shaped your project.  In particular, you should highlight the 
+% supervisor's response to your Rev 0 demonstration to them.}
 
-\plt{Version control can make the summary relatively easy, if you used issues
-and meaningful commits.  If you feedback is in an issue, and you responded in
-the issue tracker, you can point to the issue as part of explaining your
-changes.  If addressing the issue required changes to code or documentation, you
-can point to the specific commit that made the changes.  Although the links are
-helpful for the details, you should include a label for each item of feedback so
-that the reader has an idea of what each item is about without the need to click
-on everything to find out.}
+% \plt{Version control can make the summary relatively easy, if you used issues
+% and meaningful commits.  If you feedback is in an issue, and you responded in
+% the issue tracker, you can point to the issue as part of explaining your
+% changes.  If addressing the issue required changes to code or documentation, you
+% can point to the specific commit that made the changes.  Although the links are
+% helpful for the details, you should include a label for each item of feedback so
+% that the reader has an idea of what each item is about without the need to click
+% on everything to find out.}
 
-\plt{If you were not organized with your commits, traceability between feedback
-and commits will not be feasible to capture after the fact.  You will instead
-need to spend time writing down a summary of the changes made in response to
-each item of feedback.}
+% \plt{If you were not organized with your commits, traceability between feedback
+% and commits will not be feasible to capture after the fact.  You will instead
+% need to spend time writing down a summary of the changes made in response to
+% each item of feedback.}
 
-\plt{You should address EVERY item of feedback.  A table or itemized list is
-recommended.  You should record every item of feedback, along with the source of
-that feedback and the change you made in response to that feedback.  The
-response can be a change to your documentation, code, or development process.
-The response can also be the reason why no changes were made in response to the
-feedback.  To make this information manageable, you will record the feedback and
-response separately for each deliverable in the sections that follow.}
+% \plt{You should address EVERY item of feedback.  A table or itemized list is
+% recommended.  You should record every item of feedback, along with the source of
+% that feedback and the change you made in response to that feedback.  The
+% response can be a change to your documentation, code, or development process.
+% The response can also be the reason why no changes were made in response to the
+% feedback.  To make this information manageable, you will record the feedback and
+% response separately for each deliverable in the sections that follow.}
 
-\plt{If the feedback is general or incomplete, the TA (or instructor) will not
-be able to grade your response to feedback.  In that case your grade on this
-document, and likely the Revision 1 versions of the other documents will be
-low.} 
+% \plt{If the feedback is general or incomplete, the TA (or instructor) will not
+% be able to grade your response to feedback.  In that case your grade on this
+% document, and likely the Revision 1 versions of the other documents will be
+% low.} 
 
 \subsection{SRS and Hazard Analysis}
+Here is the feedback we received on the SRS and Hazard Analysis documents, and the changes we made in response to that feedback.
+
+\begin{longtable}{| p{0.2\textwidth} | p{0.2\textwidth} | p{0.3\textwidth} | p{0.1\textwidth} |}
+    \caption{Feedback and Changes for SRS Documentation} \\
+    \hline
+    \textbf{Feedback Source} & \textbf{Feedback Item} & \textbf{Response} & \textbf{Issue} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{Feedback Source} & \textbf{Feedback Item} & \textbf{Response} & \textbf{Issue} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+    TA Feedback & Formalization & Attempted to improve formalization of documentation where possible. & \href{https://github.com/TPGEngine/tpg/issues/311}{\#311}\\
+    \hline
+    TA Feedback & Extension of Knowledge & Mentioned and cited sources where terms are taken from. & \href{https://github.com/TPGEngine/tpg/issues/310}{\#310} \\
+    \hline
+    TA Feedback & Verifiable Requirements & Updated requirements to ensure they were testable and measurable. & \href{https://github.com/TPGEngine/tpg/issues/309}{\#309}\\
+    \hline
+    TA Feedback & Traceable Requirements & Added traceability matrix to enhance traceability. & \href{https://github.com/TPGEngine/tpg/issues/308}{\#308} \\
+    \hline
+    TA Feedback & What not How (Abstract) & Revised some requirements to focus on "what" the system should do rather than "how" it should do it. & \href{https://github.com/TPGEngine/tpg/issues/307}{\#307} \\
+    \hline
+    TA Feedback & Content of SRS (Functionality and Specificity) & Revised functional requirements and clarified ambiguous sections. & \href{https://github.com/TPGEngine/tpg/issues/305}{\#305} \\
+    \hline
+    TA Feedback & Formatting and Style & Modified formatting according to feedback. & \href{https://github.com/TPGEngine/tpg/issues/306}{\#306} \\
+    \hline
+    Peer Review & Project Goals & Modified project goals assocated with peer review. & \href{https://github.com/TPGEngine/tpg/issues/106}{\#106} \\
+    \hline
+    Peer Review & Verifiability & Adjusted specified requirements for verifiability.  & \href{https://github.com/TPGEngine/tpg/issues/105}{\#105} \\
+    \hline
+    Peer Review & User Business & Clarified problem context. & \href{https://github.com/TPGEngine/tpg/issues/104}{\#104} \\
+    \hline
+    Peer Review & Dev Planning & Updated development planning section with metrics. & \href{https://github.com/TPGEngine/tpg/issues/102}{\#102} \\
+    \hline
+    Peer Review & Data Dictionary and Scope & Revised data dictionary. & \href{https://github.com/TPGEngine/tpg/issues/101}{\#101} \\
+    \hline
+    Peer Review & Maintainability, Supportability, Adaptability Requirements & Adjusted requirements for maintainability, supportability, and adaptability. & \href{https://github.com/TPGEngine/tpg/issues/107}{\#107} \\
+    \hline
+    Peer Review & Fix Functional Requirements & Revised concerned FR-6 for specificity. & \href{https://github.com/TPGEngine/tpg/issues/103}{\#103} \\
+    \hline
+\end{longtable}
+
+\begin{longtable}{| p{0.2\textwidth} | p{0.2\textwidth} | p{0.3\textwidth} | p{0.1\textwidth} |}
+    \caption{Feedback and Changes for Hazard Analysis} \\
+    \hline
+    \textbf{Feedback Source} & \textbf{Feedback Item} & \textbf{Response} & \textbf{Issue} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{Feedback Source} & \textbf{Feedback Item} & \textbf{Response} & \textbf{Issue} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+    TA Feedback & Recommended Actions & Modified actions to be more actionable. & \href{https://github.com/TPGEngine/tpg/issues/314}{\#314} \\
+    \hline
+    TA Feedback & Hazard Identification & Adjusted concerned sections with feedback. & \href{https://github.com/TPGEngine/tpg/issues/313}{\#313} \\
+    \hline
+    TA Feedback & Spelling and Grammar & Corrected spelling and grammar errors and implemented other feedback specified. & \href{https://github.com/TPGEngine/tpg/issues/312}{\#312} \\
+    \hline
+    Peer Review & Inconsistent Hazard Reference & Fixed inconsistency between hazard references. & \href{https://github.com/TPGEngine/tpg/issues/136}{\#136} \\
+    \hline
+    Peer Review & Potential Missing Hazard for FMEA & Added missing hazards to the FMEA analysis. & \href{https://github.com/TPGEngine/tpg/issues/135}{\#135} \\
+    \hline
+    Peer Review & Priority Assignment & Revised priority assignments based on updated risk assessments. & \href{https://github.com/TPGEngine/tpg/issues/133}{\#133} \\
+    \hline
+    Peer Review & No Mitigation Strategy & Modify mitigation strategies for hazards. & \href{https://github.com/TPGEngine/tpg/issues/132}{\#132} \\
+    \hline
+    Peer Review & Prioritization Justification & Provided detailed justification for hazard prioritization. & \href{https://github.com/TPGEngine/tpg/issues/130}{\#130} \\
+    \hline
+    Peer Review & SRS Linking Roadmap & Linked SRS in roadmap to hazard analysis. & \href{https://github.com/TPGEngine/tpg/issues/128}{\#128} \\
+    \hline
+    Peer Review & Ambiguous Terms & Clarified ambiguous terms in the hazard analysis. & \href{https://github.com/TPGEngine/tpg/issues/134}{\#134} \\
+    \hline
+\end{longtable}
 
 \subsection{Design and Design Documentation}
+Here is the feedback we received on the design documents (MG and MIS), and the changes we made in response to that feedback.
+\begin{longtable}{| p{0.2\textwidth} | p{0.2\textwidth} | p{0.3\textwidth} | p{0.1\textwidth} |}
+    \caption{Feedback and Changes for Module Guide} \\
+    \hline
+    \textbf{Feedback Source} & \textbf{Feedback Item} & \textbf{Response} & \textbf{Issue} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{Feedback Source} & \textbf{Feedback Item} & \textbf{Response} & \textbf{Issue} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+    TA Feedback & Quality Information & Fixed all addressed concerns with issue. & \href{https://github.com/TPGEngine/tpg/issues/346}{\#346} \\
+    \hline
+    Peer Review & Lack of Links to Other Documents & Added links and references to related documents/sections for better traceability. & \href{https://github.com/TPGEngine/tpg/issues/242}{\#242} \\
+    \hline
+    Peer Review & Module Decomposition & \textbf{Did Not Fix}: Decomposition was deemed unnecessary for the current scope. & \href{https://github.com/TPGEngine/tpg/issues/240}{\#240} \\
+    \hline
+\end{longtable}
 
+\begin{longtable}{| p{0.2\textwidth} | p{0.2\textwidth} | p{0.3\textwidth} | p{0.1\textwidth} |}
+    \caption{Feedback and Changes for Module Specification Interface} \\
+    \hline
+    \textbf{Feedback Source} & \textbf{Feedback Item} & \textbf{Response} & \textbf{Issue} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{Feedback Source} & \textbf{Feedback Item} & \textbf{Response} & \textbf{Issue} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+    TA Feedback & Enough to Build & \textbf{Did Not Fix}: Did not include additional sketchecs or examples, as current level of detail seemed sufficient for our project scope. & \href{https://github.com/TPGEngine/tpg/issues/347}{\#347} \\
+    \hline
+    Peer Review & Confusion & Clarified confusing sections in the module specification interface. & \href{https://github.com/TPGEngine/tpg/issues/245}{\#245} \\
+    \hline
+    Peer Review & Lack of Info for Independent Developer & Added additional details to support independent developers. & \href{https://github.com/TPGEngine/tpg/issues/243}{\#243} \\
+    \hline
+    Peer Review & Incorrect "Uses" & Corrected "Uses" subsections in the module specification interface for modules. & \href{https://github.com/TPGEngine/tpg/issues/244}{\#244} \\
+    \hline
+\end{longtable}
 \subsection{VnV Plan and Report}
 
 \section{Challenge Level and Extras}
