@@ -3,9 +3,11 @@
 '''
 This script is used to retrieve individual data for each task within multi-task experiments.
 
-To use: `cd` to experiments/<environment> and run `transform-multitask.py <config_yaml_name>`.
+It reads `.std` files within `logs/misc` and stores values to CSV files which are saved in `logs/selection` directory.
 
-`<config_yaml_name>` must match a multi-task YAML config located in `configs/`.
+To use, follow these 2 steps:
+1. `cd` to `experiments/<environment>`
+2. Run `transform-multitask.py`.
 '''
 
 import os
@@ -31,13 +33,26 @@ def get_project_root(filename=".devcontainer"):
     
     raise ValueError("Error: Cannot find project root.")
 
-def get_active_tasks_from_configs(config):
+def get_config_yaml_file(target_name):
     project_root = get_project_root()
-    config_filename = config + '.yaml'
-    config_dir = os.path.join(project_root, "configs", config_filename)
+    config_dir = os.path.join(project_root, "configs")
 
-    if os.path.exists(config_dir):
-        with open(config_dir, "r") as file:
+    for file in os.listdir(config_dir):
+        target_file = "mujoco_" + target_name
+        if file.lower().startswith(target_file) and file.endswith(".yaml"):
+            yaml_file_path = os.path.join(config_dir, file)
+            
+            print(f"Found YAML file: {yaml_file_path}")
+            return yaml_file_path
+    
+    raise ValueError("Error: No config YAML file found.")
+
+def get_active_tasks_from_configs():
+    current_dir_name = os.path.basename(os.getcwd())
+    config_file_path = get_config_yaml_file(current_dir_name)
+
+    if os.path.exists(config_file_path):
+        with open(config_file_path, "r") as file:
             data = yaml.safe_load(file)
             active_tasks = data["general_task_parameters"]["active_tasks"].split(",")
 
@@ -56,9 +71,9 @@ def get_seed_and_pid(filename):
 
     return [seed, pid]
 
-def process_std_files(config):
+def process_std_files():
     std_files = glob.glob(os.path.join(misc_dir, std_file_pattern))
-    active_tasks = get_active_tasks_from_configs(config)
+    active_tasks = get_active_tasks_from_configs()
 
     for file_path in std_files:
         filename = os.path.basename(file_path)
@@ -111,9 +126,4 @@ def process_std_files(config):
             print(f"Saved: {output_path}")
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: transform-multitask.py <config_yaml_name>")
-        sys.exit(1)
-    
-    config_yaml_name = sys.argv[1]
-    process_std_files(config_yaml_name)
+    process_std_files()
