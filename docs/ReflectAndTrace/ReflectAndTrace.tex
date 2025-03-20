@@ -206,13 +206,53 @@ been approved by the course instructor as included in your problem statement.}
 
 \section{Design Iteration (LO11 (PrototypeIterate))}
 
-\plt{Explain how you arrived at your final design and implementation.  How did
-the design evolve from the first version to the final version?} 
+The design and implementation of our capstone project were driven by the needs of our client, Dr. Kelly, and his research group. As contributors to their existing \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg}{codebase}, our efforts focused on addressing pain points in current workflows and enhancing the overall developer experience, aligning with the goal of facilitating research on the TPG framework within more complex environments.
 
-\plt{Don't just say what you changed, say why you changed it.  The needs of the
-client should be part of the explanation.  For example, if you made changes in
-response to usability testing, explain what the testing found and what changes
-it led to.}
+\subsection{MuJoCo Environment Integration and Expansion}
+
+Our initial work involved integrating MuJoCo environments to expand the capabilities of the TPG framework. Dr. Kelly's group had previously implemented the "Ant" environment. Recognizing the need to evaluate the TPG framework in more advanced physics engines, we implemented support for additional environments such as Inverted Pendulum, Humanoid Standup, and Half Cheetah. This directly addressed Dr. Kelly's desire to transition to MuJoCo, enabling experimentation within more sophisticated and realistic simulations.
+
+This effort culminated in addressing Dr. Kelly's primary research question: evaluating TPG's performance in multi-task scenarios. Building upon the individual environment implementations, we iterated on combining MuJoCo environments, enabling the evolution of policies capable of learning across multiple tasks. This progression demonstrates a clear evolution driven by the client's research objectives, moving from basic integration to tackling more complex, multi-task learning problems.
+
+\subsection{Migration to .csv Logging}
+
+A significant change involved modifying the logging system. Dr. Kelly expressed a desire to transition data analysis processing from R to Python-based tools, citing maintainability and the flexibility of Python libraries as key motivations. To accommodate this transition, we migrated the logging format from \texttt{.std} and \texttt{.err} files to \texttt{.csv} files.
+
+The choice of \texttt{.csv} over the previous \texttt{.std} format offers several advantages from the perspective of user needs:
+
+\begin{itemize}
+    \item \textbf{Organization:} \texttt{.csv} files provide a structured, tabular format. This makes it easier to import and analyze data using Python libraries like Pandas, streamlining the data processing pipeline. The previous \texttt{.std} format required more complex parsing and was less amenable to automated analysis.
+    \item \textbf{Accessibility:} \texttt{.csv} is a widely supported and easily accessible format. Researchers can readily open and manipulate \texttt{.csv} files in various software packages, fostering collaboration and simplifying data sharing.
+    \item \textbf{Specific Metric Capture:} We designed the \texttt{.csv} logs to capture specific metrics from each stage of the evolutionary process. This allows for targeted analysis of performance and behavior, providing Dr. Kelly and his team with the data they need to evaluate the TPG framework effectively.
+\end{itemize}
+
+By migrating to \texttt{.csv} logs, we not only accommodated Dr. Kelly's preference for Python-based tools but also improved the organization, accessibility, and analytical potential of the logged data, directly benefiting the research workflow.
+
+\subsection{CLI Tool Development}
+
+Initially, the execution of experiments relied on script-based execution, requiring developers to navigate to specific directories and execute commands with specific parameters. This workflow was identified as a pain point, particularly when running multiple experiments concurrently.
+
+In response to this usability issue, we developed a Command Line Interface (CLI) tool to simplify experiment execution. This change was presented to Dr. Kelly, who agreed that a streamlined workflow would significantly improve the developer experience.
+
+The initial "MVP" version of the CLI tool supported essential functions such as:
+
+\begin{itemize}
+    \item \texttt{tpg evolve [environment]}: Evolving a policy for a given environment.
+    \item \texttt{tpg replay [environment]}: Replaying the best-performing agent in an environment.
+    \item \texttt{tpg plot [environment]}: Plotting relevant statistics.
+\end{itemize}
+
+These commands mirrored the functionality of the original scripts but offered a more intuitive and descriptive interface. After merging the initial version and providing documentation, Dr. Kelly's research group provided valuable feedback. They requested additional functionality, such as:
+
+\begin{itemize}
+    \item \texttt{tpg clean}: Removing old log files to maintain a clean working environment.
+    \item \texttt{tpg kill}: Terminating MPI processes.
+\end{itemize}
+
+Based on this feedback, we iterated on the CLI tool, incorporating these new features to further streamline the user experience and address the specific needs of the research team. The final CLI tool represents a significant improvement in usability, allowing researchers to execute, manage, and analyze experiments with greater ease and efficiency.
+
+In summary, our design iterations were continuously guided by the needs of Dr. Kelly and his research group. By focusing on improving existing workflows, accommodating new technologies, and responding to user feedback, we were able to develop a system that directly supports their research goals and enhances the overall developer experience.
+
 
 \section{Design Decisions (LO12)}
 
@@ -254,15 +294,29 @@ technology?}
 
 \section{Reflection on Capstone}
 
-\plt{This question focuses on what you learned during the course of the capstone project.}
+This section focuses on the key learnings and reflections gained during the course of the capstone project.
 
 \subsection{Which Courses Were Relevant}
 
-\plt{Which of the courses you have taken were relevant for the capstone project?}
+Several courses proved highly relevant to the successful completion of our capstone project. Among the most impactful were:
+
+\begin{enumerate}
+    \item \textbf{2AA4 - Introduction to Software Design:} This course provided a foundational understanding of collaborative software development practices. The experience of working on a group project using GitHub, including managing issues, utilizing Kanban boards, and creating pull requests, was invaluable. It instilled the fundamentals of effective team-based development. Furthermore, the emphasis on software design principles, such as SOLID and GRASP, was directly applicable to the capstone project. Although the course was primarily focused on Java, the object-oriented design patterns learned were transferable to our project, which utilized Python and C++. Specifically, we leveraged the Observer pattern to implement a refined logging system within the TPG codebase.
+
+    \item \textbf{3RA3 - Requirements Engineering:} This course provided a solid foundation in defining project requirements prior to implementation. Learning to articulate and prioritize user needs was instrumental in guiding our development efforts. The user-based design principles learned in 3RA3 helped us focus our efforts and prioritize features that aligned with Dr. Kelly's research objectives. The reports we submitted throughout the capstone project mirrored the structure and content of assignments completed in 3RA3, demonstrating the practical application of the course's principles.
+\end{enumerate}
 
 \subsection{Knowledge/Skills Outside of Courses}
 
-\plt{What skills/knowledge did you need to acquire for your capstone project
-that was outside of the courses you took?}
+Beyond the formal curriculum, our capstone project required the acquisition of specific knowledge and skills in areas not explicitly covered in our coursework. These included:
+
+\begin{enumerate}
+    \item \textbf{Genetic Programming:} Gaining an understanding of genetic programming, a specialized research area, was essential. Since none of us had prior exposure to this domain, our learning primarily involved direct instruction from our supervisor, Dr. Kelly, as well as in-depth analysis of the existing TPG codebase. This process required us to quickly grasp complex concepts and apply them to our project.
+
+    \item \textbf{C++ Proficiency:} C++ was the language of choice for performance-critical aspects of the project, a decision driven by Dr. Kelly's preference. While our curriculum included object-oriented languages like Java, C++ was not a primary focus. We therefore had to develop proficiency in C++ independently, leveraging our understanding of object-oriented principles to navigate the language's syntax and intricacies.
+
+    \item \textbf{Docker Containerization:} The project made extensive use of Docker for containerization, a topic not typically covered in our academic coursework. While some of us had gained exposure to Docker during co-op placements, a deeper understanding of how containers work and their benefits was necessary. We independently learned how to install, run, and utilize Docker, developing a valuable skill essential in modern software development workflows. Given the prevalence of containerization in industry, incorporating some introductory material on this topic into the curriculum could benefit future students.
+\end{enumerate}
+
 
 \end{document}
