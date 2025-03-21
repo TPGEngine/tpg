@@ -21,7 +21,7 @@ misc_dir = os.path.join(log_dir, "misc")
 selection_dir = os.path.join(log_dir, "selection")
 
 std_file_pattern = "tpg.*.*.std"
-column_list = ["generation", "best_fitness", "effective_program_instruction_count"]
+column_list = ["generation", "best_fitness", "runtime_complexity"]
 
 def get_project_root(filename=".devcontainer"):
     path = os.getcwd()

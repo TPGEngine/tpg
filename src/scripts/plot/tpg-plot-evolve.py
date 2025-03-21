@@ -121,7 +121,7 @@ def plot_generations_single(csv_files, column_name, pdf = None, num_x = None, nu
             print(f"Error processing {csv_file}: {str(e)}")
 
     if num_y is not None:
-        plt.ylim(0, num_y)  # set y-axis range from 0 to `num_y`
+        plt.ylim(None, num_y)  # set y-axis range from 0 to `num_y`
 
     if not valid_files:
         print("No valid CSV files with required columns found!")
