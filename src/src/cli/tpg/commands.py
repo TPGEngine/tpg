@@ -64,8 +64,10 @@ def evolve(ctx: click.Context, env: str, processes: int, seed: int, num_experime
 @click.argument("env", required=True)
 @click.argument("csv_files", required=False)
 @click.argument("column_name", required=True)
+@click.option("--num-x", type=int, default=None, help="Optional number of x-axis points")
+@click.option("--num-y", type=int, default=None, help="Optional number of y-axis points")
 @click.pass_context
-def plot(ctx: click.Context, env: str, csv_files: str, column_name: str):
+def plot(ctx: click.Context, env: str, csv_files: str, column_name: str, num_x: str, num_y: str):
     """Plot results for an experiment using tpg-plot-evolve.py"""
 
     # Fetch TPG directory for the environment
@@ -93,6 +95,12 @@ def plot(ctx: click.Context, env: str, csv_files: str, column_name: str):
         os.makedirs('plots')
 
     cmd = ["python3", plot_script_path, csv_files, column_name]
+
+    # Add optional flags if specified
+    if num_x is not None:
+        cmd.extend(["--num-x", str(num_x)])
+    if num_y is not None:
+        cmd.extend(["--num-y", str(num_y)])
 
     try:
         subprocess.run(cmd, check=True)
