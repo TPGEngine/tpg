@@ -126,8 +126,11 @@ void WebSocketClient::onRead(const boost::system::error_code &ec,
 
 // sendMessage: Asynchronously send a message over the WebSocket.
 void WebSocketClient::sendMessage(const std::string &message) {
+    nlohmann::json msg = nlohmann::json::parse(message);
+    msg["id"] = "pipeline-client";
+    std::string updatedMessage = msg.dump();
     ws_.async_write(
-        boost::asio::buffer(message),
+        boost::asio::buffer(updatedMessage),
         [this](const boost::system::error_code &ec, std::size_t bytes_transferred) {
             onWrite(ec, bytes_transferred);
         });

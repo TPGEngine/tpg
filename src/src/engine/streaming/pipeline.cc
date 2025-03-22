@@ -191,8 +191,7 @@ bool GStreamerPipeline::initialize(int width, int height, int fps) {
   }
 
   // Get source pad from capsfilter
-  GstPad* srcPad =
-      gst_element_get_static_pad(capsfilter, "src");
+  GstPad* srcPad = gst_element_get_static_pad(capsfilter, "src");
   if (!srcPad) {
     std::cerr << get_current_timestamp()
               << " [GStreamerPipeline] Failed to get source pad from "
@@ -202,8 +201,7 @@ bool GStreamerPipeline::initialize(int width, int height, int fps) {
   }
 
   // Get sink pad from webrtcbin (use the specific pad template)
-  GstPad* sinkPad =
-      gst_element_request_pad_simple(webrtcbin, "sink_%u");
+  GstPad* sinkPad = gst_element_request_pad_simple(webrtcbin, "sink_%u");
   if (!sinkPad) {
     std::cerr << get_current_timestamp()
               << " [GStreamerPipeline] Failed to get request pad from "
@@ -211,17 +209,6 @@ bool GStreamerPipeline::initialize(int width, int height, int fps) {
               << std::endl;
     gst_object_unref(srcPad);
     return false;
-  }
-  if (sinkPad) {
-    gst_pad_add_probe(sinkPad, GST_PAD_PROBE_TYPE_BUFFER, [](GstPad *pad, GstPadProbeInfo *info, gpointer user_data) -> GstPadProbeReturn {
-        GstBuffer *buffer = GST_PAD_PROBE_INFO_BUFFER(info);
-        if (buffer) {
-          g_print("RTP buffer received on pad %s\n", GST_PAD_NAME(pad));
-          // Optionally, you could inspect buffer timestamps, sizes, etc.
-        }
-        return GST_PAD_PROBE_OK;
-      }, NULL, NULL);
-      gst_object_unref(sinkPad);    
   }
 
   // Link the pads
@@ -233,6 +220,23 @@ bool GStreamerPipeline::initialize(int width, int height, int fps) {
     gst_object_unref(srcPad);
     gst_object_unref(sinkPad);
     return false;
+  }
+
+  // Add probe *after* linking, but *before* unreffing
+  if (sinkPad) {
+    gst_pad_add_probe(sinkPad, GST_PAD_PROBE_TYPE_BUFFER,
+                      [](GstPad* pad, GstPadProbeInfo* info,
+                         gpointer user_data) -> GstPadProbeReturn {
+                        GstBuffer* buffer = GST_PAD_PROBE_INFO_BUFFER(info);
+                        if (buffer) {
+                          g_print("RTP buffer received on pad %s\n",
+                                  GST_PAD_NAME(pad));
+                          // Optionally, you could inspect buffer timestamps,
+                          // sizes, etc.
+                        }
+                        return GST_PAD_PROBE_OK;
+                      },
+                      NULL, NULL);
   }
 
   // Release the pads

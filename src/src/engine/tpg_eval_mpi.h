@@ -249,7 +249,8 @@ inline void replayer(TPG &tpg, vector<TaskEnv *> &tasks) {
     // Add video creation for headless mode
     if (headless && frame_idx > 0) {
     #ifdef ENABLE_LIVE_STREAMING
-      GStreamerPipeline::getInstance().shutdown();
+      // GStreamerPipeline::getInstance().shutdown();
+      while(true) {}
     #else
       // Create videos directory if it doesn't exist
       struct stat st{};
