@@ -456,25 +456,30 @@ Key performance indicators analyzed include:
 \label{sec:experiments}
 This section presents the performance outcomes of the baseline experiments conducted in 
 the MuJoCo environments, including single-task and multi-task scenarios. The evaluation 
-metrics focus on \textbf{Best Fitness Score} and \textbf{Effective Program Instruction Count}, as illustrated in 
-Figures~\ref{fig:best_fitness} and~\ref{fig:effective_program}, respectively.
+metrics focus on \textbf{Best Fitness Score}, \textbf{Effective Program Instruction Count}
+and \textbf{Runtime Complexity}, as illustrated in the collection of figures in Appendix 
+~\ref{fig:figures}.
 
 \subsection{Best Fitness Score Analysis}
-The \textbf{Best Fitness Score} metric, depicted in Figure~\ref{fig:best_fitness}, provides insights into the overall 
+The \textbf{Best Fitness Score} metric, depicted in Figure~\ref{fig:best_fitness_st} for single-task experiments and
+Figures~\ref{fig:best_fitness_mt_two} and ~\ref{fig:best_fitness_mt_three} for multi-task experiments, provides insights into the overall 
 learning progress of the different experiments. The results highlight several key observations:
 
 \begin{itemize}
-  \item \textbf{Single-task environments}: The fitness scores for Half Cheetah and Inverted Pendulum show that while both static and dynamic memory setups improve over time, dynamic memory consistently achieves higher fitness scores faster.
-  \item \textbf{Multi-task environments}: Dynamic memory demonstrates a clear advantage, particularly in the Two- and Three-task multi-task setups. It outperforms static memory across generations, highlighting its ability to adapt more effectively to increasing task complexity.
+  \item \textbf{Single-task environments}: Inverted Pendulum and Inverted Double Pendulum show improvement in fitness scores over time for dynamic memory setups, displaying consistently achieving higher fitness scores more quickly. In contrast, Half Cheetah performs worse with dynamic memory, as indicated by its lower fitness scores.
+  \item \textbf{Multi-task environments}: Dynamic memory does not show a clear advantage in best fitness score, particularly in both two- and three-environment multi-task setups. In the two-environment experiments, static memory outperforms dynamic memory by consistently achieving higher fitness scores across both environments. However, in the three-environment experiments, dynamic memory surpasses static memory, particularly in Half Cheetah and Inverted Pendulum.
 \end{itemize}
 
-\subsection{Program Instruction Count Analysis}
-Figure~\ref{fig:effective_program} presents the results of the \textbf{Effective Program Instruction Count}, a key metric reflecting the number of active 
-program instructions contributing to task performance.
+\subsection{Runtime Analysis}
+Figure~\ref{fig:effective_st} presents the results of the \textbf{Effective Program Instruction Count} for single-task experiments,
+a key metric reflecting the number of active program instructions contributing to task performance.
+Figures~\ref{fig:runtime_complexity_mt_two} and ~\ref{fig:runtime_complexity_mt_three} present the 
+results of the \textbf{Runtime Complexity} for multi-task experiments, measuring the computational cost of executing the 
+program under different conditions.
 
 \begin{itemize}
-  \item \textbf{Single-task environments}: Dynamic environments show more fluctuations in active instruction counts, indicating frequent adaptation for optimization. In contrast, static environments stabilize early, limiting flexibility.
-  \item \textbf{Multi-task environments}: The Effective Program Instruction Count is significantly higher in dynamic multi-task setups, suggesting better management of complex learning structures. Static environments struggle to scale efficiently.
+  \item \textbf{Single-task environments}: The effective program instruction count is significantly lower in dynamic memory setups for Inverted Pendulum and Inverted Double Pendulum, indicating more efficient program execution. In Half Cheetah, the count remains unchanged between static and dynamic memory.
+  \item \textbf{Multi-task environments}: In two-environment experiments, runtime complexity is significantly lower with dynamic memory, showing a consistent reduction in execution time across generations and improved computational efficiency. However, in three-environment experiments, runtime complexity remains unchanged, suggesting that dynamic memory does not provide a significant advantage in this setting.
 \end{itemize}
 
 \section{Results and Conclusion}
@@ -538,7 +543,8 @@ To Dr. Stephen Kelly, for guiding us throughout the research process and providi
 \onecolumn
 \begin{figure*}
   \section{Additional Figures}
-  \subsection{Best Fitness Score Results}
+  \label{fig:figures}
+  \subsection{Single Tasks - Best Fitness Score Results}
   \centering
   \scalebox{0.87}{
   \begin{tabular}{p{1\linewidth}}
@@ -566,34 +572,22 @@ To Dr. Stephen Kelly, for guiding us throughout the research process and providi
 
   \scalebox{0.87}{
   \begin{tabular}{p{1\linewidth}}
-    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/multitask_general.pdf}
-      \put(130,20){\color{black!50}\shortstack[r]{Static \\ Two-Environment Multi-task}} % Adjust position
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/idp.pdf}
+      \put(130,20){\color{black!50}\shortstack[r]{Static \\ Inverted Double Pendulum}} % Adjust position
       \put(-15,50){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
     \end{overpic}
-    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/multitask_general.pdf}
-      \put(125,20){\color{black!50}\shortstack[r]{Dynamic \\ Two-Environment Multi-task}} % Adjust position
-    \end{overpic}
-  \end{tabular}
-  }
-
-  \scalebox{0.87}{
-  \begin{tabular}{p{1\linewidth}}
-    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/multitask_hc.pdf}
-      \put(125,20){\color{black!50}\shortstack[r]{Static \\ Three-Environment Multi-task}} % Adjust position
-      \put(-15,50){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
-    \end{overpic}
-    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/multitask_hc.pdf}
-      \put(120,20){\color{black!50}\shortstack[r]{Dynamic \\ Three-Environment Multi-task}} % Adjust position
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/idp.pdf}
+      \put(130,20){\color{black!50}\shortstack[r]{Dynamic \\ Inverted Double Pendulum}} % Adjust position
     \end{overpic}
   \end{tabular}
   }
   
-  \caption{Best Fitness Score results from Single and Multi-task Baseline Experiments}
-  \label{fig:best_fitness}
+  \caption{Best Fitness Score results from Single-task Baseline Experiments}
+  \label{fig:best_fitness_st}
 \end{figure*}
 \clearpage
 \begin{figure*}
-  \subsection{Effective Program Instruction Count Results}
+  \subsection{Single Tasks - Effective Program Instruction Count Results}
 
   \centering
   \scalebox{0.87}{
@@ -622,31 +616,172 @@ To Dr. Stephen Kelly, for guiding us throughout the research process and providi
 
   \scalebox{0.87}{
   \begin{tabular}{p{1\linewidth}}
-    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/multitask_general.pdf}
-      \put(130,20){\color{black!50}\shortstack[r]{Static \\ Two-Environment Multi-task}} % Adjust position
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/idp.pdf}
+      \put(130,20){\color{black!50}\shortstack[r]{Static \\ Inverted Double Pendulum}} % Adjust position
       \put(-15,20){\rotatebox{90}{\color{black}\LARGE Effective Instruction Count}} % Adjust position and size
     \end{overpic}
-    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/multitask_general.pdf}
-      \put(125,20){\color{black!50}\shortstack[r]{Dynamic \\ Two-Environment Multi-task}} % Adjust position
+    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/idp.pdf}
+      \put(130,20){\color{black!50}\shortstack[r]{Dynamic \\ Inverted Double Pendulum}} % Adjust position
+    \end{overpic}
+  \end{tabular}
+  }
+  
+  \caption{Effective Program Instruction Count results from Single-task Baseline Experiments}\label{fig:effective_program}
+  \label{fig:effective_st}
+\end{figure*}
+\twocolumn
+
+\begin{figure*}
+  \subsection{Two-Experiment Multi-task - Best Fitness Score Results}
+  \centering
+  \scalebox{0.87}{
+  \begin{tabular}{p{1\linewidth}}
+    \begin{overpic}[clip, trim=25 25 220 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/multitask/ip.pdf}
+      \put(160,20){\color{black!50}\shortstack[r]{Static \\ Inverted Pendulum}} % Adjust position
+      \put(-15,70){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
+    \end{overpic}
+    \begin{overpic}[clip, trim=25 25 220 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/multitask/ip.pdf}
+      \put(160,20){\color{black!50}\shortstack[r]{Dynamic \\ Inverted Pendulum}} % Adjust position
     \end{overpic}
   \end{tabular}
   }
 
   \scalebox{0.87}{
   \begin{tabular}{p{1\linewidth}}
-    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/multitask_hc.pdf}
-      \put(125,20){\color{black!50}\shortstack[r]{Static \\ Three-Environment Multi-task}} % Adjust position
-      \put(-15,20){\rotatebox{90}{\color{black}\LARGE Effective Instruction Count}} % Adjust position and size
+    \begin{overpic}[clip, trim=25 25 262 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/multitask/idp.pdf}
+      \put(130,20){\color{black!50}\shortstack[r]{Static \\ Inverted Double Pendulum}} % Adjust position
+      \put(-15,70){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
     \end{overpic}
-    \begin{overpic}[clip, trim=25 25 125 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/multitask_hc.pdf}
-      \put(120,20){\color{black!50}\shortstack[r]{Dynamic \\ Three-Environment Multitask}} % Adjust position
+    \begin{overpic}[clip, trim=25 25 262 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/multitask/idp.pdf}
+      \put(130,20){\color{black!50}\shortstack[r]{Dynamic \\ Inverted Double Pendulum}} % Adjust position
+    \end{overpic}
+  \end{tabular}
+  }
+
+  \caption{Best Fitness Score results from Two-environment Multi-task Baseline Experiments}
+  \label{fig:best_fitness_mt_two}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+  \subsection{Two-Experiment Multi-task - Runtime Complexity Results}
+  \centering
+  \scalebox{0.87}{
+  \begin{tabular}{p{1\linewidth}}
+    \begin{overpic}[clip, trim=25 25 220 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/multitask/ip.pdf}
+      \put(160,20){\color{black!50}\shortstack[r]{Static \\ Inverted Pendulum}} % Adjust position
+      \put(-15,40){\rotatebox{90}{\color{black}\LARGE Runtime Complexity}} % Adjust position and size
+    \end{overpic}
+    \begin{overpic}[clip, trim=25 25 220 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/multitask/ip.pdf}
+      \put(160,20){\color{black!50}\shortstack[r]{Dynamic \\ Inverted Pendulum}} % Adjust position
+    \end{overpic}
+  \end{tabular}
+  }
+
+  \scalebox{0.87}{
+  \begin{tabular}{p{1\linewidth}}
+    \begin{overpic}[clip, trim=25 25 262 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/multitask/idp.pdf}
+      \put(130,20){\color{black!50}\shortstack[r]{Static \\ Inverted Double Pendulum}} % Adjust position
+      \put(-15,50){\rotatebox{90}{\color{black}\LARGE Runtime Complexity}} % Adjust position and size
+    \end{overpic}
+    \begin{overpic}[clip, trim=25 25 262 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/multitask/idp.pdf}
+      \put(130,20){\color{black!50}\shortstack[r]{Dynamic \\ Inverted Double Pendulum}} % Adjust position
     \end{overpic}
   \end{tabular}
   }
   
-  \caption{Effective Program Instruction Count results from Single and Multi-task Baseline Experiments}\label{fig:effective_program}
+  \caption{Runtime Complexity results from Two-environment Multi-task Baseline Experiments}
+  \label{fig:runtime_complexity_mt_two}
 \end{figure*}
-\twocolumn
+\clearpage
+
+\begin{figure*}
+  \subsection{Three-Experiment Multi-task - Best Fitness Score Results}
+  \centering
+  \scalebox{0.87}{
+  \begin{tabular}{p{1\linewidth}}
+    \begin{overpic}[clip, trim=25 25 190 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/multitask_half_cheetah/half_cheetah.pdf}
+      \put(180,20){\color{black!50}\shortstack[r]{Static \\ Half Cheetah}} % Adjust position
+      \put(-15,60){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
+    \end{overpic}
+    \begin{overpic}[clip, trim=25 25 190 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/multitask_half_cheetah/half_cheetah.pdf}
+      \put(180,20){\color{black!50}\shortstack[r]{Dynamic \\ Half Cheetah}} % Adjust position
+    \end{overpic}
+  \end{tabular}
+  }
+
+  \scalebox{0.87}{
+  \begin{tabular}{p{1\linewidth}}
+    \begin{overpic}[clip, trim=25 25 220 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/multitask_half_cheetah/ip.pdf}
+      \put(160,20){\color{black!50}\shortstack[r]{Static \\ Inverted Pendulum}} % Adjust position
+      \put(-15,70){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
+    \end{overpic}
+    \begin{overpic}[clip, trim=25 25 220 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/multitask_half_cheetah/ip.pdf}
+      \put(160,20){\color{black!50}\shortstack[r]{Dynamic \\ Inverted Pendulum}} % Adjust position
+    \end{overpic}
+  \end{tabular}
+  }
+
+  \scalebox{0.87}{
+  \begin{tabular}{p{1\linewidth}}
+    \begin{overpic}[clip, trim=25 25 262 0, width=0.5\textwidth]{assets/pdf/static/best_fitness/multitask_half_cheetah/idp.pdf}
+      \put(130,20){\color{black!50}\shortstack[r]{Static \\ Inverted Double Pendulum}} % Adjust position
+      \put(-15,70){\rotatebox{90}{\color{black}\LARGE Best Fitness}} % Adjust position and size
+    \end{overpic}
+    \begin{overpic}[clip, trim=25 25 262 0, width=0.5\textwidth]{assets/pdf/dynamic/best_fitness/multitask_half_cheetah/idp.pdf}
+      \put(130,20){\color{black!50}\shortstack[r]{Dynamic \\ Inverted Double Pendulum}} % Adjust position
+    \end{overpic}
+  \end{tabular}
+  }
+
+  \caption{Best Fitness Score results from Three-environment Multi-task Baseline Experiments}
+  \label{fig:best_fitness_mt_three}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+  \subsection{Three-Experiment Multi-task - Runtime Complexity Results}
+  \centering
+  \scalebox{0.87}{
+  \begin{tabular}{p{1\linewidth}}
+    \begin{overpic}[clip, trim=25 25 190 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/multitask_half_cheetah/half_cheetah.pdf}
+      \put(180,20){\color{black!50}\shortstack[r]{Static \\ Half Cheetah}} % Adjust position
+      \put(-15,40){\rotatebox{90}{\color{black}\LARGE Runtime Complexity}} % Adjust position and size
+    \end{overpic}
+    \begin{overpic}[clip, trim=25 25 190 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/multitask_half_cheetah/half_cheetah.pdf}
+      \put(180,20){\color{black!50}\shortstack[r]{Dynamic \\ Half Cheetah}} % Adjust position
+    \end{overpic}
+  \end{tabular}
+  }
+
+  \scalebox{0.87}{
+  \begin{tabular}{p{1\linewidth}}
+    \begin{overpic}[clip, trim=25 25 220 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/multitask_half_cheetah/ip.pdf}
+      \put(160,20){\color{black!50}\shortstack[r]{Static \\ Inverted Pendulum}} % Adjust position
+      \put(-15,40){\rotatebox{90}{\color{black}\LARGE Runtime Complexity}} % Adjust position and size
+    \end{overpic}
+    \begin{overpic}[clip, trim=25 25 220 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/multitask_half_cheetah/ip.pdf}
+      \put(160,20){\color{black!50}\shortstack[r]{Dynamic \\ Inverted Pendulum}} % Adjust position
+    \end{overpic}
+  \end{tabular}
+  }
+
+  \scalebox{0.87}{
+  \begin{tabular}{p{1\linewidth}}
+    \begin{overpic}[clip, trim=25 25 262 0, width=0.5\textwidth]{assets/pdf/static/effective_program_instruction_count/multitask_half_cheetah/idp.pdf}
+      \put(130,20){\color{black!50}\shortstack[r]{Static \\ Inverted Double Pendulum}} % Adjust position
+      \put(-15,50){\rotatebox{90}{\color{black}\LARGE Runtime Complexity}} % Adjust position and size
+    \end{overpic}
+    \begin{overpic}[clip, trim=25 25 262 0, width=0.5\textwidth]{assets/pdf/dynamic/effective_program_instruction_count/multitask_half_cheetah/idp.pdf}
+      \put(130,20){\color{black!50}\shortstack[r]{Dynamic \\ Inverted Double Pendulum}} % Adjust position
+    \end{overpic}
+  \end{tabular}
+  }
+  
+  \caption{Runtime Complexity results from Three-environment Multi-task Baseline Experiments}
+  \label{fig:runtime_complexity_mt_three}
+\end{figure*}
+\clearpage
 
 %%
 %% If your work has an appendix, this is the place to put it.
