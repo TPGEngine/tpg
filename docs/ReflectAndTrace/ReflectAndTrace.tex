@@ -191,6 +191,62 @@ Here is the feedback we received on the design documents (MG and MIS), and the c
 \end{longtable}
 \subsection{VnV Plan and Report}
 
+Here is the feedback we received on the VnV Plan and VnV Report, and the changes we made in response to that feedback.
+\begin{longtable}{| p{0.2\textwidth} | p{0.2\textwidth} | p{0.3\textwidth} | p{0.1\textwidth} |}
+    \caption{Feedback and Changes for VnV Plan} \\
+    \hline
+    \textbf{Feedback Source} & \textbf{Feedback Item} & \textbf{Response} & \textbf{Issue} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{Feedback Source} & \textbf{Feedback Item} & \textbf{Response} & \textbf{Issue} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+    TA Feedback & Inaccurate descriptions in 2.1 Summary and 2.2 Objective  & Modified the two sections to better reflect rubric & \href{https://github.com/TPGEngine/tpg/issues/315}{\#315} \\
+    \hline
+    TA Feedback & Improve Spelling and Grammar and Style of VnV Plan  & Addressed feedback given in issue & \href{https://github.com/TPGEngine/tpg/issues/316}{\#316} \\
+    \hline
+    Peer Feedback & Add traceability in VnV Plan & Modified traceability matrix to reflect documentation & \href{https://github.com/TPGEngine/tpg/issues/150}{\#150} \\
+    \hline
+    Peer Feedback & Increase Detail in Nonfunctional Test Descriptions & Addressed feedback in issue by adding details & \href{https://github.com/TPGEngine/tpg/issues/151}{\#151} \\
+    \hline
+     Peer Feedback & Survey Questions for Documentation & Added survey questions & \href{https://github.com/TPGEngine/tpg/issues/155}{\#155} \\
+    \hline
+
+
+\end{longtable}
+
+
+
+\begin{longtable}{| p{0.2\textwidth} | p{0.2\textwidth} | p{0.3\textwidth} | p{0.1\textwidth} |}
+    \caption{Feedback and Changes for VnV Report} \\
+    \hline
+    \textbf{Feedback Source} & \textbf{Feedback Item} & \textbf{Response} & \textbf{Issue} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{Feedback Source} & \textbf{Feedback Item} & \textbf{Response} & \textbf{Issue} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+    Peer Feedback & Limited Explanation of Changes Due to Testing   & \textbf{Did Not Fix}: Deemed not relevant for VnV Report.  & \href{https://github.com/TPGEngine/tpg/issues/398}{\#398} \\
+    \hline
+    Peer Feedback & Missing Test Description for FR-SNL6 in both VnV documents  & Updated the VnVReport with the test's full description in the same format as other tests & \href{https://github.com/TPGEngine/tpg/issues/398}{\#398} \\
+    \hline
+    Peer Feedback & Traceability Matrix Inconsistency  & Removed test to get rid of inconsistency & \href{https://github.com/TPGEngine/tpg/issues/398}{\#398} \\
+    \hline
+    Peer Feedback & Lack of Criterion for Usability Tests & Added criteria for usability tests & \href{https://github.com/TPGEngine/tpg/issues/400}{\#400} \\
+    \hline
+    Peer Feedback & Missing NFR test case that is present in the VnVPlan & Included proper NFR solution & \href{https://github.com/TPGEngine/tpg/issues/401}{\#401} \\
+    \hline
+    Peer Feedback & Lack of clarity with feedback changes & Clarified what changes are made in response to feedback & \href{https://github.com/TPGEngine/tpg/issues/402}{\#402} \\
+    \hline
+
+\end{longtable}
+
 \section{Challenge Level and Extras}
 
 \subsection{Challenge Level}
@@ -296,18 +352,30 @@ and developers in the AI and robotics space.
 team communication plan, team member roles and workflow plan.  Did you use the 
 technology you planned on using?}
 
+Our team properly followed our development plan with respect to the workflow plan, team member roles, and communication plan. As stated in our Development Plan, we used the "TPG Capstone" Discord server for team communication, which was consistently utilized throughout the project to discuss ideas, host meetings and notify the team for PR requests. Additionally, the development stack and technologies mentioned in the Development Plan, such as Git, GitHub, and C++, were integral to the development of our project.
+
+We made sure that each team member adhered to their designated roles and responsibilities by assigning each member tasks that matched their roles. Our team meetings were held regularly, and we successfully coordinated schedules to accommodate everyone, leading to regular team attendance. Overall, our project management was carried out efficiently, staying true to our original plan.
+
+
 \subsection{What Went Well?}
 
 \plt{What went well for your project management in terms of processes and 
 technology?}
 
+Our project management was effective, particularly in the implementation of MuJoCo environments, which proceeded smoothly. This success allowed us to build upon our initial work by exploring multi-tasking for the TPG-Mujoco interface. Additionally, we enhanced our project with the development of new CLI tools, which streamlined our workflow and improved the overall efficiency of our processes. Our team communication and collaboration were strong throughout the project. This ensured that all team members were aligned with project goals and timelines. The use of GitHub for version control and project management also contributed to our success, allowing us to track progress effectively and manage tasks efficiently through issues. Overall, these factors combined to create a productive working environment.
 \subsection{What Went Wrong?}
 
 \plt{What went wrong in terms of processes and technology?}
 
+One of the challenges we faced was the inability to implement all the MuJoCo environments we initially planned due to unforeseen complications. Additionally, the process of migrating from SCons to CMake proved to be quite challenging due to a lack of updated documentation. Debugging C++ was particularly difficult as changes were occurring regularly in the TPG framework, and our limited experience with C++ added to the complexity. These issues highlighted areas where we needed to improve our skills and adapt our strategies to better handle such challenges in the future.
+
 \subsection{What Would you Do Differently Next Time?}
 
 \plt{What will you do differently for your next project?}
+
+In future projects, we would aim to diversify our roles within the team, allowing each member to explore multiple areas of software development. This would encourage a more varied approach and broaden our collective skill set, as it challenges us to step outside our comfort zones and tackle different aspects of the development process. Additionally, experimenting with a different development technologies and frameworks could be both exciting and beneficial, as it presents new challenges and learning opportunities. While our current stack was effective, exploring newer frameworks or languages might enhance performance and developer efficiency.
+
+We would also likely place a greater emphasis on more comprehensive unit testing to ensure robust code quality, as our testing scope was relatively limited. This would involve more inclusive testing strategies that cover a wider range of scenarios and edge cases. We would likely also have implemented more complex MuJoCo environments for evaluation, which would have provided a deeper understanding of the TPG framework's capabilities and limitations in handling sophisticated simulations.
 
 \section{Reflection on Capstone}
 
