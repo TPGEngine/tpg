@@ -13,6 +13,9 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 # Add option to explicitly enable code coverage
 option(ENABLE_COVERAGE "Enable code coverage" OFF)
 
+# Add option to explicity enable live streaming
+option(ENABLE_LIVE_STREAMING "Enable WebRTC live streaming pipeline" OFF)
+
 # Conditionally include code coverage
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" AND NOT ENABLE_HIGH_OPTIMIZATION)
   include(CodeCoverage)
