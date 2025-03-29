@@ -50,6 +50,7 @@
 \midrule
 10/9/2024 & 1.0 & Intial draft of SRS document.\\
 3/11/2025 & 1.1 & Modified functional requirements based on feedback\\
+3/29/2025 & 1.2 & Modified Purpose of Project based on peer review feedback\\
 
 % Date 2 & 1.1 & Notes\\
 \bottomrule
@@ -64,7 +65,11 @@ The Tangled Program Graphs (TPG) framework is an alternative approach to reinfor
 
 Currently, TPG has been tested primarily in fully observable, stationary mini-game environments, which are not representative of the dynamic and partially observable nature of real-world scenarios. This limitation presents a challenge, as the real-world problems TPG is meant to address are much more complex and constantly changing. To safely and effectively evolve TPG's capabilities, it is crucial to test the framework in advanced simulation environments, like MuJoCo, which can better mimic real-life dynamics in a controlled and risk-free manner.
 
-Additionally, TPG's codebase has been developed by graduate students primarily focused on research output, often neglecting the software engineering practices necessary for creating a robust and maintainable open-source framework. Without standardized practices such as unit testing, continuous integration/continuous deployment (CI/CD), and architectural guidelines, TPG's long-term goal of becoming a widely adopted, open-source framework could be hindered. This project seeks to address these gaps, ensuring that TPG can scale, evolve, and attract contributions from other researchers and reinforcement learning enthusiasts in a standardized and efficient manner.
+Additionally, TPG's codebase has been developed by graduate students primarily focused on research output, often neglecting the software engineering practices necessary for creating a robust and maintainable open-source framework. Without standardized practices such as unit testing, continuous integration/continuous deployment (CI/CD), and architectural guidelines, TPG's long-term goal of becoming a widely adopted, open-source framework could be hindered. 
+
+This project addresses these gaps by delivering a standardized and robust open-source framework for TPG, integrated with the MuJoCo simulation environment. This framework will include comprehensive documentation, unit tests, and a CI/CD pipeline, ensuring its maintainability and scalability.
+
+This deliverable will enable researchers to intuitively build upon and rapidly test applications of TPG in advanced simulation environments. By demonstrating the efficacy of TPG within MuJoCo, this project paves the way for broader applications of TPG, such as in robotics, control systems, and other real-world domains. Ultimately, this will accelerate the adoption of TPG as a viable and efficient alternative to DNN-based RL in various industries and research areas.
 \subsection{Goals of the Project}
 
 \begin{enumerate}
