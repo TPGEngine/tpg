@@ -122,9 +122,9 @@ Here are the following critical assumptions that will be made:
        \hline
        \textbf{Design Function} & \textbf{Failure Modes} & \textbf{Effects of Failure} & \textbf{Causes of Failure} & \textbf{Detection} & \textbf{Recommended Actions} & \textbf{SR} & \textbf{Ref.} \\
        \hline
-       GitHub Actions CI/CD Pipeline & Invalid Config File & Code can't be merged & a. Improper syntax & Error handling messages & a. Debug error messages  & a. SR-1 & H1-1 \\
+       GitHub Actions CI/CD Pipeline & Invalid Config File & Code can't be merged & a. Improper syntax & Error handling messages & Ensure config files have no syntax errors  & a. SR-1 & H1-1 \\
        \cline{2-8}
-        & Dependency compatibility issues & Code won't compile & Incorrect versions of a dependency & Error handling messages & a. Debug error messages & a. SR-1 & H1-2 \\
+        & Dependency compatibility issues & Code won't compile & Incorrect versions of a dependency & Error handling messages & Ensure that linux environment has been setup correctly & a. SR-1 & H1-2 \\
        \cline{2-8}
         & Invalid testing & Code does not pass coverage tests, failed test cases & a. "Breaking changes" were added that broke old code & a. Error handling messages \newline b. Automated tests run against new code & Debug error messages & a. SR-1 & H1-3 \\
        \hline
