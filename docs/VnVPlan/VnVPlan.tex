@@ -37,7 +37,7 @@
 03/11/2024 & 1.1 & Modified VnV Plan to include unit testing plan and changed summary and objective section based on TA feedback\\
 03/17/2024 & 1.2 & Updated challenge level section to be advanced.\\
 03/29/2025 & 1.3 & Updated FR-SLN1 to make it more clear\\
-
+03/30/2024 & 1.4 & Made requirement 15.3.1 less vague.\\
 \bottomrule
 \end{tabularx}
 
@@ -628,18 +628,18 @@ Control: Automated + Manual
 
 Type: Security
 
-Initial State: System has the capability of storing and visualizing data in different shapes and formats.
+Initial State: System has the capability of storing and visualizing structured (CSV, JSON) and unstructured (log files, text files) data.
 
 Input/Condition: Sensitive data is pushed into the public repository through Git.
 
-Output/Result: Obfuscation of sensitive data is implemented, protecting privacy of any entity.
+Output/Result: Obfuscation of sensitive data is implemented, protecting privacy of any entity. This data is obfuscated using SHA-256 hashing, implemented within the framework, ensuring privacy compliance.
 
 Test Case Derivation: Data, mostly stored in CSV or .txt files, are publicly stored across the framework.
 
 How test will be performed:
 \begin{itemize}
-  \item Automated: Create and run automated unit tests that verifies that ensures data shown in logs, files, and messages are obfuscated
-  \item Manual: Manually check stored data through each file within the framework
+  \item Automated: Implement unit tests to scan logs, stored files, and system messages for exposed sensitive patterns (e.g., regex detection of emails, credit card numbers). Validate that all detected sensitive data is transformed into its obfuscated equivalent.
+  \item Manual: Manually check stored data through each file within the framework. Compare obfuscated outputs with expected masked formats to confirm compliance.
 \end{itemize}
 
 \end{enumerate}
