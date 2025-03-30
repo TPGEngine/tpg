@@ -48,6 +48,7 @@
 \midrule
 01/16/2025 & 1.0 & Revision 0\\
 03/11/2025 & 1.1 & Revision 1 - Included  modifications to intro and classic control module to reflect TA feedback\\
+03/30/2025 & 1.2 & Revision 2 - Removed AC that are not relevant to information hiding\\
 \bottomrule
 \end{tabularx}
 
@@ -162,7 +163,6 @@ change.
   \item[\refstepcounter{acnum} \actheacnum \label{acOutput2}:] Simulation support for all types of operating systems.
   \item[\refstepcounter{acnum} \actheacnum \label{acOutput3}:] Comprehensive logging across all of TPG's components.
   \item[\refstepcounter{acnum} \actheacnum \label{acVerify1}:] Extensive testing and checks for newly published code.
-  \item[\refstepcounter{acnum} \actheacnum \label{acVerify2}:] Refactoring old and unstructured components.
   \item[\refstepcounter{acnum} \actheacnum \label{acInput}:] Format of inputting experimental parameters.
   \item[\refstepcounter{acnum} \actheacnum \label{acControl}:] Shift to a different dependency management tool such as CMake.
 \end{description}
@@ -376,9 +376,6 @@ requirements and between the modules and the anticipated changes.
   \\
   \acref{acVerify1}
   & Classic Control, MuJoCo, TPG Experiment  & \mref{mClassicControl}, \mref{mMuJoCo}, \mref{mExperiment}
-  \\
-  \acref{acVerify2}
-  & Classic Control, TPG Experiment  & \mref{mClassicControl}, \mref{mExperiment}
   \\
   \acref{acInput}
   & Hardware, Classic Control, MuJoCo & \mref{mHH}, \mref{mClassicControl}, \mref{mMuJoCo}
