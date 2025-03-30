@@ -41,6 +41,7 @@
 \midrule
 3/10/2025 & 1.0 & First write up of VnV Report \\
 3/18/2025 & 1.1 & Fixed extra FR-SLN6 test case \\
+3/30/2025 & 1.2 & Fixed Missing NFR-SLN5 \\
 \bottomrule
 \end{tabularx}
 
@@ -204,10 +205,14 @@ For NFR-SLN3, the framework now offers extensive customization options for MuJoC
   \endhead
   NFR-SLN4 & Pass \\
   \hline
+  NFR-SLN5 & Pass \\
+  \hline
   \end{longtable}
 \end{center}
 
 For NFR-SLN4, test cases within TPG for the experimental environments have been implemented to check for the accuracy of the numerical computations associated during training. Declaration of variables with proper types (e.g. signed long or int, unsigned long or int) has also been taken into consideration to reduce issues in the future for extremely large or small numbers that may overflow.
+
+For NFR-SLN5, Test cases have been implemented within TPG to ensure robustness against invalid inputs and unexpected environmental conditions. These tests validate the system's ability to handle exceptions gracefully, recover from errors without data loss, and maintain operational stability under varying workloads and stress conditions.
 
 \begin{figure}[H]
     \centering
