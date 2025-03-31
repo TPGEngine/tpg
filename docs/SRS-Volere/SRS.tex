@@ -52,6 +52,7 @@
 3/11/2025 & 1.1 & Modified functional requirements based on feedback\\
 3/29/2025 & 1.2 & Modified Purpose of Project based on peer review feedback\\
 3/30/2025 & 1.3 & Revised non-functional requirements\\
+3/31/2025 & 1.4 & Added external links from TA Feedback\\
 % Date 2 & 1.1 & Notes\\
 \bottomrule
 \end{tabularx}
@@ -61,9 +62,9 @@
 ~\newpage
 \section{Purpose of the Project}
 \subsection{User Business}
-The Tangled Program Graphs (TPG) framework is an alternative approach to reinforcement learning (RL) that leverages evolution-based techniques instead of the widely used deep neural networks (DNN). In traditional RL, agents learn through trial and error by generating actions and receiving rewards. The DNN approach requires extensive computational resources, often involving thousands of GPUs, which can be expensive and inefficient. In contrast, TPG aims to provide a more cost-effective and resource-efficient solution, with the long-term goal of embedding this evolution-based learning directly into hardware, reducing dependency on large-scale computational infrastructure.
+The \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg}{Tangled Program Graphs} (TPG) framework is an alternative approach to reinforcement learning (RL) that leverages evolution-based techniques instead of the widely used deep neural networks (DNN). In traditional RL, agents learn through trial and error by generating actions and receiving rewards. The DNN approach requires extensive computational resources, often involving thousands of GPUs, which can be expensive and inefficient. In contrast, TPG aims to provide a more cost-effective and resource-efficient solution, with the long-term goal of embedding this evolution-based learning directly into hardware, reducing dependency on large-scale computational infrastructure.
 
-Currently, TPG has been tested primarily in fully observable, stationary mini-game environments, which are not representative of the dynamic and partially observable nature of real-world scenarios. This limitation presents a challenge, as the real-world problems TPG is meant to address are much more complex and constantly changing. To safely and effectively evolve TPG's capabilities, it is crucial to test the framework in advanced simulation environments, like MuJoCo, which can better mimic real-life dynamics in a controlled and risk-free manner.
+Currently, TPG has been tested primarily in fully observable, stationary mini-game environments, which are not representative of the dynamic and partially observable nature of real-world scenarios. This limitation presents a challenge, as the real-world problems TPG is meant to address are much more complex and constantly changing. To safely and effectively evolve TPG's capabilities, it is crucial to test the framework in advanced simulation environments, like \href{https://github.com/google-deepmind/mujoco}{MuJoCo}, which can better mimic real-life dynamics in a controlled and risk-free manner.
 
 Additionally, TPG's codebase has been developed by graduate students primarily focused on research output, often neglecting the software engineering practices necessary for creating a robust and maintainable open-source framework. Without standardized practices such as unit testing, continuous integration/continuous deployment (CI/CD), and architectural guidelines, TPG's long-term goal of becoming a widely adopted, open-source framework could be hindered. 
 
