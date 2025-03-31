@@ -117,29 +117,73 @@ Here are the following critical assumptions that will be made:
 \begin{landscape}
     \begin{table}[ht]
        \centering
-       \scalebox{0.7}{ 
-       \begin{tabular}{|p{1.75cm}|p{4cm}|p{5cm}|p{5cm}|p{3cm}|p{5cm}|p{2cm}|p{2cm}|}
+       \scalebox{0.7}{%
+       \begin{tabular}{|p{2cm}|p{3cm}|p{4cm}|p{4cm}|p{3cm}|p{4cm}|p{2cm}|p{2cm}|}
        \hline
-       \textbf{Design Function} & \textbf{Failure Modes} & \textbf{Effects of Failure} & \textbf{Causes of Failure} & \textbf{Detection} & \textbf{Recommended Actions} & \textbf{SR} & \textbf{Ref.} \\
+       \textbf{Design Function} &
+       \textbf{Failure Mode} &
+       \textbf{Effect of Failure} &
+       \textbf{Causes of Failure} &
+       \textbf{Detection} &
+       \textbf{Recommended Actions} &
+       \textbf{SR} &
+       \textbf{Ref.} \\
        \hline
-       GitHub Actions CI/CD Pipeline & Invalid Config File & Code can't be merged & a. Improper syntax & Error handling messages & Ensure config files have no syntax errors  & a. SR-1 & H1-1 \\
-       \cline{2-8}
-        & Dependency compatibility issues & Code won't compile & Incorrect versions of a dependency & Error handling messages & Ensure that linux environment has been setup correctly & a. SR-1 & H1-2 \\
-       \cline{2-8}
-        & Invalid testing & Code does not pass coverage tests, failed test cases & a. "Breaking changes" were added that broke old code & a. Error handling messages \newline b. Automated tests run against new code & Debug error messages & a. SR-1 & H1-3 \\
+       GitHub Actions CI/CD Pipeline &
+       Invalid Config File &
+       Merged code fails integration &
+       Improper syntax or misconfiguration in the file &
+       Error messages during CI run &
+       Validate config file syntax prior to merging and introduce automated config checks &
+       SR-1 & H1-1 \\
        \hline
-       Experiment & Incomplete experiment & Output logs are missing data & a. OS compatibility \newline b. Scripts unable to parse the input data & Error handling messages & a. Redo experiment \newline b. Debug error messages \newline c. Input validation & a. SR-2 & H2-1 \\
+       GitHub Actions CI/CD Pipeline &
+       Dependency Compatibility Issues &
+       Build failure and uncompilable code &
+       Mismatched or outdated dependency versions in the environment &
+       CI error logs and build failure alerts &
+       Enforce dependency version constraints and perform environment validation tests &
+       SR-1 & H1-2 \\
        \hline
-       OpenGL Interface & OS compatibility issues & Visual Disparities & a. Missing OS specific dependencies & Testing on multiple OS types (e.g. Mac vs Windows vs Linux) & a. Testing OpenGL on a variety of operating systems and their different versions \newline b. Ensure integration testing in GitHub Actions pipeline & a. SR-3 & H3-1 \\
+       GitHub Actions CI/CD Pipeline &
+       Invalid Testing Setup &
+       Test suite failures leading to undetected issues &
+       Integration of breaking changes or misconfigured test scripts &
+       Error messages and test reports in CI logs &
+       Enhance test coverage and implement a pre-merge testing pipeline &
+       SR-1 & H1-3 \\
        \hline
-       Open source contribution & Unintended code changes & Security, code tampering & a. Wrong code being merged \newline b. Security Vulnerabilities & a. CI/CD Github Actions pipeline ensures reviewer and main branch protection & a. Revert back to previous version (Git controlled) & a. SR-1 & H4-1 \\
+       Experiment Processing &
+       Incomplete Experiment Data &
+       Missing or partial output logs affecting analysis &
+       OS-specific issues or failures in parsing input data &
+       User reports and error handling messages &
+       Validate input data, add redundancy in logging, and rerun experiments if needed &
+       SR-2 & H2-1 \\
        \hline
-       \end{tabular}
+       OpenGL Integration &
+       Software Incompatibility with OS &
+       Application failure to run and/or incorrect visual output &
+       Incorrect bindings used or OS lacking required OpenGL support &
+       Error messages on startup, user reports, and cross-platform testing outcomes &
+       Provide alternative output (e.g., fallback to video rendering or text-based interface) and
+       notify the user that the feature is unavailable on this platform &
+       SR-3 & H3-1 \\
+       \hline
+       Open Source Contribution &
+       Unauthorized Code Changes &
+       Potential security vulnerabilities and instability &
+       Merging of untrusted contributions or unreviewed code with known issues &
+       CI/CD reviews, branch protection mechanisms, and monitoring for anomalous commits &
+       Use strict code reviews, revert malicious changes via Git control, and enforce contributor
+       trust policies &
+       SR-1 & H4-1 \\
+       \hline
+       \end{tabular}%
        } % End of \scalebox
        \caption{Failure Mode and Effect Analysis}
        \label{table:fmea}
-       \end{table}
-   
+    \end{table}
 \end{landscape}
 
 
