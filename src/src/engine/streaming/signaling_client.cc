@@ -1,6 +1,7 @@
 #include "signaling_client.h"
 #include <boost/beast/core.hpp>
 #include <boost/beast/websocket.hpp>
+#include <boost/asio/post.hpp>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -126,15 +127,42 @@ void WebSocketClient::onRead(const boost::system::error_code &ec,
 
 // sendMessage: Asynchronously send a message over the WebSocket.
 void WebSocketClient::sendMessage(const std::string &message) {
+    // Parse and update the message.
     nlohmann::json msg = nlohmann::json::parse(message);
     msg["id"] = "pipeline-client";
     std::string updatedMessage = msg.dump();
-    ws_.async_write(
-        boost::asio::buffer(updatedMessage),
-        [this](const boost::system::error_code &ec, std::size_t bytes_transferred) {
-            onWrite(ec, bytes_transferred);
-        });
+
+    // Post the sending operation to the io_context to ensure thread safety.
+    boost::asio::post(io_context_, [this, updatedMessage]() {
+        bool writeInProgress = !writeQueue_.empty();
+        writeQueue_.push_back(updatedMessage);
+        if (!writeInProgress) {
+            doWrite();
+        }
+    });
 }
+
+void WebSocketClient::doWrite() {
+    ws_.async_write(
+        boost::asio::buffer(writeQueue_.front()),
+        [this](const boost::system::error_code &ec, std::size_t /*bytes_transferred*/) {
+            if (ec) {
+                std::cerr << "Write error: " << ec.message() << "\n";
+                // Handle error as needed.
+                return;
+            }
+            
+            // Remove the message that was just sent.
+            writeQueue_.pop_front();
+            
+            // If more messages are pending, send the next one.
+            if (!writeQueue_.empty()) {
+                doWrite();
+            }
+        }
+    );
+}
+
 
 // onWrite: Called when a write operation completes.
 void WebSocketClient::onWrite(const boost::system::error_code &ec,

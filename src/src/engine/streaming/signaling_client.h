@@ -8,6 +8,7 @@
 #include <string>
 #include <thread>
 #include <memory>
+#include <deque>
 
 class WebSocketClient {
 public:
@@ -48,6 +49,7 @@ private:
     void onHandshake(const boost::system::error_code &ec);
     void onWrite(const boost::system::error_code &ec, std::size_t bytes_transferred);
     void onRead(const boost::system::error_code &ec, std::size_t bytes_transferred);
+    void doWrite();
 
     // Connection details.
     std::string host_;
@@ -69,6 +71,8 @@ private:
 
     // Callback for received messages.
     MessageHandler messageHandler_;
+
+    std::deque<std::string> writeQueue_;
 };
 
 #endif // WEBSOCKET_CLIENT_H

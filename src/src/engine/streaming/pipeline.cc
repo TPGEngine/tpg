@@ -26,8 +26,8 @@ static std::string get_current_timestamp() {
 }
 
 // Helper callback for promise fulfillment to extract the SDP offer.
-static void on_offer_created(GstPromise* promise,
-                             gpointer user_data) {
+static void on_offer_created(GstPromise* promise, gpointer user_data) {
+  GstElement* webrtc = (GstElement*)user_data;
   const GstStructure* reply = gst_promise_get_reply(promise);
   GstWebRTCSessionDescription* offer = nullptr;
 
@@ -38,10 +38,12 @@ static void on_offer_created(GstPromise* promise,
 
   if (!offer) {
     std::cerr << get_current_timestamp()
-              << " [GStreamerPipeline] Failed to create offer"
-              << std::endl;
+              << " [GStreamerPipeline] Failed to create offer" << std::endl;
     return;
   }
+
+  // **The key missing step: set the local description before sending the offer.**
+  g_signal_emit_by_name(webrtc, "set-local-description", offer, NULL);
 
   // Convert the SDP to string.
   gchar* sdp_text = gst_sdp_message_as_text(offer->sdp);
@@ -106,6 +108,7 @@ static void on_ice_candidate(GstElement* webrtc, guint mlineindex,
   candidateJson["type"] = "ice-candidate";
   candidateJson["sdpMLineIndex"] = mlineindex;
   candidateJson["candidate"] = std::string(candidate);
+  candidateJson["sdpMid"] = "video0";
 
   // Serialize JSON to a string.
   std::string candidateMsg = candidateJson.dump();
