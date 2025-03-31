@@ -291,12 +291,11 @@ to be implemented.
 \subsubsection{Visualization Module (\mref{mVisualization})}
 
 \begin{description}
-\item[Secrets:]Output logs from tpg*.std files.
-\item[Services:]Provides the visualization of the experiment being run. Extract metrics from logs, aggregate the metrics, plot, and combine them into a singular PDF.
+\item[Secrets:] Specifies the agreed log format shared between the logging and visualization modules. The visualization module does not need to avoid details of the log content but relies on the consistent interpretation defined by this format.
+\item[Services:] Provides visualization for experiments by extracting metrics from logs, aggregating metrics, plotting results, and compiling the outputs into a single PDF report.
 \item[Implemented By:] \progname{}
 \item[Type of Module:] Abstract Object
 \end{description}
-
 
 \subsubsection{Logging Module  (\mref{mLogging})}
 
