@@ -34,9 +34,11 @@
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 11/04/2024 & 1.0 & Initial draft of VnV plan.\\
-03/11/2024 & 1.1 & Modified VnV Plan to include unit testing plan and changed summary and objective section based on TA feedback\\
-03/17/2024 & 1.2 & Updated challenge level section to be advanced.\\
-
+03/11/2025 & 1.1 & Modified VnV Plan to include unit testing plan and changed summary and objective section based on TA feedback. \\
+03/17/2025 & 1.2 & Updated challenge level section to be advanced. \\
+03/29/2025 & 1.3 & Updated FR-SLN1 to make it more clear. \\
+03/30/2025 & 1.4 & Made requirement 15.3.1 less vague.\\
+03/31/2025 & 1.5 & Updated Visualization Module secrets. \\
 \bottomrule
 \end{tabularx}
 
@@ -273,6 +275,8 @@ The entire validation process will be iterative, with feedback incorporated thro
 
 The following section covers the test cases for functional requirements discussed in the SRS document. Every test is defined with control, type, initial state, input and output values, test case derivation and how the testing will be performed. Using this approach of testing will maintain the high-quality experience that users may look for when interacting with a software.
 
+Additionally, in order to perform these tests, follow this \href{https://gitlab.cas.mcmaster.ca/kellys32/tpg/-/wikis/Dev-Container-Setup-Guide}{setup guide} to get set up so testers can reproduce.
+
 \subsubsection{Interface that is Compatible with \href{https://mujoco.org/}{MuJoCo}}
 
 The tests below provide the means to evaluate the following functional requirements referred to in the SRS document:
@@ -294,6 +298,7 @@ Input: This \href{https://github.com/TPGEngine/tpg/blob/main/src/scripts/run/tpg
 Output: The output of the script is \textbf{Starting run ...} printed on the terminal. Note the experiment is running in the background.
 
 Test Case Derivation: The script successfully executes the experiment and the output is printed. A user could also run htop to see the processes of the experiment running to confirm. Also another script \href{https://github.com/TPGEngine/tpg/blob/main/src/scripts/run/tpg-run-mpi.sh}{tpg-run-mpi.sh -m 1} can be run to output an OpenGL visualization of the experiment. 
+
 How test will be performed: The test can be performed across different Operating Systems. The interaction with the system is through the command line.
 					
 \item{FR-SLN2}
@@ -624,18 +629,18 @@ Control: Automated + Manual
 
 Type: Security
 
-Initial State: System has the capability of storing and visualizing data in different shapes and formats.
+Initial State: System has the capability of storing and visualizing structured (CSV, JSON) and unstructured (log files, text files) data.
 
 Input/Condition: Sensitive data is pushed into the public repository through Git.
 
-Output/Result: Obfuscation of sensitive data is implemented, protecting privacy of any entity.
+Output/Result: Obfuscation of sensitive data is implemented, protecting privacy of any entity. This data is obfuscated using SHA-256 hashing, implemented within the framework, ensuring privacy compliance.
 
 Test Case Derivation: Data, mostly stored in CSV or .txt files, are publicly stored across the framework.
 
 How test will be performed:
 \begin{itemize}
-  \item Automated: Create and run automated unit tests that verifies that ensures data shown in logs, files, and messages are obfuscated
-  \item Manual: Manually check stored data through each file within the framework
+  \item Automated: Implement unit tests to scan logs, stored files, and system messages for exposed sensitive patterns (e.g., regex detection of emails, credit card numbers). Validate that all detected sensitive data is transformed into its obfuscated equivalent.
+  \item Manual: Manually check stored data through each file within the framework. Compare obfuscated outputs with expected masked formats to confirm compliance.
 \end{itemize}
 
 \end{enumerate}

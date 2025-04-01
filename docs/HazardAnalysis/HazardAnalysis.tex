@@ -41,6 +41,8 @@
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
 10/25/2024 & All members & Revision 0 of Hazard Analysis\\
+03/29/2025 & Richard & Edited traceability and rewording of safety requirements \\
+03/31/2025 & Richard & Made FMEA table more coherent for TA Feedback \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -116,53 +118,107 @@ Here are the following critical assumptions that will be made:
 \begin{landscape}
     \begin{table}[ht]
        \centering
-       \scalebox{0.7}{ 
-       \begin{tabular}{|p{1.75cm}|p{4cm}|p{5cm}|p{5cm}|p{3cm}|p{5cm}|p{2cm}|p{2cm}|}
+       \scalebox{0.7}{%
+       \begin{tabular}{|p{2cm}|p{3cm}|p{4cm}|p{4cm}|p{3cm}|p{4cm}|p{2cm}|p{2cm}|}
        \hline
-       \textbf{Design Function} & \textbf{Failure Modes} & \textbf{Effects of Failure} & \textbf{Causes of Failure} & \textbf{Detection} & \textbf{Recommended Actions} & \textbf{SR} & \textbf{Ref.} \\
+       \textbf{Design Function} &
+       \textbf{Failure Mode} &
+       \textbf{Effect of Failure} &
+       \textbf{Causes of Failure} &
+       \textbf{Detection} &
+       \textbf{Recommended Actions} &
+       \textbf{SR} &
+       \textbf{Ref.} \\
        \hline
-       GitHub Actions CI/CD Pipeline & Invalid Config File & Code can't be merged & a. Improper syntax & Error handling messages & a. Debug error messages  & a. SR-1 & H1-1 \\
-       \cline{2-8}
-        & Dependency compatibility issues & Code won't compile & Incorrect versions of a dependency & Error handling messages & a. Debug error messages & a. SR-1 & H1-2 \\
-       \cline{2-8}
-        & Invalid testing & Code does not pass coverage tests, failed test cases & a. "Breaking changes" were added that broke old code & a. Error handling messages \newline b. Automated tests run against new code & Debug error messages & a. SR-1 & H1-3 \\
+       GitHub Actions CI/CD Pipeline &
+       Invalid Config File &
+       Merged code fails integration &
+       Improper syntax or misconfiguration in the file &
+       Error messages during CI run &
+       Validate config file syntax prior to merging and introduce automated config checks &
+       SR-1 & H1-1 \\
        \hline
-       Experiment & Incomplete experiment & Output logs are missing data & a. OS compatibility \newline b. Scripts unable to parse the input data & Error handling messages & a. Redo experiment \newline b. Debug error messages \newline c. Input validation & a. SR-2 & H3-1 \\
+       GitHub Actions CI/CD Pipeline &
+       Dependency Compatibility Issues &
+       Build failure and uncompilable code &
+       Mismatched or outdated dependency versions in the environment &
+       CI error logs and build failure alerts &
+       Enforce dependency version constraints and perform environment validation tests &
+       SR-1 & H1-2 \\
        \hline
-       OpenGL Interface & OS compatibility issues & Visual Disparities & a. Missing OS specific dependencies & Testing on multiple OS types (e.g. Mac vs Windows vs Linux) & a. Testing OpenGL on a variety of operating systems and their different versions \newline b. Ensure integration testing in GitHub Actions pipeline & a. SR-3 & H4-1 \\
+       GitHub Actions CI/CD Pipeline &
+       Invalid Testing Setup &
+       Test suite failures leading to undetected issues &
+       Integration of breaking changes or misconfigured test scripts &
+       Error messages and test reports in CI logs &
+       Enhance test coverage and implement a pre-merge testing pipeline &
+       SR-1 & H1-3 \\
        \hline
-       Open source contribution & Unintended code changes & Security, code tampering & a. Wrong code being merged \newline b. Security Vulnerabilities & a. CI/CD Github Actions pipeline ensures reviewer and main branch protection & a. Revert back to previous version (Git controlled) & a. SR-1 & H5-1 \\
+       Experiment Processing &
+       Incomplete Experiment Data &
+       Missing or partial output logs affecting analysis &
+       OS-specific issues or failures in parsing input data &
+       User reports and error handling messages &
+       Validate input data, add redundancy in logging, and rerun experiments if needed &
+       SR-2 & H2-1 \\
        \hline
-       \end{tabular}
+       OpenGL Integration &
+       Software Incompatibility with OS &
+       Application failure to run and/or incorrect visual output &
+       Incorrect bindings used or OS lacking required OpenGL support &
+       Error messages on startup, user reports, and cross-platform testing outcomes &
+       Provide alternative output (e.g., fallback to video rendering or text-based interface) and
+       notify the user that the feature is unavailable on this platform &
+       SR-3 & H3-1 \\
+       \hline
+       Open Source Contribution &
+       Unauthorized Code Changes &
+       Potential security vulnerabilities and instability &
+       Merging of untrusted contributions or unreviewed code with known issues &
+       CI/CD reviews, branch protection mechanisms, and monitoring for anomalous commits &
+       Use strict code reviews, revert malicious changes via Git control, and enforce contributor
+       trust policies &
+       SR-1 & H4-1 \\
+       \hline
+       \end{tabular}%
        } % End of \scalebox
        \caption{Failure Mode and Effect Analysis}
        \label{table:fmea}
-       \end{table}
-   
+    \end{table}
 \end{landscape}
 
 
 \section{Safety and Security Requirements}
 
 \subsection*{SR-1:}
+\label{SR-1}
 The system shall have a CI/CD pipeline that goes through the essential steps (build, test, linting, etc.) whenever new code is committed. \\ \\
 \textbf{Rationale:} Maintaining a large code base with numerous contributors needs to be standardized. Want to minimize time spent onboarding and debugging nagging issues. Running through this pipeline upon each commit/pull request ensures the code base is properly synchronized across contributors and a seamless developer experience. \\ \\
-\textbf{Associated Hazards:} H1, H5-1
+\textbf{Associated Hazards:} H1, H4-1
 
 \subsection*{SR-2:}
+\label{SR-2}
 The system shall inform contributors of errors that occur during the running of an experiment between the agent and the environment. It is the contributors responsibility to ensure the validity of the experiments they want to run between the agent and the environment. \\ \\ 
 \textbf{Rationale:} Since the contributor has to manually specify parameters to run an experiment, it is very possible an incompatible parameter is run. The system shall inform the contributor which parameter(s) are leading to an incomplete experiment and to highlight these in the input data. \\ \\ 
-\textbf{Associated Hazards:} H3-1
+\textbf{Associated Hazards:} H2-1
 
 \subsection*{SR-3:}
-The system shall ensure performance across contributors using different operating systems functions consistently. \\ \\
+\label{SR-3}
+The system shall ensure consistent performance across different operating systems functions. \\ \\
 \textbf{Rationale:} Contributors use a variety of platforms to do development (e.g. Linux, Windows, MacOS). Ensuring each of those user groups is able to onboard quickly and use the framework lowers the friction to access this project and enables more development from a wider user base. \\ \\
-\textbf{Associated Hazards:} H4-1
+\textbf{Associated Hazards:} H3-1
 
 
 \section{Roadmap}
 
-This hazard analysis has introduced new safety and security requirements as seen in the sections above. The majority of these requirements will be attempted to be implemented into the design of the project by the Revision 0 demonstration in February 2025. At the moment, the team will prioritize implementing safety and security requirements SR-1 and SR-2; however at any moment throughout the development of the project, some requirements may be ultimately decided not to be pursued due to potential time constraints. 
+This hazard analysis has introduced new safety and security requirements as seen in the sections above. The majority of these requirements will be attempted to be implemented into the design of the project by the Revision 0 demonstration in February 2025. At the moment, the team will prioritize implementing safety and security requirements SR-1 and SR-2.
+\\\\
+\textbf{Justification for SR-1 and SR-2 Prioritization:}
+\begin{itemize}
+    \item \textbf{\hyperref[SR-1]{SR-1} (CI/CD Pipeline):} Establishing a robust CI/CD pipeline is crucial for maintaining code quality, ensuring consistent builds, and streamlining the development workflow. By addressing SR-1 early, we can prevent integration issues, automate testing, and facilitate collaboration among developers. This proactive approach will minimize the risk of introducing errors into the codebase and improve overall project stability.
+    \item \textbf{\hyperref[SR-2]{SR-2} (Experiment Error Reporting):} Providing contributors with clear and informative error messages during experiment execution is essential for accelerating the development and debugging process. By addressing SR-2 early, we empower contributors to identify and resolve issues more effectively, leading to faster iteration cycles and improved experimental outcomes. This proactive approach will minimize wasted time and effort and ensure the validity of experimental results.
+\end{itemize}
+The remaining requirements will be addressed in subsequent iterations of the project, with the specific sequence determined based on ongoing risk assessments, resource availability, and stakeholder feedback. However at any moment throughout the development of the project, some requirements may be ultimately decided not to be pursued due to potential time constraints.
 
 \newpage{}
 
