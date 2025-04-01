@@ -372,7 +372,29 @@ The tests below provide the means to evaluate the following functional requireme
 \end{itemize}
 
 \begin{enumerate}
+
   \item{FR-SLN5}
+
+  Control: Automated
+
+  Initial State: A new code change has been pushed and merged into the main branch.
+  
+  Input: The latest commit in the main branch triggers the GitHub Actions pipeline.
+  
+  Output: The CMake-based test suite is executed, and all test cases are run automatically. The pipeline reports success if all tests pass or failure if any tests fail.
+  
+  Test Case Derivation: The system must detect changes in the main branch and automatically trigger the test suite to ensure no regressions or breakages are introduced. This verifies that new changes maintain compatibility with existing functionality.
+  
+  How test will be performed:
+  \begin{itemize}
+  \item The GitHub Actions pipeline is configured to monitor the main branch for new commits.
+  \item Upon detecting a new commit, the pipeline checks out the code, builds the project using CMake, and runs all C++ test cases.
+  \item Test results are reported in the GitHub Actions workflow summary.
+  \item If any tests fail, the pipeline will mark the run as failed, notifying the team of the failure.
+  \end{itemize}
+
+
+  \item{FR-SLN6}
   Control: Automated
             
   Initial State: User has just made code changes and pushed to a feature branch.
