@@ -28,7 +28,9 @@
 9/23/2024 & Richard Li & Made suggestions to Calvyn's sections \\
 9/23/2024 & Calvyn Siong & Implemented feedback \\
 9/23/2024 & Richard Li, Calvyn Siong & Added reflection section \\
-11/03/2025 & Calvyn Siong & Changed goals to reflect feedback appropriately (Introduced more measurable outcomes rather than desired outcomes/methodology) \\
+11/3/2024 & Calvyn Siong & Changed goals to reflect feedback appropriately (Introduced more measurable outcomes rather than desired outcomes/methodology) \\
+3/31/2025 & Richard Li & Fixed challenge level to change to Advanced level \\
+3/31/2025 & Richard Li & Constructed Problem Statement around a thesis \\
 
 \bottomrule
 \end{tabularx}
@@ -38,36 +40,60 @@
 
 \subsection{Problem}
 
-Tangled Program Graphs (TPG) is a reinforcement learning framework being developed by McMaster’s Creative Algorithm Lab under Dr. Stephen Kelly. The main scope of the research is to eventually apply genetic programming principles to embedded systems and to share this framework as an open source library. Reinforcement Learning algorithms have the same underlying purpose: determining the right action given the current state of the environment. The cost to train deep learning neural networks is a huge blocker to democratize access to this technology. TPG aims to solve the cost issue through evolution. However, TPG has two notable problems: software engineering practices, and integrations into more advanced real-world environments.
+Tangled Program Graphs (TPG) is a reinforcement learning framework under development at McMaster’s Creative Algorithm Lab led by Dr. Stephen Kelly. The research aims to apply genetic programming principles to embedded systems and share the framework as an open-source library. Unlike conventional deep learning approaches whose heavy training costs limit their accessibility, TPG uses evolutionary methods to reduce these costs. However, the current implementation of TPG faces two significant challenges:
 
-Despite its innovative approach, TPG’s code base does not fully adhere to standard software engineering practices commonly found in large open-source libraries. For instance, it lacks comprehensive documentation, robust testing, and CI/CD, which can pose challenges for researchers or community contributors attempting to onboard or make changes to the framework. With more focus on software engineering best principles (SOLID, abstractions, etc.), the code base can evolve over time, allowing researchers to focus more on actual results, rather than dealing with technical debt.
+\begin{enumerate}
+  \item \textbf{Software Engineering Practices:}  
+    The TPG codebase does not fully adhere to the robust software engineering standards seen in mature open-source projects. It lacks comprehensive documentation, robust testing frameworks, and automated CI/CD pipelines. This shortfall creates technical debt and hinders community contributions as researchers struggle with onboarding and maintaining the framework.
 
-Currently, TPG has been integrated and validated within fully observable mini-game environments (such as Atari, Pac-man, CartPole etc.). However, real-world scenarios are typically partially observable and dynamic, where an AI agent must adapt to constantly changing conditions. To advance Dr. Kelly’s research, testing and validation in more complex, dynamic environments is essential. The ultimate objective is to develop an evolutionary reinforcement learning framework suitable for embedded systems. Achieving this goal requires moving beyond controlled environments and applying evolutionary reinforcement learning to real-world scenarios, further expanding the scope and pushing the boundaries of this research.
+  \item \textbf{Integration into Advanced Environments:}  
+    Up to this point, TPG has only been integrated and validated in fully observable, simple environments (e.g., Atari, Pac-Man, CartPole). However, real-world applications involve partially observable, dynamic scenarios. To extend the research and move towards deploying TPG in real-life embedded and robotics systems, integration with more complex simulators, like the MuJoCo physics engine, is essential.
+\end{enumerate}
+
+The overarching thesis of this work is that by addressing these challenges, the TPG framework can be transformed into a scalable, efficient solution for embedded systems and real-time robotics. This transformation will not only demonstrate the practical viability of evolutionary reinforcement learning but also pave the way for widespread adoption of cost-effective intelligent systems.
 
 \subsection{Inputs and Outputs}
 
-The problem is sub divided into two main problems: \textbf{Adhering to Software Engineering Practices} and \textbf{MuJoCo} integration.
+The problem is subdivided into two primary areas:
 
 \subsubsection{Adhering to Software Engineering Practices}
 
-When developing code according to best software engineering practices, the \textbf{codebase} is the main input. However, there are many different scenarios that need to be encompassed: DevOps integration, code refactoring, and extensive documentation. The main difference is when these scenarios are triggered. For instance, DevOps pipelines are typically run after code has been committed/merged (depends on the requirements specified). Each of these scenarios involves performing transformations on the code base, allowing the team to allow the TPG code base to adhere to the standard open source software development standards. Other sources of inputs could be references that the team can model these software development practices after such as large scale open source projects (i.e., MuJoCo library from DeepMind) to see what standards they adhere to. 
+The central input in this area is the \textbf{TPG codebase} itself, along with a set of supplementary artifacts such as documentation, test scripts, and CI/CD configurations. The task involves:
 
-When development is complete, the TPG codebase will have a \textbf{CI/CD pipeline} so whenever changes are made to the codebase - automatic testing, code checks, and possible deployments are performed allowing for more robust, and higher quality code that everyone can contribute to in a standardized manner. Unit testing allows current code to be validated, ensuring the blocks of code can adhere to many different cases both obvious and edge cases. The output of more refined testing is robust code that has been validated. Documentation will allow new contributors to understand how to contribute and also onboard to the project in an easy and clear manner.
+\begin{itemize}
+  \item Integrating DevOps pipelines to run after code changes.
+  \item Refactoring the code to adhere to best practices (e.g., SOLID principles, proper abstractions).
+  \item Implementing automated unit testing and continuous integration.
+  \item Drawing standards from established large-scale open-source projects such as the MuJoCo library.
+\end{itemize}
+
+The expected output is a robust and maintainable software environment where every code change is automatically validated. This change will improve the developer experience, foster community contributions, and accelerate further research developments.
 
 \subsubsection{MuJoCo Integration}
 
-For this integration to be successful, TPG and MuJoCo libraries need to be connected together. MuJoCo is an open source physics engine developed by Google DeepMind and enables accurate real-life simulation experiments to be performed for machine learning scientists. The development of the interface requires all of these components as when an experiment is simulated, the interface needs to know what it needs to be simulating on the MuJoCo engine. 
+In this area, the problem focuses on interfacing the TPG framework with the MuJoCo physics engine—a tool developed by DeepMind for real-life simulation experiments. For the integration to be successful, the interface must provide MuJoCo with detailed simulation configurations derived from TPG. This will enable:
 
-A successful interface enables the TPG framework to be evaluated in more dynamic environments on MuJoCo. As a research team, Dr. Kelly is able to perform more “real-world” like experiments and to evaluate the performance of TPG and fine tune the framework to iteratively improve its capabilities.
+\begin{itemize}
+  \item Accurate real-world testing of the TPG framework.
+  \item Evaluation of TPG performance under dynamic and partially observable conditions.
+  \item Iterative refinement of the framework based on performance data from complex simulation experiments.
+\end{itemize}
+
+The output of this effort is a fully functional simulation interface that allows TPG to be evaluated in environments that closely mirror real-world conditions.
 
 \subsection{Why is this Problem Important?}
-Current deep learning neural networks, particularly those used for reinforcement learning, are highly inefficient and resource-intensive, making them impractical for many real-world applications, especially in embedded systems and robotics. Addressing this inefficiency is crucial to making intelligent robotics more accessible and cost-effective.  The alternative utilizing concepts  can accelerate the transition to adopting this technology in embedded systems. This approach could drastically reduce the GPU training costs associated with deep learning, enabling more scalable and adaptable solutions for embedded systems and real-time robotics applications. This transition is critical for making advanced robotics more accessible and economically viable.
 
-Achieving this next stage requies significant effort and adjustments. Firstly, the current codebase needs to adhere to traditional software engineering standards to allow for the next steps of evolution. If more researchers want to contribute or build on top of the framework to tune it to their specific applications, then having robust CI/CD pipelines, unit testing, and extensive documentation are critical for the developer experience. Making the codebase more accessible to all while ensuring the business logic is sound is critical to the future of this problem. 
+Current deep learning models for reinforcement learning are highly resource-intensive, limiting their use, especially within embedded systems and robotics. By applying evolutionary principles, TPG seeks to overcome the cost barriers associated with traditional deep learning. Achieving this requires two main advancements:
 
-Many existing reinforcement learning models have been tested primarily in “toy” environments—simple, fully observable scenarios like mini-games. While these simulations provide a controlled testing ground, they fail to represent the complexity of real-world environments, which are dynamic and only partially observable. To advance Dr. Kelly’s framework and make it applicable to real-world robotics, further experimentation is required in more realistic settings where agents must learn from incomplete information and adapt to changing conditions over time.
+\begin{enumerate}
+  \item \textbf{Improved Software Engineering:}  
+      A robust codebase will lower the barrier for research contributions and enhance the framework's reliability, fostering faster innovation and practical implementations.
+      
+  \item \textbf{Realistic Simulation Validation:}  
+      Testing TPG in dynamic, partially observable environments is essential for transitioning from controlled mini-game simulations to real-world applications. This step is crucial to fine-tuning the framework and proving its efficacy in adaptable, cost-effective robotics.
+\end{enumerate}
 
-Dr. Kelly’s research addresses a critical bottleneck in how robots learn to interact with their environment. By providing a more efficient and cost-effective alternative to current deep learning models, this work has the potential to revolutionize the industry. However, before this solution can be fully integrated into real-world robotics, rigorous testing and validation in dynamic, real-world environments must be conducted. The work ahead is challenging, but the potential impact is transformative—ushering in a new era of intelligent, accessible, and adaptable robotics.
+Ultimately, addressing these challenges positions TPG as a viable alternative to traditional resource-heavy neural network approaches. This work is not only critical for advancing the framework but also has the potential to revolutionize real-world robotics by making intelligent systems more accessible and economically viable.
 
 \subsection{Stakeholders}
 
@@ -172,15 +198,11 @@ Successfully run TPG agents with $\geq 2$ distinct MuJoCo environments simultane
 
 \section{Challenge Level and Extras}
 
-The challenge level of this project is deemed to be \textbf{general}, as it builds upon an existing foundation of work developed by Dr. Kelly’s research team.
+This project is classified as \textbf{advanced} due to the inclusion of a research experiment that investigates the effects of Dynamic Memory on the performance of the Tangled Program Graphs (TPG) framework within MuJoCo environments. While the TPG framework has a proven foundation in simpler contexts, extending it to handle dynamic memory management in sophisticated robotics simulations adds both novel research dimensions and technical challenges.
 
-While the project involves expanding the Tangled Program Graphs (TPG) framework and integrating it with new environments, the foundational research, including the algorithmic structure of TPG and its application in simpler environments, has already been established. This provides a stable starting point, reducing the complexity typically associated with new algorithm integrations.
+The primary research component focuses on studying how Dynamic Memory influences the performance and stability of TPG in the context of MuJoCo. This involves designing experiments, collecting and analyzing performance data, and iterating on the integration approach based on empirical results. The research findings will be compiled into a detailed report, offering insights that bridge theoretical analysis and practical application.
 
-Although the integration of TPG with advanced robotics simulators such as MuJoCo introduces new technical challenges with an unexplored and wider scope (in regards to extending the application to robotics simulations), these are manageable due to the existing knowledge base and the prior successful implementation of TPG in simpler environments like Atari video games. The task primarily involves adapting and extending the current work rather than developing entirely new algorithms.
-
-Additionally, the software engineering improvements, such as implementing continuous integration, introducing a testing suite, and generating comprehensive documentation, follow standard best practices and are well-supported by available tools. These tasks, while requiring careful planning and execution, are considered general development work and are feasible within the scope of the project.
-
-One of the extras to accompany this project will involve implementing \textbf{user documentation} to support the newly integrated features and enhancements. This documentation will be designed to guide users through the updated functionalities, including the integration of the TPG framework with the MuJoCo simulator, as well as any improvements made to the codebase and testing suite.
+In addition to the research experiment, the project continues to integrate essential software engineering practices. These include implementing continuous integration, developing a comprehensive testing suite, and maintaining detailed user documentation. Together, these components ensure that both the research and the engineering aspects meet high standards of reliability and reproducibility.
 
 \newpage{}
 
