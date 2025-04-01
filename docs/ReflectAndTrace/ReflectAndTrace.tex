@@ -311,9 +311,44 @@ In summary, our design iterations were continuously guided by the needs of Dr. K
 
 \section{Design Decisions (LO12)}
 
-\plt{Reflect and justify your design decisions.  How did limitations,
- assumptions, and constraints influence your decisions?  Discuss each of these
- separately.}
+This section justifies the key design decisions made throughout the project, explaining how they were influenced by our initial assumptions, the limitations we encountered, and the constraints imposed upon us. The aim was to evolve the TPG framework into a more robust, usable, and extensible system suitable for advanced research and easier collaboration.
+
+\subsection{Build System Migration (SCons to CMake)}
+\begin{itemize}
+    \item \textbf{Initial State \& Limitation:} The original TPG project utilized \texttt{SCons}. While functional, \texttt{SCons} is less common in the modern C++ ecosystem than \texttt{CMake}. We found it presented limitations regarding straightforward integration with standard C++ tooling (like IDEs), effective dependency management (especially for testing frameworks like \texttt{Catch2}), and seamless configuration within modern CI/CD pipelines (GitHub Actions).
+    \item \textbf{Assumption:} We assumed that migrating to \texttt{CMake}, a widely adopted industry standard, would significantly improve long-term maintainability, ease developer onboarding, and simplify the integration of necessary components. We also assumed the team could acquire the necessary \texttt{CMake} proficiency.
+    \item \textbf{Constraint:} The need to reliably build a complex C++ project involving multiple external dependencies (Eigen, Boost, MuJoCo, MPI, YAML-CPP, \texttt{Catch2}) across potentially different setups (even within a container) mandated a robust and well-supported build system.
+    \item \textbf{Decision \& Justification:} We decided to invest the effort in migrating the build system entirely to \texttt{CMake}. This addressed the limitations of \texttt{SCons} by providing a standardized platform. It simplified adding unit tests, enabled easier configuration for code coverage tools (though challenges remained), and made integration with GitHub Actions workflows much more straightforward. The upfront effort was justified by the significant expected gains in project health, developer productivity, and CI/CD integration, aligning with the project goal of improving software engineering practices.
+\end{itemize}
+
+\subsection{Development Environment Standardization (VS Code Dev Containers)}
+\begin{itemize}
+    \item \textbf{Limitation/Constraint:} A major initial hurdle, identified early on and confirmed by user feedback, was the inconsistency in development environments across team members (macOS, Windows with WSL, Linux) and within Dr. Kelly's research group. This led to significant time lost on configuration, dependency conflicts (especially graphics libraries, MuJoCo setup), and a steep onboarding curve, directly hindering productivity and collaboration.
+    \item \textbf{Assumption:} We assumed that developers would be amenable to using VS Code and that Docker containerization could provide a fully consistent, Linux-based development environment regardless of the host OS, encapsulating all complex dependencies.
+    \item \textbf{Decision \& Justification:} We implemented and documented a VS Code Dev Container setup. This directly tackled the limitation of environment inconsistency and the cross-platform constraint. It ensured all developers worked with the exact same dependencies and tools, drastically reducing setup time (from potentially weeks to minutes, per usability feedback) and eliminating "works on my machine" issues. This was crucial for enabling effective teamwork, reliable testing, and predictable CI/CD runs.
+\end{itemize}
+
+\subsection{Logging Framework Overhaul (.std/.err to Typed CSVs)}
+\begin{itemize}
+    \item \textbf{Limitation:} The original logging mechanism, primarily redirecting \texttt{stdout}/\texttt{stderr}, made automated data extraction and analysis difficult and inefficient, hindering the research workflow which requires plotting and comparing metrics. Dr. Kelly also desired a shift towards Python-based analysis.
+    \item \textbf{Assumption:} We assumed that structuring log output into typed CSV files (one per metric type) would be significantly easier to parse programmatically (e.g., using Pandas) and that separating metrics by type would improve organization.
+    \item \textbf{Decision \& Justification:} We designed and implemented an event-driven logging system where specific metric events are emitted and captured by loggers writing to dedicated, typed \texttt{.csv} files in a structured \texttt{logs/} directory hierarchy (split by metric type). This decision directly addressed the parsing limitations and facilitated Python-based analysis, enabling the creation of plotting scripts (\texttt{tpg-plot-evolve.py}) and systematic analysis for the research report extra. Usability feedback confirmed the usefulness but highlighted areas for documentation improvement (e.g., explaining metric names).
+\end{itemize}
+
+\subsection{User Interface (Script-based to Python CLI)}
+\begin{itemize}
+    \item \textbf{Limitation:} As evidenced by the project's early README versions and initial team experience, interacting with the TPG framework relied on executing various shell scripts (\texttt{.sh}), requiring specific knowledge of arguments, paths, and context. This was cumbersome, error-prone, and presented a barrier to easy experimentation and onboarding.
+    \item \textbf{Assumption:} A unified Command Line Interface (CLI) built with Python (common in the ML/research ecosystem) and a library like Click would provide a more intuitive, discoverable, and consistent user experience, abstracting away script complexities.
+    \item \textbf{Decision \& Justification:} We developed the \texttt{tpg} CLI tool, migrating away from the collection of shell scripts. This provided a single, user-friendly entry point, integrated the loading of environment configurations (initially \texttt{.txt}, later migrated to \texttt{.yaml}), handled directory setup automatically, and offered clear commands with help messages. The initial design addressed the core limitations, and subsequent refinements (adding \texttt{kill}, \texttt{debug}, \texttt{clean} commands) were directly driven by feedback from Dr. Kelly's research group, demonstrating its value in improving the practical research workflow.
+\end{itemize}
+
+\subsection{MuJoCo Environment Integration (Adapter/Environment Classes)}
+\begin{itemize}
+    \item \textbf{Constraint:} A primary project requirement was to integrate the MuJoCo physics simulator.
+    \item \textbf{Limitation:} TPG's engine needed a robust way to interact with the MuJoCo C API, managing its specific data structures (\texttt{mjModel*}, \texttt{mjData*}), simulation steps, and differing state/action spaces, without cluttering the core TPG logic.
+    \item \textbf{Assumption:} Encapsulating environment-specific logic within dedicated C++ classes inheriting from a common base (\texttt{MujocoEnv}, itself inheriting \texttt{TaskEnv}) would provide effective abstraction and allow the core TPG algorithm to remain generic. Configuration could be managed externally via files.
+    \item \textbf{Decision \& Justification:} We implemented specific classes for each target MuJoCo environment (Ant, Half-Cheetah, etc.) within \texttt{src/src/environments/mujoco/}. These classes handle MuJoCo model loading, API interactions (stepping, state/action handling), reward calculation, and termination logic, isolating these details from the main TPG engine. Configuration was managed via \texttt{.yaml} files. This object-oriented design successfully met the integration constraint while managing the inherent complexity of the task through abstraction and encapsulation.
+\end{itemize}
 
 \section{Economic Considerations (LO23)}
 
