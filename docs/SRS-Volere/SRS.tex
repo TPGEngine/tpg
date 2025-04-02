@@ -670,11 +670,22 @@ Relation:
     \item \textbf{Phase In Plan:} During development, starting Oct 14, 2024.
   \end{itemize}
 
-\item \label{PR-RR} \textbf{PR-RR:} The system shall maintain high reliability, with minimal downtime or failures during operation. Continuous integration and automated testing shall be employed to detect and address issues promptly, ensuring consistent performance over time.
-  \begin{itemize}
-    \item \textbf{Rationale:} High reliability is crucial for maintaining user trust and ensuring that experiments yield consistent results. Continuous integration and automated testing will help identify and address issues promptly, minimizing downtime and ensuring that the system operates smoothly over time.
-    \item \textbf{Phase In Plan:} During development, starting Oct 14, 2024.
-  \end{itemize}
+\item \label{PR-RR} \textbf{PR-RR:} The system shall demonstrate operational reliability during execution. This will be verified by:
+    \begin{itemize}
+        \item[a)] Achieving a build success rate of at least 98\% in the Continuous Integration (CI) pipeline for commits merged to the main branch over the final month of development.
+        \item[b)] Achieving an automated test pass rate of at least 95\% in the CI pipeline for commits merged to the main branch over the final month of development.
+        \item[c)] Successfully completing a defined long-running benchmark experiment (e.g., MuJoCo Inverted Pendulum for 100 generations) without unhandled exceptions or crashes in at least 95\% of test executions during final validation.
+    \end{itemize}
+    \begin{itemize}
+        \item \textbf{Rationale:} High reliability is crucial for maintaining user trust and ensuring that experiments yield consistent and valid results. Failures during development (build/test) or execution waste resources and time. Continuous integration and automated testing (\hyperref[FR-3]{FR-3}, \hyperref[FR-5]{FR-5}) are employed during development to detect and address issues promptly, contributing to overall system stability and reliability.
+        \item \textbf{Verification:}
+            \begin{itemize}
+                \item CI pipeline logs will be reviewed to verify build success rates (a).
+                \item CI pipeline logs (test reports) will be reviewed to verify test pass rates (b).
+                \item System Test defined in the VnV Plan/Report (e.g., \texttt{ST-ReliabilityRun}) will execute the specified long-running benchmark multiple times (e.g., 20 times) and report the success rate (c).
+            \end{itemize}
+        \item \textbf{Phase In Plan:} During development, starting Oct 14, 2024. CI metrics (a, b) monitored continuously. Benchmark execution reliability (c) verified during final VnV phase.
+    \end{itemize}
 \end{itemize}
 
 \section{Operational and Environmental Requirements}
