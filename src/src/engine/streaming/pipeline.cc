@@ -414,7 +414,52 @@ void GStreamerPipeline::handleSignalingMessage(const std::string& message) {
             std::cout << get_current_timestamp() 
                      << " [GStreamerPipeline] Received ICE Candidate:\n" 
                      << jsonMsg.dump(2) << std::endl;
-            // ICE candidate handling will be implemented in Step 4
+            
+            // Check for required fields with correct nesting
+            if (!jsonMsg.contains("candidate") || !jsonMsg["candidate"].is_object()) {
+                std::cerr << get_current_timestamp() 
+                         << " [GStreamerPipeline] Invalid or missing 'candidate' object in ICE message." << std::endl;
+                return;
+            }
+
+            const json& candidateObj = jsonMsg["candidate"];
+
+            // Extract the candidate string from the nested structure
+            if (!candidateObj.contains("candidate") || !candidateObj["candidate"].is_string()) {
+                std::cerr << get_current_timestamp() 
+                         << " [GStreamerPipeline] Invalid or missing 'candidate' string in ICE candidate object." << std::endl;
+                return;
+            }
+            std::string candidate_str = candidateObj["candidate"].get<std::string>();
+
+            // Extract the mlineindex from the nested structure
+            if (!candidateObj.contains("sdpMLineIndex") || !candidateObj["sdpMLineIndex"].is_number_integer()) {
+                std::cerr << get_current_timestamp() 
+                         << " [GStreamerPipeline] Invalid or missing 'sdpMLineIndex' field in ICE candidate object." << std::endl;
+                return;
+            }
+            guint mlineindex = candidateObj["sdpMLineIndex"].get<guint>();
+
+            // Log the candidate details for debugging
+            std::cout << get_current_timestamp() 
+                     << " [GStreamerPipeline] Processing ICE Candidate:"
+                     << " mlineindex=" << mlineindex
+                     << ", candidate=" << candidate_str << std::endl;
+
+            // Note on thread safety:
+            // If the WebSocket callback is executing on a different thread than the GMainLoop,
+            // these GStreamer calls might need to be marshalled to the main GStreamer thread
+            // using g_main_context_invoke or similar for thread safety.
+
+            // Add the ICE candidate to webrtcbin
+            if (webrtcbinElement) {
+                std::cout << get_current_timestamp() 
+                         << " [GStreamerPipeline] Adding ICE candidate to webrtcbin..." << std::endl;
+                g_signal_emit_by_name(webrtcbinElement, "add-ice-candidate", mlineindex, candidate_str.c_str());
+            } else {
+                std::cerr << get_current_timestamp() 
+                         << " [GStreamerPipeline] Error: webrtcbin element is NULL when trying to add ICE candidate." << std::endl;
+            }
         }
         else {
             std::cout << get_current_timestamp() 
