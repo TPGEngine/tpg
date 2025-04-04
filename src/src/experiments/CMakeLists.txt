@@ -34,6 +34,7 @@ target_include_directories(TPGExperimentMPI
     ${CMAKE_CURRENT_SOURCE_DIR}/runners
     ${CMAKE_CURRENT_SOURCE_DIR}/evaluators
     ${CMAKE_CURRENT_SOURCE_DIR}/../engine
+    ${CMAKE_CURRENT_SOURCE_DIR}/../engine/streaming
     ${CMAKE_CURRENT_SOURCE_DIR}/../environments
     ${CMAKE_CURRENT_SOURCE_DIR}/../environments/classic_control
     ${CMAKE_CURRENT_SOURCE_DIR}/../environments/mujoco

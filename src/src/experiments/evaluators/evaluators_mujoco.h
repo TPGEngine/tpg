@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <mujoco/mujoco.h>
 #include <MujocoEnv.h>
+#include "streaming/pipeline.h"
 
 #include <GL/osmesa.h>
 #include <sys/types.h>
@@ -215,7 +216,33 @@ if (!headless) {
         }
         mjr_readPixels(rgb, NULL, viewport, &con);
 
-        // Save the image to disk
+    #ifdef ENABLE_LIVE_STREAMING
+        GStreamerPipeline& gstPipeline = GStreamerPipeline::getInstance();
+        if (!gstPipeline.isInitialized()) {
+            if (!gstPipeline.initialize(viewport.width, viewport.height, 30)) {
+                std::cerr << "Failed to initialize streaming pipeline" << std::endl;
+            }
+        }
+        
+        // Create a buffer for the flipped image
+        unsigned char* flipped_rgb = new unsigned char[3 * viewport.width * viewport.height];
+        
+        // Flip the image vertically (convert from OpenGL's bottom-left origin to top-left origin)
+        for (int row = 0; row < viewport.height; ++row) {
+            memcpy(&flipped_rgb[3 * row * viewport.width],
+                   &rgb[3 * (viewport.height - 1 - row) * viewport.width],
+                   3 * viewport.width);
+        }
+        
+        int frameSize = 3 * viewport.width * viewport.height; // raw RGB data size
+        if (!gstPipeline.pushFrame(flipped_rgb, frameSize)) {
+            std::cerr << "Failed to push frame to streaming pipeline" << std::endl;
+        }
+        
+        // Clean up the temporary buffer
+        delete[] flipped_rgb;
+    #else
+        // Existing code: write the frame to disk as a PPM file.
         char filename[100];
         snprintf(filename, sizeof(filename), "frames/frame_%05d.ppm", frame_idx);
         FILE* fp = fopen(filename, "wb");
@@ -223,12 +250,11 @@ if (!headless) {
             mju_error("Could not open file for writing");
         }
         fprintf(fp, "P6\n%d %d\n255\n", viewport.width, viewport.height);
-        // PPM format expects top-to-bottom, left-to-right
-        // MuJoCo's mjr_readPixels reads from bottom-left, so we need to flip vertically
         for (int row = viewport.height - 1; row >= 0; --row) {
             fwrite(&rgb[3 * row * viewport.width], 1, 3 * viewport.width, fp);
         }
         fclose(fp);
+    #endif  // ENABLE_LIVE_STREAMING
 
         free(rgb);
 

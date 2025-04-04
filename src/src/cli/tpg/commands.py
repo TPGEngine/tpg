@@ -120,7 +120,11 @@ def replay(ctx: click.Context, env: str, seed: int, seed_aux: int, task_to_repla
     hyper_parameters = ctx.obj["hyper_parameters"]
     TPG = ctx.obj["tpg"]
     
-    env_dir = helpers.create_environment_directories(TPG, env)
+    env_dir = os.path.join(TPG, "experiments", env)
+
+    # Check if the environment directory exists
+    if not os.path.isdir(env_dir):
+        raise click.ClickException(f"Environment directory {env_dir} does not exist. Ensure that you've evolved a policy before replaying it.")    
     
     # Change working directory to environment directory
     os.chdir(env_dir)

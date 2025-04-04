@@ -14,6 +14,7 @@
 #include "evaluators_control.h"
 #include "evaluators_forecast.h"
 #include "evaluators_mujoco.h"
+#include "streaming/pipeline.h"
 
 #include <boost/mpi.hpp>
 #include <chrono>
@@ -247,6 +248,9 @@ inline void replayer(TPG &tpg, vector<TaskEnv *> &tasks) {
 
     // Add video creation for headless mode
     if (headless && frame_idx > 0) {
+    #ifdef ENABLE_LIVE_STREAMING
+      GStreamerPipeline::getInstance().shutdown();
+    #else
       // Create videos directory if it doesn't exist
       struct stat st{};
       if (stat("videos", &st) == -1) {
@@ -273,6 +277,7 @@ inline void replayer(TPG &tpg, vector<TaskEnv *> &tasks) {
       if (ret != 0) {
           cerr << "Error removing frame files" << endl;
       }
+    #endif
     }
   }
 }

@@ -37,6 +37,15 @@ optimized:
 	@cd $(TPG) && $(CMAKE) -B $(BUILD_DIR) -S . -DCMAKE_BUILD_TYPE=Release -DENABLE_HIGH_OPTIMIZATION=ON
 	@cd $(TPG) && $(CMAKE) --build $(BUILD_DIR)
 
+# Release build with high optimization and livestreaming enabled with WebRTC
+livestream:
+	@if [ -z "$(TPG)" ]; then \
+		echo "ERROR: TPG environment variable is not set"; \
+		exit 1; \
+	fi
+	@cd $(TPG) && $(CMAKE) -B $(BUILD_DIR) -S . -DCMAKE_BUILD_TYPE=Release -DENABLE_HIGH_OPTIMIZATION=ON -DENABLE_LIVE_STREAMING=ON
+	@cd $(TPG) && $(CMAKE) --build $(BUILD_DIR)
+
 # Clean the build directory
 clean:
 	@if [ -z "$(TPG)" ]; then \
