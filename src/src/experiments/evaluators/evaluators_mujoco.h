@@ -223,10 +223,24 @@ if (!headless) {
                 std::cerr << "Failed to initialize streaming pipeline" << std::endl;
             }
         }
+        
+        // Create a buffer for the flipped image
+        unsigned char* flipped_rgb = new unsigned char[3 * viewport.width * viewport.height];
+        
+        // Flip the image vertically (convert from OpenGL's bottom-left origin to top-left origin)
+        for (int row = 0; row < viewport.height; ++row) {
+            memcpy(&flipped_rgb[3 * row * viewport.width],
+                   &rgb[3 * (viewport.height - 1 - row) * viewport.width],
+                   3 * viewport.width);
+        }
+        
         int frameSize = 3 * viewport.width * viewport.height; // raw RGB data size
-        if (!gstPipeline.pushFrame(rgb, frameSize)) {
+        if (!gstPipeline.pushFrame(flipped_rgb, frameSize)) {
             std::cerr << "Failed to push frame to streaming pipeline" << std::endl;
         }
+        
+        // Clean up the temporary buffer
+        delete[] flipped_rgb;
     #else
         // Existing code: write the frame to disk as a PPM file.
         char filename[100];
