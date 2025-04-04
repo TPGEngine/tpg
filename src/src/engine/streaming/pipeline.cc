@@ -323,3 +323,45 @@ void GStreamerPipeline::shutdown() {
               << std::endl;
   }
 }
+
+void GStreamerPipeline::handleSignalingMessage(const std::string& message) {
+    try {
+        // Parse the incoming message as JSON
+        json jsonMsg = json::parse(message);
+
+        // Check if the message has a type field
+        if (!jsonMsg.contains("type")) {
+            std::cerr << get_current_timestamp() 
+                     << " [GStreamerPipeline] Received message without 'type' field." << std::endl;
+            return;
+        }
+
+        std::string msgType = jsonMsg["type"];
+
+        if (msgType == "answer") {
+            std::cout << get_current_timestamp() 
+                     << " [GStreamerPipeline] Received SDP Answer:\n" 
+                     << jsonMsg.dump(2) << std::endl;
+        }
+        else if (msgType == "ice-candidate") {
+            std::cout << get_current_timestamp() 
+                     << " [GStreamerPipeline] Received ICE Candidate:\n" 
+                     << jsonMsg.dump(2) << std::endl;
+        }
+        else {
+            std::cout << get_current_timestamp() 
+                     << " [GStreamerPipeline] Received unknown message type: " 
+                     << msgType << std::endl;
+        }
+    }
+    catch (const json::parse_error& e) {
+        std::cerr << get_current_timestamp() 
+                 << " [GStreamerPipeline] Failed to parse signaling message as JSON: " 
+                 << e.what() << std::endl;
+    }
+    catch (const std::exception& e) {
+        std::cerr << get_current_timestamp() 
+                 << " [GStreamerPipeline] Error handling signaling message: " 
+                 << e.what() << std::endl;
+    }
+}

@@ -23,6 +23,9 @@ public:
     void shutdown();
     bool isInitialized() const { return initialized; }
 
+    // Handle incoming signaling messages from WebSocket
+    void handleSignalingMessage(const std::string& message);
+
 private:
     // Private constructor ensures no external instantiation.
     GStreamerPipeline() : pipeline(nullptr), appsrc(nullptr), timestamp(0), initialized(false) {
