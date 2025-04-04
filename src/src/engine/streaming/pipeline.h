@@ -28,7 +28,7 @@ public:
 
 private:
     // Private constructor ensures no external instantiation.
-    GStreamerPipeline() : pipeline(nullptr), appsrc(nullptr), timestamp(0), initialized(false) {
+    GStreamerPipeline() : pipeline(nullptr), appsrc(nullptr), webrtcbinElement(nullptr), timestamp(0), initialized(false) {
         gst_init(nullptr, nullptr);
     }
     ~GStreamerPipeline() {}
@@ -36,6 +36,7 @@ private:
     // Private member variables.
     GstElement* pipeline;
     GstElement* appsrc;
+    GstElement* webrtcbinElement;  // Store webrtcbin element for signaling
     GstClockTime timestamp;
     bool initialized;
 };

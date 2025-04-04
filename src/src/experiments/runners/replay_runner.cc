@@ -1,5 +1,6 @@
 #include "replay_runner.h"
 #include "streaming/signaling_client.h"
+#include "streaming/pipeline.h"
 #include <iostream>
 #include <chrono>
 #include <thread>
@@ -58,7 +59,8 @@ void ReplayRunner::initialization() {
   // Set a message handler to process incoming signaling messages.
   signalingClient.setMessageHandler([](const std::string &msg) {
     std::cout << "[Signaling] Received: " << msg << std::endl;
-    // Process signaling messages (SDP, ICE candidates, etc.) here as needed.
+    // Forward the message to GStreamerPipeline for processing
+    GStreamerPipeline::getInstance().handleSignalingMessage(msg);
   });
 
   // Connect the signaling client to the FastAPI WebSocket signaling server.

@@ -144,6 +144,9 @@ bool GStreamerPipeline::initialize(int width, int height, int fps) {
   GstElement* webrtcbin =
       gst_element_factory_make("webrtcbin", "webrtc");
 
+  // Store webrtcbin element for later use in signaling
+  webrtcbinElement = webrtcbin;
+
   // Check all elements were created
   if (!appsrc || !videoconvert || !vp8enc || !rtpvp8pay ||
       !capsfilter || !webrtcbin) {
@@ -340,13 +343,78 @@ void GStreamerPipeline::handleSignalingMessage(const std::string& message) {
 
         if (msgType == "answer") {
             std::cout << get_current_timestamp() 
-                     << " [GStreamerPipeline] Received SDP Answer:\n" 
-                     << jsonMsg.dump(2) << std::endl;
+                     << " [GStreamerPipeline] Processing SDP Answer..." << std::endl;
+
+            // Check for SDP field
+            if (!jsonMsg.contains("sdp") || !jsonMsg["sdp"].is_string()) {
+                std::cerr << get_current_timestamp() 
+                         << " [GStreamerPipeline] Answer message missing valid SDP field." << std::endl;
+                return;
+            }
+
+            // Extract SDP string
+            std::string sdp_text = jsonMsg["sdp"].get<std::string>();
+
+            // Create new SDP message
+            GstSDPMessage* sdp_msg = nullptr;
+            GstSDPResult sdp_result = gst_sdp_message_new(&sdp_msg);
+            if (sdp_result != GST_SDP_OK) {
+                std::cerr << get_current_timestamp() 
+                         << " [GStreamerPipeline] Failed to create SDP message structure." << std::endl;
+                return;
+            }
+
+            // Parse SDP text into message
+            sdp_result = gst_sdp_message_parse_buffer(
+                (const guint8*)sdp_text.c_str(), 
+                sdp_text.length(), 
+                sdp_msg
+            );
+            if (sdp_result != GST_SDP_OK) {
+                std::cerr << get_current_timestamp() 
+                         << " [GStreamerPipeline] Failed to parse SDP answer text." << std::endl;
+                gst_sdp_message_free(sdp_msg);
+                return;
+            }
+
+            // Create WebRTC session description for the answer
+            GstWebRTCSessionDescription* answer_desc = 
+                gst_webrtc_session_description_new(
+                    GST_WEBRTC_SDP_TYPE_ANSWER, 
+                    sdp_msg
+                );
+            if (!answer_desc) {
+                std::cerr << get_current_timestamp() 
+                         << " [GStreamerPipeline] Failed to create WebRTC session description for answer." << std::endl;
+                gst_sdp_message_free(sdp_msg);
+                return;
+            }
+
+            // Note on thread safety:
+            // If the WebSocket callback is executing on a different thread than the GMainLoop,
+            // these GStreamer calls might need to be marshalled to the main GStreamer thread
+            // using g_main_context_invoke or similar for thread safety.
+
+            // Set the remote description
+            if (webrtcbinElement) {
+                std::cout << get_current_timestamp() 
+                         << " [GStreamerPipeline] Setting remote description (Answer)." << std::endl;
+                GstPromise* promise = gst_promise_new();
+                g_signal_emit_by_name(webrtcbinElement, "set-remote-description", answer_desc, promise);
+                gst_promise_unref(promise);
+            } else {
+                std::cerr << get_current_timestamp() 
+                         << " [GStreamerPipeline] Error: webrtcbin element is NULL when trying to set remote description." << std::endl;
+            }
+
+            // Cleanup
+            gst_webrtc_session_description_free(answer_desc);
         }
         else if (msgType == "ice-candidate") {
             std::cout << get_current_timestamp() 
                      << " [GStreamerPipeline] Received ICE Candidate:\n" 
                      << jsonMsg.dump(2) << std::endl;
+            // ICE candidate handling will be implemented in Step 4
         }
         else {
             std::cout << get_current_timestamp() 
