@@ -4,6 +4,7 @@ import re
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 
 router = APIRouter(
     prefix="/experiments",
@@ -51,10 +52,13 @@ def extract_seed_and_pid(log_messages):
 
     return seed, pid
 
+class EvolveRequest(BaseModel):
+    environment: str
 
 @router.post("/evolve", tags=["experiments"])
-async def evolve():
-    cmd = ["tpg", "evolve", "inverted_pendulum"]
+async def evolve(request: EvolveRequest):
+    environment = request.environment
+    cmd = ["tpg", "evolve", environment]
 
     try:
         output_lines, return_code = await execute_tpg(cmd)
@@ -75,11 +79,15 @@ async def evolve():
             raise e  # Re-raise the HTTPException
         raise HTTPException(status_code=500, detail=str(e))
 
-
+class ReplayRequest(BaseModel):
+    environment: str
+    seed: int
 
 @router.post("/replay", tags=["experiments"])
-async def replay():
-    cmd = ["tpg", "replay", "inverted_pendulum"]
+async def replay(request: ReplayRequest):
+    environment = request.environment
+    seed = request.seed
+    cmd = ["tpg", "replay", environment, "-s", str(seed)]
 
     try:
         output_lines, return_code = await execute_tpg(cmd)
