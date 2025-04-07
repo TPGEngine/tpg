@@ -130,6 +130,16 @@ void WebSocketClient::sendMessage(const std::string &message) {
     // Parse and update the message.
     nlohmann::json msg = nlohmann::json::parse(message);
     msg["id"] = "pipeline-client";
+
+    // If this is an ICE candidate message, restructure it to have nested candidate object
+    if (msg["type"] == "ice-candidate") {
+        nlohmann::json candidateObj;
+        candidateObj["candidate"] = msg["candidate"];
+        candidateObj["sdpMLineIndex"] = msg["sdpMLineIndex"];
+        candidateObj["sdpMid"] = msg["sdpMid"];
+        msg["candidate"] = candidateObj;
+    }
+
     std::string updatedMessage = msg.dump();
 
     // Post the sending operation to the io_context to ensure thread safety.
